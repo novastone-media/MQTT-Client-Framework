@@ -4,10 +4,13 @@ MQTT-Client-Framework
 IOS native ObjectiveC MQTT Framework
 
 * Howto
+
 Add MQTTClient.framework from the dist directory to your IOS project
+
 Import <MQTTClient/MQTTClient.h> to your files calling MQTTClient
 
 * License
+
 Copyright (C) 2013, 2014 Christoph Krey
 
 Based on
