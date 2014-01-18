@@ -59,10 +59,9 @@ enum {
 + (id)pingreqMessage;
 + (id)disconnectMessage;
 + (id)subscribeMessageWithMessageId:(UInt16)msgId
-                              topic:(NSString*)topic
-                                qos:(UInt8)qos;
+                             topics:(NSDictionary *)topics;
 + (id)unsubscribeMessageWithMessageId:(UInt16)msgId
-                                topic:(NSString*)topic;
+                                topics:(NSArray *)topics;
 + (id)publishMessageWithData:(NSData*)payload
                      onTopic:(NSString*)topic
                          qos:(UInt8)qosLevel

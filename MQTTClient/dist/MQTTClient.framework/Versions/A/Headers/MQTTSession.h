@@ -52,7 +52,7 @@ typedef enum {
 
 @optional
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID;
-- (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQos:(int)qos;
+- (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQoss:(NSArray *)qoss;
 - (void)unsubAckReceived:(MQTTSession *)session msgID:(UInt16)msgID;
 - (void)sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
 - (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
@@ -81,10 +81,12 @@ typedef enum {
                           runLoop:(NSRunLoop *)runLoop
                           forMode:(NSString *)runLoopMode;
 
-- (void)connectToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
-- (UInt16)subscribeToTopic:(NSString*)topic atLevel:(UInt8)qosLevel;
-- (UInt16)unsubscribeTopic:(NSString*)theTopic;
-- (UInt16)publishData:(NSData*)data onTopic:(NSString*)topic retain:(BOOL)retainFlag qos:(NSInteger)qos;
+- (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
+- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(UInt8)qosLevel;
+- (UInt16)subscribeToTopics:(NSDictionary *)topics;
+- (UInt16)unsubscribeTopic:(NSString *)theTopic;
+- (UInt16)unsubscribeTopics:(NSArray *)theTopics;
+- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(NSInteger)qos;
 - (void)close;
 
 @end

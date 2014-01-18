@@ -69,9 +69,18 @@
     self = [super init];
 #ifdef DEBUG
     NSLog(@"MQTTSession initWithClientId:%@ userName:%@ password:%@ keepAlive:%d cleanSession:%d will:%d willTopic:%@ willTopic:%@ willQos:%d willRetainFlag:%d protocolLevel:%d runLoop:%@ forMode:%@",
-          clientId, userName, password, keepAliveInterval, cleanSessionFlag,
-          willFlag, willTopic, willMsg, willQoS, willRetainFlag,
-          protocolLevel, @"runLoop", runLoopMode);
+          clientId,
+          userName,
+          password,
+          keepAliveInterval,
+          cleanSessionFlag,
+          willFlag,
+          willTopic,
+          willMsg,
+          willQoS,
+          willRetainFlag,
+          protocolLevel,
+          @"runLoop", runLoopMode);
 #endif
     
     self.clientId = clientId;
@@ -162,16 +171,26 @@
     [self.decoder open];
 }
 
-- (UInt16)subscribeToTopic:(NSString*)topic
-                  atLevel:(UInt8)qosLevel
+- (UInt16)subscribeToTopic:(NSString *)topic
+                   atLevel:(UInt8)qosLevel
 {
 #ifdef DEBUG
     NSLog(@"MQTTSession subscribeToTopic:%@ atLevel:%d]", topic, qosLevel);
 #endif
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage subscribeMessageWithMessageId:mid
-                                                    topic:topic
-                                                      qos:qosLevel]];
+                                                   topics:topic ? @{topic: @(qosLevel)} : @{}]];
+    return mid;
+}
+
+- (UInt16)subscribeToTopics:(NSDictionary *)topics
+{
+#ifdef DEBUG
+    NSLog(@"MQTTSession subscribeToTopics:%@]", topics);
+#endif
+    UInt16 mid = [self nextMsgId];
+    [self send:[MQTTMessage subscribeMessageWithMessageId:mid
+                                                   topics:topics]];
     return mid;
 }
 
@@ -182,7 +201,18 @@
 #endif
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage unsubscribeMessageWithMessageId:mid
-                                                      topic:theTopic]];
+                                                     topics:theTopic ? @[theTopic] : @[]]];
+    return mid;
+}
+
+- (UInt16)unsubscribeTopics:(NSArray *)theTopics
+{
+#ifdef DEBUG
+    NSLog(@"MQTTSession unsubscribeTopics:%@", theTopics);
+#endif
+    UInt16 mid = [self nextMsgId];
+    [self send:[MQTTMessage unsubscribeMessageWithMessageId:mid
+                                                      topics:theTopics]];
     return mid;
 }
 
@@ -250,6 +280,12 @@
     [self.decoder close];
     self.status = MQTTSessionStatusClosed;
     [self.delegate handleEvent:self event:MQTTSessionEventConnectionClosed error:nil];
+    if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
+        [self.delegate buffered:self
+                         queued:[self.queue count]
+                      flowingIn:[self.rxFlows count]
+                     flowingOut:[self.txFlows count]];
+    }
 }
 
 
@@ -294,8 +330,8 @@
                                              queued:[self.queue count]
                                           flowingIn:[self.rxFlows count]
                                          flowingOut:[self.txFlows count]];
-                            [self.encoder encodeMessage:msg];
                         }
+                        [self.encoder encodeMessage:msg];
                     }
                     break;
                 case MQTTSessionStatusDisconnecting:
@@ -559,15 +595,17 @@
 
 - (void)handleSuback:(MQTTMessage*)msg
 {
-    if ([[msg data] length] == 3) {
+    if ([[msg data] length] >= 3) {
         UInt8 const *bytes = [[msg data] bytes];
         NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
         msg.mid = [msgId unsignedIntValue];
-        UInt8 qos = bytes[2];
-        if ([self.delegate respondsToSelector:@selector(subAckReceived:msgID:grantedQos:)]) {
-            [self.delegate subAckReceived:self msgID:msg.mid grantedQos:qos];
+        NSMutableArray *qoss = [[NSMutableArray alloc] init];
+        for (int i = 2; i < [[msg data] length]; i++) {
+            [qoss addObject:@(bytes[i])];
         }
-
+        if ([self.delegate respondsToSelector:@selector(subAckReceived:msgID:grantedQoss:)]) {
+            [self.delegate subAckReceived:self msgID:msg.mid grantedQoss:qoss];
+        }
     }
     if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
         [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];

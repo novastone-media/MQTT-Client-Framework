@@ -105,13 +105,14 @@
 }
 
 + (id)subscribeMessageWithMessageId:(UInt16)msgId
-                              topic:(NSString*)topic
-                                qos:(UInt8)qos
+                              topics:(NSDictionary *)topics
 {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
-    [data appendMQTTString:topic];
-    [data appendByte:qos];
+    for (NSString *topic in topics.allKeys) {
+        [data appendMQTTString:topic];
+        [data appendByte:[topics[topic] intValue]];
+    }
     MQTTMessage* msg = [[MQTTMessage alloc] initWithType:MQTTSubscribe
                                                      qos:1
                                                     data:data];
@@ -120,11 +121,13 @@
 }
 
 + (id)unsubscribeMessageWithMessageId:(UInt16)msgId
-                                topic:(NSString*)topic
+                                topics:(NSArray *)topics
 {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
-    [data appendMQTTString:topic];
+    for (NSString *topic in topics) {
+        [data appendMQTTString:topic];
+    }
     MQTTMessage* msg = [[MQTTMessage alloc] initWithType:MQTTUnsubscribe
                                                      qos:1
                                                     data:data];
