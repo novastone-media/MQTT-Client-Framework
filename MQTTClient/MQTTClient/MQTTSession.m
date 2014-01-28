@@ -276,6 +276,9 @@
         self.keepAliveTimer = nil;
     }
     
+    self.encoder.delegate = nil;
+    self.decoder.delegate = nil;
+    
     [self.encoder close];
     [self.decoder close];
     self.status = MQTTSessionStatusClosed;

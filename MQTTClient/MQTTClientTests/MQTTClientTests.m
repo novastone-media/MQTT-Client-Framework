@@ -11,7 +11,7 @@
 
 @interface MQTTClientTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
-@property (nonatomic) MQTTSessionEvent event;
+@property (nonatomic) NSInteger event;
 @property (strong, nonatomic) NSError *error;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) int type;
@@ -288,7 +288,7 @@
     XCTAssertEqual(self.type, MQTTPingresp, @"No PingResp received %u", self.type);
     XCTAssertNotEqual(self.event, MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
     XCTAssertNotEqual(self.event, MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
-    XCTAssert(!self.timeout, @"Timeout 200% keepalive");
+    XCTAssert(!self.timeout, @"Timeout 200%% keepalive");
 }
 
 - (void)test_disconnect_wrong_flags
