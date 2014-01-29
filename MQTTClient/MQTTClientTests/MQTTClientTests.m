@@ -17,7 +17,7 @@
 @property (nonatomic) int type;
 @end
 
-#define HOST @"test.mosquitto.org"
+#define HOST @"localhost"
 
 @implementation MQTTClientTests
 
