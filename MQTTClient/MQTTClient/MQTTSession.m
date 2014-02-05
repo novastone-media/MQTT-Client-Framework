@@ -276,11 +276,11 @@
         self.keepAliveTimer = nil;
     }
     
-    self.encoder.delegate = nil;
-    self.decoder.delegate = nil;
-    
     [self.encoder close];
     [self.decoder close];
+    self.encoder.delegate = nil;
+    self.decoder.delegate = nil;
+
     self.status = MQTTSessionStatusClosed;
     [self.delegate handleEvent:self event:MQTTSessionEventConnectionClosed error:nil];
     if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
@@ -315,6 +315,15 @@
 
 - (void)encoder:(MQTTEncoder*)sender handleEvent:(MQTTEncoderEvent)eventCode error:(NSError *)error
 {
+#ifdef DEBUG
+    NSArray *events = @[
+                        @"MQTTEncoderEventReady",
+                        @"MQTTEncoderEventErrorOccurred"
+                        ];
+    
+    NSLog(@"MQTTSession encoder handleEvent: %@ (%d) %@", events[eventCode % [events count]], eventCode, [error description]);
+#endif
+
     switch (eventCode) {
         case MQTTEncoderEventReady:
             switch (self.status) {
@@ -364,6 +373,16 @@
 
 - (void)decoder:(MQTTDecoder*)sender handleEvent:(MQTTDecoderEvent)eventCode error:(NSError *)error
 {
+#ifdef DEBUG
+    NSArray *events = @[
+                        @"MQTTDecoderEventProtocolError",
+                        @"MQTTDecoderEventConnectionClosed",
+                        @"MQTTDecoderEventConnectionError"
+                        ];
+    
+    NSLog(@"MQTTSession decoder handleEvent: %@ (%d) %@", events[eventCode % [events count]], eventCode, [error description]);
+#endif
+
     MQTTSessionEvent event;
     switch (eventCode) {
         case MQTTDecoderEventConnectionClosed:

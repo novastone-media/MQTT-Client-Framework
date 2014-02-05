@@ -18,7 +18,10 @@
 @end
 
 #define HOST @"localhost"
+<<<<<<< HEAD
 #define PROTOCOLLEVEL 4
+=======
+>>>>>>> f69925a5fc9da1a3df5875672b878381ffa89564
 
 @implementation MQTTClientTests
 

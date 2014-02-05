@@ -11,7 +11,7 @@
 
 @interface MQTTClientSubscriptionTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
-@property (nonatomic) MQTTSessionEvent event;
+@property (nonatomic) NSInteger event;
 @property (nonatomic) UInt16 mid;
 @property (nonatomic) UInt16 sentMid;
 @property (nonatomic) NSArray *qoss;
@@ -180,7 +180,7 @@
     for (UInt32 i = 2; i <= 32768; i *= 2) {
         topic = [topic stringByAppendingString:topic];
     }
-    NSLog(@"LongSubscribe (%d)", strlen([[topic substringFromIndex:1] UTF8String]));
+    NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
     [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
 }
 
@@ -267,7 +267,7 @@
 {
     [self testSubscribe:topic atLevel:qos];
     XCTAssertFalse(self.timeout, @"No SUBACK received within %d seconds [MQTT-3.8.4-1]", 10);
-    XCTAssert(self.event == -1, @"Event %d happened", self.event);
+    XCTAssert(self.event == -1, @"Event %ld happened", (long)self.event);
     XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.mid, self.sentMid);
     for (NSNumber *qos in self.qoss) {
         XCTAssertNotEqual([qos intValue], 0x80, @"Returncode in SUBACK is 0x80");
@@ -279,7 +279,7 @@
 {
     [self testMultiSubscribe:topics];
     XCTAssertFalse(self.timeout, @"No SUBACK received within %d seconds [MQTT-3.8.4-1]", 10);
-    XCTAssert(self.event == -1, @"Event %d happened", self.event);
+    XCTAssert(self.event == -1, @"Event %ld happened", (long)self.event);
     XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.mid, self.sentMid);
     for (NSNumber *qos in self.qoss) {
         XCTAssertNotEqual([qos intValue], 0x80, @"Returncode in SUBACK is 0x80");
@@ -292,7 +292,7 @@
     [self testSubscribe:topic atLevel:qos];
     XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
     XCTAssert(self.mid == 0, @"SUBACK received");
-    XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %d happened", self.event);
+    XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testMultiSubscribeCloseExpected:(NSDictionary *)topics
@@ -300,14 +300,14 @@
     [self testMultiSubscribe:topics];
     XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
     XCTAssert(self.mid == 0, @"SUBACK received");
-    XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %d happened", self.event);
+    XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testSubscribeFailureExpected:(NSString *)topic atLevel:(UInt8)qos
 {
     [self testSubscribe:topic atLevel:qos];
     XCTAssertFalse(self.timeout, @"No SUBACK received within %d seconds [MQTT-3.8.4-1]", 10);
-    XCTAssert(self.event == -1, @"Event %d happened", self.event);
+    XCTAssert(self.event == -1, @"Event %ld happened", (long)self.event);
     XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.mid, self.sentMid);
     for (NSNumber *qos in self.qoss) {
         XCTAssertEqual([qos intValue], 0x80, @"Returncode in SUBACK is not 0x80");
