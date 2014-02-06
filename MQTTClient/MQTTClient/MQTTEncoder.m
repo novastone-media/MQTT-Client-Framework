@@ -123,11 +123,11 @@
     self.buffer = [[NSMutableData alloc] init];
     
     // encode fixed header
-    header = [msg type] << 4;
+    header = ([msg type] & 0x0f) << 4;
     if (msg.dupFlag) {
         header |= 0x08;
     }
-    header |= [msg qos] << 1;
+    header |= ([msg qos] & 0x03) << 1;
     if ([msg retainFlag]) {
         header |= 0x01;
     }

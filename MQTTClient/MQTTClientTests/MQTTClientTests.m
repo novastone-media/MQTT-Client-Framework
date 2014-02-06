@@ -18,10 +18,7 @@
 @end
 
 #define HOST @"localhost"
-<<<<<<< HEAD
 #define PROTOCOLLEVEL 4
-=======
->>>>>>> f69925a5fc9da1a3df5875672b878381ffa89564
 
 @implementation MQTTClientTests
 
@@ -283,7 +280,7 @@
     while (!self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
-    NSLog(@"self.event:%d MQTTSessionEventConnected:%d", self.event, MQTTSessionEventConnected);
+    NSLog(@"self.event:%ld MQTTSessionEventConnected:%ld", (long)self.event, (long)MQTTSessionEventConnected);
     XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
 
     self.event = -1;

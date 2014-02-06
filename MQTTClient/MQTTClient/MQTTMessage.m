@@ -180,6 +180,7 @@
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPubrel
+                                                     qos:1
                                                     data:data];
     msg.mid = msgId;
     return msg;

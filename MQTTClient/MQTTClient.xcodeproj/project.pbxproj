@@ -22,6 +22,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		840785A918A2AA26009158D5 /* MQTTClientPublishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */; };
 		845DBE771884AAD700EDB183 /* MQTTClientSubscriptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */; };
 		8461912E1883E56800101409 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8461912D1883E56800101409 /* Foundation.framework */; };
 		846191331883E56800101409 /* MQTTClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 846191321883E56800101409 /* MQTTClient.h */; };
@@ -75,6 +76,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientPublishTests.m; sourceTree = "<group>"; };
 		845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientSubscriptionTests.m; sourceTree = "<group>"; };
 		8461912A1883E56800101409 /* libMQTTClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMQTTClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8461912D1883E56800101409 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -182,6 +184,7 @@
 			children = (
 				846191491883E56800101409 /* MQTTClientTests.m */,
 				845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */,
+				840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */,
 				846191441883E56800101409 /* Supporting Files */,
 			);
 			path = MQTTClientTests;
@@ -339,6 +342,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				840785A918A2AA26009158D5 /* MQTTClientPublishTests.m in Sources */,
 				8461914A1883E56800101409 /* MQTTClientTests.m in Sources */,
 				845DBE771884AAD700EDB183 /* MQTTClientSubscriptionTests.m in Sources */,
 			);
