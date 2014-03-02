@@ -731,7 +731,7 @@
                 if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
                     [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
                 }
-                if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
+                if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
                     [self.delegate messageDelivered:self msgID:[msgId unsignedIntValue]];
                 }
                 return;
