@@ -152,7 +152,8 @@
     }
 
 #ifdef DEBUG
-    NSLog(@"MQTTEncoder buffer to write (%lu)=%@", (unsigned long)self.buffer.length, [self.buffer description]);
+    NSLog(@"MQTTEncoder buffer to write (%lu)=%@...", (unsigned long)self.buffer.length,
+          [self.buffer subdataWithRange:NSMakeRange(0, MIN(16, self.buffer.length))]);
 #endif
 
     [self.delegate encoder:self sending:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:self.buffer];

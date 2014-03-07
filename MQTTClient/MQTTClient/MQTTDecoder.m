@@ -133,7 +133,8 @@
                                                     dupFlag:isDuplicate
                                                        data:self.dataBuffer];
 #ifdef DEBUG
-                    NSLog(@"MQTTDecoder received (%lu)=%@", (unsigned long)self.dataBuffer.length, [self.dataBuffer description]);
+                    NSLog(@"MQTTDecoder received (%lu)=%@...", (unsigned long)self.dataBuffer.length,
+                          [self.dataBuffer subdataWithRange:NSMakeRange(0, MIN(16, self.dataBuffer.length))]);
 #endif
                     [self.delegate decoder:self newMessage:msg];
                     self.dataBuffer = NULL;

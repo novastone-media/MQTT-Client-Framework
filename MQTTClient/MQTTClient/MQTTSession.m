@@ -222,7 +222,9 @@
                 qos:(NSInteger)qos
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession publishData:%@ onTopic:%@ retain:%d qos:%ld", data, topic, retainFlag, (long)qos);
+    NSLog(@"MQTTSession publishData:%@... onTopic:%@ retain:%d qos:%ld",
+          [data subdataWithRange:NSMakeRange(0, MIN(16, data.length))],
+          topic, retainFlag, (long)qos);
 #endif
     UInt16 msgId = [self nextMsgId];
     MQTTMessage *msg = [MQTTMessage publishMessageWithData:data
