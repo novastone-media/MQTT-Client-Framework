@@ -47,12 +47,12 @@
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
 #ifdef DEBUG
-    NSLog(@"MQTTEncoder handleEvent 0x%02lx", (long)eventCode);
+    NSLog(@"%@handleEvent 0x%02lx", self, (long)eventCode);
 #endif
 
     if(self.stream == nil) {
 #ifdef DEBUG
-        NSLog(@"MQTTEncoder self.stream == nil");
+        NSLog(@"%@ self.stream == nil", self);
 #endif
         return;
     }
@@ -100,7 +100,7 @@
             break;
         default:
 #ifdef DEBUG
-            NSLog(@"MQTTEncoder unhandled event code 0x%02lx", (long)eventCode);
+            NSLog(@"%@ unhandled event code 0x%02lx", self, (long)eventCode);
 #endif
             break;
     }
@@ -112,7 +112,7 @@
     
     if (self.status != MQTTEncoderStatusReady) {
 #ifdef DEBUG
-        NSLog(@"MQTTEncoder not status ready %d", self.status);
+        NSLog(@"%@ not status ready %d", self, self.status);
 #endif
         return;
     }
@@ -152,7 +152,7 @@
     }
 
 #ifdef DEBUG
-    NSLog(@"MQTTEncoder buffer to write (%lu)=%@...", (unsigned long)self.buffer.length,
+    NSLog(@"%@ buffer to write (%lu)=%@...", self, (unsigned long)self.buffer.length,
           [self.buffer subdataWithRange:NSMakeRange(0, MIN(16, self.buffer.length))]);
 #endif
 

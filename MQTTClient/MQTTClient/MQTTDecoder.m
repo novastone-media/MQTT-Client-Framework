@@ -47,11 +47,11 @@
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
 #ifdef DEBUG
-    NSLog(@"MQTTDecoder handleEvent 0x%02lx", (long)eventCode);
+    NSLog(@"%@ handleEvent 0x%02lx", self, (long)eventCode);
 #endif
     if(self.stream == nil) {
 #ifdef DEBUG
-        NSLog(@"MQTTDecoder self.stream == nil");
+        NSLog(@"%@ self.stream == nil", self);
 #endif
         return;
     }
@@ -133,7 +133,7 @@
                                                     dupFlag:isDuplicate
                                                        data:self.dataBuffer];
 #ifdef DEBUG
-                    NSLog(@"MQTTDecoder received (%lu)=%@...", (unsigned long)self.dataBuffer.length,
+                    NSLog(@"%@received (%lu)=%@...", self, (unsigned long)self.dataBuffer.length,
                           [self.dataBuffer subdataWithRange:NSMakeRange(0, MIN(16, self.dataBuffer.length))]);
 #endif
                     [self.delegate decoder:self newMessage:msg];
@@ -155,7 +155,7 @@
         }
         default:
 #ifdef DEBUG
-            NSLog(@"MQTTDecoder unhandled event code 0x%02lx", (long)eventCode);
+            NSLog(@"%@ unhandled event code 0x%02lx", self, (long)eventCode);
 #endif
             break;
     }

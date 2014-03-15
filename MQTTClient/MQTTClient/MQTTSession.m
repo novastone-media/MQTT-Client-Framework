@@ -68,7 +68,8 @@
 {
     self = [super init];
 #ifdef DEBUG
-    NSLog(@"MQTTSession initWithClientId:%@ userName:%@ password:%@ keepAlive:%d cleanSession:%d will:%d willTopic:%@ willTopic:%@ willQos:%d willRetainFlag:%d protocolLevel:%d runLoop:%@ forMode:%@",
+    NSLog(@"%@ initWithClientId:%@ userName:%@ password:%@ keepAlive:%d cleanSession:%d will:%d willTopic:%@ willTopic:%@ willQos:%d willRetainFlag:%d protocolLevel:%d runLoop:%@ forMode:%@",
+          self,
           clientId,
           userName,
           password,
@@ -126,7 +127,7 @@
 - (void)connectToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession connectToHost:%@ port:%d usingSSL:%d]", host, (unsigned int)port, usingSSL);
+    NSLog(@"%@ connectToHost:%@ port:%d usingSSL:%d]", self, host, (unsigned int)port, usingSSL);
 #endif
 
     self.status = MQTTSessionStatusCreated;
@@ -175,7 +176,7 @@
                    atLevel:(UInt8)qosLevel
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession subscribeToTopic:%@ atLevel:%d]", topic, qosLevel);
+    NSLog(@"%@ subscribeToTopic:%@ atLevel:%d]", self, topic, qosLevel);
 #endif
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage subscribeMessageWithMessageId:mid
@@ -186,7 +187,7 @@
 - (UInt16)subscribeToTopics:(NSDictionary *)topics
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession subscribeToTopics:%@]", topics);
+    NSLog(@"%@ subscribeToTopics:%@]", self, topics);
 #endif
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage subscribeMessageWithMessageId:mid
@@ -197,7 +198,7 @@
 - (UInt16)unsubscribeTopic:(NSString*)theTopic
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession unsubscribeTopic:%@", theTopic);
+    NSLog(@"%@ unsubscribeTopic:%@", self, theTopic);
 #endif
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage unsubscribeMessageWithMessageId:mid
@@ -208,7 +209,7 @@
 - (UInt16)unsubscribeTopics:(NSArray *)theTopics
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession unsubscribeTopics:%@", theTopics);
+    NSLog(@"%@ unsubscribeTopics:%@", self, theTopics);
 #endif
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage unsubscribeMessageWithMessageId:mid
@@ -222,9 +223,12 @@
                 qos:(NSInteger)qos
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession publishData:%@... onTopic:%@ retain:%d qos:%ld",
+    NSLog(@"%@ publishData:%@... onTopic:%@ retain:%d qos:%ld",
+          self,
           [data subdataWithRange:NSMakeRange(0, MIN(16, data.length))],
-          topic, retainFlag, (long)qos);
+          topic,
+          retainFlag,
+          (long)qos);
 #endif
     UInt16 msgId = [self nextMsgId];
     MQTTMessage *msg = [MQTTMessage publishMessageWithData:data
@@ -253,12 +257,12 @@
 - (void)close
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession close");
+    NSLog(@"%@ close", self);
 #endif
 
     if (self.status == MQTTSessionStatusConnected) {
 #ifdef DEBUG
-        NSLog(@"MQTTSession disconnecting");
+        NSLog(@"%@ disconnecting", self);
 #endif
         self.status = MQTTSessionStatusDisconnecting;
         [self send:[MQTTMessage disconnectMessage]];
@@ -270,7 +274,7 @@
 - (void)closeInternal
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession closeInternal");
+    NSLog(@"%@ closeInternal", self);
 #endif 
     
     if (self.keepAliveTimer) {
@@ -297,7 +301,7 @@
 - (void)keepAlive:(NSTimer *)timer
 {
 #ifdef DEBUG
-    NSLog(@"MQTTSession keepAlive %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
+    NSLog(@"%@ keepAlive %@ @%.0f", self, self.clientId, [[NSDate date] timeIntervalSince1970]);
 #endif
     if ([self.encoder status] == MQTTEncoderStatusReady) {
         MQTTMessage *msg = [MQTTMessage pingreqMessage];
@@ -323,7 +327,7 @@
                         @"MQTTEncoderEventErrorOccurred"
                         ];
     
-    NSLog(@"MQTTSession encoder handleEvent: %@ (%d) %@", events[eventCode % [events count]], eventCode, [error description]);
+    NSLog(@"%@ encoder handleEvent: %@ (%d) %@", self, events[eventCode % [events count]], eventCode, [error description]);
 #endif
 
     switch (eventCode) {
@@ -350,7 +354,7 @@
                     break;
                 case MQTTSessionStatusDisconnecting:
 #ifdef DEBUG
-                    NSLog(@"MQTTSession disconnect sent");
+                    NSLog(@"%@ disconnect sent", self);
 #endif
                     [self closeInternal];
                     break;
@@ -382,7 +386,7 @@
                         @"MQTTDecoderEventConnectionError"
                         ];
     
-    NSLog(@"MQTTSession decoder handleEvent: %@ (%d) %@", events[eventCode % [events count]], eventCode, [error description]);
+    NSLog(@"%@ decoder handleEvent: %@ (%d) %@", self, events[eventCode % [events count]], eventCode, [error description]);
 #endif
 
     MQTTSessionEvent event;
