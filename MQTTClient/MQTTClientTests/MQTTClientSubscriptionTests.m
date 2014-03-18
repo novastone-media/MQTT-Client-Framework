@@ -25,6 +25,7 @@
 #define HOST @"localhost"
 #define PROTOCOLLEVEL 4
 
+
 - (void)setUp
 {
     [super setUp];
@@ -291,7 +292,6 @@
 {
     [self testSubscribe:topic atLevel:qos];
     XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
-    XCTAssert(self.mid == 0, @"SUBACK received");
     XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %ld happened", (long)self.event);
 }
 
@@ -351,7 +351,6 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
-    XCTAssert(self.mid == 0, @"SUBACK received");
     XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %d happened", self.event);
 }
 

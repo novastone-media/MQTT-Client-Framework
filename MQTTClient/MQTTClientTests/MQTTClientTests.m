@@ -15,6 +15,7 @@
 @property (strong, nonatomic) NSError *error;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) int type;
+@property (nonatomic) BOOL ungraceful;
 @end
 
 #define HOST @"localhost"
@@ -30,9 +31,11 @@
 
 - (void)tearDown
 {
-    [self.session close];
-    self.session.delegate = nil;
-    self.session = nil;
+    if (!self.ungraceful) {
+        [self.session close];
+        self.session.delegate = nil;
+        self.session = nil;
+    }
 
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
@@ -145,8 +148,68 @@
     }
     XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
     XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
+    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
     XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
+    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
+    
+}
+
+- (void)test_connect_will_with_qos3
+{
+    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+                                                userName:nil
+                                                password:nil
+                                               keepAlive:10
+                                            cleanSession:YES
+                                                    will:YES
+                                               willTopic:@"will-qos3"
+                                                 willMsg:[@"will-qos3" dataUsingEncoding:NSUTF8StringEncoding]
+                                                 willQoS:3
+                                          willRetainFlag:NO
+                                           protocolLevel:PROTOCOLLEVEL
+                                                 runLoop:[NSRunLoop currentRunLoop]
+                                                 forMode:NSRunLoopCommonModes];
+    self.session.delegate = self;
+    self.event = -1;
+    [self.session connectToHost:HOST port:1883 usingSSL:NO];
+    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    while (!self.timeout && self.event == -1) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
+    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
+    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
+    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
+    self.ungraceful = TRUE;
+    
+}
+
+- (void)test_connect_will
+{
+    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+                                                userName:nil
+                                                password:nil
+                                               keepAlive:10
+                                            cleanSession:YES
+                                                    will:YES
+                                               willTopic:@"will-qos0"
+                                                 willMsg:[@"will-qos0" dataUsingEncoding:NSUTF8StringEncoding]
+                                                 willQoS:0
+                                          willRetainFlag:NO
+                                           protocolLevel:PROTOCOLLEVEL
+                                                 runLoop:[NSRunLoop currentRunLoop]
+                                                 forMode:NSRunLoopCommonModes];
+    self.session.delegate = self;
+    self.event = -1;
+    [self.session connectToHost:HOST port:1883 usingSSL:NO];
+    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    while (!self.timeout && self.event == -1) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+    self.ungraceful = TRUE;
+    
 }
 
 - (void)test_connect_other_protocollevel
