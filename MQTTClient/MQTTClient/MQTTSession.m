@@ -406,13 +406,13 @@
 
 - (void)decoder:(MQTTDecoder*)sender newMessage:(MQTTMessage*)msg
 {
+    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
+        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
+    }
     switch (self.status) {
         case MQTTSessionStatusConnecting:
             switch ([msg type]) {
                 case MQTTConnack:
-                    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
-                    }
                     if ([[msg data] length] != 2) {
                         [self error:MQTTSessionEventProtocolError
                               error:[NSError errorWithDomain:@"MQTT"
@@ -474,9 +474,6 @@
                     }
                     break;
                 default:
-                    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
-                    }
                     [self error:MQTTSessionEventProtocolError
                           error:[NSError errorWithDomain:@"MQTT"
                                                     code:-1
@@ -508,16 +505,10 @@
                     [self handleUnsuback:msg];
                     break;
                 default:
-                    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
-                    }
-                    return;
+                    break;
             }
             break;
         default:
-            if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
-            }
             break;
     }
 }
@@ -539,9 +530,6 @@
     NSRange range = NSMakeRange(2 + topicLength, [data length] - topicLength - 2);
     data = [data subdataWithRange:range];
     if ([msg qos] == 0) {
-        if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-            [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
-        }
         [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:0];
     }
     else {
@@ -552,9 +540,6 @@
                 msg.mid = msgId;
                 data = [data subdataWithRange:NSMakeRange(2, [data length] - 2)];
                 if ([msg qos] == 1) {
-                    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
-                    }
                     [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:msgId];
                     [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
                     return;
@@ -573,16 +558,9 @@
                                       flowingIn:[self.rxFlows count]
                                      flowingOut:[self.txFlows count]];
                     }
-                    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
-                    }
                     [self send:[MQTTMessage pubrecMessageWithMessageId:msgId]];
-                    return;
                 }
             }
-        }
-        if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-            [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
         }
     }
 }
@@ -605,19 +583,12 @@
                                       flowingIn:[self.rxFlows count]
                                      flowingOut:[self.txFlows count]];
                     }
-                    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
-                    }
                     if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
                         [self.delegate messageDelivered:self msgID:[msgId unsignedIntValue]];
                     }
-                    return;
                 }
             }
         }
-    }
-    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
     }
 }
 
@@ -635,9 +606,6 @@
             [self.delegate subAckReceived:self msgID:msg.mid grantedQoss:qoss];
         }
     }
-    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
-    }
 }
 
 - (void)handleUnsuback:(MQTTMessage*)msg
@@ -650,9 +618,6 @@
             [self.delegate unsubAckReceived:self msgID:msg.mid];
         }
     }
-    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
-    }
 }
 
 - (void)handlePubrec:(MQTTMessage*)msg
@@ -662,24 +627,17 @@
         NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
         if ([msgId unsignedIntValue] != 0) {
             msg.mid = [msgId unsignedIntValue];
+            MQTTMessage *pubrelmsg = [MQTTMessage pubrelMessageWithMessageId:[msgId unsignedIntValue]];
             MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
             if (flow != nil) {
                 MQTTMessage *flowmsg = [flow msg];
                 if ([flowmsg type] == MQTTPublish && [flowmsg qos] == 2) {
-                    flowmsg = [MQTTMessage pubrelMessageWithMessageId:[msgId unsignedIntValue]];
-                    flow.msg = flowmsg;
+                    flow.msg = pubrelmsg;
                     flow.deadline = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT];
-                    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
-                    }
-                    [self send:flowmsg];
-                    return;
                 }
             }
+            [self send:pubrelmsg];
         }
-    }
-    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
     }
 }
 
@@ -692,9 +650,6 @@
             msg.mid = [msgId unsignedIntValue];
             NSDictionary *dict = [self.rxFlows objectForKey:msgId];
             if (dict != nil) {
-                if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
-                }
                 [self.delegate newMessage:self
                                      data:[dict valueForKey:@"data"]
                                   onTopic:[dict valueForKey:@"topic"]
@@ -711,11 +666,7 @@
                 }
             }
             [self send:[MQTTMessage pubcompMessageWithMessageId:[msgId unsignedIntegerValue]]];
-            return;
         }
-    }
-    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
     }
 }
 
@@ -734,18 +685,12 @@
                                   flowingIn:[self.rxFlows count]
                                  flowingOut:[self.txFlows count]];
                 }
-                if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-                    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
-                }
                 if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
                     [self.delegate messageDelivered:self msgID:[msgId unsignedIntValue]];
                 }
                 return;
             }
         }
-    }
-    if ([self.delegate respondsToSelector:@selector(received:qos:retained:duped:mid:data:)]) {
-        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
     }
 }
 
