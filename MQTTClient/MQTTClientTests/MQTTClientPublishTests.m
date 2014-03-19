@@ -51,11 +51,18 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
 
+    self.type = -1;
+    [self.session subscribeToTopic:[NSString stringWithFormat:@"%@/#", TOPIC] atLevel:2];
+    while (self.type == -1) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+
     self.timeout = FALSE;
+    self.type = -1;
     self.mid = -1;
     self.qos = -1;
     self.event = -1;
-    self.type = -1;
+
 }
 
 - (void)tearDown
@@ -219,6 +226,7 @@
 - (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
 {
     NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
+    self.type = type;
 }
 
 @end

@@ -54,7 +54,7 @@
         flags |= 0x04;
     }
     
-    flags |= ((willQoS & 0x03) << 4);
+    flags |= ((willQoS & 0x03) << 3);
 
     if (willRetainFlag) {
         flags |= 0x20;
