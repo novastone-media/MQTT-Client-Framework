@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "MQTTClient.h"
+#import "MQTTClientTests.h"
 
 @interface MQTTClientTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
@@ -18,8 +19,6 @@
 @property (nonatomic) BOOL ungraceful;
 @end
 
-#define HOST @"localhost"
-#define PROTOCOLLEVEL 4
 
 @implementation MQTTClientTests
 
@@ -162,7 +161,7 @@
                                                keepAlive:10
                                             cleanSession:YES
                                                     will:YES
-                                               willTopic:@"will-qos3"
+                                               willTopic:@"MQTTClient/will-qos3"
                                                  willMsg:[@"will-qos3" dataUsingEncoding:NSUTF8StringEncoding]
                                                  willQoS:3
                                           willRetainFlag:NO
@@ -193,7 +192,7 @@
                                                keepAlive:10
                                             cleanSession:YES
                                                     will:YES
-                                               willTopic:@"will-qos0"
+                                               willTopic:@"MQTTClient/will-qos0"
                                                  willMsg:[@"will-qos0" dataUsingEncoding:NSUTF8StringEncoding]
                                                  willQoS:0
                                           willRetainFlag:NO

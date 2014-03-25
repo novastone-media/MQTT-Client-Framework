@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "MQTTClient.h"
+#import "MQTTClientTests.h"
 
 @interface MQTTClientPublishTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
@@ -21,10 +22,6 @@
 @end
 
 @implementation MQTTClientPublishTests
-
-#define HOST @"localhost"
-#define PROTOCOLLEVEL 4
-#define TOPIC @"MQTTClient"
 
 - (void)setUp
 {
@@ -52,11 +49,12 @@
     }
 
     self.type = -1;
+    /*
     [self.session subscribeToTopic:[NSString stringWithFormat:@"%@/#", TOPIC] atLevel:2];
     while (self.type == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
-
+     */
     self.timeout = FALSE;
     self.type = -1;
     self.mid = -1;

@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "MQTTClient.h"
+#import "MQTTClientTests.h"
 
 @interface MQTTClientSubscriptionTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
@@ -21,10 +22,6 @@
 @end
 
 @implementation MQTTClientSubscriptionTests
-
-#define HOST @"localhost"
-#define PROTOCOLLEVEL 4
-
 
 - (void)setUp
 {
@@ -80,11 +77,6 @@
     NSLog(@"can't test [MQTT-3.10.1-1]");
 }
 
-- (void)testSubscribeWOTopic
-{
-    [self testMultiSubscribeCloseExpected:@{}];
-}
-
 - (void)testSubscribeWMultipleTopics_None
 {
     [self testMultiSubscribeCloseExpected:@{}];
@@ -92,42 +84,42 @@
 
 - (void)testSubscribeWMultipleTopics_One
 {
-    [self testMultiSubscribeSubackExpected:@{@"abc": @(2)}];
+    [self testMultiSubscribeSubackExpected:@{@"MQTTClient": @(2)}];
 }
 
 - (void)testSubscribeWMultipleTopics_more
 {
-    [self testMultiSubscribeSubackExpected:@{@"abc": @(0), @"#": @(0), @"mqttitude/#": @(1)}];
+    [self testMultiSubscribeSubackExpected:@{@"MQTTClient": @(0), @"MQTTClient/abc": @(0), @"MQTTClient/#": @(1)}];
 }
 
 - (void)testSubscribeQoS0
 {
-    [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:0];
+    [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:0];
 }
 
 - (void)testSubscribeQoS1
 {
-    [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:1];
+    [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:1];
 }
 
 - (void)testSubscribeQoS2
 {
-    [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:2];
+    [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:2];
 }
 
 - (void)testSubscribeQoS3
 {
-    [self testSubscribeCloseExpected:@"mqttitude/#" atLevel:3];
+    [self testSubscribeCloseExpected:@"MQTTClient/#" atLevel:3];
 }
 
 - (void)testSubscribeQoS4_MQTT_3_8_3_2
 {
-    [self testSubscribeCloseExpected:@"mqttitude/#" atLevel:4];
+    [self testSubscribeCloseExpected:@"MQTTClient/#" atLevel:4];
 }
 
 - (void)testSubscribeTopicPlain
 {
-    [self testSubscribeSubackExpected:@"abc" atLevel:0];
+    [self testSubscribeSubackExpected:@"MQTTClient" atLevel:0];
 }
 
 - (void)testSubscribeTopicHash {
@@ -136,12 +128,17 @@
 
 - (void)testSubscribeTopicHashnotalone
 {
-    [self testSubscribeCloseExpected:@"#abc" atLevel:0];
+    [self testSubscribeCloseExpected:@"#MQTTClient" atLevel:0];
+}
+
+- (void)testSubscribeTopicEmpty
+{
+    [self testSubscribeCloseExpected:@"" atLevel:0];
 }
 
 - (void)testSubscribeTopicHashnotlast
 {
-    [self testSubscribeCloseExpected:@"abc/#/def" atLevel:0];
+    [self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0];
 }
 
 - (void)testSubscribeTopicPlus
@@ -156,7 +153,7 @@
 
 - (void)testSubscribeTopicPlusnotalone_MQTT_4_7_1_3
 {
-    [self testSubscribeCloseExpected:@"abc+" atLevel:0];
+    [self testSubscribeCloseExpected:@"MQTTClient+" atLevel:0];
 }
 
 - (void)testSubscribeTopicEmpty_MQTT_4_7_3_1
@@ -257,7 +254,7 @@
 
 - (void)testMultiUnsubscribe_more
 {
-    [self testMultiUnsubscribeTopic:@[@"abc", @"ab/+/ef", @"+", @"#", @"abc/d+f", @"#/b/c"]];
+    [self testMultiUnsubscribeTopic:@[@"abc", @"ab/+/ef", @"+", @"#", @"abc/df", @"a/b/c/#"]];
 }
 
 /*
