@@ -1,18 +1,13 @@
 MQTT-Client-Framework
 =====================
 
-an Objective-C native MQTT Framework 
-
-http://mqtt.org
+an Objective-C native MQTT Framework http://mqtt.org
 
 ### Howto
 
 Add MQTTClient.framework from the dist directory to your IOS project
 
-Import `<MQTTClient/MQTTClient.h>` to your files calling MQTTClient
-
 [Documentation](MQTTClient/dist/index.html)
-
 
 ### License
 
@@ -44,13 +39,9 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #### Framework
 
-Framework build using instructions and scripts by Jeff Verkoeyen
-
-https://github.com/jverkoey/iOS-Framework
+Framework build using instructions and scripts by Jeff Verkoeyen https://github.com/jverkoey/iOS-Framework
 
 #### docs
 
-Documentation generated with doxygen
-
-http://doxygen.org
+Documentation generated with doxygen http://doxygen.org
 
