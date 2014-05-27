@@ -23,20 +23,6 @@
 
 /* Begin PBXBuildFile section */
 		840785A918A2AA26009158D5 /* MQTTClientPublishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */; };
-		8453268918DF1B8C00DEA5E3 /* Broker.h in Headers */ = {isa = PBXBuildFile; fileRef = 8453268718DF1B8C00DEA5E3 /* Broker.h */; };
-		8453268A18DF1B8C00DEA5E3 /* Broker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8453268818DF1B8C00DEA5E3 /* Broker.m */; };
-		8453268D18DF1B8C00DEA5E3 /* Message.h in Headers */ = {isa = PBXBuildFile; fileRef = 8453268B18DF1B8C00DEA5E3 /* Message.h */; };
-		8453268E18DF1B8C00DEA5E3 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 8453268C18DF1B8C00DEA5E3 /* Message.m */; };
-		8453269118DF1B8C00DEA5E3 /* Myself.h in Headers */ = {isa = PBXBuildFile; fileRef = 8453268F18DF1B8C00DEA5E3 /* Myself.h */; };
-		8453269218DF1B8C00DEA5E3 /* Myself.m in Sources */ = {isa = PBXBuildFile; fileRef = 8453269018DF1B8C00DEA5E3 /* Myself.m */; };
-		8453269518DF1B8C00DEA5E3 /* Device.h in Headers */ = {isa = PBXBuildFile; fileRef = 8453269318DF1B8C00DEA5E3 /* Device.h */; };
-		8453269618DF1B8C00DEA5E3 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 8453269418DF1B8C00DEA5E3 /* Device.m */; };
-		8453269918DF1B8C00DEA5E3 /* Group.h in Headers */ = {isa = PBXBuildFile; fileRef = 8453269718DF1B8C00DEA5E3 /* Group.h */; };
-		8453269A18DF1B8C00DEA5E3 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 8453269818DF1B8C00DEA5E3 /* Group.m */; };
-		8453269D18DF1B8C00DEA5E3 /* User.h in Headers */ = {isa = PBXBuildFile; fileRef = 8453269B18DF1B8C00DEA5E3 /* User.h */; };
-		8453269E18DF1B8C00DEA5E3 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 8453269C18DF1B8C00DEA5E3 /* User.m */; };
-		845326A118DF1B8C00DEA5E3 /* UserGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 8453269F18DF1B8C00DEA5E3 /* UserGroup.h */; };
-		845326A218DF1B8C00DEA5E3 /* UserGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 845326A018DF1B8C00DEA5E3 /* UserGroup.m */; };
 		845DBE771884AAD700EDB183 /* MQTTClientSubscriptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */; };
 		8461912E1883E56800101409 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8461912D1883E56800101409 /* Foundation.framework */; };
 		846191331883E56800101409 /* MQTTClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 846191321883E56800101409 /* MQTTClient.h */; };
@@ -91,20 +77,6 @@
 
 /* Begin PBXFileReference section */
 		840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientPublishTests.m; sourceTree = "<group>"; };
-		8453268718DF1B8C00DEA5E3 /* Broker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Broker.h; sourceTree = "<group>"; };
-		8453268818DF1B8C00DEA5E3 /* Broker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Broker.m; sourceTree = "<group>"; };
-		8453268B18DF1B8C00DEA5E3 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		8453268C18DF1B8C00DEA5E3 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		8453268F18DF1B8C00DEA5E3 /* Myself.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Myself.h; sourceTree = "<group>"; };
-		8453269018DF1B8C00DEA5E3 /* Myself.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Myself.m; sourceTree = "<group>"; };
-		8453269318DF1B8C00DEA5E3 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
-		8453269418DF1B8C00DEA5E3 /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
-		8453269718DF1B8C00DEA5E3 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
-		8453269818DF1B8C00DEA5E3 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
-		8453269B18DF1B8C00DEA5E3 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		8453269C18DF1B8C00DEA5E3 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		8453269F18DF1B8C00DEA5E3 /* UserGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserGroup.h; sourceTree = "<group>"; };
-		845326A018DF1B8C00DEA5E3 /* UserGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserGroup.m; sourceTree = "<group>"; };
 		845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientSubscriptionTests.m; sourceTree = "<group>"; };
 		8461912A1883E56800101409 /* libMQTTClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMQTTClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8461912D1883E56800101409 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -155,20 +127,6 @@
 		846191211883E56800101409 = {
 			isa = PBXGroup;
 			children = (
-				8453269F18DF1B8C00DEA5E3 /* UserGroup.h */,
-				845326A018DF1B8C00DEA5E3 /* UserGroup.m */,
-				8453269B18DF1B8C00DEA5E3 /* User.h */,
-				8453269C18DF1B8C00DEA5E3 /* User.m */,
-				8453269718DF1B8C00DEA5E3 /* Group.h */,
-				8453269818DF1B8C00DEA5E3 /* Group.m */,
-				8453269318DF1B8C00DEA5E3 /* Device.h */,
-				8453269418DF1B8C00DEA5E3 /* Device.m */,
-				8453268F18DF1B8C00DEA5E3 /* Myself.h */,
-				8453269018DF1B8C00DEA5E3 /* Myself.m */,
-				8453268B18DF1B8C00DEA5E3 /* Message.h */,
-				8453268C18DF1B8C00DEA5E3 /* Message.m */,
-				8453268718DF1B8C00DEA5E3 /* Broker.h */,
-				8453268818DF1B8C00DEA5E3 /* Broker.m */,
 				8461912F1883E56800101409 /* MQTTClient */,
 				846191431883E56800101409 /* MQTTClientTests */,
 				8461912C1883E56800101409 /* Frameworks */,
@@ -254,15 +212,8 @@
 				846192021883E8FD00101409 /* MQTTEncoder.h in Headers */,
 				846192031883E8FD00101409 /* MQTTMessage.h in Headers */,
 				846192041883E8FD00101409 /* MQTTSession.h in Headers */,
-				8453269918DF1B8C00DEA5E3 /* Group.h in Headers */,
-				8453269118DF1B8C00DEA5E3 /* Myself.h in Headers */,
-				8453268D18DF1B8C00DEA5E3 /* Message.h in Headers */,
-				8453269D18DF1B8C00DEA5E3 /* User.h in Headers */,
 				846192051883E8FD00101409 /* MQTTTxFlow.h in Headers */,
 				846192011883E8FD00101409 /* MQTTDecoder.h in Headers */,
-				8453269518DF1B8C00DEA5E3 /* Device.h in Headers */,
-				845326A118DF1B8C00DEA5E3 /* UserGroup.h in Headers */,
-				8453268918DF1B8C00DEA5E3 /* Broker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,7 +309,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# Link the \"Current\" version to \"A\"\n/bin/ln -sfh A \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"";
+			shellScript = "set -e\n\n(cd \"${PROJECT_DIR}/MQTTClient\"; /usr/local/bin/doxygen)\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# Link the \"Current\" version to \"A\"\n/bin/ln -sfh A \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"";
 		};
 		8461920D1883EC3900101409 /* Build for all Platforms */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -383,15 +334,8 @@
 			files = (
 				846191EF1883E8B900101409 /* MQTTMessage.m in Sources */,
 				846191EE1883E8B900101409 /* MQTTEncoder.m in Sources */,
-				845326A218DF1B8C00DEA5E3 /* UserGroup.m in Sources */,
 				846191F01883E8B900101409 /* MQTTSession.m in Sources */,
-				8453269618DF1B8C00DEA5E3 /* Device.m in Sources */,
-				8453269218DF1B8C00DEA5E3 /* Myself.m in Sources */,
-				8453268E18DF1B8C00DEA5E3 /* Message.m in Sources */,
-				8453269E18DF1B8C00DEA5E3 /* User.m in Sources */,
 				846191ED1883E8B900101409 /* MQTTDecoder.m in Sources */,
-				8453269A18DF1B8C00DEA5E3 /* Group.m in Sources */,
-				8453268A18DF1B8C00DEA5E3 /* Broker.m in Sources */,
 				846191F11883E8B900101409 /* MQTTTxFlow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

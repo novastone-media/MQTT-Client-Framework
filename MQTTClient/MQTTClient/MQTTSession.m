@@ -17,11 +17,22 @@
 //    Kyle Roche - initial API and implementation and/or initial documentation
 // 
 
+/**
+ Using MQTT in your Objective-C application
+ 
+ @author Christoph Krey krey.christoph@gmail.com
+ @see http://mqtt.org
+ */
+
 #import "MQTTSession.h"
 #import "MQTTTxFlow.h"
+#import "MQTTDecoder.h"
+#import "MQTTEncoder.h"
+
+
 #import <CFNetwork/CFSocketStream.h>
 
-@interface MQTTSession()
+@interface MQTTSession() <MQTTDecoderDelegate, MQTTEncoderDelegate>
 
 @property (nonatomic) MQTTSessionStatus status;
 @property (strong, nonatomic) NSString *clientId;
@@ -52,6 +63,24 @@
 @implementation MQTTSession
 #define TIMEOUT 60
 
+- (id)init
+{
+    return [self initWithClientId:[NSString stringWithFormat:@"MQTTClient-%f",
+                                   fmod([[NSDate date] timeIntervalSince1970], 10.0)]
+                         userName:nil
+                         password:nil
+                        keepAlive:60
+                     cleanSession:YES
+                             will:NO
+                        willTopic:nil
+                          willMsg:nil
+                          willQoS:0
+                   willRetainFlag:NO
+                    protocolLevel:4
+                          runLoop:nil
+                          forMode:nil];
+}
+
 - (id)initWithClientId:(NSString *)clientId
               userName:(NSString *)userName
               password:(NSString *)password
@@ -81,12 +110,39 @@
           willQoS,
           willRetainFlag,
           protocolLevel,
-          @"runLoop", runLoopMode);
+          @"runLoop",
+          runLoopMode);
 #endif
     
+    // clientId
+    if (!clientId) {
+        clientId = [NSString stringWithFormat:@"MQTTClient%.0f",fmod([[NSDate date] timeIntervalSince1970], 1.0) * 1000000.0];
+    }
+    NSAssert(clientId.length > 0 || cleanSessionFlag, @"clientId must be at least 1 character long if cleanSessionFlag is off");
+    NSData *data = [clientId dataUsingEncoding:NSUTF8StringEncoding];
+    NSAssert(data, @"clientId contains non-UTF8 characters");
+    NSAssert(data.length <= 65535L, @"clientId may not be longer than 65535 bytes in UTF8 representation");
+    
     self.clientId = clientId;
+    
+    // userName
+    if (userName) {
+        NSData *data = [userName dataUsingEncoding:NSUTF8StringEncoding];
+        NSAssert(data, @"userName contains non-UTF8 characters");
+        NSAssert(data.length <= 65535L, @"userName may not be longer than 65535 bytes in UTF8 representation");
+    }
+    
     self.userName = userName;
+
+    // password
+    if (password) {
+        NSAssert(userName, @"password specified without userName");
+        NSData *data = [password dataUsingEncoding:NSUTF8StringEncoding];
+        NSAssert(data, @"password contains non-UTF8 characters");
+        NSAssert(data.length <= 65535L, @"password may not be longer than 65535 bytes in UTF8 representation");
+    }
     self.password = password;
+    
     self.keepAliveInterval = keepAliveInterval;
     self.cleanSessionFlag = cleanSessionFlag;
     self.willFlag = willFlag;
@@ -94,8 +150,20 @@
     self.willMsg = willMsg;
     self.willQoS = willQoS;
     self.willRetainFlag = willRetainFlag;
+    
+    NSAssert(protocolLevel == 3 || protocolLevel == 4, @"allowed protocolLevel values are 3 or 4 only");
     self.protocolLevel = protocolLevel;
+    
+    // runLoop
+    if (!runLoop ) {
+        runLoop = [NSRunLoop currentRunLoop];
+    }
     self.runLoop = runLoop;
+    
+    // runLoopMode
+    if (!runLoopMode) {
+        runLoopMode = NSRunLoopCommonModes;
+    }
     self.runLoopMode = runLoopMode;
    
     self.queue = [NSMutableArray array];
@@ -129,6 +197,10 @@
 #ifdef DEBUG
     NSLog(@"%@ connectToHost:%@ port:%d usingSSL:%d]", self, host, (unsigned int)port, usingSSL);
 #endif
+    
+    if (!host) {
+        host = @"localhost";
+    }
 
     self.status = MQTTSessionStatusCreated;
 
@@ -178,6 +250,9 @@
 #ifdef DEBUG
     NSLog(@"%@ subscribeToTopic:%@ atLevel:%d]", self, topic, qosLevel);
 #endif
+    
+    NSAssert(qosLevel >= 0 && qosLevel <= 2, @"qosLevel must be 0, 1, or 2");
+
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage subscribeMessageWithMessageId:mid
                                                    topics:topic ? @{topic: @(qosLevel)} : @{}]];
@@ -189,6 +264,12 @@
 #ifdef DEBUG
     NSLog(@"%@ subscribeToTopics:%@]", self, topics);
 #endif
+    
+    for (NSNumber *qos in [topics allValues]) {
+        NSAssert([qos intValue] >= 0 && [qos intValue] <= 2, @"qosLevel must be 0, 1, or 2");
+
+    }
+
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage subscribeMessageWithMessageId:mid
                                                    topics:topics]];
@@ -230,6 +311,13 @@
           retainFlag,
           (long)qos);
 #endif
+    
+    if (!data) {
+        data = [[NSData alloc] init];
+    }
+    
+    NSAssert(qos >= 0 && qos <= 2, @"qos must be 0, 1, or 2");
+
     UInt16 msgId = [self nextMsgId];
     MQTTMessage *msg = [MQTTMessage publishMessageWithData:data
                                                    onTopic:topic
@@ -308,6 +396,11 @@
         [self.encoder encodeMessage:msg];
     }
     
+    [self checkTxFlows];
+}
+
+- (void)checkTxFlows
+{
     for (NSNumber *msgId in [self.txFlows allKeys]) {
         MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
         if ([flow.deadline compare:[NSDate date]] == NSOrderedAscending) {
@@ -351,6 +444,7 @@
                         }
                         [self.encoder encodeMessage:msg];
                     }
+                    [self checkTxFlows];
                     break;
                 case MQTTSessionStatusDisconnecting:
 #ifdef DEBUG

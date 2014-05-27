@@ -19,7 +19,6 @@
 @property (nonatomic) BOOL ungraceful;
 @end
 
-
 @implementation MQTTClientTests
 
 - (void)setUp
@@ -40,9 +39,40 @@
     [super tearDown];
 }
 
-- (void)test_connect_1883
+- (void)test_init
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+    self.session = [[MQTTSession alloc] init];
+    self.session.delegate = self;
+    self.event = -1;
+    [self.session connectToHost:HOST port:1883 usingSSL:NO];
+    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    while (!self.timeout && self.event == -1) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+}
+
+- (void)test_init_short_clientId
+{
+    self.session = [[MQTTSession alloc] initWithClientId:@""
+                                                userName:nil
+                                                password:nil
+                                               keepAlive:60
+                                            cleanSession:YES
+                                                    will:NO
+                                               willTopic:nil
+                                                 willMsg:nil
+                                                 willQoS:0
+                                          willRetainFlag:NO
+                                           protocolLevel:PROTOCOLLEVEL
+                                                 runLoop:[NSRunLoop currentRunLoop]
+                                                 forMode:NSRunLoopCommonModes];
+    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+}
+
+- (void)test_init_long_clientId
+{
+    self.session = [[MQTTSession alloc] initWithClientId:@"123456789.123456789.1234"
                                                 userName:nil
                                                 password:nil
                                                keepAlive:60
@@ -62,16 +92,58 @@
     while (!self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
+    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
 }
 
-- (void)test_connect_zero_length_user_pwd
+- (void)test_init_verylong_clientId
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
-                                                userName:@""
-                                                password:@""
+    NSString *clientId = @"öä";
+    for (UInt32 i = 2; i <= 32768; i *= 2) {
+        clientId = [clientId stringByAppendingString:clientId];
+    }
+    NSLog(@"test_init_verylong_clientId (%lu)", [clientId dataUsingEncoding:NSUTF8StringEncoding].length);
+
+    XCTAssertThrows({
+        self.session = [[MQTTSession alloc] initWithClientId:clientId
+                                                    userName:nil
+                                                    password:nil
+                                                   keepAlive:60
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:PROTOCOLLEVEL
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes];
+    }, @"Should have detected very long clientId");
+}
+
+- (void)test_init_no_clientId_without_cleansession
+{
+    XCTAssertThrows({
+        self.session = [[MQTTSession alloc] initWithClientId:@""
+                                                    userName:nil
+                                                    password:nil
+                                                   keepAlive:60
+                                                cleanSession:NO
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:PROTOCOLLEVEL
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes];
+    }, @"Should have detected no clientId without cleansession");
+}
+
+- (void)test_init_no_clientId
+{
+    self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                userName:nil
+                                                password:nil
                                                keepAlive:60
                                             cleanSession:YES
                                                     will:NO
@@ -89,15 +161,37 @@
     while (!self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
+    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+}
+
+- (void)test_connect_1883
+{
+    self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                userName:nil
+                                                password:nil
+                                               keepAlive:60
+                                            cleanSession:YES
+                                                    will:NO
+                                               willTopic:nil
+                                                 willMsg:nil
+                                                 willQoS:0
+                                          willRetainFlag:NO
+                                           protocolLevel:PROTOCOLLEVEL
+                                                 runLoop:[NSRunLoop currentRunLoop]
+                                                 forMode:NSRunLoopCommonModes];
+    self.session.delegate = self;
+    self.event = -1;
+    [self.session connectToHost:HOST port:1883 usingSSL:NO];
+    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    while (!self.timeout && self.event == -1) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
 }
 
 - (void)test_connect_user_no_pwd
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:@"user"
                                                 password:nil
                                                keepAlive:60
@@ -117,45 +211,64 @@
     while (!self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
+    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@",
+                   (long)self.event, self.error);
 }
 
-- (void)test_connect_no_user_but_pwd
+- (void)test_connect_very_long_user
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
-                                                userName:nil
-                                                password:@"passwd"
-                                               keepAlive:60
-                                            cleanSession:YES
-                                                    will:NO
-                                               willTopic:nil
-                                                 willMsg:nil
-                                                 willQoS:0
-                                          willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
-                                                 runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    NSString *userName = @"öä";
+    for (UInt32 i = 2; i <= 32768; i *= 2) {
+        userName = [userName stringByAppendingString:userName];
     }
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
+    NSLog(@"test_init_verylong_userName (%lu)", [userName dataUsingEncoding:NSUTF8StringEncoding].length);
+
+    XCTAssertThrows({
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:userName
+                                                    password:@"passwd"
+                                                   keepAlive:60
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:PROTOCOLLEVEL
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes];
+    }, @"Should have detected password without userName");
+}
+
+- (void)test_connect_very_long_password
+{
+    NSString *password = @"öä";
+    for (UInt32 i = 2; i <= 32768; i *= 2) {
+        password = [password stringByAppendingString:password];
+    }
+    NSLog(@"test_init_verylong_password (%lu)", [password dataUsingEncoding:NSUTF8StringEncoding].length);
     
+
+    XCTAssertThrows({
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:@"user"
+                                                    password:password
+                                                   keepAlive:60
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:PROTOCOLLEVEL
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes];
+    }, @"Should have detected password without userName");
 }
 
 - (void)test_connect_will_with_qos3
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
                                                 password:nil
                                                keepAlive:10
@@ -186,7 +299,7 @@
 
 - (void)test_connect_will
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
                                                 password:nil
                                                keepAlive:10
@@ -213,7 +326,7 @@
 
 - (void)test_connect_other_protocollevel
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
                                                 password:nil
                                                keepAlive:60
@@ -242,9 +355,28 @@
     XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
 }
 
+- (void)test_connect_invalid_protocollevel
+{
+    XCTAssertThrows({
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:nil
+                                                    password:nil
+                                                   keepAlive:60
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:2
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes];
+    }, @"Should have detected invalid protocolLevel");
+}
+
 - (void)test_connect_host_not_found
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
                                                 password:nil
                                                keepAlive:60
@@ -271,7 +403,7 @@
 
 - (void)test_connect_1884
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
                                                 password:nil
                                                keepAlive:60
@@ -297,7 +429,7 @@
 
 - (void)test_connect_wrong_user_passwd
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:@"username"
                                                 password:@"password"
                                                keepAlive:60
@@ -323,7 +455,7 @@
 
 - (void)test_ping
 {
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
                                                 password:nil
                                                keepAlive:5
@@ -381,9 +513,9 @@
     self.error = error;
 }
 
-- (void)ackTimeout:(NSTimeInterval)timeout
+- (void)ackTimeout:(NSNumber *)timeout
 {
-    NSLog(@"ackTimeout: %f", timeout);
+    NSLog(@"ackTimeout: %f", [timeout doubleValue]);
     self.timeout = TRUE;
 }
 

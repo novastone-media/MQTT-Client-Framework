@@ -26,9 +26,8 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here; it will be run once, before the first test case.
     
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithFormat:@"MQTTClient-%f", [NSDate timeIntervalSinceReferenceDate]]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
                                                 password:nil
                                                keepAlive:60

@@ -47,7 +47,7 @@
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
 #ifdef DEBUG
-    NSLog(@"%@handleEvent 0x%02lx", self, (long)eventCode);
+    NSLog(@"%@ handleEvent 0x%02lx", self, (long)eventCode);
 #endif
 
     if(self.stream == nil) {

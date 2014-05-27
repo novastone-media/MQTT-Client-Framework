@@ -28,7 +28,7 @@
     [super setUp];
     // Put setup code here; it will be run once, before the first test case.
     
-    self.session = [[MQTTSession alloc] initWithClientId:[NSString stringWithFormat:@"MQTTClient-%f", [NSDate timeIntervalSinceReferenceDate]]
+    self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
                                                 password:nil
                                                keepAlive:60
@@ -348,7 +348,7 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
-    XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %d happened", self.event);
+    XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testMultiUnsubscribeTopic:(NSArray *)topics
