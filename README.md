@@ -7,7 +7,7 @@ an Objective-C native MQTT Framework http://mqtt.org
 
 Add MQTTClient.framework from the dist directory to your IOS project
 
-[Documentation](MQTTClient/dist/index.html)
+[Documentation](MQTTClient/dist/documentation/html/index.html)
 
 ### License
 
