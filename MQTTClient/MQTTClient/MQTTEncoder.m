@@ -42,7 +42,6 @@
     [self.stream close];
     [self.stream removeFromRunLoop:self.runLoop forMode:self.runLoopMode];
     [self.stream setDelegate:nil];
-    self.stream = nil;
 }
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {

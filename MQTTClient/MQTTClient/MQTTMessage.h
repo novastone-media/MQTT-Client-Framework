@@ -26,7 +26,7 @@
 @property (nonatomic)    BOOL     dupFlag;
 @property (nonatomic)    UInt16   mid;
 
-enum {
+typedef NS_ENUM(UInt8, MQTTCommandType) {
     MQTTConnect = 1,
     MQTTConnack = 2,
     MQTTPublish = 3,

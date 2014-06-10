@@ -29,25 +29,25 @@
 /**
  Enumeration of MQTTSession states
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, MQTTSessionStatus) {
     MQTTSessionStatusCreated,
     MQTTSessionStatusConnecting,
     MQTTSessionStatusConnected,
     MQTTSessionStatusDisconnecting,
     MQTTSessionStatusClosed,
     MQTTSessionStatusError
-} MQTTSessionStatus;
+};
 
 /**
  Enumeration of MQTTSession events
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
     MQTTSessionEventConnected,
     MQTTSessionEventConnectionRefused,
     MQTTSessionEventConnectionClosed,
     MQTTSessionEventConnectionError,
     MQTTSessionEventProtocolError
-} MQTTSessionEvent;
+};
 
 /** gets called when a connection is established, closed or a problem occurred
  @param session the MQTTSession reporting the event

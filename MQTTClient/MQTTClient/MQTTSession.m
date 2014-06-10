@@ -33,7 +33,6 @@
 #import <CFNetwork/CFSocketStream.h>
 
 @interface MQTTSession() <MQTTDecoderDelegate, MQTTEncoderDelegate>
-
 @property (nonatomic) MQTTSessionStatus status;
 @property (strong, nonatomic) NSString *clientId;
 @property (strong, nonatomic) NSString *userName;
@@ -329,7 +328,7 @@
         MQttTxFlow *flow = [[MQttTxFlow alloc] init];
         flow.msg = msg;
         flow.deadline = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT];
-        [self.txFlows setObject:flow forKey:[NSNumber numberWithUnsignedInt:msgId]];
+        self.txFlows[[NSNumber numberWithUnsignedInt:(uint)msgId]] = flow;
         if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
             [self.delegate buffered:self
                              queued:[self.queue count]
@@ -402,7 +401,7 @@
 - (void)checkTxFlows
 {
     for (NSNumber *msgId in [self.txFlows allKeys]) {
-        MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
+        MQttTxFlow *flow = (self.txFlows)[msgId];
         if ([flow.deadline compare:[NSDate date]] == NSOrderedAscending) {
             MQTTMessage *msg = [flow msg];
             flow.deadline = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT];
@@ -434,7 +433,7 @@
                     break;
                 case MQTTSessionStatusConnected:
                     if ([self.queue count] > 0) {
-                        MQTTMessage *msg = [self.queue objectAtIndex:0];
+                        MQTTMessage *msg = (self.queue)[0];
                         [self.queue removeObjectAtIndex:0];
                         if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
                             [self.delegate buffered:self
@@ -526,7 +525,7 @@
                             [self.delegate handleEvent:self event:MQTTSessionEventConnected error:nil];
                             if ([self.queue count] > 0) {
                                 if (self.encoder.status == MQTTEncoderStatusReady) {
-                                    MQTTMessage *msg = [self.queue objectAtIndex:0];
+                                    MQTTMessage *msg = (self.queue)[0];
                                     [self.queue removeObjectAtIndex:0];
                                     if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
                                         [self.delegate buffered:self
@@ -638,14 +637,12 @@
                     [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
                     return;
                 } else {
-                    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          data, @"data",
-                                          topic, @"topic",
-                                          @(msg.qos), @"qos",
-                                          @(msg.retainFlag), @"retained",
-                                          @(msgId), @"mid",
-                                          nil];
-                    [self.rxFlows setObject:dict forKey:[NSNumber numberWithUnsignedInt:msgId]];
+                    NSDictionary *dict = @{@"data": data,
+                                          @"topic": topic,
+                                          @"qos": @(msg.qos),
+                                          @"retained": @(msg.retainFlag),
+                                          @"mid": @(msgId)};
+                    (self.rxFlows)[[NSNumber numberWithUnsignedInt:msgId]] = dict;
                     if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
                         [self.delegate buffered:self
                                          queued:[self.queue count]
@@ -666,7 +663,7 @@
         NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
         if ([msgId unsignedIntValue] != 0) {
             msg.mid = [msgId unsignedIntValue];
-            MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
+            MQttTxFlow *flow = (self.txFlows)[msgId];
             if (flow != nil) {
                 if ([[flow msg] type] == MQTTPublish && [[flow msg] qos] == 1) {
                     
@@ -722,7 +719,7 @@
         if ([msgId unsignedIntValue] != 0) {
             msg.mid = [msgId unsignedIntValue];
             MQTTMessage *pubrelmsg = [MQTTMessage pubrelMessageWithMessageId:[msgId unsignedIntValue]];
-            MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
+            MQttTxFlow *flow = (self.txFlows)[msgId];
             if (flow != nil) {
                 MQTTMessage *flowmsg = [flow msg];
                 if ([flowmsg type] == MQTTPublish && [flowmsg qos] == 2) {
@@ -742,7 +739,7 @@
         NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
         if ([msgId unsignedIntValue] != 0) {
             msg.mid = [msgId unsignedIntValue];
-            NSDictionary *dict = [self.rxFlows objectForKey:msgId];
+            NSDictionary *dict = (self.rxFlows)[msgId];
             if (dict != nil) {
                 [self.delegate newMessage:self
                                      data:[dict valueForKey:@"data"]
@@ -770,7 +767,7 @@
         NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
         if ([msgId unsignedIntValue] != 0) {
             msg.mid = [msgId unsignedIntValue];
-            MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
+            MQttTxFlow *flow = (self.txFlows)[msgId];
             if (flow != nil && [[flow msg] type] == MQTTPubrel) {
                 [self.txFlows removeObjectForKey:msgId];
                 if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
@@ -813,7 +810,7 @@
 
 - (UInt16)nextMsgId {
     self.txMsgId++;
-    while (self.txMsgId == 0 || [self.txFlows objectForKey:[NSNumber numberWithUnsignedInt:self.txMsgId]] != nil) {
+    while (self.txMsgId == 0 || (self.txFlows)[[NSNumber numberWithUnsignedInt:self.txMsgId]] != nil) {
         self.txMsgId++;
     }
     return self.txMsgId;
