@@ -10,18 +10,33 @@ import Foundation
 
 class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
     
-    var session = MQTTSession(clientId: "swift", userName: nil, password: nil, keepAlive: 60, cleanSession: true, will: false, willTopic: nil, willMsg: nil, willQoS: 0, willRetainFlag: false, protocolLevel: 4, runLoop: nil, forMode: nil)
+    var session = MQTTSession(clientId: "swift",
+        userName: nil,
+        password: nil,
+        keepAlive: 60,
+        cleanSession: true,
+        will: false,
+        willTopic: nil,
+        willMsg: nil,
+        willQoS: 0,
+        willRetainFlag: false,
+        protocolLevel: 4,
+        runLoop: nil,
+        forMode: nil)
     var sessionConnected = false;
     var sessionError = false;
+    var sessionReceived = false;
+    var sessionSubAcked = false;
     
     override func setUp() {
         session.delegate = self;
         
-        session.connectToHost("localhost", port: 1883, usingSSL: false)
+        session.connectToHost("localhost",
+            port: 1883,
+            usingSSL: false)
         while !sessionConnected && !sessionError {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
         }
-        
     }
     
     override func tearDown() {
@@ -30,8 +45,30 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
     
     func testSubscribe() {
         session.subscribeToTopic("#", atLevel: 0)
-    }
 
+        while sessionConnected && !sessionError && !sessionSubAcked {
+            NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
+        }
+    }
+    
+    func testPublish() {
+        session.subscribeToTopic("#", atLevel: 0)
+
+        while sessionConnected && !sessionError && !sessionSubAcked {
+            NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
+        }
+
+        session.publishData("sent from Xcode 6.0 using Swift".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false),
+            onTopic: "mqtt/swift/framework",
+            retain: false,
+            qos: 0)
+        
+        while sessionConnected && !sessionError && !sessionReceived {
+            NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
+        }
+
+    }
+    
     func handleEvent(session: MQTTSession!, event eventCode: MQTTSessionEvent, error: NSError!) {
         switch eventCode {
         case .Connected:
@@ -45,7 +82,12 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
     
     func newMessage(session: MQTTSession!, data: NSData!, onTopic topic: String!, qos: CInt, retained: Bool, mid: CUnsignedInt)
     {
-        
+        println("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
+        sessionReceived = true;
+    }
+    
+    func subAckReceived(session: MQTTSession!, msgID: UInt16, grantedQoss qoss: AnyObject[]!) {
+        sessionSubAcked = true;
     }
     
 }
