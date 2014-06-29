@@ -18,6 +18,7 @@
 @property (nonatomic) NSInteger qos;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) NSInteger type;
+@property (strong, nonatomic) NSDictionary *parameters;
 
 @end
 
@@ -26,6 +27,8 @@
 - (void)setUp
 {
     [super setUp];
+    
+    self.parameters = PARAMETERS;
     
     self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
@@ -37,16 +40,28 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
     self.session.delegate = self;
     self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    while (self.event == -1) {
+    
+    self.timeout = FALSE;
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+
+    [self.session connectToHost:self.parameters[@"host"]
+                      port:[self.parameters[@"port"] intValue]
+                  usingSSL:[self.parameters[@"tls"] boolValue]];
+    
+    while (self.event == -1 && !self.timeout) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
 
+    XCTAssert(!self.timeout, @"timeout");
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
     self.type = -1;
     /*
     [self.session subscribeToTopic:[NSString stringWithFormat:@"%@/#", TOPIC] atLevel:2];
@@ -68,7 +83,6 @@
     self.session.delegate = nil;
     self.session = nil;
     
-    // Put teardown code here; it will be run once, after the last test case.
     [super tearDown];
 }
 
@@ -98,22 +112,6 @@
               onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
                retain:NO
               atLevel:2];
-}
-
-- (void)testPublish_r0_q3
-{
-    [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
-              onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
-               retain:NO
-              atLevel:3];
-}
-
-- (void)testPublish_r0_q4
-{
-    [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
-              onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
-               retain:NO
-              atLevel:4];
 }
 
 - (void)testPublish_r1_q2
@@ -191,7 +189,10 @@
 - (void)testPublishCore:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos
 {
     self.sentMid = [self.session publishData:data onTopic:topic retain:retain qos:qos];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+     
     while (self.mid == -1 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }

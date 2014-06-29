@@ -12,11 +12,12 @@
 
 @interface MQTTClientTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
-@property (nonatomic) NSInteger event;
+@property (nonatomic) MQTTSessionEvent event;
 @property (strong, nonatomic) NSError *error;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) int type;
 @property (nonatomic) BOOL ungraceful;
+@property (strong, nonatomic) NSDictionary *parameters;
 @end
 
 @implementation MQTTClientTests
@@ -24,7 +25,8 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+
+    self.parameters = PARAMETERS;
 }
 
 - (void)tearDown
@@ -34,22 +36,15 @@
         self.session.delegate = nil;
         self.session = nil;
     }
-
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
     [super tearDown];
 }
 
 - (void)test_init
 {
     self.session = [[MQTTSession alloc] init];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+    [self connect:self.session];
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
 }
 
 - (void)test_init_short_clientId
@@ -64,10 +59,12 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+    [self connect:self.session];
+    XCTAssert(!self.timeout, @"timeout");
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
 }
 
 - (void)test_init_long_clientId
@@ -82,61 +79,12 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
-}
-
-- (void)test_init_verylong_clientId
-{
-    NSString *clientId = @"öä";
-    for (UInt32 i = 2; i <= 32768; i *= 2) {
-        clientId = [clientId stringByAppendingString:clientId];
-    }
-    NSLog(@"test_init_verylong_clientId (%lu)", [clientId dataUsingEncoding:NSUTF8StringEncoding].length);
-
-    XCTAssertThrows({
-        self.session = [[MQTTSession alloc] initWithClientId:clientId
-                                                    userName:nil
-                                                    password:nil
-                                                   keepAlive:60
-                                                cleanSession:YES
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:PROTOCOLLEVEL
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
-    }, @"Should have detected very long clientId");
-}
-
-- (void)test_init_no_clientId_without_cleansession
-{
-    XCTAssertThrows({
-        self.session = [[MQTTSession alloc] initWithClientId:@""
-                                                    userName:nil
-                                                    password:nil
-                                                   keepAlive:60
-                                                cleanSession:NO
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:PROTOCOLLEVEL
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
-    }, @"Should have detected no clientId without cleansession");
+    [self connect:self.session];
+    XCTAssert(!self.timeout, @"timeout");
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
 }
 
 - (void)test_init_no_clientId
@@ -151,17 +99,12 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+    [self connect:self.session];
+    XCTAssert(!self.timeout, @"timeout");
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
 }
 
 - (void)test_connect_1883
@@ -176,17 +119,12 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+    [self connect:self.session];
+    XCTAssert(!self.timeout, @"timeout");
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
 }
 
 - (void)test_connect_user_no_pwd
@@ -201,100 +139,11 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"Not Connected %ld %@",
-                   (long)self.event, self.error);
-}
-
-- (void)test_connect_very_long_user
-{
-    NSString *userName = @"öä";
-    for (UInt32 i = 2; i <= 32768; i *= 2) {
-        userName = [userName stringByAppendingString:userName];
-    }
-    NSLog(@"test_init_verylong_userName (%lu)", [userName dataUsingEncoding:NSUTF8StringEncoding].length);
-
-    XCTAssertThrows({
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:userName
-                                                    password:@"passwd"
-                                                   keepAlive:60
-                                                cleanSession:YES
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:PROTOCOLLEVEL
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
-    }, @"Should have detected password without userName");
-}
-
-- (void)test_connect_very_long_password
-{
-    NSString *password = @"öä";
-    for (UInt32 i = 2; i <= 32768; i *= 2) {
-        password = [password stringByAppendingString:password];
-    }
-    NSLog(@"test_init_verylong_password (%lu)", [password dataUsingEncoding:NSUTF8StringEncoding].length);
-    
-
-    XCTAssertThrows({
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:@"user"
-                                                    password:password
-                                                   keepAlive:60
-                                                cleanSession:YES
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:PROTOCOLLEVEL
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
-    }, @"Should have detected password without userName");
-}
-
-- (void)test_connect_will_with_qos3
-{
-    self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:nil
-                                                password:nil
-                                               keepAlive:10
-                                            cleanSession:YES
-                                                    will:YES
-                                               willTopic:@"MQTTClient/will-qos3"
-                                                 willMsg:[@"will-qos3" dataUsingEncoding:NSUTF8StringEncoding]
-                                                 willQoS:3
-                                          willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
-                                                 runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
-    self.ungraceful = TRUE;
-    
+    [self connect:self.session];
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
 }
 
 - (void)test_connect_will
@@ -309,19 +158,14 @@
                                                  willMsg:[@"will-qos0" dataUsingEncoding:NSUTF8StringEncoding]
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+    [self connect:self.session];
+    XCTAssert(!self.timeout, @"timeout");
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+
     self.ungraceful = TRUE;
-    
 }
 
 - (void)test_connect_other_protocollevel
@@ -336,96 +180,18 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:(PROTOCOLLEVEL == 4) ? 3 : 4
+                                           protocolLevel:([self.parameters[@"protocollevel"] intValue] == 4) ? 3 : 4
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
-    
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
+    [self connect:self.session];
     XCTAssert(!self.timeout, @"timeout");
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
+    XCTAssertNotEqual(self.event, MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
+    XCTAssertNotEqual(self.event, MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
+    XCTAssertNotEqual(self.event, MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
+    XCTAssertNotEqual(self.event, MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
 }
 
-- (void)test_connect_invalid_protocollevel
-{
-    XCTAssertThrows({
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
-                                                   keepAlive:60
-                                                cleanSession:YES
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:2
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
-    }, @"Should have detected invalid protocolLevel");
-}
-
-- (void)test_connect_host_not_found
-{
-    self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:nil
-                                                password:nil
-                                               keepAlive:60
-                                            cleanSession:YES
-                                                    will:NO
-                                               willTopic:nil
-                                                 willMsg:nil
-                                                 willQoS:0
-                                          willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
-                                                 runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:@"abc" port:1883 usingSSL:NO];
-    while (self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
-}
-
-
-- (void)test_connect_1884
-{
-    self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:nil
-                                                password:nil
-                                               keepAlive:60
-                                            cleanSession:YES
-                                                    will:NO
-                                               willTopic:nil
-                                                 willMsg:nil
-                                                 willQoS:0
-                                          willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
-                                                 runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1884 usingSSL:NO];
-    while (self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolErrorr %@", self.error);
-}
 
 - (void)test_connect_wrong_user_passwd
 {
@@ -439,18 +205,14 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    while (self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolErrorr %@", self.error);
+    [self connect:self.session];
+    XCTAssert(!self.timeout, @"timeout");
+    XCTAssertNotEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+    XCTAssertNotEqual(self.event, MQTTSessionEventConnectionError, @"MQTTSessionEventConnectionError %@", self.error);
+    XCTAssertNotEqual(self.event, MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolErrorr %@", self.error);
 }
 
 - (void)test_ping
@@ -465,27 +227,25 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    while (!self.timeout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    NSLog(@"self.event:%ld MQTTSessionEventConnected:%ld", (long)self.event, (long)MQTTSessionEventConnected);
-    XCTAssertEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
+    [self connect:self.session];
+    XCTAssert(!self.timeout, @"timeout");
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
 
     self.event = -1;
     self.type = 0xff;
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+     
     while (!self.timeout && self.event == -1 && self.type == 0xff) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     XCTAssertEqual(self.type, MQTTPingresp, @"No PingResp received %u", self.type);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
-    XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
+    XCTAssertNotEqual(self.event, MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
+    XCTAssertNotEqual(self.event, MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
     XCTAssert(!self.timeout, @"Timeout 200%% keepalive");
 }
 
@@ -519,7 +279,30 @@
     self.timeout = TRUE;
 }
 
+- (void)connect:(MQTTSession *)session
+{
+    session.delegate = self;
+    self.event = -1;
+    self.timeout = FALSE;
+    
+    NSLog(@"connecting to:%@ port:%d tls:%d",
+          self.parameters[@"host"],
+          [self.parameters[@"port"] intValue],
+          [self.parameters[@"tls"] boolValue]);
 
+    [session connectToHost:self.parameters[@"host"]
+                      port:[self.parameters[@"port"] intValue]
+                  usingSSL:[self.parameters[@"tls"] boolValue]];
+    
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+     
 
+    while (!self.timeout && self.event == -1) {
+        NSLog(@"waiting for connection");
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+}
 
 @end

@@ -12,12 +12,13 @@
 
 @interface MQTTClientSubscriptionTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
-@property (nonatomic) NSInteger event;
+@property (nonatomic) MQTTSessionEvent event;
 @property (nonatomic) UInt16 mid;
 @property (nonatomic) UInt16 sentMid;
 @property (nonatomic) NSArray *qoss;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) int type;
+@property (strong, nonatomic) NSDictionary *parameters;
 
 @end
 
@@ -26,7 +27,7 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here; it will be run once, before the first test case.
+    self.parameters = PARAMETERS;
     
     self.session = [[MQTTSession alloc] initWithClientId:nil
                                                 userName:nil
@@ -38,15 +39,29 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:PROTOCOLLEVEL
+                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
     self.session.delegate = self;
     self.event = -1;
-    [self.session connectToHost:HOST port:1883 usingSSL:NO];
-    while (self.event == -1) {
+    
+    self.timeout = FALSE;
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+     
+    
+    [self.session connectToHost:self.parameters[@"host"]
+                           port:[self.parameters[@"port"] intValue]
+                       usingSSL:[self.parameters[@"tls"] boolValue]];
+    
+    while (self.event == -1 && !self.timeout) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
+    
+    XCTAssert(!self.timeout, @"timeout");
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        
     self.timeout = FALSE;
     self.mid = 0;
     self.qoss = @[];
@@ -58,8 +73,7 @@
     [self.session close];
     self.session.delegate = nil;
     self.session = nil;
-
-    // Put teardown code here; it will be run once, after the last test case.
+    
     [super tearDown];
 }
 
@@ -105,16 +119,6 @@
 - (void)testSubscribeQoS2
 {
     [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:2];
-}
-
-- (void)testSubscribeQoS3
-{
-    [self testSubscribeCloseExpected:@"MQTTClient/#" atLevel:3];
-}
-
-- (void)testSubscribeQoS4_MQTT_3_8_3_2
-{
-    [self testSubscribeCloseExpected:@"MQTTClient/#" atLevel:4];
 }
 
 - (void)testSubscribeTopicPlain
@@ -314,7 +318,10 @@
 - (void)testSubscribe:(NSString *)topic atLevel:(UInt8)qos
 {
     self.sentMid = [self.session subscribeToTopic:topic atLevel:qos];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+     
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -323,7 +330,10 @@
 - (void)testMultiSubscribe:(NSDictionary *)topics
 {
     self.sentMid = [self.session subscribeToTopics:topics];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+     
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -332,7 +342,10 @@
 - (void)testUnsubscribeTopic:(NSString *)topic
 {
     self.sentMid = [self.session unsubscribeTopic:topic];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+     
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -343,7 +356,10 @@
 - (void)testUnsubscribeTopicCloseExpected:(NSString *)topic
 {
     self.sentMid = [self.session unsubscribeTopic:topic];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+     
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -354,7 +370,10 @@
 - (void)testMultiUnsubscribeTopic:(NSArray *)topics
 {
     self.sentMid = [self.session unsubscribeTopics:topics];
-    [self performSelector:@selector(ackTimeout:) withObject:@(10) afterDelay:10];
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+     
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }

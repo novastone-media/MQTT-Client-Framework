@@ -16,4 +16,5 @@
 #import <Foundation/Foundation.h>
 
 #import <MQTTClient/MQTTSession.h>
+#import <MQTTClient/MQTTMessage.h>
 
