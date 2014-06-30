@@ -79,7 +79,23 @@
 
 - (void)tearDown
 {
+    self.event = -1;
+    
+    self.timeout = FALSE;
+    [self performSelector:@selector(ackTimeout:)
+               withObject:self.parameters[@"timeout"]
+               afterDelay:[self.parameters[@"timeout"] intValue]];
+    
     [self.session close];
+    
+    while (self.event == -1 && !self.timeout) {
+        NSLog(@"waiting for disconnect");
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+    
+    XCTAssert(!self.timeout, @"timeout");
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
     self.session.delegate = nil;
     self.session = nil;
     

@@ -95,6 +95,8 @@
                forMode:(NSString *)runLoopMode
 {
     self = [super init];
+    NSLog(@"MQTTClient %s %s", __DATE__, __TIME__);
+
 #ifdef DEBUG
     NSLog(@"%@ initWithClientId:%@ userName:%@ password:%@ keepAlive:%d cleanSession:%d will:%d willTopic:%@ willTopic:%@ willQos:%d willRetainFlag:%d protocolLevel:%d runLoop:%@ forMode:%@",
           self,
@@ -449,7 +451,7 @@
 #ifdef DEBUG
                     NSLog(@"%@ disconnect sent", self);
 #endif
-                    [self closeInternal];
+                    // [self closeInternal]; rather wait until server closes connect, see issue #10
                     break;
                 case MQTTSessionStatusClosed:
                     break;
