@@ -122,6 +122,17 @@
     [self testMultiSubscribeSubackExpected:@{@"MQTTClient": @(0), @"MQTTClient/abc": @(0), @"MQTTClient/#": @(1)}];
 }
 
+- (void)testSubscribeWMultipleTopics_a_lot
+{
+#define TOPICS 256
+    NSMutableDictionary *topics = [[NSMutableDictionary alloc] initWithCapacity:TOPICS];
+    for (int i = 0; i < TOPICS; i++) {
+        [topics setObject:@(1) forKey:[NSString stringWithFormat:@"MQTTClient/a/lot/%d", i]];
+    }
+    
+    [self testMultiSubscribeSubackExpected:topics];
+}
+
 - (void)testSubscribeQoS0
 {
     [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:0];

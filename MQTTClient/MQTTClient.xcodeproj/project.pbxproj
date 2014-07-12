@@ -57,6 +57,9 @@
 		846192041883E8FD00101409 /* MQTTSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FF1883E8FD00101409 /* MQTTSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		846192051883E8FD00101409 /* MQTTTxFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 846192001883E8FD00101409 /* MQTTTxFlow.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		848BB8F3195FF7A2004FCAE2 /* MQTTClientOnlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */; };
+		84B1AFEE196C7AF60056B959 /* MultiThreadingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B1AFED196C7AF60056B959 /* MultiThreadingTests.m */; };
+		84B1AFF2196D99170056B959 /* MQTTSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B1AFF0196D99170056B959 /* MQTTSessionManager.h */; };
+		84B1AFF3196D99170056B959 /* MQTTSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B1AFF1196D99170056B959 /* MQTTSessionManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +146,9 @@
 		846191FF1883E8FD00101409 /* MQTTSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTSession.h; sourceTree = "<group>"; };
 		846192001883E8FD00101409 /* MQTTTxFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTTxFlow.h; sourceTree = "<group>"; };
 		848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientOnlyTests.m; sourceTree = "<group>"; };
+		84B1AFED196C7AF60056B959 /* MultiThreadingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiThreadingTests.m; sourceTree = "<group>"; };
+		84B1AFF0196D99170056B959 /* MQTTSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTSessionManager.h; sourceTree = "<group>"; };
+		84B1AFF1196D99170056B959 /* MQTTSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionManager.m; sourceTree = "<group>"; };
 		84E0010118E22C9600C07F23 /* MQTTClientTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTClientTests.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -268,6 +274,8 @@
 				846192001883E8FD00101409 /* MQTTTxFlow.h */,
 				846191EC1883E8B900101409 /* MQTTTxFlow.m */,
 				846191321883E56800101409 /* MQTTClient.h */,
+				84B1AFF0196D99170056B959 /* MQTTSessionManager.h */,
+				84B1AFF1196D99170056B959 /* MQTTSessionManager.m */,
 				846191301883E56800101409 /* Supporting Files */,
 			);
 			path = MQTTClient;
@@ -286,6 +294,7 @@
 			children = (
 				84E0010118E22C9600C07F23 /* MQTTClientTests.h */,
 				846191491883E56800101409 /* MQTTClientTests.m */,
+				84B1AFED196C7AF60056B959 /* MultiThreadingTests.m */,
 				848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */,
 				845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */,
 				840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */,
@@ -323,6 +332,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84B1AFF2196D99170056B959 /* MQTTSessionManager.h in Headers */,
 				846191E71883E74D00101409 /* MQTTClient.h in Headers */,
 				846192021883E8FD00101409 /* MQTTEncoder.h in Headers */,
 				846192031883E8FD00101409 /* MQTTMessage.h in Headers */,
@@ -531,6 +541,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84B1AFF3196D99170056B959 /* MQTTSessionManager.m in Sources */,
 				846191EF1883E8B900101409 /* MQTTMessage.m in Sources */,
 				846191EE1883E8B900101409 /* MQTTEncoder.m in Sources */,
 				846191F01883E8B900101409 /* MQTTSession.m in Sources */,
@@ -545,6 +556,7 @@
 			files = (
 				840785A918A2AA26009158D5 /* MQTTClientPublishTests.m in Sources */,
 				8461914A1883E56800101409 /* MQTTClientTests.m in Sources */,
+				84B1AFEE196C7AF60056B959 /* MultiThreadingTests.m in Sources */,
 				848BB8F3195FF7A2004FCAE2 /* MQTTClientOnlyTests.m in Sources */,
 				845DBE771884AAD700EDB183 /* MQTTClientSubscriptionTests.m in Sources */,
 			);

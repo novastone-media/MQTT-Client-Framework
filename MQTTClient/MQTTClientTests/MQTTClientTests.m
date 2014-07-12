@@ -270,7 +270,7 @@
     NSLog(@"can't test [MQTT-3.14.1-1]");
 }
 
-- (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
+- (void)received:(MQTTSession *)session type:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
 {
     NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
 

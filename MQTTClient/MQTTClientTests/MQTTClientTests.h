@@ -23,13 +23,13 @@
 // not tested
 
 // Mosquitto
-#define PARAMETERS @{ \
-                  @"host": @"test.mosquitto.org",  \
-                  @"port": @1883,  \
-                  @"tls": @NO, \
-                  @"protocollevel": @4, \
-                  @"timeout": @10 \
-                  }
+//#define PARAMETERS @{ \
+//                  @"host": @"test.mosquitto.org",  \
+//                  @"port": @1883,  \
+//                  @"tls": @NO, \
+//                  @"protocollevel": @4, \
+//                  @"timeout": @10 \
+//                  }
 
 //#define HOST @"m2m.eclipse.org"
 //#define PARAMETERS @{ \
@@ -40,14 +40,14 @@
 //                    @"timeout": @10 \
 //                    }
 
-//#define HOST @"192.168.178.38"
-//#define PARAMETERS @{ \
-//                    @"host": @"192.168.178.38",  \
-//                    @"port": @1883,  \
-//                    @"tls": @NO, \
-//                    @"protocollevel": @4, \
-//                    @"timeout": @10 \
-//                    }
+#define HOST @"192.168.178.38"
+#define PARAMETERS @{ \
+                    @"host": @"192.168.178.38",  \
+                    @"port": @1883,  \
+                    @"tls": @NO, \
+                    @"protocollevel": @4, \
+                    @"timeout": @10 \
+                    }
 
 //#define HOST @"localhost"
 //#define PARAMETERS @{ \

@@ -18,6 +18,9 @@
 
 
 #import <Foundation/Foundation.h>
+
+#import "MQTTMessage.h"
+
 @class MQTTSession;
 
 /** Session delegate gives your application control over the MQTTSession
@@ -49,13 +52,6 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
     MQTTSessionEventProtocolError
 };
 
-/** gets called when a connection is established, closed or a problem occurred
- @param session the MQTTSession reporting the event
- @param eventCode the code of the event
- @param error an optional additional error object with additional information
- */
-- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error;
-
 /** gets called when a new message was received
  @param session the MQTTSession reporting the new message
  @param data the data received, might be zero length
@@ -64,15 +60,51 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  @param retained indicates if the data retransmitted from server storage
  @param mid the Message Identifier of the message if qos = 1 or 2, zero otherwise
  */
-
 - (void)newMessage:(MQTTSession *)session
               data:(NSData *)data
            onTopic:(NSString *)topic
-               qos:(int)qos
+               qos:(MQTTQosLevel)qos
           retained:(BOOL)retained
                mid:(unsigned int)mid;
 
 @optional
+/** gets called when a connection is established, closed or a problem occurred
+ @param session the MQTTSession reporting the event
+ @param eventCode the code of the event
+ @param error an optional additional error object with additional information
+ */
+- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error;
+
+/** gets called when a connection has been successfully established
+ @param session the MQTTSession reporting the connect
+
+ */
+- (void)connected:(MQTTSession *)session;
+
+/** gets called when a connection has been refused
+ @param session the MQTTSession reporting the refusal
+ @param error an optional additional error object with additional information
+ */
+- (void)connectionRefused:(MQTTSession *)session error:(NSError *)error;
+
+/** gets called when a connection has been closed
+ @param session the MQTTSession reporting the close
+
+ */
+- (void)connectionClosed:(MQTTSession *)session;
+
+/** gets called when a connection error happened
+ @param session the MQTTSession reporting the connect error
+ @param error an optional additional error object with additional information
+ */
+- (void)connectionError:(MQTTSession *)session error:(NSError *)error;
+
+/** gets called when an MQTT protocol error happened
+ @param session the MQTTSession reporting the protocol error
+ @param error an optional additional error object with additional information
+ */
+- (void)protocolError:(MQTTSession *)session error:(NSError *)error;
+
 /** gets called when a published message was actually delivered
  @param session the MQTTSession reporting the delivery
  @param msgID the Message Identifier of the delivered message
@@ -96,6 +128,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 
 /** gets called when a command is sent to the MQTT broker
  use this for low level monitoring of the MQTT connection
+ @param session the MQTTSession reporting the sent command
  @param type the MQTT command type
  @param qos the Quality of Service of the command
  @param retained the retained status of the command
@@ -103,10 +136,11 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  @param mid the Message Identifier of the command
  @param data the payload data of the command if any, might be zero length
  */
-- (void)sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
+- (void)sending:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
 
 /** gets called when a command is received from the MQTT broker
  use this for low level monitoring of the MQTT connection
+ @param session the MQTTSession reporting the received command
  @param type the MQTT command type
  @param qos the Quality of Service of the command
  @param retained the retained status of the command
@@ -114,7 +148,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  @param mid the Message Identifier of the command
  @param data the payload data of the command if any, might be zero length
  */
-- (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
+- (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
 
 /** gets called when the content of MQTTClients internal buffers change
  use for monitoring the completion of transmitted and received messages
@@ -155,7 +189,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  - (void)newMessage:(MQTTSession *)session
         data:(NSData *)data
         onTopic:(NSString *)topic
-        qos:(int)qos
+        qos:(MQTTQosLevel)qos
         retained:(BOOL)retained
         mid:(unsigned int)mid {
     ...
@@ -165,6 +199,50 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 
 @property (weak, nonatomic) id<MQTTSessionDelegate> delegate;
+
+/** Session status
+ */
+@property (nonatomic, readonly) MQTTSessionStatus status;
+
+/** see initWithClientId for description
+ */
+@property (strong, nonatomic) NSString *clientId;
+/** see initWithClientId for description
+ */
+@property (strong, nonatomic) NSString *userName;
+/** see initWithClientId for description
+ */
+@property (strong, nonatomic) NSString *password;
+/** see initWithClientId for description
+ */
+@property (nonatomic) UInt16 keepAliveInterval;
+/** see initWithClientId for description
+ */
+@property (nonatomic) BOOL cleanSessionFlag;
+/** see initWithClientId for description
+ */
+@property (nonatomic) BOOL willFlag;
+/** see initWithClientId for description
+ */
+@property (strong, nonatomic) NSString *willTopic;
+/** see initWithClientId for description
+ */
+@property (strong, nonatomic) NSData *willMsg;
+/** see initWithClientId for description
+ */
+@property (nonatomic) MQTTQosLevel willQoS;
+/** see initWithClientId for description
+ */
+@property (nonatomic) BOOL willRetainFlag;
+/** see initWithClientId for description
+ */
+@property (nonatomic) UInt8 protocolLevel;
+/** see initWithClientId for description
+ */
+@property (strong, nonatomic) NSRunLoop *runLoop;
+/** see initWithClientId for description
+ */
+@property (strong, nonatomic) NSString *runLoopMode;
 
 /** initialises the MQTT session with default values
  @return the initialised MQTTSession object
@@ -246,7 +324,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
                              will:(BOOL)willFlag
                         willTopic:(NSString *)willTopic
                           willMsg:(NSData *)willMsg
-                          willQoS:(UInt8)willQoS
+                          willQoS:(MQTTQosLevel)willQoS
                    willRetainFlag:(BOOL)willRetainFlag
                     protocolLevel:(UInt8)protocolLevel
                           runLoop:(NSRunLoop *)runLoop
@@ -264,22 +342,41 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
-
+ 
  [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
  @endcode
  
  */
 - (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
 
+/** connects to the specified MQTT server synchronously
+ 
+ @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
+ @param port spefies the port to connect to
+ @param usingSSL specifies whether to use SSL or not
+ 
+ @return true if the connection was established
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ @endcode
+ 
+ */
+- (BOOL)connectAndWaitToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
+
 /** subscribes to a topic at a specific QoS level
  
  @param topic the Topic Filter to subscribe to.
  
  @param qosLevel specifies the QoS Level of the subscription.
-    qosLevel can be 0, 1, or 2.
-
+ qosLevel can be 0, 1, or 2.
+ 
  @return the Message Identifier of the SUBSCRIBE message.
-  
+ 
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
  
  @code
@@ -292,16 +389,40 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  [session subscribeToTopic:@"example/#" atLevel:2];
  
  @endcode
-
+ 
  */
 
-- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(UInt8)qosLevel;
+- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;
+
+/** subscribes to a topic at a specific QoS level synchronously
+ 
+ @param topic the Topic Filter to subscribe to.
+ 
+ @param qosLevel specifies the QoS Level of the subscription.
+ qosLevel can be 0, 1, or 2.
+ 
+ @return TRUE if successfully subscribed
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session subscribeToTopic:@"example/#" atLevel:2];
+ 
+ @endcode
+ 
+ */
+
+- (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;
 
 
 /** subscribes a number of topics
  
  @param topics an NSDictionary containing the Topic Filters to subscribe to as keys and the corresponding QoS as NSNumber values
-
+ 
  @return the Message Identifier of the SUBSCRIBE message.
  
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
@@ -314,21 +435,45 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
  
  [session subscribeToTopics:@{
-    @"example/#": @(0),
-    @"example/status": @(2),
-    @"other/#": @(1)
+ @"example/#": @(0),
+ @"example/status": @(2),
+ @"other/#": @(1)
  }];
-
+ 
  @endcode
-*/
+ */
 
 
 - (UInt16)subscribeToTopics:(NSDictionary *)topics;
+/** subscribes a number of topics
+ 
+ @param topics an NSDictionary containing the Topic Filters to subscribe to as keys and the corresponding QoS as NSNumber values
+ 
+ @return TRUE if the subscribe was succesfull
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session subscribeToTopics:@{
+ @"example/#": @(0),
+ @"example/status": @(2),
+ @"other/#": @(1)
+ }];
+ 
+ @endcode
+ */
+
+
+- (BOOL)subscribeAndWaitToTopics:(NSDictionary *)topics;
 
 /** unsubscribes from a topic
  
  @param topic the Topic Filter to unsubscribe from.
-
+ 
  @return the Message Identifier of the UNSUBSCRIBE message.
  
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
@@ -343,18 +488,38 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  [session unsubscribeTopic:@"example/#"];
  
  @endcode
-*/
+ */
 
 - (UInt16)unsubscribeTopic:(NSString *)topic;
+
+/** unsubscribes from a topic synchronously
+ 
+ @param topic the Topic Filter to unsubscribe from.
+ 
+ @return TRUE if sucessfully unsubscribed
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session unsubscribeTopic:@"example/#"];
+ 
+ @endcode
+ */
+
+- (BOOL)unsubscribeAndWaitTopic:(NSString *)topic;
 
 /** unsubscribes from a number of topics
  
  @param topics an NSArray of topics to unsubscribe from
-
+ 
  @return the Message Identifier of the UNSUBSCRIBE message.
  
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
-
+ 
  @code
  #import "MQTTClient.h"
  
@@ -363,16 +528,42 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
  
  [session unsubscribeTopics:@[
-    @"example/#",
-    @"example/status",
-    @"other/#"
+ @"example/#",
+ @"example/status",
+ @"other/#"
  ]];
  
  @endcode
-
+ 
  */
 
 - (UInt16)unsubscribeTopics:(NSArray *)topics;
+
+/** unsubscribes from a number of topics synchronously
+ 
+ @param topics an NSArray of topics to unsubscribe from
+ 
+ @return TRUE if the unsubscribe was successful
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session unsubscribeTopics:@[
+ @"example/#",
+ @"example/status",
+ @"other/#"
+ ]];
+ 
+ @endcode
+ 
+ */
+
+- (BOOL)unsubscribeAndWaitTopics:(NSArray *)topics;
+
 
 /** publishes data on a given topic at a specified QoS level and retain flag
  
@@ -380,8 +571,8 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  @param topic the Topic to identify the data
  @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
  @param qos specifies the Quality of Service for the publish
-    qos can be 0, 1, or 2.
- @return the Message Identifier of the UNSUBSCRIBE message.
+ qos can be 0, 1, or 2.
+ @return the Message Identifier of the PUBLISH message.
  
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
  
@@ -393,14 +584,40 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
  
  [session publishData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
-    topic:@"example/data"
-    retain:YES
-    qos:1];
+ topic:@"example/data"
+ retain:YES
+ qos:1];
  @endcode
  
  */
 
-- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(NSInteger)qos;
+- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;
+
+/** publishes synchronously data on a given topic at a specified QoS level and retain flag
+ 
+ @param data the data to be sent. length may range from 0 to 268,435,455 - 4 - _lengthof-topic_ bytes. Defaults to length 0.
+ @param topic the Topic to identify the data
+ @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
+ @param qos specifies the Quality of Service for the publish
+ qos can be 0, 1, or 2.
+ @returns TRUE if the publish was successful
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session publishAndWaitData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
+ topic:@"example/data"
+ retain:YES
+ qos:1];
+ @endcode
+ 
+ */
+
+- (BOOL)publishAndWaitData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;
 
 /** closes an MQTTSession gracefully
  
@@ -418,8 +635,28 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  [session close];
  
  @endcode
-
+ 
  */
 - (void)close;
+
+/** closes an MQTTSession gracefully synchronously
+ 
+ If the connection was successfully established before, a DISCONNECT is sent.
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ ...
+ 
+ [session closeAndWait];
+ 
+ @endcode
+ 
+ */
+- (void)closeAndWait;
 
 @end

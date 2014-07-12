@@ -43,6 +43,15 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
     MQTTDisconnect = 14
 };
 
+/**
+ Enumeration of MQTT Quality of Service levels
+ */
+typedef NS_ENUM(UInt8, MQTTQosLevel) {
+    MQTTQoSLevelAtMostOnce = 0,
+    MQTTQosLevelAtLeastOnce,
+    MQTTQosLevelExactlyOnce
+};
+
 // instance methods
 + (id)connectMessageWithClientId:(NSString*)clientId
                         userName:(NSString*)userName
@@ -52,7 +61,7 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
                             will:(BOOL)will
                        willTopic:(NSString*)willTopic
                          willMsg:(NSData*)willData
-                         willQoS:(UInt8)willQoS
+                         willQoS:(MQTTQosLevel)willQoS
                       willRetain:(BOOL)willRetainFlag
                    protocolLevel:(UInt8)protocolLevel;
 
@@ -64,7 +73,7 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
                                 topics:(NSArray *)topics;
 + (id)publishMessageWithData:(NSData*)payload
                      onTopic:(NSString*)topic
-                         qos:(UInt8)qosLevel
+                         qos:(MQTTQosLevel)qosLevel
                        msgId:(UInt16)msgId
                   retainFlag:(BOOL)retain
                      dupFlag:(BOOL)dup;
@@ -76,10 +85,10 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
 - (id)initWithType:(UInt8)aType;
 - (id)initWithType:(UInt8)aType data:(NSData*)aData;
 - (id)initWithType:(UInt8)aType
-               qos:(UInt8)aQos
+               qos:(MQTTQosLevel)aQos
               data:(NSData*)aData;
 - (id)initWithType:(UInt8)aType
-               qos:(UInt8)aQos
+               qos:(MQTTQosLevel)aQos
         retainFlag:(BOOL)aRetainFlag
            dupFlag:(BOOL)aDupFlag
               data:(NSData*)aData;

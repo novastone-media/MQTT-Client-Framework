@@ -29,7 +29,7 @@
                             will:(BOOL)will
                        willTopic:(NSString*)willTopic
                          willMsg:(NSData*)willMsg
-                         willQoS:(UInt8)willQoS
+                         willQoS:(MQTTQosLevel)willQoS
                       willRetain:(BOOL)willRetainFlag
                    protocolLevel:(UInt8)protocolLevel
 {
@@ -137,7 +137,7 @@
 
 + (id)publishMessageWithData:(NSData*)payload
                      onTopic:(NSString*)topic
-                         qos:(UInt8)qosLevel
+                         qos:(MQTTQosLevel)qosLevel
                        msgId:(UInt16)msgId
                   retainFlag:(BOOL)retain
                      dupFlag:(BOOL)dup
@@ -209,7 +209,7 @@
 }
 
 - (id)initWithType:(UInt8)aType
-               qos:(UInt8)aQos
+               qos:(MQTTQosLevel)aQos
               data:(NSData*)aData {
     _type = aType;
     _qos = aQos;
@@ -218,7 +218,7 @@
 }
 
 - (id)initWithType:(UInt8)aType
-               qos:(UInt8)aQos
+               qos:(MQTTQosLevel)aQos
         retainFlag:(BOOL)aRetainFlag
            dupFlag:(BOOL)aDupFlag
               data:(NSData*)aData {
