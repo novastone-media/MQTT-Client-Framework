@@ -781,6 +781,7 @@
 				DSTROOT = /tmp/MQTTClient.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MQTTClient/MQTTClient-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ckrey/mqttIO-objC/src/MqttSDK/build/MqttSDK.build/Debug-iphoneos/MqttSDK.build/Objects-normal/armv7",

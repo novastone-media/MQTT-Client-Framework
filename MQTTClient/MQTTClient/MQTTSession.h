@@ -77,9 +77,16 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 
 /** gets called when a connection has been successfully established
  @param session the MQTTSession reporting the connect
-
+ 
  */
 - (void)connected:(MQTTSession *)session;
+
+/** gets called when a connection has been successfully established
+ @param session the MQTTSession reporting the connect
+ @param sessionPresent represents the Session Present flag sent by the broker
+ 
+ */
+- (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent;
 
 /** gets called when a connection has been refused
  @param session the MQTTSession reporting the refusal

@@ -685,6 +685,9 @@
                             if ([self.delegate respondsToSelector:@selector(connected:)]) {
                                 [self.delegate connected:self];
                             }
+                            if ([self.delegate respondsToSelector:@selector(connected:sessionPresent:)]) {
+                                [self.delegate connected:self sessionPresent:((bytes[0] & 0x01) == 0x01)];
+                            }
                             
                             self.synchronConnect = FALSE;
                             

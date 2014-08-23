@@ -108,6 +108,8 @@ Instance Methods</h2></td></tr>
 <tr class="separator:a168b8ff4bd95ffbfe61a8b10236860f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a663f6af2141773ba925ddf4ca44a5b66"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a663f6af2141773ba925ddf4ca44a5b66">connected:</a></td></tr>
 <tr class="separator:a663f6af2141773ba925ddf4ca44a5b66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a443d92270a3c1a1cd0330f1be1e66952"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a443d92270a3c1a1cd0330f1be1e66952">connected:sessionPresent:</a></td></tr>
+<tr class="separator:a443d92270a3c1a1cd0330f1be1e66952"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a179c4f9104394b3843a20862d50fd813"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a179c4f9104394b3843a20862d50fd813">connectionRefused:error:</a></td></tr>
 <tr class="separator:a179c4f9104394b3843a20862d50fd813"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ee6176897e9dc28236c562aece2a375"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a6ee6176897e9dc28236c562aece2a375">connectionClosed:</a></td></tr>
@@ -211,6 +213,47 @@ Instance Methods</h2></td></tr>
 <p>gets called when a connection has been successfully established </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">session</td><td>the <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> reporting the connect </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a443d92270a3c1a1cd0330f1be1e66952"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void) <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a663f6af2141773ba925ddf4ca44a5b66">connected:</a> </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> *)&#160;</td>
+          <td class="paramname"><em>session</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">sessionPresent:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>sessionPresent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>gets called when a connection has been successfully established </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">session</td><td>the <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> reporting the connect </td></tr>
+    <tr><td class="paramname">sessionPresent</td><td>represents the Session Present flag sent by the broker </td></tr>
   </table>
   </dd>
 </dl>
@@ -768,7 +811,7 @@ Instance Methods</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 9 2014 20:45:55 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 18 2014 21:13:46 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

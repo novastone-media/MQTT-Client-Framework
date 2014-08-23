@@ -381,6 +381,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>connected:sessionPresent:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>intfm</Type>
+      <Scope>MQTTSessionDelegate-p</Scope>
+    </TokenIdentifier>
+    <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+    <Anchor>a443d92270a3c1a1cd0330f1be1e66952</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>connectionRefused:error:</Name>
       <APILanguage>occ</APILanguage>
       <Type>intfm</Type>

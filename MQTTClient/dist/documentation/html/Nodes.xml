@@ -189,6 +189,11 @@
               <Anchor>a663f6af2141773ba925ddf4ca44a5b66</Anchor>
              </Node>
              <Node>
+              <Name>connected:sessionPresent:</Name>
+              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+              <Anchor>a443d92270a3c1a1cd0330f1be1e66952</Anchor>
+             </Node>
+             <Node>
               <Name>connectionClosed:</Name>
               <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
               <Anchor>a6ee6176897e9dc28236c562aece2a375</Anchor>
