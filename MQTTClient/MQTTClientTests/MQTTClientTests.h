@@ -40,8 +40,8 @@
 //                    @"timeout": @10 \
 //                    }
 
-#define HOST @"192.168.178.38"
-#define PARAMETERS @{ \
+//#define HOST @"192.168.178.38"
+//#define PARAMETERS @{ \
                     @"host": @"192.168.178.38",  \
                     @"port": @1883,  \
                     @"tls": @NO, \
@@ -49,14 +49,14 @@
                     @"timeout": @10 \
                     }
 
-//#define HOST @"localhost"
-//#define PARAMETERS @{ \
-//                    @"host": @"localhost",  \
-//                    @"port": @1883,  \
-//                    @"tls": @NO, \
-//                    @"protocollevel": @4, \
-//                    @"timeout": @10 \
-//                    }
+#define HOST @"localhost"
+#define PARAMETERS @{ \
+                    @"host": @"localhost",  \
+                    @"port": @1883,  \
+                    @"tls": @NO, \
+                    @"protocollevel": @4, \
+                    @"timeout": @10 \
+                    }
 
 //#define @"www.cloudmqtt.com"
 //#define port 18443, 28443

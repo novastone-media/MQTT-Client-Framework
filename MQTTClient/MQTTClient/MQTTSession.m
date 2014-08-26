@@ -38,6 +38,7 @@
 @property (strong, nonatomic) NSTimer *keepAliveTimer;
 @property (strong, nonatomic) MQTTEncoder *encoder;
 @property (strong, nonatomic) MQTTDecoder *decoder;
+@property (strong, nonatomic) MQTTSession *selfReference;
 @property (nonatomic) UInt16 txMsgId;
 @property (strong, nonatomic) NSMutableDictionary *txFlows;
 @property (strong, nonatomic) NSMutableDictionary *rxFlows;
@@ -205,6 +206,8 @@
 #ifdef DEBUG
     NSLog(@"%@ connectToHost:%@ port:%d usingSSL:%d]", self, host, (unsigned int)port, usingSSL);
 #endif
+    
+    self.selfReference = self;
     
     if (!host) {
         host = @"localhost";
@@ -528,6 +531,7 @@
                      flowingOut:[self.txFlows count]];
     }
     self.synchronDisconnect = FALSE;
+    self.selfReference = nil;
 }
 
 
