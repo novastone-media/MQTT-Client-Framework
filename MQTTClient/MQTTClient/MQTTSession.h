@@ -49,7 +49,8 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
     MQTTSessionEventConnectionRefused,
     MQTTSessionEventConnectionClosed,
     MQTTSessionEventConnectionError,
-    MQTTSessionEventProtocolError
+    MQTTSessionEventProtocolError,
+    MQTTSessionEventConnectionClosedByBroker
 };
 
 /** gets called when a new message was received

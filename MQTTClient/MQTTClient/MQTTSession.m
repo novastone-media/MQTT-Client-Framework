@@ -644,10 +644,7 @@
 
     switch (eventCode) {
         case MQTTDecoderEventConnectionClosed:
-            [self error:MQTTSessionEventConnectionClosed error:error];
-            if ([self.delegate respondsToSelector:@selector(connectionClosed:)]) {
-                [self.delegate connectionClosed:self];
-            }
+            [self error:MQTTSessionEventConnectionClosedByBroker error:error];
             break;
         case MQTTDecoderEventConnectionError:
             [self connectionError:error];
