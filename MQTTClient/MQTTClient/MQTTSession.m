@@ -530,6 +530,13 @@
                       flowingIn:[self.rxFlows count]
                      flowingOut:[self.txFlows count]];
     }
+    self.synchronPub = FALSE;
+    self.synchronPubMid = 0;
+    self.synchronSub = FALSE;
+    self.synchronSubMid = 0;
+    self.synchronUnsub = FALSE;
+    self.synchronUnsubMid = 0;
+    self.synchronConnect = FALSE;
     self.synchronDisconnect = FALSE;
     self.selfReference = nil;
 }

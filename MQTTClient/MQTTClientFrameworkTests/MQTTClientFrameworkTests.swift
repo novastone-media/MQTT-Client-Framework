@@ -10,7 +10,8 @@ import Foundation
 
 class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
     
-    var session = MQTTSession(clientId: "swift",
+    var session = MQTTSession(
+        clientId: "swift",
         userName: nil,
         password: nil,
         keepAlive: 60,
@@ -18,11 +19,13 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
         will: false,
         willTopic: nil,
         willMsg: nil,
-        willQoS: 0,
+        willQoS: MQTTQosLevel.QoSLevelAtMostOnce,
         willRetainFlag: false,
         protocolLevel: 4,
         runLoop: nil,
-        forMode: nil)
+        forMode: nil
+    )
+    
     var sessionConnected = false;
     var sessionError = false;
     var sessionReceived = false;
@@ -44,7 +47,7 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
     }
     
     func testSubscribe() {
-        session.subscribeToTopic("#", atLevel: 0)
+        session.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
 
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
@@ -52,7 +55,7 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
     }
     
     func testPublish() {
-        session.subscribeToTopic("#", atLevel: 0)
+        session.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
 
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
@@ -61,7 +64,7 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
         session.publishData("sent from Xcode 6.0 using Swift".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false),
             onTopic: "mqtt/swift/framework",
             retain: false,
-            qos: 0)
+            qos: MQTTQosLevel.QoSLevelAtMostOnce)
         
         while sessionConnected && !sessionError && !sessionReceived {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
@@ -80,13 +83,12 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
         }
     }
     
-    func newMessage(session: MQTTSession!, data: NSData!, onTopic topic: String!, qos: CInt, retained: Bool, mid: CUnsignedInt)
-    {
+    func newMessage(session: MQTTSession!, data: NSData!, onTopic topic: String!, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
         println("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
         sessionReceived = true;
     }
     
-    func subAckReceived(session: MQTTSession!, msgID: UInt16, grantedQoss qoss: AnyObject[]!) {
+    func subAckReceived(session: MQTTSession!, msgID: UInt16, grantedQoss qoss: [AnyObject]!) {
         sessionSubAcked = true;
     }
     
