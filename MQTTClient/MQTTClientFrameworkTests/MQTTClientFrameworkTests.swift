@@ -34,7 +34,7 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
     override func setUp() {
         session.delegate = self;
         
-        session.connectToHost("localhost",
+        session.connectToHost("192.168.178.38",
             port: 1883,
             usingSSL: false)
         while !sessionConnected && !sessionError {

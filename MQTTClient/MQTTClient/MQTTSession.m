@@ -55,9 +55,16 @@
 
 @end
 
-@implementation MQTTSession
 #define TIMEOUT 60
 #define WAIT 30
+
+#ifdef DEBUG
+#define DEBUGSESS FALSE
+#else
+#define DEBUGSESS FALSE
+#endif
+
+@implementation MQTTSession
 
 - (id)init
 {
@@ -92,10 +99,9 @@
                forMode:(NSString *)runLoopMode
 {
     self = [super init];
-    NSLog(@"MQTTClient %s %s", __DATE__, __TIME__);
+    if (DEBUGSESS) NSLog(@"MQTTClient %s %s", __DATE__, __TIME__);
 
-#ifdef DEBUG
-    NSLog(@"%@ initWithClientId:%@ userName:%@ password:%@ keepAlive:%d cleanSession:%d will:%d willTopic:%@ willTopic:%@ willQos:%d willRetainFlag:%d protocolLevel:%d runLoop:%@ forMode:%@",
+    if (DEBUGSESS) NSLog(@"%@ initWithClientId:%@ userName:%@ password:%@ keepAlive:%d cleanSession:%d will:%d willTopic:%@ willTopic:%@ willQos:%d willRetainFlag:%d protocolLevel:%d runLoop:%@ forMode:%@",
           self,
           clientId,
           userName,
@@ -110,7 +116,6 @@
           protocolLevel,
           @"runLoop",
           runLoopMode);
-#endif
     
     self.clientId = clientId;
     self.userName = userName;
@@ -149,9 +154,8 @@
     
     NSAssert(clientId.length > 0 || self.cleanSessionFlag, @"clientId must be at least 1 character long if cleanSessionFlag is off");
     
-    NSData *data = [clientId dataUsingEncoding:NSUTF8StringEncoding];
-    NSAssert(data, @"clientId contains non-UTF8 characters");
-    NSAssert(data.length <= 65535L, @"clientId may not be longer than 65535 bytes in UTF8 representation");
+    NSAssert([clientId dataUsingEncoding:NSUTF8StringEncoding], @"clientId contains non-UTF8 characters");
+    NSAssert([clientId dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"clientId may not be longer than 65535 bytes in UTF8 representation");
     
     _clientId = clientId;
 }
@@ -159,9 +163,8 @@
 - (void)setUserName:(NSString *)userName
 {
     if (userName) {
-        NSData *data = [userName dataUsingEncoding:NSUTF8StringEncoding];
-        NSAssert(data, @"userName contains non-UTF8 characters");
-        NSAssert(data.length <= 65535L, @"userName may not be longer than 65535 bytes in UTF8 representation");
+        NSAssert([userName dataUsingEncoding:NSUTF8StringEncoding], @"userName contains non-UTF8 characters");
+        NSAssert([userName dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"userName may not be longer than 65535 bytes in UTF8 representation");
     }
     
     _userName = userName;
@@ -171,9 +174,8 @@
 {
     if (password) {
         NSAssert(self.userName, @"password specified without userName");
-        NSData *data = [password dataUsingEncoding:NSUTF8StringEncoding];
-        NSAssert(data, @"password contains non-UTF8 characters");
-        NSAssert(data.length <= 65535L, @"password may not be longer than 65535 bytes in UTF8 representation");
+        NSAssert([password dataUsingEncoding:NSUTF8StringEncoding], @"password contains non-UTF8 characters");
+        NSAssert([password dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"password may not be longer than 65535 bytes in UTF8 representation");
     }
     _password = password;
 }
@@ -203,9 +205,7 @@
 
 - (void)connectToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL
 {
-#ifdef DEBUG
-    NSLog(@"%@ connectToHost:%@ port:%d usingSSL:%d]", self, host, (unsigned int)port, usingSSL);
-#endif
+    if (DEBUGSESS) NSLog(@"%@ connectToHost:%@ port:%d usingSSL:%d]", self, host, (unsigned int)port, usingSSL);
     
     self.selfReference = self;
     
@@ -272,9 +272,7 @@
 - (UInt16)subscribeToTopic:(NSString *)topic
                    atLevel:(MQTTQosLevel)qosLevel
 {
-#ifdef DEBUG
-    NSLog(@"%@ subscribeToTopic:%@ atLevel:%d]", self, topic, qosLevel);
-#endif
+    if (DEBUGSESS) NSLog(@"%@ subscribeToTopic:%@ atLevel:%d]", self, topic, qosLevel);
     
     NSAssert(qosLevel >= 0 && qosLevel <= 2, @"qosLevel must be 0, 1, or 2");
 
@@ -306,14 +304,13 @@
 
 - (UInt16)subscribeToTopics:(NSDictionary *)topics
 {
-#ifdef DEBUG
-    NSLog(@"%@ subscribeToTopics:%@]", self, topics);
-#endif
-    
+   if (DEBUGSESS)  NSLog(@"%@ subscribeToTopics:%@]", self, topics);
+
+#ifndef NS_BLOCK_ASSERTIONS
     for (NSNumber *qos in [topics allValues]) {
         NSAssert([qos intValue] >= 0 && [qos intValue] <= 2, @"qosLevel must be 0, 1, or 2");
-
     }
+#endif
 
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage subscribeMessageWithMessageId:mid
@@ -327,10 +324,8 @@
     self.synchronSub = TRUE;
     self.synchronSubMid = mid;
     
-    while (self.synchronUnsub) {
-#ifdef DEBUG
-        NSLog(@"%@ waiting for suback %d", self, mid);
-#endif
+    while (self.synchronSub) {
+        if (DEBUGSESS) NSLog(@"%@ waiting for suback %d", self, mid);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
@@ -343,9 +338,7 @@
 
 - (UInt16)unsubscribeTopic:(NSString*)theTopic
 {
-#ifdef DEBUG
-    NSLog(@"%@ unsubscribeTopic:%@", self, theTopic);
-#endif
+    if (DEBUGSESS) NSLog(@"%@ unsubscribeTopic:%@", self, theTopic);
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage unsubscribeMessageWithMessageId:mid
                                                      topics:theTopic ? @[theTopic] : @[]]];
@@ -359,9 +352,7 @@
     self.synchronUnsubMid = mid;
     
     while (self.synchronUnsub) {
-#ifdef DEBUG
-        NSLog(@"%@ waiting for unsuback %d", self, mid);
-#endif
+        if (DEBUGSESS) NSLog(@"%@ waiting for unsuback %d", self, mid);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
@@ -374,9 +365,7 @@
 
 - (UInt16)unsubscribeTopics:(NSArray *)theTopics
 {
-#ifdef DEBUG
-    NSLog(@"%@ unsubscribeTopics:%@", self, theTopics);
-#endif
+    if (DEBUGSESS) NSLog(@"%@ unsubscribeTopics:%@", self, theTopics);
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage unsubscribeMessageWithMessageId:mid
                                                       topics:theTopics]];
@@ -390,9 +379,7 @@
     self.synchronUnsubMid = mid;
     
     while (self.synchronUnsub) {
-#ifdef DEBUG
-        NSLog(@"%@ waiting for unsuback %d", self, mid);
-#endif
+        if (DEBUGSESS) NSLog(@"%@ waiting for unsuback %d", self, mid);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
@@ -408,14 +395,12 @@
                retain:(BOOL)retainFlag
                   qos:(MQTTQosLevel)qos
 {
-#ifdef DEBUG
-    NSLog(@"%@ publishData:%@... onTopic:%@ retain:%d qos:%ld",
+    if (DEBUGSESS) NSLog(@"%@ publishData:%@... onTopic:%@ retain:%d qos:%ld",
           self,
           [data subdataWithRange:NSMakeRange(0, MIN(16, data.length))],
           topic,
           retainFlag,
           (long)qos);
-#endif
     
     if (!data) {
         data = [[NSData alloc] init];
@@ -474,14 +459,10 @@
 
 - (void)close
 {
-#ifdef DEBUG
-    NSLog(@"%@ close", self);
-#endif
+    if (DEBUGSESS) NSLog(@"%@ close", self);
     
     if (self.status == MQTTSessionStatusConnected) {
-#ifdef DEBUG
-        NSLog(@"%@ disconnecting", self);
-#endif
+        if (DEBUGSESS) NSLog(@"%@ disconnecting", self);
         self.status = MQTTSessionStatusDisconnecting;
         [self send:[MQTTMessage disconnectMessage]];
     } else {
@@ -495,16 +476,14 @@
     [self close];
     
     while (self.synchronDisconnect) {
-        NSLog(@"%@ waiting for close", self);
+        if (DEBUGSESS) NSLog(@"%@ waiting for close", self);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
 }
 
 - (void)closeInternal
 {
-#ifdef DEBUG
-    NSLog(@"%@ closeInternal", self);
-#endif 
+    if (DEBUGSESS) NSLog(@"%@ closeInternal", self);
     
     if (self.keepAliveTimer) {
         [self.keepAliveTimer invalidate];
@@ -544,9 +523,7 @@
 
 - (void)keepAlive:(NSTimer *)timer
 {
-#ifdef DEBUG
-    NSLog(@"%@ keepAlive %@ @%.0f", self, self.clientId, [[NSDate date] timeIntervalSince1970]);
-#endif
+   if (DEBUGSESS)  NSLog(@"%@ keepAlive %@ @%.0f", self, self.clientId, [[NSDate date] timeIntervalSince1970]);
     if ([self.encoder status] == MQTTEncoderStatusReady) {
         MQTTMessage *msg = [MQTTMessage pingreqMessage];
         [self.encoder encodeMessage:msg];
@@ -570,15 +547,14 @@
 
 - (void)encoder:(MQTTEncoder*)sender handleEvent:(MQTTEncoderEvent)eventCode error:(NSError *)error
 {
-#ifdef DEBUG
-    NSArray *events = @[
-                        @"MQTTEncoderEventReady",
-                        @"MQTTEncoderEventErrorOccurred"
-                        ];
-    
-    NSLog(@"%@ encoder handleEvent: %@ (%d) %@", self, events[eventCode % [events count]], eventCode, [error description]);
-#endif
-
+    if (DEBUGSESS) {
+        NSArray *events = @[
+                            @"MQTTEncoderEventReady",
+                            @"MQTTEncoderEventErrorOccurred"
+                            ];
+        
+        NSLog(@"%@ encoder handleEvent: %@ (%d) %@", self, events[eventCode % [events count]], eventCode, [error description]);
+    }
     switch (eventCode) {
         case MQTTEncoderEventReady:
             switch (self.status) {
@@ -613,9 +589,7 @@
                     [self checkTxFlows];
                     break;
                 case MQTTSessionStatusDisconnecting:
-#ifdef DEBUG
-                    NSLog(@"%@ disconnect sent", self);
-#endif
+                    if (DEBUGSESS) NSLog(@"%@ disconnect sent", self);
                     // [self closeInternal]; rather wait until server closes connect, see issue #10
                     break;
                 case MQTTSessionStatusClosed:
@@ -639,16 +613,15 @@
 
 - (void)decoder:(MQTTDecoder*)sender handleEvent:(MQTTDecoderEvent)eventCode error:(NSError *)error
 {
-#ifdef DEBUG
-    NSArray *events = @[
-                        @"MQTTDecoderEventProtocolError",
-                        @"MQTTDecoderEventConnectionClosed",
-                        @"MQTTDecoderEventConnectionError"
-                        ];
-    
-    NSLog(@"%@ decoder handleEvent: %@ (%d) %@", self, events[eventCode % [events count]], eventCode, [error description]);
-#endif
-
+    if (DEBUGSESS) {
+        NSArray *events = @[
+                            @"MQTTDecoderEventProtocolError",
+                            @"MQTTDecoderEventConnectionClosed",
+                            @"MQTTDecoderEventConnectionError"
+                            ];
+        
+        NSLog(@"%@ decoder handleEvent: %@ (%d) %@", self, events[eventCode % [events count]], eventCode, [error description]);
+    }
     switch (eventCode) {
         case MQTTDecoderEventConnectionClosed:
             [self error:MQTTSessionEventConnectionClosedByBroker error:error];

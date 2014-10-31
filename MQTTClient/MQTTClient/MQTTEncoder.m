@@ -19,6 +19,13 @@
 
 #import "MQTTEncoder.h"
 
+#ifdef DEBUG
+#define DEBUGENC FALSE
+#else
+#define DEBUGENC FALSE
+#endif
+
+
 @implementation MQTTEncoder
 
 - (id)initWithStream:(NSOutputStream*)stream
@@ -45,14 +52,9 @@
 }
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
-#ifdef DEBUG
-    NSLog(@"%@ handleEvent 0x%02lx", self, (long)eventCode);
-#endif
-
+    if (DEBUGENC) NSLog(@"%@ handleEvent 0x%02lx", self, (long)eventCode);
     if(self.stream == nil) {
-#ifdef DEBUG
-        NSLog(@"%@ self.stream == nil", self);
-#endif
+        if (DEBUGENC) NSLog(@"%@ self.stream == nil", self);
         return;
     }
     assert(sender == self.stream);
@@ -98,9 +100,7 @@
             }
             break;
         default:
-#ifdef DEBUG
-            NSLog(@"%@ unhandled event code 0x%02lx", self, (long)eventCode);
-#endif
+            if (DEBUGENC) NSLog(@"%@ unhandled event code 0x%02lx", self, (long)eventCode);
             break;
     }
 }
@@ -110,9 +110,7 @@
     NSInteger n, length;
     
     if (self.status != MQTTEncoderStatusReady) {
-#ifdef DEBUG
-        NSLog(@"%@ not status ready %d", self, self.status);
-#endif
+        if (DEBUGENC) NSLog(@"%@ not status ready %d", self, self.status);
         return;
     }
     
@@ -150,10 +148,8 @@
         [self.buffer appendData:[msg data]];
     }
 
-#ifdef DEBUG
-    NSLog(@"%@ buffer to write (%lu)=%@...", self, (unsigned long)self.buffer.length,
+    if (DEBUGENC) NSLog(@"%@ buffer to write (%lu)=%@...", self, (unsigned long)self.buffer.length,
           [self.buffer subdataWithRange:NSMakeRange(0, MIN(16, self.buffer.length))]);
-#endif
 
     [self.delegate encoder:self sending:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:self.buffer];
 
