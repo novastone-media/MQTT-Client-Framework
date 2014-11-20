@@ -262,10 +262,12 @@
     [self connectToHost:host port:port usingSSL:usingSSL];
     
     while (self.synchronConnect) {
-        NSLog(@"%@ waiting for connect", self);
+        if (DEBUGSESS) NSLog(@"%@ waiting for connect", self);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
+    if (DEBUGSESS) NSLog(@"%@ end connect", self);
+
     return (self.status == MQTTSessionStatusConnected);
 }
 
@@ -284,15 +286,17 @@
 
 - (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel
 {
-    UInt16 mid = [self subscribeToTopic:topic atLevel:qosLevel];
     self.synchronSub = TRUE;
+    UInt16 mid = [self subscribeToTopic:topic atLevel:qosLevel];
     self.synchronSubMid = mid;
     
     while (self.synchronSub) {
-        NSLog(@"%@ waiting for suback %d", self, mid);
+        if (DEBUGSESS) NSLog(@"%@ waiting for suback %d", self, mid);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
+    if (DEBUGSESS) NSLog(@"%@ end subscribe", self);
+
     if (self.synchronSubMid == mid) {
         return TRUE;
     } else {
@@ -304,7 +308,7 @@
 
 - (UInt16)subscribeToTopics:(NSDictionary *)topics
 {
-   if (DEBUGSESS)  NSLog(@"%@ subscribeToTopics:%@]", self, topics);
+   if (DEBUGSESS) NSLog(@"%@ subscribeToTopics:%@]", self, topics);
 
 #ifndef NS_BLOCK_ASSERTIONS
     for (NSNumber *qos in [topics allValues]) {
@@ -320,8 +324,8 @@
 
 - (BOOL)subscribeAndWaitToTopics:(NSDictionary *)topics
 {
-    UInt16 mid = [self subscribeToTopics:topics];
     self.synchronSub = TRUE;
+    UInt16 mid = [self subscribeToTopics:topics];
     self.synchronSubMid = mid;
     
     while (self.synchronSub) {
@@ -329,6 +333,8 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
+    if (DEBUGSESS) NSLog(@"%@ end subscribe", self);
+
     if (self.synchronSubMid == mid) {
         return TRUE;
     } else {
@@ -347,8 +353,8 @@
 
 - (BOOL)unsubscribeAndWaitTopic:(NSString *)theTopic
 {
-    UInt16 mid = [self unsubscribeTopic:theTopic];
     self.synchronUnsub = TRUE;
+    UInt16 mid = [self unsubscribeTopic:theTopic];
     self.synchronUnsubMid = mid;
     
     while (self.synchronUnsub) {
@@ -356,6 +362,8 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
+    if (DEBUGSESS) NSLog(@"%@ end unsubscribe", self);
+
     if (self.synchronUnsubMid == mid) {
         return TRUE;
     } else {
@@ -374,8 +382,8 @@
 
 - (BOOL)unsubscribeAndWaitTopics:(NSArray *)theTopics
 {
-    UInt16 mid = [self unsubscribeTopics:theTopics];
     self.synchronUnsub = TRUE;
+    UInt16 mid = [self unsubscribeTopics:theTopics];
     self.synchronUnsubMid = mid;
     
     while (self.synchronUnsub) {
@@ -383,6 +391,8 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
+    if (DEBUGSESS) NSLog(@"%@ end unsubscribe", self);
+
     if (self.synchronUnsubMid == mid) {
         return TRUE;
     } else {
@@ -437,18 +447,23 @@
                       retain:(BOOL)retainFlag
                          qos:(MQTTQosLevel)qos
 {
+    if (qos != MQTTQoSLevelAtMostOnce) {
+        self.synchronPub = TRUE;
+    }
+
     UInt16 mid = [self publishData:data onTopic:topic retain:retainFlag qos:qos];
     if (qos == MQTTQoSLevelAtMostOnce) {
         return TRUE;
     } else {
-        self.synchronPub = TRUE;
         self.synchronPubMid = mid;
         
         while (self.synchronPub) {
-            NSLog(@"%@ waiting for %d", self, mid);
+            if (DEBUGSESS) NSLog(@"%@ waiting for mid %d", self, mid);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
         
+        if (DEBUGSESS) NSLog(@"%@ end publish", self);
+
         if (self.synchronPubMid == mid) {
             return TRUE;
         } else {
@@ -479,6 +494,8 @@
         if (DEBUGSESS) NSLog(@"%@ waiting for close", self);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
+    if (DEBUGSESS) NSLog(@"%@ end close", self);
+
 }
 
 - (void)closeInternal
