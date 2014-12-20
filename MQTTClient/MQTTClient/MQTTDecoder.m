@@ -69,8 +69,7 @@
                 if (n == -1) {
                     self.status = MQTTDecoderStatusConnectionError;
                     [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:self.stream.streamError];
-                }
-                else if (n == 1) {
+                } else if (n == 1) {
                     self.length = 0;
                     self.lengthMultiplier = 1;
                     self.status = MQTTDecoderStatusDecodingLength;
@@ -83,16 +82,14 @@
                     self.status = MQTTDecoderStatusConnectionError;
                     [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:self.stream.streamError];
                     break;
-                }
-                else if (n == 0) {
+                } else if (n == 0) {
                     break;
                 }
                 self.length += (digit & 0x7f) * self.lengthMultiplier;
                 if ((digit & 0x80) == 0x00) {
                     self.dataBuffer = [NSMutableData dataWithCapacity:self.length];
                     self.status = MQTTDecoderStatusDecodingData;
-                }
-                else {
+                } else {
                     self.lengthMultiplier *= 128;
                 }
             }
@@ -108,8 +105,7 @@
                     if (n == -1) {
                         self.status = MQTTDecoderStatusConnectionError;
                         [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:self.stream.streamError];
-                    }
-                    else {
+                    } else {
                         [self.dataBuffer appendBytes:buffer length:n];
                     }
                 }
@@ -133,7 +129,7 @@
                                                  retainFlag:retainFlag
                                                     dupFlag:isDuplicate
                                                        data:self.dataBuffer];
-                    if (DEBUGDEC) NSLog(@"%@received (%lu)=%@...", self, (unsigned long)self.dataBuffer.length,
+                    if (DEBUGDEC) NSLog(@"%@ received (%lu)=%@...", self, (unsigned long)self.dataBuffer.length,
                           [self.dataBuffer subdataWithRange:NSMakeRange(0, MIN(16, self.dataBuffer.length))]);
                     [self.delegate decoder:self newMessage:msg];
                     self.dataBuffer = NULL;

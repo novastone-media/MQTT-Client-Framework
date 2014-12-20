@@ -36,6 +36,8 @@
 @property (nonatomic, readwrite) MQTTSessionStatus status;
 
 @property (strong, nonatomic) NSTimer *keepAliveTimer;
+@property (strong, nonatomic) NSTimer *checkDupTimer;
+
 @property (strong, nonatomic) MQTTEncoder *encoder;
 @property (strong, nonatomic) MQTTDecoder *decoder;
 @property (strong, nonatomic) MQTTSession *selfReference;
@@ -55,8 +57,8 @@
 
 @end
 
-#define TIMEOUT 60
-#define WAIT 30
+#define DUPTIMEOUT 20
+#define DUPLOOP 5
 
 #ifdef DEBUG
 #define DEBUGSESS FALSE
@@ -428,7 +430,7 @@
     if (qos) {
         MQttTxFlow *flow = [[MQttTxFlow alloc] init];
         flow.msg = msg;
-        flow.deadline = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT];
+        flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
         self.txFlows[[NSNumber numberWithUnsignedInt:(uint)msgId]] = flow;
         if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
             [self.delegate buffered:self
@@ -502,6 +504,11 @@
 {
     if (DEBUGSESS) NSLog(@"%@ closeInternal", self);
     
+    if (self.checkDupTimer) {
+        [self.checkDupTimer invalidate];
+        self.checkDupTimer = nil;
+    }
+    
     if (self.keepAliveTimer) {
         [self.keepAliveTimer invalidate];
         self.keepAliveTimer = nil;
@@ -540,12 +547,16 @@
 
 - (void)keepAlive:(NSTimer *)timer
 {
-   if (DEBUGSESS)  NSLog(@"%@ keepAlive %@ @%.0f", self, self.clientId, [[NSDate date] timeIntervalSince1970]);
+    if (DEBUGSESS)  NSLog(@"%@ keepAlive %@ @%.0f", self, self.clientId, [[NSDate date] timeIntervalSince1970]);
     if ([self.encoder status] == MQTTEncoderStatusReady) {
         MQTTMessage *msg = [MQTTMessage pingreqMessage];
         [self.encoder encodeMessage:msg];
     }
-    
+}
+
+- (void)checkDup:(NSTimer *)timer
+{
+    if (DEBUGSESS)  NSLog(@"%@ checkDup %@ @%.0f", self, self.clientId, [[NSDate date] timeIntervalSince1970]);
     [self checkTxFlows];
 }
 
@@ -554,9 +565,12 @@
     for (NSNumber *msgId in [self.txFlows allKeys]) {
         MQttTxFlow *flow = (self.txFlows)[msgId];
         if ([flow.deadline compare:[NSDate date]] == NSOrderedAscending) {
+            if (DEBUGSESS)  NSLog(@"%@ send dup %@ %@", self, self.clientId, msgId);
             MQTTMessage *msg = [flow msg];
-            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT];
-            msg.dupFlag = TRUE;
+            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+            if (msg.type == MQTTPublish) {
+                msg.dupFlag = TRUE;
+            }
             [self send:msg];
         }
     }
@@ -670,6 +684,14 @@
                         const UInt8 *bytes = [[msg data] bytes];
                         if (bytes[1] == 0) {
                             self.status = MQTTSessionStatusConnected;
+                            
+                            self.checkDupTimer = [NSTimer timerWithTimeInterval:DUPLOOP
+                                                                         target:self
+                                                                       selector:@selector(checkDup:)
+                                                                       userInfo:nil
+                                                                        repeats:YES];
+                            [self.runLoop addTimer:self.checkDupTimer forMode:self.runLoopMode];
+                            
                             self.keepAliveTimer = [NSTimer timerWithTimeInterval:self.keepAliveInterval
                                                                           target:self
                                                                         selector:@selector(keepAlive:)
@@ -906,7 +928,7 @@
                 MQTTMessage *flowmsg = [flow msg];
                 if ([flowmsg type] == MQTTPublish && [flowmsg qos] == 2) {
                     flow.msg = pubrelmsg;
-                    flow.deadline = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT];
+                    flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
                 }
             }
             [self send:pubrelmsg];
