@@ -6,17 +6,16 @@
 //  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "MQTTClient.h"
 #import "MQTTClientTests.h"
 
-@interface MQTTClientQoSTests : XCTestCase
+@interface MQTTClientQoSTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
 @property (nonatomic) NSInteger event;
 @property (nonatomic) NSInteger mid;
 @property (nonatomic) UInt16 sentMid;
-@property (nonatomic) NSInteger qos;
+@property (nonatomic) MQTTQosLevel qos;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) NSInteger type;
 @property (strong, nonatomic) NSDictionary *parameters;
@@ -181,7 +180,7 @@
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    NSLog(@"handleEvent:%d error:%@", eventCode, error);
+    NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
 }
 
@@ -191,10 +190,14 @@
     self.mid = msgID;
 }
 
-- (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
+- (void)received:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
 {
     NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
     self.type = type;
+}
+
+- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
+    //
 }
 
 - (void) connect {

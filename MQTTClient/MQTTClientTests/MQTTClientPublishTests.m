@@ -219,7 +219,7 @@
     self.timeout = TRUE;
 }
 
-- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(int)qos retained:(BOOL)retained mid:(unsigned int)mid
+- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
 {
     NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
     self.mid = mid;
@@ -227,7 +227,7 @@
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    NSLog(@"handleEvent:%d error:%@", eventCode, error);
+    NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
 }
 

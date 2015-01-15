@@ -12,7 +12,7 @@
 
 @interface MQTTClientTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
-@property (nonatomic) MQTTSessionEvent event;
+@property (nonatomic) int event;
 @property (strong, nonatomic) NSError *error;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) int type;
@@ -270,21 +270,21 @@
     NSLog(@"can't test [MQTT-3.14.1-1]");
 }
 
-- (void)received:(MQTTSession *)session type:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
+- (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
 {
     NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
 
     self.type = type;
 }
 
-- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(int)qos retained:(BOOL)retained mid:(unsigned int)mid
+- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
 {
     NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    NSLog(@"handleEvent:%d error:%@", eventCode, error);
+    NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
     self.error = error;
 }

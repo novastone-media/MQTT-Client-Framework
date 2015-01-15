@@ -1,14 +1,14 @@
 //
-//  MQTTClientFrameworkTests.swift
+//  SwiftTests.swift
 //  MQTTClient
 //
-//  Created by Christoph Krey on 10.06.14.
-//  Copyright (c) 2014 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 14.01.15.
+//  Copyright (c) 2015 Christoph Krey. All rights reserved.
 //
 
 import Foundation
 
-class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
+class SwiftTests : XCTestCase, MQTTSessionDelegate {
     
     var session = MQTTSession(
         clientId: "swift",
@@ -48,7 +48,7 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
     
     func testSubscribe() {
         session.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
-
+        
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
         }
@@ -56,11 +56,11 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
     
     func testPublish() {
         session.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
-
+        
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
         }
-
+        
         session.publishData("sent from Xcode 6.0 using Swift".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false),
             onTopic: "mqtt/swift/framework",
             retain: false,
@@ -69,7 +69,7 @@ class MQTTClientFrameworkTests : XCTestCase, MQTTSessionDelegate {
         while sessionConnected && !sessionError && !sessionReceived {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
         }
-
+        
     }
     
     func handleEvent(session: MQTTSession!, event eventCode: MQTTSessionEvent, error: NSError!) {
