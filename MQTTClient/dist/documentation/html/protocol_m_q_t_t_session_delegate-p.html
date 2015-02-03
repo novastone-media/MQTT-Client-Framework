@@ -105,8 +105,14 @@ Inheritance diagram for &lt;MQTTSessionDelegate&gt;:</div>
 Instance Methods</h2></td></tr>
 <tr class="memitem:a85ecb50aa7dfb9865ec6acfd1192b92c"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a85ecb50aa7dfb9865ec6acfd1192b92c">newMessage:data:onTopic:qos:retained:mid:</a></td></tr>
 <tr class="separator:a85ecb50aa7dfb9865ec6acfd1192b92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c379d26811e242b52a05d09cf60d804"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c379d26811e242b52a05d09cf60d804"></a>
+(void)&#160;</td><td class="memItemRight" valign="bottom">- <b>session:newMessage:onTopic:</b></td></tr>
+<tr class="separator:a7c379d26811e242b52a05d09cf60d804"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a168b8ff4bd95ffbfe61a8b10236860f8"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a168b8ff4bd95ffbfe61a8b10236860f8">handleEvent:event:error:</a></td></tr>
 <tr class="separator:a168b8ff4bd95ffbfe61a8b10236860f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a469397d413d288d61b98112f643d0f9c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a469397d413d288d61b98112f643d0f9c"></a>
+(void)&#160;</td><td class="memItemRight" valign="bottom">- <b>session:handleEvent:</b></td></tr>
+<tr class="separator:a469397d413d288d61b98112f643d0f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a663f6af2141773ba925ddf4ca44a5b66"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a663f6af2141773ba925ddf4ca44a5b66">connected:</a></td></tr>
 <tr class="separator:a663f6af2141773ba925ddf4ca44a5b66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a443d92270a3c1a1cd0330f1be1e66952"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a443d92270a3c1a1cd0330f1be1e66952">connected:sessionPresent:</a></td></tr>
@@ -466,6 +472,9 @@ Instance Methods</h2></td></tr>
 <a class="anchor" id="a85ecb50aa7dfb9865ec6acfd1192b92c"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">- (void) newMessage: </td>
@@ -509,6 +518,11 @@ Instance Methods</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>gets called when a new message was received </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -812,7 +826,7 @@ Instance Methods</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 14 2015 21:56:39 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 3 2015 17:48:26 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

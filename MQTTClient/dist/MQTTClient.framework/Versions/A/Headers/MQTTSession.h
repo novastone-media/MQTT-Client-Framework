@@ -53,6 +53,8 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
     MQTTSessionEventConnectionClosedByBroker
 };
 
+@optional
+
 /** gets called when a new message was received
  @param session the MQTTSession reporting the new message
  @param data the data received, might be zero length
@@ -68,13 +70,17 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
           retained:(BOOL)retained
                mid:(unsigned int)mid;
 
-@optional
+/* for mqttio-OBJC backward compatibility */
+- (void)session:(MQTTSession*)session newMessage:(NSData*)data onTopic:(NSString*)topic;
+
 /** gets called when a connection is established, closed or a problem occurred
  @param session the MQTTSession reporting the event
  @param eventCode the code of the event
  @param error an optional additional error object with additional information
  */
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error;
+/* for mqttio-OBJC backward compatibility */
+- (void)session:(MQTTSession*)session handleEvent:(MQTTSessionEvent)eventCode;
 
 /** gets called when a connection has been successfully established
  @param session the MQTTSession reporting the connect
@@ -208,6 +214,10 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 
 @property (weak, nonatomic) id<MQTTSessionDelegate> delegate;
 
+/* for mqttio-OBJC backward compatibility */
+@property (strong) void (^connectionHandler)(MQTTSessionEvent event);
+@property (strong) void (^messageHandler)(NSData* message, NSString* topic);
+
 /** Session status
  */
 @property (nonatomic, readonly) MQTTSessionStatus status;
@@ -251,6 +261,9 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 /** see initWithClientId for description
  */
 @property (strong, nonatomic) NSString *runLoopMode;
+
+/* for mqttio-OBJC backward compatibility */
+@property (strong, nonatomic) MQTTMessage *connectMessage;
 
 /** initialises the MQTT session with default values
  @return the initialised MQTTSession object
@@ -338,6 +351,56 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
                           runLoop:(NSRunLoop *)runLoop
                           forMode:(NSString *)runLoopMode;
 
+/* for mqttio-OBJC backward compatibility */
+- (id)initWithClientId:(NSString*)theClientId;
+- (id)initWithClientId:(NSString*)theClientId runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theRunLoopMode;
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUsername
+              password:(NSString*)thePassword;
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUserName
+              password:(NSString*)thePassword
+               runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theRunLoopMode;
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUsername
+              password:(NSString*)thePassword
+             keepAlive:(UInt16)theKeepAliveInterval
+          cleanSession:(BOOL)cleanSessionFlag;
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUsername
+              password:(NSString*)thePassword
+             keepAlive:(UInt16)theKeepAlive
+          cleanSession:(BOOL)theCleanSessionFlag
+               runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theMode;
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUserName
+              password:(NSString*)thePassword
+             keepAlive:(UInt16)theKeepAliveInterval
+          cleanSession:(BOOL)theCleanSessionFlag
+             willTopic:(NSString*)willTopic
+               willMsg:(NSData*)willMsg
+               willQoS:(UInt8)willQoS
+        willRetainFlag:(BOOL)willRetainFlag;
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUserName
+              password:(NSString*)thePassword
+             keepAlive:(UInt16)theKeepAliveInterval
+          cleanSession:(BOOL)theCleanSessionFlag
+             willTopic:(NSString*)willTopic
+               willMsg:(NSData*)willMsg
+               willQoS:(UInt8)willQoS
+        willRetainFlag:(BOOL)willRetainFlag
+               runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theRunLoopMode;
+- (id)initWithClientId:(NSString*)theClientId
+             keepAlive:(UInt16)theKeepAliveInterval
+        connectMessage:(MQTTMessage*)theConnectMessage
+               runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theRunLoopMode;
+
 /** connects to the specified MQTT server
  
  @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
@@ -356,6 +419,12 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  
  */
 - (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
+
+/* for mqttio-OBJC backward compatibility */
+- (void)connectToHost:(NSString*)ip port:(UInt32)port;
+- (void)connectToHost:(NSString*)ip port:(UInt32)port withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
+- (void)connectToHost:(NSString*)ip port:(UInt32)port usingSSL:(BOOL)usingSSL withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
+
 
 /** connects to the specified MQTT server synchronously
  
@@ -401,6 +470,9 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 
 - (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;
+
+/* for mqttio-OBJC backward compatibility */
+- (void)subscribeTopic:(NSString*)theTopic;
 
 /** subscribes to a topic at a specific QoS level synchronously
  
@@ -600,6 +672,16 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 
 - (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;
+
+/* for mqttio-OBJC backward compatibility */
+- (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic;
+- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic;
+- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
+- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic;
+- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
+- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic;
+- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
+- (void)publishJson:(id)payload onTopic:(NSString*)theTopic;
 
 /** publishes synchronously data on a given topic at a specified QoS level and retain flag
  

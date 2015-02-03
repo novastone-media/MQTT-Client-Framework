@@ -33,9 +33,24 @@
               <Anchor>abde5a7876357d84972d414fe25843f89</Anchor>
              </Node>
              <Node>
+              <Name>connectToHost:port:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>abc2b0b1291a5da11028761e3a3ed097b</Anchor>
+             </Node>
+             <Node>
               <Name>connectToHost:port:usingSSL:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a97c0fc3b9a06d8c5eefa3012591feb82</Anchor>
+             </Node>
+             <Node>
+              <Name>connectToHost:port:usingSSL:withConnectionHandler:messageHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>af41a9384007931bb624c80bcf1101bd4</Anchor>
+             </Node>
+             <Node>
+              <Name>connectToHost:port:withConnectionHandler:messageHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>acdad8a7c44b78c04eaaef5f6bc2593ec</Anchor>
              </Node>
              <Node>
               <Name>init</Name>
@@ -43,9 +58,54 @@
               <Anchor>aee55d52a9b6395f1a0d73b672900629c</Anchor>
              </Node>
              <Node>
+              <Name>initWithClientId:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a47477e68d8200f0df23c313a2f6ee927</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithClientId:keepAlive:connectMessage:runLoop:forMode:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a96b88231af9e3d5735fe981e4f6c73d4</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithClientId:runLoop:forMode:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a1a346ceb51284cbad07ee3dadf0f4618</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithClientId:userName:password:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>ab5b8767084a7ff67196351a0cbedd3f8</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithClientId:userName:password:keepAlive:cleanSession:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>ad179c0ea11248b1056ecc60b1efe6aa1</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithClientId:userName:password:keepAlive:cleanSession:runLoop:forMode:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a89f1d6be2eedc229c50c2e6e6c7549a4</Anchor>
+             </Node>
+             <Node>
               <Name>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a5d4657d074b0dd745de2a8bded6b0308</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithClientId:userName:password:keepAlive:cleanSession:willTopic:willMsg:willQoS:willRetainFlag:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a7dc7dfa1a3fc8bc9be7b668f39b748d2</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithClientId:userName:password:keepAlive:cleanSession:willTopic:willMsg:willQoS:willRetainFlag:runLoop:forMode:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>aaf15fb90e0b68cc0e41ff4978d8b9d72</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithClientId:userName:password:runLoop:forMode:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a52b198d36af634c4ecc9e5df460e2df6</Anchor>
              </Node>
              <Node>
               <Name>publishAndWaitData:onTopic:retain:qos:</Name>
@@ -53,9 +113,49 @@
               <Anchor>a9ae63de719c3a395c6382cf48e8926ad</Anchor>
              </Node>
              <Node>
+              <Name>publishData:onTopic:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a51b3078f3a68d0ea0abe85683151d608</Anchor>
+             </Node>
+             <Node>
               <Name>publishData:onTopic:retain:qos:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>af76085443daa0ceadf01acc828c91370</Anchor>
+             </Node>
+             <Node>
+              <Name>publishDataAtLeastOnce:onTopic:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a73d4fe58c076c3cbcccd2d7a6c000e9e</Anchor>
+             </Node>
+             <Node>
+              <Name>publishDataAtLeastOnce:onTopic:retain:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a3e89f3d2f4567b7111dbad994f70106b</Anchor>
+             </Node>
+             <Node>
+              <Name>publishDataAtMostOnce:onTopic:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a2b6e9d695e1ed9258489276ad4d3e176</Anchor>
+             </Node>
+             <Node>
+              <Name>publishDataAtMostOnce:onTopic:retain:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a7c4e4bd2e5531a7c6e99584afc9ce75e</Anchor>
+             </Node>
+             <Node>
+              <Name>publishDataExactlyOnce:onTopic:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>aea24466e7d7f3a790d18f770ee96a336</Anchor>
+             </Node>
+             <Node>
+              <Name>publishDataExactlyOnce:onTopic:retain:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>aaefe746cdf09f309731265c8f01ab753</Anchor>
+             </Node>
+             <Node>
+              <Name>publishJson:onTopic:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a3a6bf970d3496e953941b258d1a9a73c</Anchor>
              </Node>
              <Node>
               <Name>subscribeAndWaitToTopic:atLevel:</Name>
@@ -66,6 +166,11 @@
               <Name>subscribeAndWaitToTopics:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a42bce4703b36a0a18bd92a4b6a860767</Anchor>
+             </Node>
+             <Node>
+              <Name>subscribeTopic:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>af3bb097c036b9441ce48adff45917322</Anchor>
              </Node>
              <Node>
               <Name>subscribeToTopic:atLevel:</Name>
@@ -108,6 +213,16 @@
               <Anchor>aa426b344bb913f5f338cacb1844dfb6a</Anchor>
              </Node>
              <Node>
+              <Name>connectionHandler</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a96b070cb597ed0857fbf289579c10a58</Anchor>
+             </Node>
+             <Node>
+              <Name>connectMessage</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a44f63ba3383e0e5c5bed5e051cad9d2f</Anchor>
+             </Node>
+             <Node>
               <Name>delegate</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a1a8eb040c4fd693c218999bae64d1281</Anchor>
@@ -116,6 +231,11 @@
               <Name>keepAliveInterval</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>aa63e148680fef0724b66218d53caba6d</Anchor>
+             </Node>
+             <Node>
+              <Name>messageHandler</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a0af8d5512fae0ed59e572e9566ac9940</Anchor>
              </Node>
              <Node>
               <Name>password</Name>
@@ -237,6 +357,16 @@
               <Name>sending:type:qos:retained:duped:mid:data:</Name>
               <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
               <Anchor>a8c16339f900bfe2aa98a2aabdca44484</Anchor>
+             </Node>
+             <Node>
+              <Name>session:handleEvent:</Name>
+              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+              <Anchor>a469397d413d288d61b98112f643d0f9c</Anchor>
+             </Node>
+             <Node>
+              <Name>session:newMessage:onTopic:</Name>
+              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+              <Anchor>a7c379d26811e242b52a05d09cf60d804</Anchor>
              </Node>
              <Node>
               <Name>subAckReceived:msgID:grantedQoss:</Name>

@@ -68,7 +68,7 @@
 
 @implementation MQTTSession
 
-- (id)init
+- (MQTTSession *)init
 {
     return [self initWithClientId:[NSString stringWithFormat:@"MQTTClient-%f",
                                    fmod([[NSDate date] timeIntervalSince1970], 10.0)]
@@ -86,7 +86,7 @@
                           forMode:nil];
 }
 
-- (id)initWithClientId:(NSString *)clientId
+- (MQTTSession *)initWithClientId:(NSString *)clientId
               userName:(NSString *)userName
               password:(NSString *)password
              keepAlive:(UInt16)keepAliveInterval
@@ -205,6 +205,191 @@
     _runLoopMode = runLoopMode;
 }
 
+- (id)initWithClientId:(NSString*)theClientId {
+    return [self initWithClientId:theClientId
+                         userName:nil
+                         password:nil
+                        keepAlive:60
+                     cleanSession:YES
+                             will:NO
+                        willTopic:nil
+                          willMsg:nil
+                          willQoS:MQTTQosLevelAtLeastOnce
+                   willRetainFlag:FALSE
+                    protocolLevel:4
+                          runLoop:nil
+                          forMode:nil];
+}
+
+- (id)initWithClientId:(NSString*)theClientId
+               runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theRunLoopMode {
+    return [self initWithClientId:theClientId
+                         userName:nil
+                         password:nil
+                        keepAlive:60
+                     cleanSession:YES
+                             will:NO
+                        willTopic:nil
+                          willMsg:nil
+                          willQoS:MQTTQosLevelAtLeastOnce
+                   willRetainFlag:FALSE
+                    protocolLevel:4
+                          runLoop:theRunLoop
+                          forMode:theRunLoopMode];
+}
+
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUsername
+              password:(NSString*)thePassword {
+    return [self initWithClientId:theClientId
+                         userName:theUsername
+                         password:thePassword
+                        keepAlive:60
+                     cleanSession:YES
+                             will:NO
+                        willTopic:nil
+                          willMsg:nil
+                          willQoS:MQTTQosLevelAtLeastOnce
+                   willRetainFlag:FALSE
+                    protocolLevel:4
+                          runLoop:nil
+                          forMode:nil];
+}
+
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUserName
+              password:(NSString*)thePassword
+               runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theRunLoopMode {
+    return [self initWithClientId:theClientId
+                         userName:theUserName
+                         password:thePassword
+                        keepAlive:60
+                     cleanSession:YES
+                             will:NO
+                        willTopic:nil
+                          willMsg:nil
+                          willQoS:MQTTQosLevelAtLeastOnce
+                   willRetainFlag:FALSE
+                    protocolLevel:4
+                          runLoop:theRunLoop
+                          forMode:theRunLoopMode];
+}
+
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUsername
+              password:(NSString*)thePassword
+             keepAlive:(UInt16)theKeepAliveInterval
+          cleanSession:(BOOL)cleanSessionFlag {
+    return [self initWithClientId:theClientId
+                         userName:theUsername
+                         password:thePassword
+                        keepAlive:theKeepAliveInterval
+                     cleanSession:cleanSessionFlag
+                             will:NO
+                        willTopic:nil
+                          willMsg:nil
+                          willQoS:MQTTQosLevelAtLeastOnce
+                   willRetainFlag:FALSE
+                    protocolLevel:4
+                          runLoop:nil
+                          forMode:nil];
+}
+
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUsername
+              password:(NSString*)thePassword
+             keepAlive:(UInt16)theKeepAlive
+          cleanSession:(BOOL)theCleanSessionFlag
+               runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theMode {
+    return [self initWithClientId:theClientId
+                         userName:theUsername
+                         password:thePassword
+                        keepAlive:theKeepAlive
+                     cleanSession:theCleanSessionFlag
+                             will:NO
+                        willTopic:nil
+                          willMsg:nil
+                          willQoS:MQTTQosLevelAtLeastOnce
+                   willRetainFlag:FALSE
+                    protocolLevel:4
+                          runLoop:theRunLoop
+                          forMode:theMode];
+}
+
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUserName
+              password:(NSString*)thePassword
+             keepAlive:(UInt16)theKeepAliveInterval
+          cleanSession:(BOOL)theCleanSessionFlag
+             willTopic:(NSString*)willTopic
+               willMsg:(NSData*)willMsg
+               willQoS:(UInt8)willQoS
+        willRetainFlag:(BOOL)willRetainFlag {
+    return [self initWithClientId:theClientId
+                         userName:theUserName
+                         password:thePassword
+                        keepAlive:theKeepAliveInterval
+                     cleanSession:theCleanSessionFlag
+                             will:YES
+                        willTopic:willTopic
+                          willMsg:willMsg
+                          willQoS:willQoS
+                   willRetainFlag:willRetainFlag
+                    protocolLevel:4
+                          runLoop:nil
+                          forMode:nil];
+}
+
+- (id)initWithClientId:(NSString*)theClientId
+              userName:(NSString*)theUserName
+              password:(NSString*)thePassword
+             keepAlive:(UInt16)theKeepAliveInterval
+          cleanSession:(BOOL)theCleanSessionFlag
+             willTopic:(NSString*)willTopic
+               willMsg:(NSData*)willMsg
+               willQoS:(UInt8)willQoS
+        willRetainFlag:(BOOL)willRetainFlag
+               runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theRunLoopMode {
+    return [self initWithClientId:theClientId
+                         userName:theUserName
+                         password:thePassword
+                        keepAlive:theKeepAliveInterval
+                     cleanSession:theCleanSessionFlag
+                             will:YES
+                        willTopic:willTopic
+                          willMsg:willMsg
+                          willQoS:willQoS
+                   willRetainFlag:willRetainFlag
+                    protocolLevel:4
+                          runLoop:theRunLoop
+                          forMode:theRunLoopMode];
+}
+
+- (id)initWithClientId:(NSString*)theClientId
+             keepAlive:(UInt16)theKeepAliveInterval
+        connectMessage:(MQTTMessage*)theConnectMessage
+               runLoop:(NSRunLoop*)theRunLoop
+               forMode:(NSString*)theRunLoopMode {
+    self.connectMessage = theConnectMessage;
+    return [self initWithClientId:theClientId
+                         userName:nil
+                         password:nil
+                        keepAlive:theKeepAliveInterval
+                     cleanSession:YES
+                             will:NO
+                        willTopic:nil
+                          willMsg:nil
+                          willQoS:MQTTQosLevelAtLeastOnce
+                   willRetainFlag:FALSE
+                    protocolLevel:4
+                          runLoop:theRunLoop
+                          forMode:theRunLoopMode];
+}
+
 - (void)connectToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL
 {
     if (DEBUGSESS) NSLog(@"%@ connectToHost:%@ port:%d usingSSL:%d]", self, host, (unsigned int)port, usingSSL);
@@ -257,6 +442,25 @@
     [self.decoder open];
 }
 
+- (void)connectToHost:(NSString*)ip port:(UInt32)port {
+    [self connectToHost:ip port:port usingSSL:NO];
+}
+
+- (void)connectToHost:(NSString*)ip port:(UInt32)port withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler messageHandler:(void (^)(NSData* data, NSString* topic))messHandler {
+    self.messageHandler = messHandler;
+    self.connectionHandler = connHandler;
+
+    [self connectToHost:ip port:port usingSSL:NO];
+}
+
+- (void)connectToHost:(NSString*)ip port:(UInt32)port usingSSL:(BOOL)usingSSL withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler messageHandler:(void (^)(NSData* data, NSString* topic))messHandler {
+    self.messageHandler = messHandler;
+    self.connectionHandler = connHandler;
+
+    [self connectToHost:ip port:port usingSSL:usingSSL];
+}
+
+
 - (BOOL)connectAndWaitToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL
 {
     self.synchronConnect = TRUE;
@@ -286,6 +490,10 @@
     return mid;
 }
 
+- (void)subscribeTopic:(NSString*)theTopic {
+    [self subscribeToTopic:theTopic atLevel:MQTTQosLevelAtLeastOnce];
+}
+
 - (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel
 {
     self.synchronSub = TRUE;
@@ -305,8 +513,6 @@
         return FALSE;
     }
 }
-
-
 
 - (UInt16)subscribeToTopics:(NSDictionary *)topics
 {
@@ -474,6 +680,41 @@
     }
 }
 
+- (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic {
+    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQosLevelAtLeastOnce];
+}
+
+- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic {
+    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQosLevelAtLeastOnce];
+}
+
+- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag {
+    [self publishData:theData onTopic:theTopic retain:retainFlag qos:MQTTQosLevelAtLeastOnce];
+}
+
+- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic {
+    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQoSLevelAtMostOnce];
+}
+
+- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag {
+    [self publishData:theData onTopic:theTopic retain:retainFlag qos:MQTTQoSLevelAtMostOnce];
+}
+
+- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic {
+    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQosLevelExactlyOnce];
+}
+
+- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag {
+    [self publishData:theData onTopic:theTopic retain:retainFlag qos:MQTTQosLevelExactlyOnce];
+}
+
+- (void)publishJson:(id)payload onTopic:(NSString*)theTopic {
+    NSData *data = [NSJSONSerialization dataWithJSONObject:payload options:0 error:nil];
+    if (data) {
+        [self publishData:payload onTopic:theTopic retain:FALSE qos:MQTTQosLevelAtLeastOnce];
+    }
+}
+
 - (void)close
 {
     if (DEBUGSESS) NSLog(@"%@ close", self);
@@ -590,6 +831,7 @@
         case MQTTEncoderEventReady:
             switch (self.status) {
                 case MQTTSessionStatusCreated:
+                    if (!self.connectMessage) {
                     [sender encodeMessage:[MQTTMessage connectMessageWithClientId:self.clientId
                                                                          userName:self.userName
                                                                          password:self.password
@@ -601,6 +843,9 @@
                                                                           willQoS:self.willQoS
                                                                        willRetain:self.willRetainFlag
                                                                     protocolLevel:self.protocolLevel]];
+                    } else {
+                        [sender encodeMessage:self.connectMessage];
+                    }
                     self.status = MQTTSessionStatusConnecting;
                     break;
                 case MQTTSessionStatusConnecting:
@@ -708,7 +953,11 @@
                             if ([self.delegate respondsToSelector:@selector(connected:sessionPresent:)]) {
                                 [self.delegate connected:self sessionPresent:((bytes[0] & 0x01) == 0x01)];
                             }
-                            
+
+                            if(self.connectionHandler){
+                                self.connectionHandler(MQTTSessionEventConnected);
+                            }
+
                             self.synchronConnect = FALSE;
                             
                             if ([self.queue count] > 0) {
@@ -818,6 +1067,9 @@
         if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
             [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:0];
         }
+        if(self.messageHandler){
+            self.messageHandler(data, topic);
+        }
     } else {
         if ([data length] >= 2) {
             bytes = [data bytes];
@@ -828,6 +1080,9 @@
                 if ([msg qos] == 1) {
                     if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
                         [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:msgId];
+                    }
+                    if(self.messageHandler){
+                        self.messageHandler(data, topic);
                     }
                     [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
                     return;
@@ -954,6 +1209,10 @@
                                           mid:[[dict valueForKey:@"mid"] unsignedIntValue]
                      ];
                 }
+                if(self.messageHandler){
+                    self.messageHandler([dict valueForKey:@"data"], [dict valueForKey:@"topic"]);
+                }
+
                 [self.rxFlows removeObjectForKey:msgId];
                 if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
                     [self.delegate buffered:self
@@ -1014,6 +1273,11 @@
     if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
         [self.delegate handleEvent:self event:eventCode error:error];
     }
+
+    if(self.connectionHandler){
+        self.connectionHandler(eventCode);
+    }
+
     self.synchronPub = FALSE;
     self.synchronPubMid = 0;
     self.synchronSub = FALSE;

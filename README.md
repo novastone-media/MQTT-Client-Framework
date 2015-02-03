@@ -12,9 +12,9 @@ or use the CocoaPod MQTTClient
 
 ### License
 
-Copyright (C) 2013, 2014 Christoph Krey
+Copyright (C) 2013-2015 Christoph Krey
 
-Based on
+Based on and fully API backward compatible with
 
 https://github.com/m2mIO/mqttIO-objC
 
