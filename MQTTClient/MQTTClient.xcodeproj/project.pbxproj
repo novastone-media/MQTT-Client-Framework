@@ -44,6 +44,7 @@
 		840F3C861A80056800575235 /* MQTTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F3C7F1A80056800575235 /* MQTTMessage.m */; };
 		840F3C871A80056800575235 /* MQTTSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F3C811A80056800575235 /* MQTTSession.m */; };
 		840F3C881A80056800575235 /* MQttTxFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F3C831A80056800575235 /* MQttTxFlow.m */; };
+		844C93AB1A81645D00CA4A03 /* MQTTACLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */; };
 		845DBE771884AAD700EDB183 /* MQTTClientSubscriptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */; };
 		8461912E1883E56800101409 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8461912D1883E56800101409 /* Foundation.framework */; };
 		846191331883E56800101409 /* MQTTClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 846191321883E56800101409 /* MQTTClient.h */; };
@@ -68,7 +69,6 @@
 		84B1AFF2196D99170056B959 /* MQTTSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B1AFF0196D99170056B959 /* MQTTSessionManager.h */; };
 		84B1AFF3196D99170056B959 /* MQTTSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B1AFF1196D99170056B959 /* MQTTSessionManager.m */; };
 		84B739B31A66F07A00B103F4 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B739B21A66F07A00B103F4 /* SwiftTests.swift */; };
-		84E1D85F1A45A12700494C04 /* MQTTClientQoSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E1D85E1A45A12700494C04 /* MQTTClientQoSTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +144,7 @@
 		840F3C811A80056800575235 /* MQTTSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSession.m; sourceTree = "<group>"; };
 		840F3C821A80056800575235 /* MQttTxFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQttTxFlow.h; sourceTree = "<group>"; };
 		840F3C831A80056800575235 /* MQttTxFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQttTxFlow.m; sourceTree = "<group>"; };
+		844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTACLTests.m; sourceTree = "<group>"; };
 		845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientSubscriptionTests.m; sourceTree = "<group>"; };
 		8461912A1883E56800101409 /* libMQTTClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMQTTClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8461912D1883E56800101409 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -172,7 +173,6 @@
 		84B739B11A66F07900B103F4 /* MQTTClientTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MQTTClientTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		84B739B21A66F07A00B103F4 /* SwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTests.swift; sourceTree = "<group>"; };
 		84E0010118E22C9600C07F23 /* MQTTClientTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTClientTests.h; sourceTree = "<group>"; };
-		84E1D85E1A45A12700494C04 /* MQTTClientQoSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientQoSTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,10 +318,10 @@
 				84E0010118E22C9600C07F23 /* MQTTClientTests.h */,
 				846191491883E56800101409 /* MQTTClientTests.m */,
 				84B1AFED196C7AF60056B959 /* MultiThreadingTests.m */,
+				844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */,
 				848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */,
 				845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */,
 				840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */,
-				84E1D85E1A45A12700494C04 /* MQTTClientQoSTests.m */,
 				84B739B21A66F07A00B103F4 /* SwiftTests.swift */,
 				84B739B11A66F07900B103F4 /* MQTTClientTests-Bridging-Header.h */,
 				846191441883E56800101409 /* Supporting Files */,
@@ -575,7 +575,7 @@
 			files = (
 				840785A918A2AA26009158D5 /* MQTTClientPublishTests.m in Sources */,
 				8461914A1883E56800101409 /* MQTTClientTests.m in Sources */,
-				84E1D85F1A45A12700494C04 /* MQTTClientQoSTests.m in Sources */,
+				844C93AB1A81645D00CA4A03 /* MQTTACLTests.m in Sources */,
 				84B1AFEE196C7AF60056B959 /* MultiThreadingTests.m in Sources */,
 				848BB8F3195FF7A2004FCAE2 /* MQTTClientOnlyTests.m in Sources */,
 				845DBE771884AAD700EDB183 /* MQTTClientSubscriptionTests.m in Sources */,
@@ -890,6 +890,7 @@
 				840F3C761A80054E00575235 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		840F3C771A80054E00575235 /* Build configuration list for PBXNativeTarget "MQTTSDKTests" */ = {
 			isa = XCConfigurationList;
@@ -898,6 +899,7 @@
 				840F3C791A80054E00575235 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		846191251883E56800101409 /* Build configuration list for PBXProject "MQTTClient" */ = {
 			isa = XCConfigurationList;

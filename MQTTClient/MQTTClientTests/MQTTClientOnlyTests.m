@@ -16,7 +16,6 @@
 @property (strong, nonatomic) NSError *error;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) int type;
-@property (nonatomic) BOOL ungraceful;
 @end
 
 @implementation MQTTClientOnlyTests
@@ -24,16 +23,13 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown
 {
-    if (!self.ungraceful) {
-        [self.session close];
-        self.session.delegate = nil;
-        self.session = nil;
-    }
+    [self.session close];
+    self.session.delegate = nil;
+    self.session = nil;
 
     [super tearDown];
 }
@@ -67,48 +63,28 @@
     XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolErrorr %@", self.error);
 }
 
-- (void)test_connect_invalid_protocollevel
-{
-    XCTAssertThrows({
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
-                                                   keepAlive:60
-                                                cleanSession:YES
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:2
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
-    }, @"Should have detected invalid protocolLevel");
-}
-
-
 - (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
 {
-    NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
+    //NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
 
     self.type = type;
 }
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
 {
-    NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
+    //NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
+    //NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
     self.error = error;
 }
 
 - (void)ackTimeout:(NSNumber *)timeout
 {
-    NSLog(@"ackTimeout: %f", [timeout doubleValue]);
+    //NSLog(@"ackTimeout: %f", [timeout doubleValue]);
     self.timeout = TRUE;
 }
 

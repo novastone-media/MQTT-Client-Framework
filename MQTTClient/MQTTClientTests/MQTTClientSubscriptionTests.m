@@ -17,8 +17,8 @@
 @property (nonatomic) UInt16 sentMid;
 @property (nonatomic) NSArray *qoss;
 @property (nonatomic) BOOL timeout;
+@property (nonatomic) NSTimeInterval timeoutValue;
 @property (nonatomic) int type;
-@property (strong, nonatomic) NSDictionary *parameters;
 
 @end
 
@@ -27,75 +27,12 @@
 - (void)setUp
 {
     [super setUp];
-    self.parameters = PARAMETERS;
-    
-    self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:nil
-                                                password:nil
-                                               keepAlive:60
-                                            cleanSession:YES
-                                                    will:NO
-                                               willTopic:nil
-                                                 willMsg:nil
-                                                 willQoS:0
-                                          willRetainFlag:NO
-                                           protocolLevel:[self.parameters[@"protocollevel"] intValue]
-                                                 runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes];
-    self.session.delegate = self;
-    self.event = -1;
-    
-    self.timeout = FALSE;
-    [self performSelector:@selector(ackTimeout:)
-               withObject:self.parameters[@"timeout"]
-               afterDelay:[self.parameters[@"timeout"] intValue]];
-     
-    
-    [self.session connectToHost:self.parameters[@"host"]
-                           port:[self.parameters[@"port"] intValue]
-                       usingSSL:[self.parameters[@"tls"] boolValue]];
-    
-    while (self.event == -1 && !self.timeout) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    XCTAssert(!self.timeout, @"timeout");
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        
-    self.timeout = FALSE;
-    self.mid = 0;
-    self.qoss = @[];
-    self.event = -1;
 }
 
 - (void)tearDown
 {
-    self.event = -1;
-    
-    self.timeout = FALSE;
-    [self performSelector:@selector(ackTimeout:)
-               withObject:self.parameters[@"timeout"]
-               afterDelay:[self.parameters[@"timeout"] intValue]];
-    
-    [self.session close];
-    
-    while (self.event == -1 && !self.timeout) {
-        NSLog(@"waiting for disconnect");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    XCTAssert(!self.timeout, @"timeout");
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    
-    self.session.delegate = nil;
-    self.session = nil;
-    
     [super tearDown];
 }
-
-/*
- * Subscriptions
- */
 
 - (void)testSubscribe_with_wrong_flags_MQTT_3_8_1_1
 {
@@ -109,92 +46,194 @@
 
 - (void)testSubscribeWMultipleTopics_None
 {
-    [self testMultiSubscribeCloseExpected:@{}];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testMultiSubscribeCloseExpected:@{}];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeWMultipleTopics_One
 {
-    [self testMultiSubscribeSubackExpected:@{@"MQTTClient": @(2)}];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testMultiSubscribeSubackExpected:@{@"MQTTClient": @(2)}];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeWMultipleTopics_more
 {
-    [self testMultiSubscribeSubackExpected:@{@"MQTTClient": @(0), @"MQTTClient/abc": @(0), @"MQTTClient/#": @(1)}];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testMultiSubscribeSubackExpected:@{@"MQTTClient": @(0), @"MQTTClient/abc": @(0), @"MQTTClient/#": @(1)}];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeWMultipleTopics_a_lot
 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
 #define TOPICS 256
-    NSMutableDictionary *topics = [[NSMutableDictionary alloc] initWithCapacity:TOPICS];
-    for (int i = 0; i < TOPICS; i++) {
-        [topics setObject:@(1) forKey:[NSString stringWithFormat:@"MQTTClient/a/lot/%d", i]];
+        NSMutableDictionary *topics = [[NSMutableDictionary alloc] initWithCapacity:TOPICS];
+        for (int i = 0; i < TOPICS; i++) {
+            [topics setObject:@(1) forKey:[NSString stringWithFormat:@"MQTTClient/a/lot/%d", i]];
+        }
+
+        [self testMultiSubscribeSubackExpected:topics];
+        [self shutdown:parameters];
     }
-    
-    [self testMultiSubscribeSubackExpected:topics];
 }
 
 - (void)testSubscribeQoS0
 {
-    [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeQoS1
 {
-    [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:1];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:1];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeQoS2
 {
-    [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:2];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:2];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicPlain
 {
-    [self testSubscribeSubackExpected:@"MQTTClient" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"MQTTClient" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicHash {
-    [self testSubscribeSubackExpected:@"#" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"#" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicHashnotalone
 {
-    [self testSubscribeCloseExpected:@"#MQTTClient" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeCloseExpected:@"#MQTTClient" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicEmpty
 {
-    [self testSubscribeCloseExpected:@"" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeCloseExpected:@"" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicHashnotlast
 {
-    [self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicPlus
 {
-    [self testSubscribeSubackExpected:@"+" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"+" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicSlash
 {
-    [self testSubscribeSubackExpected:@"/" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"/" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicPlusnotalone_MQTT_4_7_1_3
 {
-    [self testSubscribeCloseExpected:@"MQTTClient+" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeCloseExpected:@"MQTTClient+" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicEmpty_MQTT_4_7_3_1
 {
-    [self testSubscribeCloseExpected:@"" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeCloseExpected:@"" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopicNone
 {
-    [self testSubscribeCloseExpected:nil atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeCloseExpected:nil atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testSubscribeTopic_0x00_in_topic
@@ -205,87 +244,183 @@
 
 - (void)testSubscribeLong_MQTT_4_7_3_3
 {
-    NSString *topic = @"aa";
-    for (UInt32 i = 2; i <= 32768; i *= 2) {
-        topic = [topic stringByAppendingString:topic];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        NSString *topic = @"aa";
+        for (UInt32 i = 2; i <= 32768; i *= 2) {
+            topic = [topic stringByAppendingString:topic];
+        }
+        NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+        [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
+        [self shutdown:parameters];
     }
-    NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
-    [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
 }
 
 
 - (void)testSubscribeSameTopicDifferentQoSa_MQTT_3_8_4_3
 {
-    [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
+
 - (void)testSubscribeSameTopicDifferentQoSb_MQTT_3_8_4_3
 {
-    [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:1];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:1];
+        [self shutdown:parameters];
+    }
 }
+
 - (void)testSubscribeSameTopicDifferentQoSc_MQTT_3_8_4_3
 {
-    [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:2];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:2];
+        [self shutdown:parameters];
+    }
 }
+
 - (void)testSubscribeSameTopicDifferentQoSd_MQTT_3_8_4_3
 {
-    [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:1];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:1];
+        [self shutdown:parameters];
+    }
 }
+
 - (void)testSubscribeSameTopicDifferentQoSe_MQTT_3_8_4_3
 {
-    [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:0];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:0];
+        [self shutdown:parameters];
+    }
 }
 
-
-/*
- * Unsubscribe tests
- */
 - (void)testUnsubscribeTopicPlain
 {
-    [self testUnsubscribeTopic:@"abc"];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testUnsubscribeTopic:@"abc"];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testUnubscribeTopicHash {
-    [self testUnsubscribeTopic:@"#"];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testUnsubscribeTopic:@"#"];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testUnsubscribeTopicHashnotalone
 {
-    [self testUnsubscribeTopic:@"#abc"];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testUnsubscribeTopicCloseExpected:@"#abc"];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testUnsubscribeTopicPlus
 {
-    [self testUnsubscribeTopic:@"+"];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testUnsubscribeTopic:@"+"];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testUnsubscribeTopicEmpty
 {
-    [self testUnsubscribeTopicCloseExpected:@""];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testUnsubscribeTopicCloseExpected:@""];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testUnsubscribeTopicNone
 {
-    [self testUnsubscribeTopic:nil];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testUnsubscribeTopic:nil];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testUnsubscribeTopicZero
 {
-    [self testUnsubscribeTopic:@"a\0b"];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testUnsubscribeTopic:@"a\0b"];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testMultiUnsubscribe_None
 {
-    [self testMultiUnsubscribeTopic:@[]];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testMultiUnsubscribeTopic:@[]];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testMultiUnsubscribe_One
 {
-    [self testMultiUnsubscribeTopic:@[@"abc"]];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testMultiUnsubscribeTopic:@[@"abc"]];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testMultiUnsubscribe_more
 {
-    [self testMultiUnsubscribeTopic:@[@"abc", @"ab/+/ef", @"+", @"#", @"abc/df", @"a/b/c/#"]];
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testMultiUnsubscribeTopic:@[@"abc", @"ab/+/ef", @"+", @"#", @"abc/df", @"a/b/c/#"]];
+        [self shutdown:parameters];
+    }
 }
 
 /*
@@ -300,7 +435,7 @@
     XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.mid, self.sentMid);
     for (NSNumber *qos in self.qoss) {
         XCTAssertNotEqual([qos intValue], 0x80, @"Returncode in SUBACK is 0x80");
-        XCTAssert([qos intValue] == 0x00 || [qos intValue] == 0x01 || [qos intValue] == 0x02, @"Returncode in SUBACK invavalid [MQTT-3.9.3-2]");
+        XCTAssert([qos intValue] == 0x00 || [qos intValue] == 0x01 || [qos intValue] == 0x02, @"Returncode in SUBACK invalid [MQTT-3.9.3-2]");
     }
 }
 
@@ -311,8 +446,7 @@
     XCTAssert(self.event == -1, @"Event %ld happened", (long)self.event);
     XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.mid, self.sentMid);
     for (NSNumber *qos in self.qoss) {
-        XCTAssertNotEqual([qos intValue], 0x80, @"Returncode in SUBACK is 0x80");
-        XCTAssert([qos intValue] == 0x00 || [qos intValue] == 0x01 || [qos intValue] == 0x02, @"Returncode in SUBACK invavalid [MQTT-3.9.3-2]");
+        XCTAssert([qos intValue] == 0x00 || [qos intValue] == 0x01 || [qos intValue] == 0x02, @"Returncode %d in SUBACK invalid [MQTT-3.9.3-2]", [qos intValue]);
     }
 }
 
@@ -320,7 +454,7 @@
 {
     [self testSubscribe:topic atLevel:qos];
     XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
-    XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %ld happened", (long)self.event);
+    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testMultiSubscribeCloseExpected:(NSDictionary *)topics
@@ -328,7 +462,7 @@
     [self testMultiSubscribe:topics];
     XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
     XCTAssert(self.mid == 0, @"SUBACK received");
-    XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %ld happened", (long)self.event);
+    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testSubscribeFailureExpected:(NSString *)topic atLevel:(UInt8)qos
@@ -346,9 +480,9 @@
 {
     self.sentMid = [self.session subscribeToTopic:topic atLevel:qos];
     [self performSelector:@selector(ackTimeout:)
-               withObject:self.parameters[@"timeout"]
-               afterDelay:[self.parameters[@"timeout"] intValue]];
-     
+               withObject:nil
+               afterDelay:self.timeoutValue];
+
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -358,9 +492,9 @@
 {
     self.sentMid = [self.session subscribeToTopics:topics];
     [self performSelector:@selector(ackTimeout:)
-               withObject:self.parameters[@"timeout"]
-               afterDelay:[self.parameters[@"timeout"] intValue]];
-     
+               withObject:nil
+               afterDelay:self.timeoutValue];
+
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -370,9 +504,9 @@
 {
     self.sentMid = [self.session unsubscribeTopic:topic];
     [self performSelector:@selector(ackTimeout:)
-               withObject:self.parameters[@"timeout"]
-               afterDelay:[self.parameters[@"timeout"] intValue]];
-     
+               withObject:nil
+               afterDelay:self.timeoutValue];
+
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -384,23 +518,23 @@
 {
     self.sentMid = [self.session unsubscribeTopic:topic];
     [self performSelector:@selector(ackTimeout:)
-               withObject:self.parameters[@"timeout"]
-               afterDelay:[self.parameters[@"timeout"] intValue]];
-     
+               withObject:nil
+               afterDelay:self.timeoutValue];
+
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
-    XCTAssert(self.event == MQTTSessionEventConnectionClosed, @"Event %ld happened", (long)self.event);
+    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testMultiUnsubscribeTopic:(NSArray *)topics
 {
     self.sentMid = [self.session unsubscribeTopics:topics];
     [self performSelector:@selector(ackTimeout:)
-               withObject:self.parameters[@"timeout"]
-               afterDelay:[self.parameters[@"timeout"] intValue]];
-     
+               withObject:nil
+               afterDelay:self.timeoutValue];
+
     while (self.mid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -415,34 +549,98 @@
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
 {
-    NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
+    //NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
+    //NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
 }
 
 - (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQoss:(NSArray *)qoss
 {
-    NSLog(@"subAckReceived:%d grantedQoss:%@", msgID, qoss);
+    //NSLog(@"subAckReceived:%d grantedQoss:%@", msgID, qoss);
     self.mid = msgID;
     self.qoss = qoss;
 }
 
 - (void)unsubAckReceived:(MQTTSession *)session msgID:(UInt16)msgID
 {
-    NSLog(@"unsubAckReceived:%d", msgID);
+    //NSLog(@"unsubAckReceived:%d", msgID);
     self.mid = msgID;
 }
 
 - (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
 {
-    NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
-    
+    //NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
+
     self.type = type;
 }
+
+- (void)connect:(NSDictionary *)parameters {
+    self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                userName:nil
+                                                password:nil
+                                               keepAlive:60
+                                            cleanSession:YES
+                                                    will:NO
+                                               willTopic:nil
+                                                 willMsg:nil
+                                                 willQoS:0
+                                          willRetainFlag:NO
+                                           protocolLevel:4
+                                                 runLoop:[NSRunLoop currentRunLoop]
+                                                 forMode:NSRunLoopCommonModes];
+    self.session.delegate = self;
+    self.event = -1;
+
+    self.timeout = FALSE;
+    self.timeoutValue = [parameters[@"timeout"] doubleValue];
+    [self performSelector:@selector(ackTimeout:)
+               withObject:nil
+               afterDelay:self.timeoutValue];
+
+    [self.session connectToHost:parameters[@"host"]
+                           port:[parameters[@"port"] intValue]
+                       usingSSL:[parameters[@"tls"] boolValue]];
+
+    while (self.event == -1 && !self.timeout) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+
+    XCTAssert(!self.timeout, @"timeout");
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+
+    self.timeout = FALSE;
+    self.type = -1;
+    self.mid = 0;
+    self.qoss = @[];
+    self.event = -1;
+}
+
+- (void)shutdown:(NSDictionary *)parameters {
+    self.event = -1;
+
+    self.timeout = FALSE;
+    [self performSelector:@selector(ackTimeout:)
+               withObject:parameters[@"timeout"]
+               afterDelay:[parameters[@"timeout"] intValue]];
+
+    [self.session close];
+
+    while (self.event == -1 && !self.timeout) {
+        //NSLog(@"waiting for disconnect");
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+    
+    XCTAssert(!self.timeout, @"timeout");
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
+    self.session.delegate = nil;
+    self.session = nil;
+}
+
 
 
 

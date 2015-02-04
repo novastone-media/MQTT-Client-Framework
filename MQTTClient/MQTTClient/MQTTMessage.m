@@ -2,7 +2,7 @@
 // MQTTMessage.m
 // MQTTClient.framework
 //
-// Copyright (c) 2013, 2014, Christoph Krey
+// Copyright (c) 2013-2015, Christoph Krey
 //
 // based on
 //
@@ -67,9 +67,17 @@
             [data appendMQTTString:@"MQTT"];
             [data appendByte:4];
             break;
-        default:
+        case 3:
             [data appendMQTTString:@"MQIsdp"];
             [data appendByte:3];
+            break;
+        case 0:
+            [data appendMQTTString:@""];
+            [data appendByte:protocolLevel];
+            break;
+        default:
+            [data appendMQTTString:@"MQTT"];
+            [data appendByte:protocolLevel];
             break;
     }
     [data appendByte:flags];

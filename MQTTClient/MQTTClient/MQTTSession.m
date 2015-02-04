@@ -2,7 +2,7 @@
 // MQTTSession.m
 // MQTTClient.framework
 //
-// Copyright (c) 2013, 2014, Christoph Krey
+// Copyright (c) 2013-2015, Christoph Krey
 //
 // based on
 //
@@ -154,10 +154,10 @@
         clientId = [NSString stringWithFormat:@"MQTTClient%.0f",fmod([[NSDate date] timeIntervalSince1970], 1.0) * 1000000.0];
     }
     
-    NSAssert(clientId.length > 0 || self.cleanSessionFlag, @"clientId must be at least 1 character long if cleanSessionFlag is off");
+    //NSAssert(clientId.length > 0 || self.cleanSessionFlag, @"clientId must be at least 1 character long if cleanSessionFlag is off");
     
-    NSAssert([clientId dataUsingEncoding:NSUTF8StringEncoding], @"clientId contains non-UTF8 characters");
-    NSAssert([clientId dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"clientId may not be longer than 65535 bytes in UTF8 representation");
+    //NSAssert([clientId dataUsingEncoding:NSUTF8StringEncoding], @"clientId contains non-UTF8 characters");
+    //NSAssert([clientId dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"clientId may not be longer than 65535 bytes in UTF8 representation");
     
     _clientId = clientId;
 }
@@ -165,8 +165,8 @@
 - (void)setUserName:(NSString *)userName
 {
     if (userName) {
-        NSAssert([userName dataUsingEncoding:NSUTF8StringEncoding], @"userName contains non-UTF8 characters");
-        NSAssert([userName dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"userName may not be longer than 65535 bytes in UTF8 representation");
+        //NSAssert([userName dataUsingEncoding:NSUTF8StringEncoding], @"userName contains non-UTF8 characters");
+        //NSAssert([userName dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"userName may not be longer than 65535 bytes in UTF8 representation");
     }
     
     _userName = userName;
@@ -175,16 +175,16 @@
 - (void)setPassword:(NSString *)password
 {
     if (password) {
-        NSAssert(self.userName, @"password specified without userName");
-        NSAssert([password dataUsingEncoding:NSUTF8StringEncoding], @"password contains non-UTF8 characters");
-        NSAssert([password dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"password may not be longer than 65535 bytes in UTF8 representation");
+        //NSAssert(self.userName, @"password specified without userName");
+        //NSAssert([password dataUsingEncoding:NSUTF8StringEncoding], @"password contains non-UTF8 characters");
+        //NSAssert([password dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"password may not be longer than 65535 bytes in UTF8 representation");
     }
     _password = password;
 }
 
 - (void)setProtocolLevel:(UInt8)protocolLevel
 {
-    NSAssert(protocolLevel == 3 || protocolLevel == 4, @"allowed protocolLevel values are 3 or 4 only");
+    //NSAssert(protocolLevel == 3 || protocolLevel == 4, @"allowed protocolLevel values are 3 or 4 only");
 
     _protocolLevel = protocolLevel;
 }
@@ -482,7 +482,7 @@
 {
     if (DEBUGSESS) NSLog(@"%@ subscribeToTopic:%@ atLevel:%d]", self, topic, qosLevel);
     
-    NSAssert(qosLevel >= 0 && qosLevel <= 2, @"qosLevel must be 0, 1, or 2");
+    //NSAssert(qosLevel >= 0 && qosLevel <= 2, @"qosLevel must be 0, 1, or 2");
 
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage subscribeMessageWithMessageId:mid
@@ -518,11 +518,9 @@
 {
    if (DEBUGSESS) NSLog(@"%@ subscribeToTopics:%@]", self, topics);
 
-#ifndef NS_BLOCK_ASSERTIONS
-    for (NSNumber *qos in [topics allValues]) {
-        NSAssert([qos intValue] >= 0 && [qos intValue] <= 2, @"qosLevel must be 0, 1, or 2");
-    }
-#endif
+    //for (NSNumber *qos in [topics allValues]) {
+        //NSAssert([qos intValue] >= 0 && [qos intValue] <= 2, @"qosLevel must be 0, 1, or 2");
+    //}
 
     UInt16 mid = [self nextMsgId];
     [self send:[MQTTMessage subscribeMessageWithMessageId:mid
@@ -624,7 +622,7 @@
         data = [[NSData alloc] init];
     }
     
-    NSAssert(qos >= 0 && qos <= 2, @"qos must be 0, 1, or 2");
+    //NSAssert(qos >= 0 && qos <= 2, @"qos must be 0, 1, or 2");
     
     UInt16 msgId = [self nextMsgId];
     MQTTMessage *msg = [MQTTMessage publishMessageWithData:data
