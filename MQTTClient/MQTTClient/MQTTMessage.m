@@ -19,6 +19,12 @@
 
 #import "MQTTMessage.h"
 
+#ifdef DEBUG
+#define DEBUGMSG FALSE
+#else
+#define DEBUGMSG FALSE
+#endif
+
 @implementation MQTTMessage
 
 + (id)connectMessageWithClientId:(NSString*)clientId
@@ -257,7 +263,10 @@
 {
     if (string) {
         UInt8 buf[2];
+        if (DEBUGMSG) NSLog(@"String=%@", string);
         const char* utf8String = [string UTF8String];
+        if (DEBUGMSG) NSLog(@"UTF8=%s", utf8String);
+
         size_t strLen = strlen(utf8String);
         buf[0] = strLen / 256;
         buf[1] = strLen % 256;

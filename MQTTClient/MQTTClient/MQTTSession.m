@@ -912,7 +912,24 @@
 - (void)decoder:(MQTTDecoder*)sender newMessage:(MQTTMessage*)msg
 {
     if ([self.delegate respondsToSelector:@selector(received:type:qos:retained:duped:mid:data:)]) {
-        [self.delegate received:self type:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
+        [self.delegate received:self
+                           type:msg.type
+                            qos:msg.qos
+                       retained:msg.retainFlag
+                          duped:msg.dupFlag
+                            mid:0
+                           data:msg.data];
+    }
+    if ([self.delegate respondsToSelector:@selector(ignoreReceived:type:qos:retained:duped:mid:data:)]) {
+        if ([self.delegate ignoreReceived:self
+                                     type:msg.type
+                                      qos:msg.qos
+                                 retained:msg.retainFlag
+                                    duped:msg.dupFlag
+                                      mid:0
+                                     data:msg.data]) {
+            return;
+        }
     }
     switch (self.status) {
         case MQTTSessionStatusConnecting:

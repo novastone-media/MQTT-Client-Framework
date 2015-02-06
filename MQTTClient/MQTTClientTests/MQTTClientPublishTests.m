@@ -19,6 +19,7 @@
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) NSTimeInterval timeoutValue;
 @property (nonatomic) NSInteger type;
+@property (nonatomic) BOOL blockQos2;
 
 @end
 
@@ -48,6 +49,50 @@
     }
 }
 
+/*
+ * [MQTT-1.5.3-3]
+ * A UTF-8 encoded sequence 0xEF 0xBB 0xBF is always to be interpreted to mean
+ * U+FEFF ("ZERO WIDTH NO-BREAK SPACE") wherever it appears in a string and
+ * MUST NOT be skipped over or stripped off by a packet receiver.
+ */
+- (void)testPublish_r0_q0_0xFEFF_MQTT_1_5_3_3
+{
+    unichar feff = 0xFEFF;
+
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                  onTopic:[NSString stringWithFormat:@"%@<%C>/%s", TOPIC, feff, __FUNCTION__]
+                   retain:NO
+                  atLevel:0];
+        [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-1.5.3-1]
+ * The character data in a UTF-8 encoded string MUST be well-formed UTF-8 as defined by the
+ * Unicode specification [Unicode] and restated in RFC 3629 [RFC3629]. In particular this data MUST NOT
+ * include encodings of code points between U+D800 and U+DFFF. If a Server or Client receives a Control
+ * Packet containing ill-formed UTF-8 it MUST close the Network Connection.
+ */
+- (void)testPublish_r0_q0_0x00_MQTT_1_5_3_1
+{
+    NSLog(@"can't test [MQTT-1.5.3-1]");
+}
+
+/*
+ * [MQTT-1.5.3-2]
+ * A UTF-8 encoded string MUST NOT include an encoding of the null character U+0000.
+ * If a receiver (Server or Client) receives a Control Packet containing U+0000 it MUST close the Network Connection.
+ */
+- (void)testPublish_r0_q0_0xD800_MQTT_1_5_3_2
+{
+    NSLog(@"can't test [MQTT-1.5.3-2]");
+}
+
 - (void)testPublish_r0_q1
 {
     for (NSString *broker in BROKERLIST) {
@@ -58,6 +103,28 @@
                   onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
                    retain:NO
                   atLevel:1];
+        [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-3.3.1-11]
+ * A zero byte retained message MUST NOT be stored as a retained message on the Server.
+ */
+- (void)testPublish_r1_MQTT_3_3_1_11
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                   retain:YES
+                  atLevel:MQTTQosLevelAtLeastOnce];
+        [self testPublish:[@"" dataUsingEncoding:NSUTF8StringEncoding]
+                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                   retain:YES
+                  atLevel:MQTTQosLevelAtLeastOnce];
         [self shutdown:parameters];
     }
 }
@@ -90,6 +157,11 @@
     }
 }
 
+/*
+ * [MQTT-3.3.2-1]
+ * The Topic Name MUST be present as the first field in the PUBLISH Packet Variable header.
+ * It MUST be a UTF-8 encoded string.
+ */
 - (void)testPublishNoUTF8_MQTT_3_3_2_1
 {
     NSLog(@"Can't test[MQTT-3.3.2-1]");
@@ -231,6 +303,32 @@
 }
 
 
+- (void)testPublish_q2_dup_MQTT_3_3_1_2
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        self.timeoutValue= 90;
+        self.blockQos2 = true;
+        [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                  onTopic:[NSString stringWithFormat:@"%@/1%s", TOPIC, __FUNCTION__]
+                   retain:NO
+                  atLevel:MQTTQosLevelExactlyOnce];
+        [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                  onTopic:[NSString stringWithFormat:@"%@/2%s", TOPIC, __FUNCTION__]
+                   retain:NO
+                  atLevel:MQTTQosLevelExactlyOnce];
+        self.blockQos2 = true;
+        [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                  onTopic:[NSString stringWithFormat:@"%@/3%s", TOPIC, __FUNCTION__]
+                   retain:NO
+                  atLevel:MQTTQosLevelExactlyOnce];
+        [self shutdown:parameters];
+    }
+}
+
+
 
 /*
  * helpers
@@ -303,10 +401,18 @@
     self.mid = msgID;
 }
 
-- (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
-{
+- (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
     //NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
     self.type = type;
+}
+
+- (BOOL)ignoreReceived:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
+    //NSLog(@"ignoreReceived:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
+    if (self.blockQos2 && type == MQTTPubrec) {
+        self.blockQos2 = false;
+        return true;
+    }
+    return false;
 }
 
 - (void)connect:(NSDictionary *)parameters {
@@ -320,7 +426,7 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:4
+                                           protocolLevel:[parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
     self.session.delegate = self;

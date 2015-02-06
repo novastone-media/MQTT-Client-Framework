@@ -164,6 +164,19 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 - (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
 
+/** gets called when a command is received from the MQTT broker
+ use this for low level control of the MQTT connection
+ @param session the MQTTSession reporting the received command
+ @param type the MQTT command type
+ @param qos the Quality of Service of the command
+ @param retained the retained status of the command
+ @param duped the duplication status of the command
+ @param mid the Message Identifier of the command
+ @param data the payload data of the command if any, might be zero length
+ @return true if the sessionmanager should ignore the received message
+ */
+- (BOOL)ignoreReceived:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
+
 /** gets called when the content of MQTTClients internal buffers change
  use for monitoring the completion of transmitted and received messages
  @param session the MQTTSession reporting the change

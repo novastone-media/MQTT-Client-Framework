@@ -259,60 +259,109 @@
 }
 
 
-- (void)testSubscribeSameTopicDifferentQoSa_MQTT_3_8_4_3
+- (void)testSubscribeSameTopicDifferentQoS_MQTT_3_8_4_3
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:0];
+        [self testSubscribeSubackExpected:TOPIC atLevel:0];
+        [self testSubscribeSubackExpected:TOPIC atLevel:1];
+        [self testSubscribeSubackExpected:TOPIC atLevel:2];
+        [self testSubscribeSubackExpected:TOPIC atLevel:1];
+        [self testSubscribeSubackExpected:TOPIC atLevel:0];
         [self shutdown:parameters];
     }
 }
 
-- (void)testSubscribeSameTopicDifferentQoSb_MQTT_3_8_4_3
+/*
+ * [MQTT-3.3.5-1]
+ * The Server MUST deliver the message to the Client respecting the maximum QoS of all the matching subscriptions.
+ */
+- (void)test_delivery_max_QoS_MQTT_3_3_5_1
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:1];
+        [self testSubscribeSubackExpected:[NSString stringWithFormat:@"%@/#", TOPIC] atLevel:MQTTQoSLevelAtMostOnce];
+        [self testSubscribeSubackExpected:[NSString stringWithFormat:@"%@/2", TOPIC] atLevel:MQTTQosLevelExactlyOnce];
+        [self.session publishAndWaitData:[@"Should be delivered with qos 1" dataUsingEncoding:NSUTF8StringEncoding]
+                                 onTopic:[NSString stringWithFormat:@"%@/2", TOPIC]
+                                  retain:NO
+                                     qos:MQTTQosLevelAtLeastOnce];
         [self shutdown:parameters];
     }
 }
 
-- (void)testSubscribeSameTopicDifferentQoSc_MQTT_3_8_4_3
+/*
+ * [MQTT-3.10.4-1]
+ * The Topic Filters (whether they contain wildcards or not) supplied in an UNSUBSCRIBE
+ * packet MUST be compared character-by-character with the current set of Topic Filters
+ * held by the Server for the Client. If any filter matches exactly then its owning Subscription
+ * is deleted, otherwise no additional processing occurs.
+ */
+- (void)test_unsubscribe_byte_by_byte_MQTT_3_10_4_1
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:2];
+        [self testSubscribeSubackExpected:TOPIC atLevel:MQTTQoSLevelAtMostOnce];
+        [self testUnsubscribeTopic:TOPIC];
         [self shutdown:parameters];
     }
 }
 
-- (void)testSubscribeSameTopicDifferentQoSd_MQTT_3_8_4_3
+/*
+ * [MQTT-3.10.4-2]
+ * If a Server deletes a Subscription It MUST stop adding any new messages for delivery to the Client.
+ */
+- (void)test_stop_delivering_after_unsubscribe_MQTT_3_10_4_2
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:1];
+        [self testSubscribeSubackExpected:TOPIC atLevel:MQTTQoSLevelAtMostOnce];
+        [self.session publishAndWaitData:[@"Should be delivered" dataUsingEncoding:NSUTF8StringEncoding]
+                                 onTopic:TOPIC
+                                  retain:NO
+                                     qos:MQTTQosLevelAtLeastOnce];
+        [self testUnsubscribeTopic:TOPIC];
+        [self.session publishAndWaitData:[@"Should not be delivered" dataUsingEncoding:NSUTF8StringEncoding]
+                                 onTopic:TOPIC
+                                  retain:NO
+                                     qos:MQTTQosLevelAtLeastOnce];
         [self shutdown:parameters];
     }
 }
 
-- (void)testSubscribeSameTopicDifferentQoSe_MQTT_3_8_4_3
+/*
+ * [MQTT-3.10.4-3]
+ * If a Server deletes a Subscription It MUST complete the delivery of any QoS 1 or
+ * QoS 2 messages which it has started to send to the Client.
+ */
+- (void)test_complete_delivering_qos12_after_unsubscribe_MQTT_3_10_4_3
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:@"mqttitude/#" atLevel:0];
+        [self testSubscribeSubackExpected:TOPIC atLevel:MQTTQosLevelExactlyOnce];
+        [self.session publishAndWaitData:[@"Should be delivered" dataUsingEncoding:NSUTF8StringEncoding]
+                                 onTopic:TOPIC
+                                  retain:NO
+                                     qos:MQTTQosLevelAtLeastOnce];
+        [self testUnsubscribeTopic:TOPIC];
+        [self.session publishAndWaitData:[@"Should not be delivered" dataUsingEncoding:NSUTF8StringEncoding]
+                                 onTopic:TOPIC
+                                  retain:NO
+                                     qos:MQTTQosLevelAtLeastOnce];
         [self shutdown:parameters];
     }
 }
+
 
 - (void)testUnsubscribeTopicPlain
 {
@@ -478,6 +527,7 @@
 
 - (void)testSubscribe:(NSString *)topic atLevel:(UInt8)qos
 {
+    self.mid = 0;
     self.sentMid = [self.session subscribeToTopic:topic atLevel:qos];
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
@@ -490,6 +540,7 @@
 
 - (void)testMultiSubscribe:(NSDictionary *)topics
 {
+    self.mid = 0;
     self.sentMid = [self.session subscribeToTopics:topics];
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
@@ -502,6 +553,7 @@
 
 - (void)testUnsubscribeTopic:(NSString *)topic
 {
+    self.mid = 0;
     self.sentMid = [self.session unsubscribeTopic:topic];
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
@@ -516,6 +568,7 @@
 
 - (void)testUnsubscribeTopicCloseExpected:(NSString *)topic
 {
+    self.mid = 0;
     self.sentMid = [self.session unsubscribeTopic:topic];
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
@@ -530,6 +583,7 @@
 
 - (void)testMultiUnsubscribeTopic:(NSArray *)topics
 {
+    self.mid = 0;
     self.sentMid = [self.session unsubscribeTopics:topics];
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
@@ -589,7 +643,7 @@
                                                  willMsg:nil
                                                  willQoS:0
                                           willRetainFlag:NO
-                                           protocolLevel:4
+                                           protocolLevel:[parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
     self.session.delegate = self;

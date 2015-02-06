@@ -147,7 +147,7 @@
                                                      willMsg:will
                                                      willQoS:willQos
                                               willRetainFlag:willRetainFlag
-                                               protocolLevel:3
+                                               protocolLevel:4
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSDefaultRunLoopMode];
         self.session.delegate = self;

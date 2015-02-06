@@ -49,12 +49,12 @@
 }
 
 
-- (void)test_connect_1884
+- (void)test_connect_1889
 {
     self.session = [[MQTTSession alloc] init];
     self.session.delegate = self;
     self.event = -1;
-    [self.session connectToHost:@"localhost" port:1884 usingSSL:NO];
+    [self.session connectToHost:@"localhost" port:1889 usingSSL:NO];
     while (self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
