@@ -248,12 +248,35 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
+        
         NSString *topic = @"aa";
+        for (UInt32 i = 2; i <= 64; i *= 2) {
+            topic = [topic stringByAppendingString:topic];
+        }
+        NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+        [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
+
+        topic = @"bb";
+        for (UInt32 i = 2; i <= 1024; i *= 2) {
+            topic = [topic stringByAppendingString:topic];
+        }
+        NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+        [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
+
+        topic = @"cc";
+        for (UInt32 i = 2; i <= 10000; i *= 2) {
+            topic = [topic stringByAppendingString:topic];
+        }
+        NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+        [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
+
+        topic = @"dd";
         for (UInt32 i = 2; i <= 32768; i *= 2) {
             topic = [topic stringByAppendingString:topic];
         }
         NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
         [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
+
         [self shutdown:parameters];
     }
 }
