@@ -153,179 +153,185 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;- (void)received:(<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)session type:(<span class="keywordtype">int</span>)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;- (void)buffered:(<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)session</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;          queued:(NSUInteger)queued</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;       flowingIn:(NSUInteger)flowingIn</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      flowingOut:(NSUInteger)flowingOut;</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="keyword">@end</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="line"><a name="l00184"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html">  184</a></span>&#160;<span class="keyword">@interface </span><a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> : NSObject</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
-<div class="line"><a name="l00215"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a1a8eb040c4fd693c218999bae64d1281">  215</a></span>&#160;<span class="keyword">@property</span> (weak, nonatomic) id&lt;MQTTSessionDelegate&gt; <a class="code" href="interface_m_q_t_t_session.html#a1a8eb040c4fd693c218999bae64d1281">delegate</a>;</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="keyword">@property</span> (strong) <span class="keywordtype">void</span> (^connectionHandler)(MQTTSessionEvent event);</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="keyword">@property</span> (strong) <span class="keywordtype">void</span> (^messageHandler)(NSData* message, NSString* topic);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;</div>
-<div class="line"><a name="l00223"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#adff1474fe186b8af3bb4cac1ccd4ff2d">  223</a></span>&#160;<span class="keyword">@property</span> (nonatomic, readonly) MQTTSessionStatus <a class="code" href="interface_m_q_t_t_session.html#adff1474fe186b8af3bb4cac1ccd4ff2d">status</a>;</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;</div>
-<div class="line"><a name="l00227"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a">  227</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a">clientId</a>;</div>
-<div class="line"><a name="l00230"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a23cc4596889bf5798bf3749ee0a9e61f">  230</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#a23cc4596889bf5798bf3749ee0a9e61f">userName</a>;</div>
-<div class="line"><a name="l00233"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a5c0d3fc1c8fbdcb39ba7c7cff8d43a5b">  233</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#a5c0d3fc1c8fbdcb39ba7c7cff8d43a5b">password</a>;</div>
-<div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#aa63e148680fef0724b66218d53caba6d">  236</a></span>&#160;<span class="keyword">@property</span> (nonatomic) UInt16 <a class="code" href="interface_m_q_t_t_session.html#aa63e148680fef0724b66218d53caba6d">keepAliveInterval</a>;</div>
-<div class="line"><a name="l00239"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa">  239</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa">cleanSessionFlag</a>;</div>
-<div class="line"><a name="l00242"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#aa3227d1cd407e13f1dd694cb352951d7">  242</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_m_q_t_t_session.html#aa3227d1cd407e13f1dd694cb352951d7">willFlag</a>;</div>
-<div class="line"><a name="l00245"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a20fd768170dd1d21800420f376d04042">  245</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#a20fd768170dd1d21800420f376d04042">willTopic</a>;</div>
-<div class="line"><a name="l00248"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a10be0166d86c90591c40b79923eba9ba">  248</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSData *<a class="code" href="interface_m_q_t_t_session.html#a10be0166d86c90591c40b79923eba9ba">willMsg</a>;</div>
-<div class="line"><a name="l00251"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#af9cee4ec8306915190b101441f673a71">  251</a></span>&#160;<span class="keyword">@property</span> (nonatomic) MQTTQosLevel <a class="code" href="interface_m_q_t_t_session.html#af9cee4ec8306915190b101441f673a71">willQoS</a>;</div>
-<div class="line"><a name="l00254"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a54df13cee1ccaa0bf803304c33a3b237">  254</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_m_q_t_t_session.html#a54df13cee1ccaa0bf803304c33a3b237">willRetainFlag</a>;</div>
-<div class="line"><a name="l00257"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a1876938dddeed1f536fcbaabad6f763a">  257</a></span>&#160;<span class="keyword">@property</span> (nonatomic) UInt8 <a class="code" href="interface_m_q_t_t_session.html#a1876938dddeed1f536fcbaabad6f763a">protocolLevel</a>;</div>
-<div class="line"><a name="l00260"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a49e106f38faead00b6d9d53a77a50472">  260</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSRunLoop *<a class="code" href="interface_m_q_t_t_session.html#a49e106f38faead00b6d9d53a77a50472">runLoop</a>;</div>
-<div class="line"><a name="l00263"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a3ab2f0926aa51b0dc7969c66bae215e4">  263</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#a3ab2f0926aa51b0dc7969c66bae215e4">runLoopMode</a>;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="keyword">@property</span> (strong, nonatomic) MQTTMessage *connectMessage;</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;- (<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)<a class="code" href="interface_m_q_t_t_session.html#aee55d52a9b6395f1a0d73b672900629c">init</a>;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; - (<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)initWithClientId:(NSString *)clientId</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                         userName:(NSString *)userName</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                         password:(NSString *)password</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                        keepAlive:(UInt16)keepAliveInterval</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                     cleanSession:(BOOL)cleanSessionFlag</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                             will:(BOOL)willFlag</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                        willTopic:(NSString *)willTopic</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                          willMsg:(NSData *)willMsg</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                          willQoS:(MQTTQosLevel)willQoS</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                   willRetainFlag:(BOOL)willRetainFlag</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                    protocolLevel:(UInt8)protocolLevel</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                          runLoop:(NSRunLoop *)runLoop</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                          forMode:(NSString *)runLoopMode;</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;- (id)initWithClientId:(NSString*)theClientId;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;- (id)initWithClientId:(NSString*)theClientId runLoop:(NSRunLoop*)theRunLoop</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;               forMode:(NSString*)theRunLoopMode;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;              userName:(NSString*)theUsername</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;              password:(NSString*)thePassword;</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;              userName:(NSString*)theUserName</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;              password:(NSString*)thePassword</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;               runLoop:(NSRunLoop*)theRunLoop</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;               forMode:(NSString*)theRunLoopMode;</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;              userName:(NSString*)theUsername</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;              password:(NSString*)thePassword</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;             keepAlive:(UInt16)theKeepAliveInterval</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;          cleanSession:(BOOL)cleanSessionFlag;</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;              userName:(NSString*)theUsername</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;              password:(NSString*)thePassword</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;             keepAlive:(UInt16)theKeepAlive</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;          cleanSession:(BOOL)theCleanSessionFlag</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;               runLoop:(NSRunLoop*)theRunLoop</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;               forMode:(NSString*)theMode;</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;              userName:(NSString*)theUserName</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;              password:(NSString*)thePassword</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;             keepAlive:(UInt16)theKeepAliveInterval</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;          cleanSession:(BOOL)theCleanSessionFlag</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;             willTopic:(NSString*)willTopic</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;               willMsg:(NSData*)willMsg</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;               willQoS:(UInt8)willQoS</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        willRetainFlag:(BOOL)willRetainFlag;</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;              userName:(NSString*)theUserName</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;              password:(NSString*)thePassword</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;             keepAlive:(UInt16)theKeepAliveInterval</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;          cleanSession:(BOOL)theCleanSessionFlag</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;             willTopic:(NSString*)willTopic</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;               willMsg:(NSData*)willMsg</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;               willQoS:(UInt8)willQoS</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        willRetainFlag:(BOOL)willRetainFlag</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;               runLoop:(NSRunLoop*)theRunLoop</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;               forMode:(NSString*)theRunLoopMode;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;             keepAlive:(UInt16)theKeepAliveInterval</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        connectMessage:(MQTTMessage*)theConnectMessage</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;               runLoop:(NSRunLoop*)theRunLoop</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;               forMode:(NSString*)theRunLoopMode;</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;- (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;- (void)connectToHost:(NSString*)ip port:(UInt32)port;</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;- (void)connectToHost:(NSString*)ip port:(UInt32)port withConnectionHandler:(<span class="keywordtype">void</span> (^)(MQTTSessionEvent event))connHandler messageHandler:(<span class="keywordtype">void</span> (^)(NSData* data, NSString* topic))messHandler;</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;- (void)connectToHost:(NSString*)ip port:(UInt32)port usingSSL:(BOOL)usingSSL withConnectionHandler:(<span class="keywordtype">void</span> (^)(MQTTSessionEvent event))connHandler messageHandler:(<span class="keywordtype">void</span> (^)(NSData* data, NSString* topic))messHandler;</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;- (BOOL)connectAndWaitToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;- (void)subscribeTopic:(NSString*)theTopic;</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;- (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;- (UInt16)subscribeToTopics:(NSDictionary *)topics;</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;- (BOOL)subscribeAndWaitToTopics:(NSDictionary *)topics;</div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;- (UInt16)unsubscribeTopic:(NSString *)topic;</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;- (BOOL)unsubscribeAndWaitTopic:(NSString *)topic;</div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;- (UInt16)unsubscribeTopics:(NSArray *)topics;</div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;- (BOOL)unsubscribeAndWaitTopics:(NSArray *)topics;</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;</div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;</div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;- (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic;</div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic;</div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic;</div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;</div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic;</div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;</div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;- (void)publishJson:(<span class="keywordtype">id</span>)payload onTopic:(NSString*)theTopic;</div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;</div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;- (BOOL)publishAndWaitData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;</div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;</div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440">close</a>;</div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;</div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#a08591f1296d67a36a8fa31d021bf544a">closeAndWait</a>;</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;</div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;<span class="keyword">@end</span></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_adff1474fe186b8af3bb4cac1ccd4ff2d"><div class="ttname"><a href="interface_m_q_t_t_session.html#adff1474fe186b8af3bb4cac1ccd4ff2d">MQTTSession::status</a></div><div class="ttdeci">MQTTSessionStatus status</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:223</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a10be0166d86c90591c40b79923eba9ba"><div class="ttname"><a href="interface_m_q_t_t_session.html#a10be0166d86c90591c40b79923eba9ba">MQTTSession::willMsg</a></div><div class="ttdeci">NSData * willMsg</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:248</div></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;- (BOOL)ignoreReceived:(<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)session type:(<span class="keywordtype">int</span>)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;- (void)buffered:(<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)session</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;          queued:(NSUInteger)queued</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;       flowingIn:(NSUInteger)flowingIn</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      flowingOut:(NSUInteger)flowingOut;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;- (void)buffered:(<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)session</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;       flowingIn:(NSUInteger)flowingIn</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      flowingOut:(NSUInteger)flowingOut;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="keyword">@end</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;</div>
+<div class="line"><a name="l00207"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html">  207</a></span>&#160;<span class="keyword">@interface </span><a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> : NSObject</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
+<div class="line"><a name="l00238"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a1a8eb040c4fd693c218999bae64d1281">  238</a></span>&#160;<span class="keyword">@property</span> (weak, nonatomic) id&lt;MQTTSessionDelegate&gt; <a class="code" href="interface_m_q_t_t_session.html#a1a8eb040c4fd693c218999bae64d1281">delegate</a>;</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="keyword">@property</span> (strong) <span class="keywordtype">void</span> (^connectionHandler)(MQTTSessionEvent event);</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="keyword">@property</span> (strong) <span class="keywordtype">void</span> (^messageHandler)(NSData* message, NSString* topic);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
+<div class="line"><a name="l00246"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#adff1474fe186b8af3bb4cac1ccd4ff2d">  246</a></span>&#160;<span class="keyword">@property</span> (nonatomic, readonly) MQTTSessionStatus <a class="code" href="interface_m_q_t_t_session.html#adff1474fe186b8af3bb4cac1ccd4ff2d">status</a>;</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;</div>
+<div class="line"><a name="l00250"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a">  250</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a">clientId</a>;</div>
+<div class="line"><a name="l00253"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a23cc4596889bf5798bf3749ee0a9e61f">  253</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#a23cc4596889bf5798bf3749ee0a9e61f">userName</a>;</div>
+<div class="line"><a name="l00256"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a5c0d3fc1c8fbdcb39ba7c7cff8d43a5b">  256</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#a5c0d3fc1c8fbdcb39ba7c7cff8d43a5b">password</a>;</div>
+<div class="line"><a name="l00259"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#aa63e148680fef0724b66218d53caba6d">  259</a></span>&#160;<span class="keyword">@property</span> (nonatomic) UInt16 <a class="code" href="interface_m_q_t_t_session.html#aa63e148680fef0724b66218d53caba6d">keepAliveInterval</a>;</div>
+<div class="line"><a name="l00262"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa">  262</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa">cleanSessionFlag</a>;</div>
+<div class="line"><a name="l00265"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#aa3227d1cd407e13f1dd694cb352951d7">  265</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_m_q_t_t_session.html#aa3227d1cd407e13f1dd694cb352951d7">willFlag</a>;</div>
+<div class="line"><a name="l00268"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a20fd768170dd1d21800420f376d04042">  268</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#a20fd768170dd1d21800420f376d04042">willTopic</a>;</div>
+<div class="line"><a name="l00271"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a10be0166d86c90591c40b79923eba9ba">  271</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSData *<a class="code" href="interface_m_q_t_t_session.html#a10be0166d86c90591c40b79923eba9ba">willMsg</a>;</div>
+<div class="line"><a name="l00274"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#af9cee4ec8306915190b101441f673a71">  274</a></span>&#160;<span class="keyword">@property</span> (nonatomic) MQTTQosLevel <a class="code" href="interface_m_q_t_t_session.html#af9cee4ec8306915190b101441f673a71">willQoS</a>;</div>
+<div class="line"><a name="l00277"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a54df13cee1ccaa0bf803304c33a3b237">  277</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_m_q_t_t_session.html#a54df13cee1ccaa0bf803304c33a3b237">willRetainFlag</a>;</div>
+<div class="line"><a name="l00280"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a1876938dddeed1f536fcbaabad6f763a">  280</a></span>&#160;<span class="keyword">@property</span> (nonatomic) UInt8 <a class="code" href="interface_m_q_t_t_session.html#a1876938dddeed1f536fcbaabad6f763a">protocolLevel</a>;</div>
+<div class="line"><a name="l00283"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a49e106f38faead00b6d9d53a77a50472">  283</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSRunLoop *<a class="code" href="interface_m_q_t_t_session.html#a49e106f38faead00b6d9d53a77a50472">runLoop</a>;</div>
+<div class="line"><a name="l00286"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a3ab2f0926aa51b0dc7969c66bae215e4">  286</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_session.html#a3ab2f0926aa51b0dc7969c66bae215e4">runLoopMode</a>;</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="keyword">@property</span> (strong, nonatomic) MQTTMessage *connectMessage;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;- (<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)<a class="code" href="interface_m_q_t_t_session.html#aee55d52a9b6395f1a0d73b672900629c">init</a>;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; - (<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)initWithClientId:(NSString *)clientId</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                         userName:(NSString *)userName</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                         password:(NSString *)password</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                        keepAlive:(UInt16)keepAliveInterval</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                     cleanSession:(BOOL)cleanSessionFlag</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                             will:(BOOL)willFlag</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                        willTopic:(NSString *)willTopic</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                          willMsg:(NSData *)willMsg</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                          willQoS:(MQTTQosLevel)willQoS</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                   willRetainFlag:(BOOL)willRetainFlag</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                    protocolLevel:(UInt8)protocolLevel</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                          runLoop:(NSRunLoop *)runLoop</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                          forMode:(NSString *)runLoopMode;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;- (id)initWithClientId:(NSString*)theClientId;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;- (id)initWithClientId:(NSString*)theClientId runLoop:(NSRunLoop*)theRunLoop</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;               forMode:(NSString*)theRunLoopMode;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;              userName:(NSString*)theUsername</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;              password:(NSString*)thePassword;</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;              userName:(NSString*)theUserName</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;              password:(NSString*)thePassword</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;               runLoop:(NSRunLoop*)theRunLoop</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;               forMode:(NSString*)theRunLoopMode;</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;              userName:(NSString*)theUsername</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;              password:(NSString*)thePassword</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;             keepAlive:(UInt16)theKeepAliveInterval</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;          cleanSession:(BOOL)cleanSessionFlag;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;              userName:(NSString*)theUsername</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;              password:(NSString*)thePassword</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;             keepAlive:(UInt16)theKeepAlive</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;          cleanSession:(BOOL)theCleanSessionFlag</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;               runLoop:(NSRunLoop*)theRunLoop</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;               forMode:(NSString*)theMode;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;              userName:(NSString*)theUserName</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;              password:(NSString*)thePassword</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;             keepAlive:(UInt16)theKeepAliveInterval</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;          cleanSession:(BOOL)theCleanSessionFlag</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;             willTopic:(NSString*)willTopic</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;               willMsg:(NSData*)willMsg</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;               willQoS:(UInt8)willQoS</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        willRetainFlag:(BOOL)willRetainFlag;</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;              userName:(NSString*)theUserName</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;              password:(NSString*)thePassword</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;             keepAlive:(UInt16)theKeepAliveInterval</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;          cleanSession:(BOOL)theCleanSessionFlag</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;             willTopic:(NSString*)willTopic</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;               willMsg:(NSData*)willMsg</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;               willQoS:(UInt8)willQoS</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        willRetainFlag:(BOOL)willRetainFlag</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;               runLoop:(NSRunLoop*)theRunLoop</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;               forMode:(NSString*)theRunLoopMode;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;- (id)initWithClientId:(NSString*)theClientId</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;             keepAlive:(UInt16)theKeepAliveInterval</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        connectMessage:(MQTTMessage*)theConnectMessage</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;               runLoop:(NSRunLoop*)theRunLoop</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;               forMode:(NSString*)theRunLoopMode;</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;- (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;- (void)connectToHost:(NSString*)ip port:(UInt32)port;</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;- (void)connectToHost:(NSString*)ip port:(UInt32)port withConnectionHandler:(<span class="keywordtype">void</span> (^)(MQTTSessionEvent event))connHandler messageHandler:(<span class="keywordtype">void</span> (^)(NSData* data, NSString* topic))messHandler;</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;- (void)connectToHost:(NSString*)ip port:(UInt32)port usingSSL:(BOOL)usingSSL withConnectionHandler:(<span class="keywordtype">void</span> (^)(MQTTSessionEvent event))connHandler messageHandler:(<span class="keywordtype">void</span> (^)(NSData* data, NSString* topic))messHandler;</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;- (BOOL)connectAndWaitToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;- (void)subscribeTopic:(NSString*)theTopic;</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;- (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;- (UInt16)subscribeToTopics:(NSDictionary *)topics;</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;- (BOOL)subscribeAndWaitToTopics:(NSDictionary *)topics;</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;- (UInt16)unsubscribeTopic:(NSString *)topic;</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;- (BOOL)unsubscribeAndWaitTopic:(NSString *)topic;</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;</div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;- (UInt16)unsubscribeTopics:(NSArray *)topics;</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;</div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;- (BOOL)unsubscribeAndWaitTopics:(NSArray *)topics;</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;</div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;<span class="comment">/* for mqttio-OBJC backward compatibility */</span></div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;- (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic;</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic;</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;</div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic;</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic;</div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;- (void)publishJson:(<span class="keywordtype">id</span>)payload onTopic:(NSString*)theTopic;</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;</div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;- (BOOL)publishAndWaitData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440">close</a>;</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#a08591f1296d67a36a8fa31d021bf544a">closeAndWait</a>;</div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;</div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;<span class="keyword">@end</span></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_adff1474fe186b8af3bb4cac1ccd4ff2d"><div class="ttname"><a href="interface_m_q_t_t_session.html#adff1474fe186b8af3bb4cac1ccd4ff2d">MQTTSession::status</a></div><div class="ttdeci">MQTTSessionStatus status</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:246</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a10be0166d86c90591c40b79923eba9ba"><div class="ttname"><a href="interface_m_q_t_t_session.html#a10be0166d86c90591c40b79923eba9ba">MQTTSession::willMsg</a></div><div class="ttdeci">NSData * willMsg</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:271</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_a6e08af5a1b20daabe6be9b9a0618c440"><div class="ttname"><a href="interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440">-[MQTTSession close]</a></div><div class="ttdeci">void close()</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html"><div class="ttname"><a href="interface_m_q_t_t_session.html">MQTTSession</a></div><div class="ttdef"><b>Definition:</b> MQTTSession.h:184</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_af9cee4ec8306915190b101441f673a71"><div class="ttname"><a href="interface_m_q_t_t_session.html#af9cee4ec8306915190b101441f673a71">MQTTSession::willQoS</a></div><div class="ttdeci">MQTTQosLevel willQoS</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:251</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_aa426b344bb913f5f338cacb1844dfb6a"><div class="ttname"><a href="interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a">MQTTSession::clientId</a></div><div class="ttdeci">NSString * clientId</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:227</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a1a8eb040c4fd693c218999bae64d1281"><div class="ttname"><a href="interface_m_q_t_t_session.html#a1a8eb040c4fd693c218999bae64d1281">MQTTSession::delegate</a></div><div class="ttdeci">id&lt; MQTTSessionDelegate &gt; delegate</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:215</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a8efd9a5bcf99786f2c78d4bc957fa4aa"><div class="ttname"><a href="interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa">MQTTSession::cleanSessionFlag</a></div><div class="ttdeci">BOOL cleanSessionFlag</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:239</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a23cc4596889bf5798bf3749ee0a9e61f"><div class="ttname"><a href="interface_m_q_t_t_session.html#a23cc4596889bf5798bf3749ee0a9e61f">MQTTSession::userName</a></div><div class="ttdeci">NSString * userName</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:230</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a49e106f38faead00b6d9d53a77a50472"><div class="ttname"><a href="interface_m_q_t_t_session.html#a49e106f38faead00b6d9d53a77a50472">MQTTSession::runLoop</a></div><div class="ttdeci">NSRunLoop * runLoop</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:260</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a54df13cee1ccaa0bf803304c33a3b237"><div class="ttname"><a href="interface_m_q_t_t_session.html#a54df13cee1ccaa0bf803304c33a3b237">MQTTSession::willRetainFlag</a></div><div class="ttdeci">BOOL willRetainFlag</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:254</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a3ab2f0926aa51b0dc7969c66bae215e4"><div class="ttname"><a href="interface_m_q_t_t_session.html#a3ab2f0926aa51b0dc7969c66bae215e4">MQTTSession::runLoopMode</a></div><div class="ttdeci">NSString * runLoopMode</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:263</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html"><div class="ttname"><a href="interface_m_q_t_t_session.html">MQTTSession</a></div><div class="ttdef"><b>Definition:</b> MQTTSession.h:207</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_af9cee4ec8306915190b101441f673a71"><div class="ttname"><a href="interface_m_q_t_t_session.html#af9cee4ec8306915190b101441f673a71">MQTTSession::willQoS</a></div><div class="ttdeci">MQTTQosLevel willQoS</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:274</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_aa426b344bb913f5f338cacb1844dfb6a"><div class="ttname"><a href="interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a">MQTTSession::clientId</a></div><div class="ttdeci">NSString * clientId</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:250</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a1a8eb040c4fd693c218999bae64d1281"><div class="ttname"><a href="interface_m_q_t_t_session.html#a1a8eb040c4fd693c218999bae64d1281">MQTTSession::delegate</a></div><div class="ttdeci">id&lt; MQTTSessionDelegate &gt; delegate</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:238</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a8efd9a5bcf99786f2c78d4bc957fa4aa"><div class="ttname"><a href="interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa">MQTTSession::cleanSessionFlag</a></div><div class="ttdeci">BOOL cleanSessionFlag</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:262</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a23cc4596889bf5798bf3749ee0a9e61f"><div class="ttname"><a href="interface_m_q_t_t_session.html#a23cc4596889bf5798bf3749ee0a9e61f">MQTTSession::userName</a></div><div class="ttdeci">NSString * userName</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:253</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a49e106f38faead00b6d9d53a77a50472"><div class="ttname"><a href="interface_m_q_t_t_session.html#a49e106f38faead00b6d9d53a77a50472">MQTTSession::runLoop</a></div><div class="ttdeci">NSRunLoop * runLoop</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:283</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a54df13cee1ccaa0bf803304c33a3b237"><div class="ttname"><a href="interface_m_q_t_t_session.html#a54df13cee1ccaa0bf803304c33a3b237">MQTTSession::willRetainFlag</a></div><div class="ttdeci">BOOL willRetainFlag</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:277</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a3ab2f0926aa51b0dc7969c66bae215e4"><div class="ttname"><a href="interface_m_q_t_t_session.html#a3ab2f0926aa51b0dc7969c66bae215e4">MQTTSession::runLoopMode</a></div><div class="ttdeci">NSString * runLoopMode</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:286</div></div>
 <div class="ttc" id="protocol_m_q_t_t_session_delegate-p_html"><div class="ttname"><a href="protocol_m_q_t_t_session_delegate-p.html">MQTTSessionDelegate-p</a></div><div class="ttdef"><b>Definition:</b> MQTTSession.h:30</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_aa3227d1cd407e13f1dd694cb352951d7"><div class="ttname"><a href="interface_m_q_t_t_session.html#aa3227d1cd407e13f1dd694cb352951d7">MQTTSession::willFlag</a></div><div class="ttdeci">BOOL willFlag</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:242</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a1876938dddeed1f536fcbaabad6f763a"><div class="ttname"><a href="interface_m_q_t_t_session.html#a1876938dddeed1f536fcbaabad6f763a">MQTTSession::protocolLevel</a></div><div class="ttdeci">UInt8 protocolLevel</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:257</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_aa3227d1cd407e13f1dd694cb352951d7"><div class="ttname"><a href="interface_m_q_t_t_session.html#aa3227d1cd407e13f1dd694cb352951d7">MQTTSession::willFlag</a></div><div class="ttdeci">BOOL willFlag</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:265</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a1876938dddeed1f536fcbaabad6f763a"><div class="ttname"><a href="interface_m_q_t_t_session.html#a1876938dddeed1f536fcbaabad6f763a">MQTTSession::protocolLevel</a></div><div class="ttdeci">UInt8 protocolLevel</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:280</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_a08591f1296d67a36a8fa31d021bf544a"><div class="ttname"><a href="interface_m_q_t_t_session.html#a08591f1296d67a36a8fa31d021bf544a">-[MQTTSession closeAndWait]</a></div><div class="ttdeci">void closeAndWait()</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a5c0d3fc1c8fbdcb39ba7c7cff8d43a5b"><div class="ttname"><a href="interface_m_q_t_t_session.html#a5c0d3fc1c8fbdcb39ba7c7cff8d43a5b">MQTTSession::password</a></div><div class="ttdeci">NSString * password</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:233</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a5c0d3fc1c8fbdcb39ba7c7cff8d43a5b"><div class="ttname"><a href="interface_m_q_t_t_session.html#a5c0d3fc1c8fbdcb39ba7c7cff8d43a5b">MQTTSession::password</a></div><div class="ttdeci">NSString * password</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:256</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_aee55d52a9b6395f1a0d73b672900629c"><div class="ttname"><a href="interface_m_q_t_t_session.html#aee55d52a9b6395f1a0d73b672900629c">-[MQTTSession init]</a></div><div class="ttdeci">MQTTSession * init()</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_aa63e148680fef0724b66218d53caba6d"><div class="ttname"><a href="interface_m_q_t_t_session.html#aa63e148680fef0724b66218d53caba6d">MQTTSession::keepAliveInterval</a></div><div class="ttdeci">UInt16 keepAliveInterval</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:236</div></div>
-<div class="ttc" id="interface_m_q_t_t_session_html_a20fd768170dd1d21800420f376d04042"><div class="ttname"><a href="interface_m_q_t_t_session.html#a20fd768170dd1d21800420f376d04042">MQTTSession::willTopic</a></div><div class="ttdeci">NSString * willTopic</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:245</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_aa63e148680fef0724b66218d53caba6d"><div class="ttname"><a href="interface_m_q_t_t_session.html#aa63e148680fef0724b66218d53caba6d">MQTTSession::keepAliveInterval</a></div><div class="ttdeci">UInt16 keepAliveInterval</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:259</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a20fd768170dd1d21800420f376d04042"><div class="ttname"><a href="interface_m_q_t_t_session.html#a20fd768170dd1d21800420f376d04042">MQTTSession::willTopic</a></div><div class="ttdeci">NSString * willTopic</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:268</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 3 2015 17:48:26 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 10 2015 13:33:58 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

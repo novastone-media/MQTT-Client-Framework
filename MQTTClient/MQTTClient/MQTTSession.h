@@ -180,12 +180,22 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 /** gets called when the content of MQTTClients internal buffers change
  use for monitoring the completion of transmitted and received messages
  @param session the MQTTSession reporting the change
- @param queued the number of queued messages waiting to be send when the connection becomes established and ready
+ @param for backward compatibility only: MQTTClient does not queue messages anymore except during QoS protocol
  @param flowingIn the number of incoming messages not acknowledged by the MQTTClient yet
  @param flowingOut the number of outgoing messages not yet acknowledged by the MQTT broker
  */
 - (void)buffered:(MQTTSession *)session
           queued:(NSUInteger)queued
+       flowingIn:(NSUInteger)flowingIn
+      flowingOut:(NSUInteger)flowingOut;
+
+/** gets called when the content of MQTTClients internal buffers change
+ use for monitoring the completion of transmitted and received messages
+ @param session the MQTTSession reporting the change
+ @param flowingIn the number of incoming messages not acknowledged by the MQTTClient yet
+ @param flowingOut the number of outgoing messages not yet acknowledged by the MQTT broker
+ */
+- (void)buffered:(MQTTSession *)session
        flowingIn:(NSUInteger)flowingIn
       flowingOut:(NSUInteger)flowingOut;
 

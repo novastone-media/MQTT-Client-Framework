@@ -491,6 +491,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>ignoreReceived:type:qos:retained:duped:mid:data:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>intfm</Type>
+      <Scope>MQTTSessionDelegate-p</Scope>
+    </TokenIdentifier>
+    <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+    <Anchor>a83b477a650b00526b0a39599ddd6fd12</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>buffered:queued:flowingIn:flowingOut:</Name>
       <APILanguage>occ</APILanguage>
       <Type>intfm</Type>
@@ -498,6 +509,17 @@
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
     <Anchor>a8d9602d0b89fa2c3a0009150e57edc87</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>buffered:flowingIn:flowingOut:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>intfm</Type>
+      <Scope>MQTTSessionDelegate-p</Scope>
+    </TokenIdentifier>
+    <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+    <Anchor>a66d6b40de38077ee28d05048eec4e3f9</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
 </Tokens>

@@ -44,7 +44,6 @@
 @property (nonatomic) UInt16 txMsgId;
 @property (strong, nonatomic) NSMutableDictionary *txFlows;
 @property (strong, nonatomic) NSMutableDictionary *rxFlows;
-@property (strong, nonatomic) NSMutableArray *queue;
 
 @property (nonatomic) BOOL synchronPub;
 @property (nonatomic) UInt16 synchronPubMid;
@@ -133,17 +132,10 @@
     self.runLoop = runLoop;
     self.runLoopMode = runLoopMode;
    
-    self.queue = [NSMutableArray array];
     self.txMsgId = 1;
     self.txFlows = [[NSMutableDictionary alloc] init];
     self.rxFlows = [[NSMutableDictionary alloc] init];
-    
-    if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-        [self.delegate buffered:self
-                         queued:[self.queue count]
-                      flowingIn:[self.rxFlows count]
-                     flowingOut:[self.txFlows count]];
-    }
+    [self tell];
     
     return self;
 }
@@ -636,12 +628,7 @@
         flow.msg = msg;
         flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
         self.txFlows[[NSNumber numberWithUnsignedInt:(uint)msgId]] = flow;
-        if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-            [self.delegate buffered:self
-                             queued:[self.queue count]
-                          flowingIn:[self.rxFlows count]
-                         flowingOut:[self.txFlows count]];
-        }
+        [self tell];
     }
     [self send:msg];
     
@@ -766,12 +753,7 @@
         [self.delegate connectionClosed:self];
     }
 
-    if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-        [self.delegate buffered:self
-                         queued:[self.queue count]
-                      flowingIn:[self.rxFlows count]
-                     flowingOut:[self.txFlows count]];
-    }
+    [self tell];
     self.synchronPub = FALSE;
     self.synchronPubMid = 0;
     self.synchronSub = FALSE;
@@ -849,17 +831,7 @@
                 case MQTTSessionStatusConnecting:
                     break;
                 case MQTTSessionStatusConnected:
-                    if ([self.queue count] > 0) {
-                        MQTTMessage *msg = (self.queue)[0];
-                        [self.queue removeObjectAtIndex:0];
-                        if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-                            [self.delegate buffered:self
-                                             queued:[self.queue count]
-                                          flowingIn:[self.rxFlows count]
-                                         flowingOut:[self.txFlows count]];
-                        }
-                        [self.encoder encodeMessage:msg];
-                    }
+                    [self tell];
                     [self checkTxFlows];
                     break;
                 case MQTTSessionStatusDisconnecting:
@@ -974,22 +946,7 @@
                             }
 
                             self.synchronConnect = FALSE;
-                            
-                            if ([self.queue count] > 0) {
-                                if (self.encoder.status == MQTTEncoderStatusReady) {
-                                    MQTTMessage *msg = (self.queue)[0];
-                                    [self.queue removeObjectAtIndex:0];
-                                    if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-                                        [self.delegate buffered:self
-                                                         queued:[self.queue count]
-                                                      flowingIn:[self.rxFlows count]
-                                                     flowingOut:[self.txFlows count]];
-                                    }
-                                    [self.encoder encodeMessage:msg];
-                                }
-                            }
-                        }
-                        else {
+                        } else {
                             NSString *errorDescription;
                             switch (bytes[1]) {
                                 case 1:
@@ -1108,12 +1065,7 @@
                                           @"retained": @(msg.retainFlag),
                                           @"mid": @(msgId)};
                     (self.rxFlows)[[NSNumber numberWithUnsignedInt:msgId]] = dict;
-                    if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-                        [self.delegate buffered:self
-                                         queued:[self.queue count]
-                                      flowingIn:[self.rxFlows count]
-                                     flowingOut:[self.txFlows count]];
-                    }
+                    [self tell];
                     [self send:[MQTTMessage pubrecMessageWithMessageId:msgId]];
                 }
             }
@@ -1133,12 +1085,7 @@
                 if ([[flow msg] type] == MQTTPublish && [[flow msg] qos] == 1) {
                     
                     [self.txFlows removeObjectForKey:msgId];
-                    if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-                        [self.delegate buffered:self
-                                         queued:[self.queue count]
-                                      flowingIn:[self.rxFlows count]
-                                     flowingOut:[self.txFlows count]];
-                    }
+                    [self tell];
                     if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
                         [self.delegate messageDelivered:self msgID:[msgId unsignedIntValue]];
                     }
@@ -1229,12 +1176,7 @@
                 }
 
                 [self.rxFlows removeObjectForKey:msgId];
-                if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-                    [self.delegate buffered:self
-                                     queued:[self.queue count]
-                                  flowingIn:[self.rxFlows count]
-                                 flowingOut:[self.txFlows count]];
-                }
+                [self tell];
             }
             [self send:[MQTTMessage pubcompMessageWithMessageId:[msgId unsignedIntegerValue]]];
         }
@@ -1250,12 +1192,7 @@
             MQttTxFlow *flow = (self.txFlows)[msgId];
             if (flow != nil && [[flow msg] type] == MQTTPubrel) {
                 [self.txFlows removeObjectForKey:msgId];
-                if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-                    [self.delegate buffered:self
-                                     queued:[self.queue count]
-                                  flowingIn:[self.rxFlows count]
-                                 flowingOut:[self.txFlows count]];
-                }
+                [self tell];
                 if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
                     [self.delegate messageDelivered:self msgID:[msgId unsignedIntValue]];
                 }
@@ -1307,15 +1244,6 @@
     if ([self.encoder status] == MQTTEncoderStatusReady) {
         [self.encoder encodeMessage:msg];
     }
-    else {
-        [self.queue addObject:msg];
-        if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-            [self.delegate buffered:self
-                             queued:[self.queue count]
-                          flowingIn:[self.rxFlows count]
-                         flowingOut:[self.txFlows count]];
-        }
-    }
 }
 
 - (UInt16)nextMsgId {
@@ -1324,6 +1252,20 @@
         self.txMsgId++;
     }
     return self.txMsgId;
+}
+
+- (void)tell {
+    if ([self.delegate respondsToSelector:@selector(buffered:flowingIn:flowingOut:)]) {
+        [self.delegate buffered:self
+                      flowingIn:[self.rxFlows count]
+                     flowingOut:[self.txFlows count]];
+    }
+    if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
+        [self.delegate buffered:self
+                         queued:0
+                      flowingIn:[self.rxFlows count]
+                     flowingOut:[self.txFlows count]];
+    }
 }
 
 @end

@@ -299,6 +299,11 @@
             <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
             <Subnodes>
              <Node>
+              <Name>buffered:flowingIn:flowingOut:</Name>
+              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+              <Anchor>a66d6b40de38077ee28d05048eec4e3f9</Anchor>
+             </Node>
+             <Node>
               <Name>buffered:queued:flowingIn:flowingOut:</Name>
               <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
               <Anchor>a8d9602d0b89fa2c3a0009150e57edc87</Anchor>
@@ -332,6 +337,11 @@
               <Name>handleEvent:event:error:</Name>
               <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
               <Anchor>a168b8ff4bd95ffbfe61a8b10236860f8</Anchor>
+             </Node>
+             <Node>
+              <Name>ignoreReceived:type:qos:retained:duped:mid:data:</Name>
+              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+              <Anchor>a83b477a650b00526b0a39599ddd6fd12</Anchor>
              </Node>
              <Node>
               <Name>messageDelivered:msgID:</Name>

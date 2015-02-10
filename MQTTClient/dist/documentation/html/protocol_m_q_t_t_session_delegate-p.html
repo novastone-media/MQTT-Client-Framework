@@ -135,12 +135,64 @@ Instance Methods</h2></td></tr>
 <tr class="separator:a8c16339f900bfe2aa98a2aabdca44484"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefaae4e610a97984e2135bbd902081ca"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#aefaae4e610a97984e2135bbd902081ca">received:type:qos:retained:duped:mid:data:</a></td></tr>
 <tr class="separator:aefaae4e610a97984e2135bbd902081ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83b477a650b00526b0a39599ddd6fd12"><td class="memItemLeft" align="right" valign="top">(BOOL)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a83b477a650b00526b0a39599ddd6fd12">ignoreReceived:type:qos:retained:duped:mid:data:</a></td></tr>
+<tr class="separator:a83b477a650b00526b0a39599ddd6fd12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d9602d0b89fa2c3a0009150e57edc87"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a8d9602d0b89fa2c3a0009150e57edc87">buffered:queued:flowingIn:flowingOut:</a></td></tr>
 <tr class="separator:a8d9602d0b89fa2c3a0009150e57edc87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66d6b40de38077ee28d05048eec4e3f9"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a66d6b40de38077ee28d05048eec4e3f9">buffered:flowingIn:flowingOut:</a></td></tr>
+<tr class="separator:a66d6b40de38077ee28d05048eec4e3f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Session delegate gives your application control over the <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> </p><dl class="section note"><dt>Note</dt><dd>handleEvent and newMessage are required interfaces, the rest is optional </dd></dl>
 </div><h2 class="groupheader">Method Documentation</h2>
+<a class="anchor" id="a66d6b40de38077ee28d05048eec4e3f9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void) buffered: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> *)&#160;</td>
+          <td class="paramname"><em>session</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">flowingIn:</td>
+          <td></td>
+          <td class="paramtype">(NSUInteger)&#160;</td>
+          <td class="paramname"><em>flowingIn</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">flowingOut:</td>
+          <td></td>
+          <td class="paramtype">(NSUInteger)&#160;</td>
+          <td class="paramname"><em>flowingOut</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>gets called when the content of MQTTClients internal buffers change use for monitoring the completion of transmitted and received messages </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">session</td><td>the <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> reporting the change </td></tr>
+    <tr><td class="paramname">flowingIn</td><td>the number of incoming messages not acknowledged by the MQTTClient yet </td></tr>
+    <tr><td class="paramname">flowingOut</td><td>the number of outgoing messages not yet acknowledged by the MQTT broker </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a8d9602d0b89fa2c3a0009150e57edc87"></a>
 <div class="memitem">
 <div class="memproto">
@@ -187,7 +239,7 @@ Instance Methods</h2></td></tr>
 <p>gets called when the content of MQTTClients internal buffers change use for monitoring the completion of transmitted and received messages </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">session</td><td>the <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> reporting the change </td></tr>
-    <tr><td class="paramname">queued</td><td>the number of queued messages waiting to be send when the connection becomes established and ready </td></tr>
+    <tr><td class="paramname">for</td><td>backward compatibility only: MQTTClient does not queue messages anymore except during QoS protocol </td></tr>
     <tr><td class="paramname">flowingIn</td><td>the number of incoming messages not acknowledged by the MQTTClient yet </td></tr>
     <tr><td class="paramname">flowingOut</td><td>the number of outgoing messages not yet acknowledged by the MQTT broker </td></tr>
   </table>
@@ -424,6 +476,83 @@ Instance Methods</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a83b477a650b00526b0a39599ddd6fd12"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (BOOL) ignoreReceived: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> *)&#160;</td>
+          <td class="paramname"><em>session</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">type:</td>
+          <td></td>
+          <td class="paramtype">(int)&#160;</td>
+          <td class="paramname"><em>type</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">qos:</td>
+          <td></td>
+          <td class="paramtype">(MQTTQosLevel)&#160;</td>
+          <td class="paramname"><em>qos</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">retained:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>retained</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">duped:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>duped</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">mid:</td>
+          <td></td>
+          <td class="paramtype">(UInt16)&#160;</td>
+          <td class="paramname"><em>mid</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">data:</td>
+          <td></td>
+          <td class="paramtype">(NSData *)&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>gets called when a command is received from the MQTT broker use this for low level control of the MQTT connection </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">session</td><td>the <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> reporting the received command </td></tr>
+    <tr><td class="paramname">type</td><td>the MQTT command type </td></tr>
+    <tr><td class="paramname">qos</td><td>the Quality of Service of the command </td></tr>
+    <tr><td class="paramname">retained</td><td>the retained status of the command </td></tr>
+    <tr><td class="paramname">duped</td><td>the duplication status of the command </td></tr>
+    <tr><td class="paramname">mid</td><td>the Message Identifier of the command </td></tr>
+    <tr><td class="paramname">data</td><td>the payload data of the command if any, might be zero length </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the sessionmanager should ignore the received message </dd></dl>
 
 </div>
 </div>
@@ -826,7 +955,7 @@ Instance Methods</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 3 2015 17:48:26 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 10 2015 13:33:59 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

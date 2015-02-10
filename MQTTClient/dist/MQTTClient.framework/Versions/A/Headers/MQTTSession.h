@@ -164,15 +164,38 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 - (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
 
+/** gets called when a command is received from the MQTT broker
+ use this for low level control of the MQTT connection
+ @param session the MQTTSession reporting the received command
+ @param type the MQTT command type
+ @param qos the Quality of Service of the command
+ @param retained the retained status of the command
+ @param duped the duplication status of the command
+ @param mid the Message Identifier of the command
+ @param data the payload data of the command if any, might be zero length
+ @return true if the sessionmanager should ignore the received message
+ */
+- (BOOL)ignoreReceived:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
+
 /** gets called when the content of MQTTClients internal buffers change
  use for monitoring the completion of transmitted and received messages
  @param session the MQTTSession reporting the change
- @param queued the number of queued messages waiting to be send when the connection becomes established and ready
+ @param for backward compatibility only: MQTTClient does not queue messages anymore except during QoS protocol
  @param flowingIn the number of incoming messages not acknowledged by the MQTTClient yet
  @param flowingOut the number of outgoing messages not yet acknowledged by the MQTT broker
  */
 - (void)buffered:(MQTTSession *)session
           queued:(NSUInteger)queued
+       flowingIn:(NSUInteger)flowingIn
+      flowingOut:(NSUInteger)flowingOut;
+
+/** gets called when the content of MQTTClients internal buffers change
+ use for monitoring the completion of transmitted and received messages
+ @param session the MQTTSession reporting the change
+ @param flowingIn the number of incoming messages not acknowledged by the MQTTClient yet
+ @param flowingOut the number of outgoing messages not yet acknowledged by the MQTT broker
+ */
+- (void)buffered:(MQTTSession *)session
        flowingIn:(NSUInteger)flowingIn
       flowingOut:(NSUInteger)flowingOut;
 
