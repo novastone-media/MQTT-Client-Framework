@@ -172,6 +172,22 @@
     }
 }
 
+- (void)test_connect_short {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:nil
+                                                    password:nil
+                                                   keepAlive:60
+                                                cleanSession:YES];
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+        [self shutdown:parameters];
+    }
+}
+
 /*
  * [MQTT-3.1.2-8]
  * If the Will Flag is set to 1 this indicates that, if the Connect request is accepted, a Will
@@ -516,7 +532,7 @@
     [self no_cleansession:MQTTQosLevelAtLeastOnce];
 }
 - (void)test_pub_sub_no_cleansession_qos0_MQTT_3_1_2_5 {
-    [self no_cleansession:MQTTQoSLevelAtMostOnce];
+    [self no_cleansession:MQTTQosLevelAtMostOnce];
 }
 
 /*
@@ -539,7 +555,7 @@
     [self cleansession:MQTTQosLevelAtLeastOnce];
 }
 - (void)test_pub_sub_cleansession_qos0_MQTT_4_3_3_2 {
-    [self cleansession:MQTTQoSLevelAtMostOnce];
+    [self cleansession:MQTTQosLevelAtMostOnce];
 }
 
 
@@ -809,7 +825,7 @@
      
 
     while (!self.timeout && self.event == -1) {
-        //NSLog(@"waiting for connection");
+        NSLog(@"waiting for connection");
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
 }

@@ -47,7 +47,7 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
  Enumeration of MQTT Quality of Service levels
  */
 typedef NS_ENUM(UInt8, MQTTQosLevel) {
-    MQTTQoSLevelAtMostOnce = 0,
+    MQTTQosLevelAtMostOnce = 0,
     MQTTQosLevelAtLeastOnce,
     MQTTQosLevelExactlyOnce
 };

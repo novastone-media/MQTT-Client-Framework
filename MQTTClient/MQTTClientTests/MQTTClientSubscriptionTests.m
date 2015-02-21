@@ -307,7 +307,7 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:[NSString stringWithFormat:@"%@/#", TOPIC] atLevel:MQTTQoSLevelAtMostOnce];
+        [self testSubscribeSubackExpected:[NSString stringWithFormat:@"%@/#", TOPIC] atLevel:MQTTQosLevelAtMostOnce];
         [self testSubscribeSubackExpected:[NSString stringWithFormat:@"%@/2", TOPIC] atLevel:MQTTQosLevelExactlyOnce];
         [self.session publishAndWaitData:[@"Should be delivered with qos 1" dataUsingEncoding:NSUTF8StringEncoding]
                                  onTopic:[NSString stringWithFormat:@"%@/2", TOPIC]
@@ -330,7 +330,7 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:TOPIC atLevel:MQTTQoSLevelAtMostOnce];
+        [self testSubscribeSubackExpected:TOPIC atLevel:MQTTQosLevelAtMostOnce];
         [self testUnsubscribeTopic:TOPIC];
         [self shutdown:parameters];
     }
@@ -346,7 +346,7 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:TOPIC atLevel:MQTTQoSLevelAtMostOnce];
+        [self testSubscribeSubackExpected:TOPIC atLevel:MQTTQosLevelAtMostOnce];
         [self.session publishAndWaitData:[@"Should be delivered" dataUsingEncoding:NSUTF8StringEncoding]
                                  onTopic:TOPIC
                                   retain:NO

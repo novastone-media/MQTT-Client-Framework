@@ -8,9 +8,10 @@
 
 import Foundation
 
-class SwiftTests : XCTestCase, MQTTSessionDelegate {
+class SwiftTests2 : XCTestCase, MQTTSessionDelegate {
     
     var session: MQTTSession?;
+
     var sessionConnected = false;
     var sessionError = false;
     var sessionReceived = false;
@@ -22,16 +23,9 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
             userName: nil,
             password: nil,
             keepAlive: 60,
-            cleanSession: true,
-            will: false,
-            willTopic: nil,
-            willMsg: nil,
-            willQoS: MQTTQosLevel.AtMostOnce,
-            willRetainFlag: false,
-            protocolLevel: 4,
-            runLoop: nil,
-            forMode: nil
+            cleanSession: true
         )
+
         session!.delegate = self;
         
         session!.connectToHost("localhost",
@@ -46,7 +40,7 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
         session!.close()
     }
     
-    func testSubscribe() {
+    func testSubscribe2() {
         session!.subscribeToTopic("#", atLevel: MQTTQosLevel.AtMostOnce)
         
         while sessionConnected && !sessionError && !sessionSubAcked {
@@ -54,7 +48,7 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
         }
     }
     
-    func testPublish() {
+    func testPublish2() {
         session!.subscribeToTopic("#", atLevel: MQTTQosLevel.AtMostOnce)
         
         while sessionConnected && !sessionError && !sessionSubAcked {
