@@ -632,15 +632,19 @@
                                                      msgId:qos ? msgId : 0
                                                 retainFlag:retainFlag
                                                    dupFlag:FALSE];
+    BOOL sent = [self send:msg];
     if (qos) {
         MQttTxFlow *flow = [[MQttTxFlow alloc] init];
         flow.msg = msg;
-        flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+        if (sent) {
+            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+        } else {
+            flow.deadline = [NSDate dateWithTimeIntervalSince1970:0];
+        }
         self.txFlows[[NSNumber numberWithUnsignedInt:(uint)msgId]] = flow;
         [self tell];
     }
-    [self send:msg];
-    
+
     return qos ? msgId : 0;
 }
 
@@ -797,11 +801,13 @@
         if ([flow.deadline compare:[NSDate date]] == NSOrderedAscending) {
             if (DEBUGSESS)  NSLog(@"%@ send dup %@ %@", self, self.clientId, msgId);
             MQTTMessage *msg = [flow msg];
-            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
-            if (msg.type == MQTTPublish) {
+            if (msg.type == MQTTPublish && flow.deadline != [NSDate dateWithTimeIntervalSince1970:0]) {
                 msg.dupFlag = TRUE;
             }
-            [self send:msg];
+            BOOL sent = [self send:msg];
+            if (sent) {
+                flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+            }
         }
     }
 }
@@ -1249,10 +1255,12 @@
     self.synchronDisconnect = FALSE;
 }
 
-- (void)send:(MQTTMessage*)msg {
+- (BOOL)send:(MQTTMessage*)msg {
     if ([self.encoder status] == MQTTEncoderStatusReady) {
         [self.encoder encodeMessage:msg];
+        return TRUE;
     }
+    return FALSE;
 }
 
 - (UInt16)nextMsgId {
