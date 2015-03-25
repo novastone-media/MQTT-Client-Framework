@@ -709,7 +709,7 @@
 - (void)publishJson:(id)payload onTopic:(NSString*)theTopic {
     NSData *data = [NSJSONSerialization dataWithJSONObject:payload options:0 error:nil];
     if (data) {
-        [self publishData:payload onTopic:theTopic retain:FALSE qos:MQTTQosLevelAtLeastOnce];
+        [self publishData:data onTopic:theTopic retain:FALSE qos:MQTTQosLevelAtLeastOnce];
     }
 }
 
