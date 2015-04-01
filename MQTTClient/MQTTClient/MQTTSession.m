@@ -636,9 +636,7 @@
                                                      msgId:msgId
                                                 retainFlag:retainFlag
                                                    dupFlag:FALSE];
-    BOOL sent = [self send:msg];
     if (qos) {
-<<<<<<< HEAD
         if (![self.persistence storeMessageForClientId:self.clientId
                                             topic:topic
                                              data:data
@@ -659,20 +657,6 @@
     }
     
     return msgId;
-=======
-        MQttTxFlow *flow = [[MQttTxFlow alloc] init];
-        flow.msg = msg;
-        if (sent) {
-            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
-        } else {
-            flow.deadline = [NSDate dateWithTimeIntervalSince1970:0];
-        }
-        self.txFlows[[NSNumber numberWithUnsignedInt:(uint)msgId]] = flow;
-        [self tell];
-    }
-
-    return qos ? msgId : 0;
->>>>>>> origin/master
 }
 
 - (BOOL)publishAndWaitData:(NSData*)data
@@ -836,7 +820,6 @@
     }
     for (MQTTFlow *flow in flows) {
         if ([flow.deadline compare:[NSDate date]] == NSOrderedAscending) {
-<<<<<<< HEAD
             switch ([flow.commandType intValue]) {
                 case 0:
                     if (windowSize <= self.persistence.maxWindowSize) {
@@ -870,17 +853,6 @@
                 default:
                     break;
             }
-=======
-            if (DEBUGSESS)  NSLog(@"%@ send dup %@ %@", self, self.clientId, msgId);
-            MQTTMessage *msg = [flow msg];
-            if (msg.type == MQTTPublish && flow.deadline != [NSDate dateWithTimeIntervalSince1970:0]) {
-                msg.dupFlag = TRUE;
-            }
-            BOOL sent = [self send:msg];
-            if (sent) {
-                flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
-            }
->>>>>>> origin/master
         }
     }
     [self.persistence sync];
