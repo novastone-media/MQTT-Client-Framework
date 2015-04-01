@@ -199,6 +199,7 @@
 }
 
 - (id)initWithClientId:(NSString*)theClientId {
+
     return [self initWithClientId:theClientId
                          userName:nil
                          password:nil
@@ -207,7 +208,7 @@
                              will:NO
                         willTopic:nil
                           willMsg:nil
-                          willQoS:MQTTQosLevelAtLeastOnce
+                          willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
                           runLoop:nil
@@ -217,6 +218,7 @@
 - (id)initWithClientId:(NSString*)theClientId
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode {
+
     return [self initWithClientId:theClientId
                          userName:nil
                          password:nil
@@ -225,7 +227,7 @@
                              will:NO
                         willTopic:nil
                           willMsg:nil
-                          willQoS:MQTTQosLevelAtLeastOnce
+                          willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
                           runLoop:theRunLoop
@@ -235,6 +237,7 @@
 - (id)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUsername
               password:(NSString*)thePassword {
+
     return [self initWithClientId:theClientId
                          userName:theUsername
                          password:thePassword
@@ -243,7 +246,7 @@
                              will:NO
                         willTopic:nil
                           willMsg:nil
-                          willQoS:MQTTQosLevelAtLeastOnce
+                          willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
                           runLoop:nil
@@ -255,6 +258,7 @@
               password:(NSString*)thePassword
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode {
+
     return [self initWithClientId:theClientId
                          userName:theUserName
                          password:thePassword
@@ -263,7 +267,7 @@
                              will:NO
                         willTopic:nil
                           willMsg:nil
-                          willQoS:MQTTQosLevelAtLeastOnce
+                          willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
                           runLoop:theRunLoop
@@ -275,6 +279,7 @@
               password:(NSString*)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
           cleanSession:(BOOL)cleanSessionFlag {
+
     return [self initWithClientId:theClientId
                          userName:theUsername
                          password:thePassword
@@ -283,7 +288,7 @@
                              will:NO
                         willTopic:nil
                           willMsg:nil
-                          willQoS:MQTTQosLevelAtLeastOnce
+                          willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
                           runLoop:nil
@@ -297,6 +302,7 @@
           cleanSession:(BOOL)theCleanSessionFlag
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theMode {
+
     return [self initWithClientId:theClientId
                          userName:theUsername
                          password:thePassword
@@ -305,7 +311,7 @@
                              will:NO
                         willTopic:nil
                           willMsg:nil
-                          willQoS:MQTTQosLevelAtLeastOnce
+                          willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
                           runLoop:theRunLoop
@@ -321,6 +327,7 @@
                willMsg:(NSData*)willMsg
                willQoS:(UInt8)willQoS
         willRetainFlag:(BOOL)willRetainFlag {
+
     return [self initWithClientId:theClientId
                          userName:theUserName
                          password:thePassword
@@ -347,6 +354,7 @@
         willRetainFlag:(BOOL)willRetainFlag
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode {
+
     return [self initWithClientId:theClientId
                          userName:theUserName
                          password:thePassword
@@ -367,6 +375,7 @@
         connectMessage:(MQTTMessage*)theConnectMessage
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode {
+
     self.connectMessage = theConnectMessage;
     return [self initWithClientId:theClientId
                          userName:nil
@@ -376,7 +385,7 @@
                              will:NO
                         willTopic:nil
                           willMsg:nil
-                          willQoS:MQTTQosLevelAtLeastOnce
+                          willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
                           runLoop:theRunLoop
@@ -627,7 +636,9 @@
                                                      msgId:msgId
                                                 retainFlag:retainFlag
                                                    dupFlag:FALSE];
+    BOOL sent = [self send:msg];
     if (qos) {
+<<<<<<< HEAD
         if (![self.persistence storeMessageForClientId:self.clientId
                                             topic:topic
                                              data:data
@@ -648,6 +659,20 @@
     }
     
     return msgId;
+=======
+        MQttTxFlow *flow = [[MQttTxFlow alloc] init];
+        flow.msg = msg;
+        if (sent) {
+            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+        } else {
+            flow.deadline = [NSDate dateWithTimeIntervalSince1970:0];
+        }
+        self.txFlows[[NSNumber numberWithUnsignedInt:(uint)msgId]] = flow;
+        [self tell];
+    }
+
+    return qos ? msgId : 0;
+>>>>>>> origin/master
 }
 
 - (BOOL)publishAndWaitData:(NSData*)data
@@ -655,12 +680,12 @@
                     retain:(BOOL)retainFlag
                        qos:(MQTTQosLevel)qos
 {
-    if (qos != MQTTQoSLevelAtMostOnce) {
+    if (qos != MQTTQosLevelAtMostOnce) {
         self.synchronPub = TRUE;
     }
     
     UInt16 mid = [self publishData:data onTopic:topic retain:retainFlag qos:qos];
-    if (qos == MQTTQoSLevelAtMostOnce) {
+    if (qos == MQTTQosLevelAtMostOnce) {
         return TRUE;
     } else {
         self.synchronPubMid = mid;
@@ -693,11 +718,11 @@
 }
 
 - (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic {
-    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQoSLevelAtMostOnce];
+    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQosLevelAtMostOnce];
 }
 
 - (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag {
-    [self publishData:theData onTopic:theTopic retain:retainFlag qos:MQTTQoSLevelAtMostOnce];
+    [self publishData:theData onTopic:theTopic retain:retainFlag qos:MQTTQosLevelAtMostOnce];
 }
 
 - (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic {
@@ -711,7 +736,7 @@
 - (void)publishJson:(id)payload onTopic:(NSString*)theTopic {
     NSData *data = [NSJSONSerialization dataWithJSONObject:payload options:0 error:nil];
     if (data) {
-        [self publishData:payload onTopic:theTopic retain:FALSE qos:MQTTQosLevelAtLeastOnce];
+        [self publishData:data onTopic:theTopic retain:FALSE qos:MQTTQosLevelAtLeastOnce];
     }
 }
 
@@ -811,6 +836,7 @@
     }
     for (MQTTFlow *flow in flows) {
         if ([flow.deadline compare:[NSDate date]] == NSOrderedAscending) {
+<<<<<<< HEAD
             switch ([flow.commandType intValue]) {
                 case 0:
                     if (windowSize <= self.persistence.maxWindowSize) {
@@ -844,6 +870,17 @@
                 default:
                     break;
             }
+=======
+            if (DEBUGSESS)  NSLog(@"%@ send dup %@ %@", self, self.clientId, msgId);
+            MQTTMessage *msg = [flow msg];
+            if (msg.type == MQTTPublish && flow.deadline != [NSDate dateWithTimeIntervalSince1970:0]) {
+                msg.dupFlag = TRUE;
+            }
+            BOOL sent = [self send:msg];
+            if (sent) {
+                flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+            }
+>>>>>>> origin/master
         }
     }
     [self.persistence sync];
@@ -1307,10 +1344,12 @@
     self.synchronDisconnect = FALSE;
 }
 
-- (void)send:(MQTTMessage*)msg {
+- (BOOL)send:(MQTTMessage*)msg {
     if ([self.encoder status] == MQTTEncoderStatusReady) {
         [self.encoder encodeMessage:msg];
+        return TRUE;
     }
+    return FALSE;
 }
 
 - (UInt16)nextMsgId {

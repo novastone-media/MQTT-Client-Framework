@@ -8,12 +8,10 @@
 
 import Foundation
 
-class SwiftTests : XCTestCase, MQTTSessionDelegate {
-<<<<<<< HEAD
-=======
+class SwiftTests2 : XCTestCase, MQTTSessionDelegate {
     
->>>>>>> origin/master
     var session: MQTTSession?;
+
     var sessionConnected = false;
     var sessionError = false;
     var sessionReceived = false;
@@ -25,30 +23,12 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
             userName: nil,
             password: nil,
             keepAlive: 60,
-            cleanSession: true,
-            will: false,
-            willTopic: nil,
-            willMsg: nil,
-<<<<<<< HEAD
-            willQoS: MQTTQosLevel.QoSLevelAtMostOnce,
-=======
-            willQoS: MQTTQosLevel.AtMostOnce,
->>>>>>> origin/master
-            willRetainFlag: false,
-            protocolLevel: 4,
-            runLoop: nil,
-            forMode: nil
+            cleanSession: true
         )
-<<<<<<< HEAD
-    
-        session!.delegate = self;
-        
-        session!.connectToHost("test.mosquitto.org",
-=======
+
         session!.delegate = self;
         
         session!.connectToHost("localhost",
->>>>>>> origin/master
             port: 1883,
             usingSSL: false)
         while !sessionConnected && !sessionError {
@@ -60,24 +40,16 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
         session!.close()
     }
     
-    func testSubscribe() {
-<<<<<<< HEAD
-        session!.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
-=======
+    func testSubscribe2() {
         session!.subscribeToTopic("#", atLevel: MQTTQosLevel.AtMostOnce)
->>>>>>> origin/master
         
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
         }
     }
     
-    func testPublish() {
-<<<<<<< HEAD
-        session!.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
-=======
+    func testPublish2() {
         session!.subscribeToTopic("#", atLevel: MQTTQosLevel.AtMostOnce)
->>>>>>> origin/master
         
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
