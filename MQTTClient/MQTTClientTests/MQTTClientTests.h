@@ -27,7 +27,7 @@
 @"port": @1883,  \
 @"tls": @NO, \
 @"protocollevel": @4, \
-@"timeout": @10 \
+@"timeout": @120 \
 }, \
 \
 @"mosquitto": @{ \

@@ -107,6 +107,75 @@
     }
 }
 
+#define ALOT 1024
+- (void)testPublish_a_lot_of_q0
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        for (int i = 0; i < ALOT; i++) {
+            NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
+            NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
+            self.sentMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQoSLevelAtMostOnce];
+            NSLog(@"testing publish %d", self.sentMid);
+        }
+        [self shutdown:parameters];
+    }
+}
+
+- (void)testPublish_a_lot_of_q1
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        self.session.persistence.maxWindowSize = 256;
+        for (int i = 0; i < ALOT; i++) {
+            NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
+            NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
+            self.sentMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelAtLeastOnce];
+            NSLog(@"testing publish %d", self.sentMid);
+        }
+        self.mid = 0;
+        self.timeout = false;
+        self.event = -1;
+        [self performSelector:@selector(ackTimeout:)
+                   withObject:nil
+                   afterDelay:self.timeoutValue];
+        
+        while (self.mid != self.sentMid && !self.timeout && self.event == -1) {
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        
+        [self shutdown:parameters];
+    }
+}
+
+- (void)testPublish_a_lot_of_q2
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        self.session.persistence.persistent = NO;
+        for (int i = 0; i < ALOT; i++) {
+            NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
+            NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
+            self.sentMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelExactlyOnce];
+            NSLog(@"testing publish %d", self.sentMid);
+        }
+        self.mid = 0;
+        self.event = -1;
+        
+        while (self.mid != self.sentMid && !self.timeout && self.event == -1) {
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        
+        [self shutdown:parameters];
+    }
+}
+
 /*
  * [MQTT-3.3.1-11]
  * A zero byte retained message MUST NOT be stored as a retained message on the Server.
@@ -397,7 +466,7 @@
 
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID
 {
-    //NSLog(@"messageDelivered:%ld", (long)msgID);
+    NSLog(@"messageDelivered:%ld", (long)msgID);
     self.mid = msgID;
 }
 

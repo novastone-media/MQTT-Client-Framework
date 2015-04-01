@@ -9,32 +9,32 @@
 import Foundation
 
 class SwiftTests : XCTestCase, MQTTSessionDelegate {
-    
-    var session = MQTTSession(
-        clientId: "swift",
-        userName: nil,
-        password: nil,
-        keepAlive: 60,
-        cleanSession: true,
-        will: false,
-        willTopic: nil,
-        willMsg: nil,
-        willQoS: MQTTQosLevel.QoSLevelAtMostOnce,
-        willRetainFlag: false,
-        protocolLevel: 4,
-        runLoop: nil,
-        forMode: nil
-    )
-    
+    var session: MQTTSession?;
     var sessionConnected = false;
     var sessionError = false;
     var sessionReceived = false;
     var sessionSubAcked = false;
     
     override func setUp() {
-        session.delegate = self;
+        session = MQTTSession(
+            clientId: "swift",
+            userName: nil,
+            password: nil,
+            keepAlive: 60,
+            cleanSession: true,
+            will: false,
+            willTopic: nil,
+            willMsg: nil,
+            willQoS: MQTTQosLevel.QoSLevelAtMostOnce,
+            willRetainFlag: false,
+            protocolLevel: 4,
+            runLoop: nil,
+            forMode: nil
+        )
+    
+        session!.delegate = self;
         
-        session.connectToHost("test.mosquitto.org",
+        session!.connectToHost("test.mosquitto.org",
             port: 1883,
             usingSSL: false)
         while !sessionConnected && !sessionError {
@@ -43,11 +43,11 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
     }
     
     override func tearDown() {
-        session.close()
+        session!.close()
     }
     
     func testSubscribe() {
-        session.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
+        session!.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
         
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
@@ -55,13 +55,13 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
     }
     
     func testPublish() {
-        session.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
+        session!.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
         
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
         }
         
-        session.publishData("sent from Xcode 6.0 using Swift".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false),
+        session!.publishData("sent from Xcode 6.0 using Swift".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false),
             onTopic: "mqtt/swift/framework",
             retain: false,
             qos: MQTTQosLevel.QoSLevelAtMostOnce)

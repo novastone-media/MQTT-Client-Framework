@@ -20,6 +20,7 @@
 #import <Foundation/Foundation.h>
 
 #import "MQTTMessage.h"
+#import "MQTTPersistence.h"
 
 @class MQTTSession;
 
@@ -236,6 +237,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 
 @property (weak, nonatomic) id<MQTTSessionDelegate> delegate;
+@property (strong, nonatomic) MQTTPersistence *persistence;
 
 /* for mqttio-OBJC backward compatibility */
 @property (strong) void (^connectionHandler)(MQTTSessionEvent event);
