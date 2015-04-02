@@ -22,11 +22,15 @@
 @end
 
 #ifdef DEBUG
-#define DEBUGPERSIST TRUE
+#define DEBUGPERSIST FALSE
 #else
 #define DEBUGPERSIST FALSE
 #endif
 
+#define PERSISTENT NO
+#define MAX_SIZE 64*1024*1024
+#define MAX_WINDOW_SIZE 16
+#define MAX_MESSAGES 1024
 
 
 @interface MQTTPersistence()
@@ -84,10 +88,10 @@ static unsigned long long fileSystemFreeSize;
 
 - (MQTTPersistence *)init {
     self = [super init];
-    self.persistent = TRUE;
-    self.maxSize = 1024*1024;
-    self.maxMessages = 1000;
-    self.maxWindowSize = 10;
+    self.persistent = PERSISTENT;
+    self.maxSize = MAX_SIZE;
+    self.maxMessages = MAX_MESSAGES;
+    self.maxWindowSize = MAX_WINDOW_SIZE;
     return self;
 }
 

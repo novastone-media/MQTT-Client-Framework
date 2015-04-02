@@ -9,6 +9,11 @@ var searchData=
   ['connected_3asessionpresent_3a',['connected:sessionPresent:',['../protocol_m_q_t_t_session_delegate-p.html#a443d92270a3c1a1cd0330f1be1e66952',1,'MQTTSessionDelegate-p']]],
   ['connectionclosed_3a',['connectionClosed:',['../protocol_m_q_t_t_session_delegate-p.html#a6ee6176897e9dc28236c562aece2a375',1,'MQTTSessionDelegate-p']]],
   ['connectionerror_3aerror_3a',['connectionError:error:',['../protocol_m_q_t_t_session_delegate-p.html#a8895314112168286947d78a102185ab2',1,'MQTTSessionDelegate-p']]],
+  ['connectionhandler',['connectionHandler',['../interface_m_q_t_t_session.html#a96b070cb597ed0857fbf289579c10a58',1,'MQTTSession']]],
   ['connectionrefused_3aerror_3a',['connectionRefused:error:',['../protocol_m_q_t_t_session_delegate-p.html#a179c4f9104394b3843a20862d50fd813',1,'MQTTSessionDelegate-p']]],
-  ['connecttohost_3aport_3ausingssl_3a',['connectToHost:port:usingSSL:',['../interface_m_q_t_t_session.html#a97c0fc3b9a06d8c5eefa3012591feb82',1,'MQTTSession']]]
+  ['connectmessage',['connectMessage',['../interface_m_q_t_t_session.html#a44f63ba3383e0e5c5bed5e051cad9d2f',1,'MQTTSession']]],
+  ['connecttohost_3aport_3a',['connectToHost:port:',['../interface_m_q_t_t_session.html#abc2b0b1291a5da11028761e3a3ed097b',1,'MQTTSession']]],
+  ['connecttohost_3aport_3ausingssl_3a',['connectToHost:port:usingSSL:',['../interface_m_q_t_t_session.html#a97c0fc3b9a06d8c5eefa3012591feb82',1,'MQTTSession']]],
+  ['connecttohost_3aport_3ausingssl_3awithconnectionhandler_3amessagehandler_3a',['connectToHost:port:usingSSL:withConnectionHandler:messageHandler:',['../interface_m_q_t_t_session.html#af41a9384007931bb624c80bcf1101bd4',1,'MQTTSession']]],
+  ['connecttohost_3aport_3awithconnectionhandler_3amessagehandler_3a',['connectToHost:port:withConnectionHandler:messageHandler:',['../interface_m_q_t_t_session.html#acdad8a7c44b78c04eaaef5f6bc2593ec',1,'MQTTSession']]]
 ];
