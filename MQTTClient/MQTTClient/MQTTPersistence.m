@@ -37,6 +37,7 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @end
 
+static NSRecursiveLock *lock;
 static NSManagedObjectContext *parentManagedObjectContext;
 static NSManagedObjectModel *managedObjectModel;
 static NSPersistentStoreCoordinator *persistentStoreCoordinator;
@@ -44,6 +45,19 @@ static unsigned long long fileSize;
 static unsigned long long fileSystemFreeSize;
 
 @implementation MQTTPersistence
+
+- (MQTTPersistence *)init {
+    self = [super init];
+    self.persistent = PERSISTENT;
+    self.maxSize = MAX_SIZE;
+    self.maxMessages = MAX_MESSAGES;
+    self.maxWindowSize = MAX_WINDOW_SIZE;
+    if (!lock) {
+        lock = [[NSRecursiveLock alloc] init];
+    }
+    return self;
+}
+
 
 - (NSUInteger)windowSize:(NSString *)clientId {
     NSUInteger windowSize = 0;
@@ -86,15 +100,6 @@ static unsigned long long fileSystemFreeSize;
     }
 }
 
-- (MQTTPersistence *)init {
-    self = [super init];
-    self.persistent = PERSISTENT;
-    self.maxSize = MAX_SIZE;
-    self.maxMessages = MAX_MESSAGES;
-    self.maxWindowSize = MAX_WINDOW_SIZE;
-    return self;
-}
-
 - (void)deleteFlow:(MQTTFlow *)flow {
     [self.managedObjectContext deleteObject:flow];
 }
@@ -135,7 +140,7 @@ static unsigned long long fileSystemFreeSize;
                               @(incomingFlag)
                               ];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"deadline" ascending:YES]];
-
+    
     NSError *error = nil;
     NSArray *flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (!flows) {
@@ -193,127 +198,133 @@ static unsigned long long fileSystemFreeSize;
         return _managedObjectContext;
     }
     
-    
-    if (parentManagedObjectContext == nil) {
-        NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-        if (coordinator != nil) {
-            parentManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-            [parentManagedObjectContext setPersistentStoreCoordinator:coordinator];
+    @synchronized (lock) {
+        if (parentManagedObjectContext == nil) {
+            NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+            if (coordinator != nil) {
+                parentManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+                [parentManagedObjectContext setPersistentStoreCoordinator:coordinator];
+            }
         }
+        
+        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [_managedObjectContext setParentContext:parentManagedObjectContext];
+        
+        return _managedObjectContext;
     }
-
-    _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    [_managedObjectContext setParentContext:parentManagedObjectContext];
-    
-    return _managedObjectContext;
 }
 
 - (NSManagedObjectModel *)managedObjectModel
 {
-    if (managedObjectModel != nil) {
+    @synchronized (lock) {
+        if (managedObjectModel != nil) {
+            return managedObjectModel;
+        }
+        
+        managedObjectModel = [[NSManagedObjectModel alloc] init];
+        NSMutableArray *entities = [[NSMutableArray alloc] init];
+        NSMutableArray *properties = [[NSMutableArray alloc] init];
+        
+        NSAttributeDescription *attributeDescription;
+        
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"clientId";
+        attributeDescription.attributeType = NSStringAttributeType;
+        attributeDescription.attributeValueClassName = @"NSString";
+        [properties addObject:attributeDescription];
+        
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"incomingFlag";
+        attributeDescription.attributeType = NSBooleanAttributeType;
+        attributeDescription.attributeValueClassName = @"NSNumber";
+        [properties addObject:attributeDescription];
+        
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"retainedFlag";
+        attributeDescription.attributeType = NSBooleanAttributeType;
+        attributeDescription.attributeValueClassName = @"NSNumber";
+        [properties addObject:attributeDescription];
+        
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"commandType";
+        attributeDescription.attributeType = NSInteger16AttributeType;
+        attributeDescription.attributeValueClassName = @"NSNumber";
+        [properties addObject:attributeDescription];
+        
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"qosLevel";
+        attributeDescription.attributeType = NSInteger16AttributeType;
+        attributeDescription.attributeValueClassName = @"NSNumber";
+        [properties addObject:attributeDescription];
+        
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"messageId";
+        attributeDescription.attributeType = NSInteger32AttributeType;
+        attributeDescription.attributeValueClassName = @"NSNumber";
+        [properties addObject:attributeDescription];
+        
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"topic";
+        attributeDescription.attributeType = NSStringAttributeType;
+        attributeDescription.attributeValueClassName = @"NSString";
+        [properties addObject:attributeDescription];
+        
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"data";
+        attributeDescription.attributeType = NSBinaryDataAttributeType;
+        attributeDescription.attributeValueClassName = @"NSData";
+        [properties addObject:attributeDescription];
+        
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"deadline";
+        attributeDescription.attributeType = NSDateAttributeType;
+        attributeDescription.attributeValueClassName = @"NSDate";
+        [properties addObject:attributeDescription];
+        
+        NSEntityDescription *entityDescription = [[NSEntityDescription alloc] init];
+        entityDescription.name = @"MQTTFlow";
+        entityDescription.managedObjectClassName = @"MQTTFlow";
+        entityDescription.abstract = FALSE;
+        entityDescription.properties = properties;
+        
+        [entities addObject:entityDescription];
+        [managedObjectModel setEntities:entities];
+        
         return managedObjectModel;
     }
-    managedObjectModel = [[NSManagedObjectModel alloc] init];
-    NSMutableArray *entities = [[NSMutableArray alloc] init];
-    NSMutableArray *properties = [[NSMutableArray alloc] init];
-    
-    NSAttributeDescription *attributeDescription;
-    
-    attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"clientId";
-    attributeDescription.attributeType = NSStringAttributeType;
-    attributeDescription.attributeValueClassName = @"NSString";
-    [properties addObject:attributeDescription];
-
-    attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"incomingFlag";
-    attributeDescription.attributeType = NSBooleanAttributeType;
-    attributeDescription.attributeValueClassName = @"NSNumber";
-    [properties addObject:attributeDescription];
-    
-    attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"retainedFlag";
-    attributeDescription.attributeType = NSBooleanAttributeType;
-    attributeDescription.attributeValueClassName = @"NSNumber";
-    [properties addObject:attributeDescription];
-    
-    attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"commandType";
-    attributeDescription.attributeType = NSInteger16AttributeType;
-    attributeDescription.attributeValueClassName = @"NSNumber";
-    [properties addObject:attributeDescription];
-
-    attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"qosLevel";
-    attributeDescription.attributeType = NSInteger16AttributeType;
-    attributeDescription.attributeValueClassName = @"NSNumber";
-    [properties addObject:attributeDescription];
-
-    attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"messageId";
-    attributeDescription.attributeType = NSInteger32AttributeType;
-    attributeDescription.attributeValueClassName = @"NSNumber";
-    [properties addObject:attributeDescription];
-
-    attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"topic";
-    attributeDescription.attributeType = NSStringAttributeType;
-    attributeDescription.attributeValueClassName = @"NSString";
-    [properties addObject:attributeDescription];
-
-    attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"data";
-    attributeDescription.attributeType = NSBinaryDataAttributeType;
-    attributeDescription.attributeValueClassName = @"NSData";
-    [properties addObject:attributeDescription];
-    
-    attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"deadline";
-    attributeDescription.attributeType = NSDateAttributeType;
-    attributeDescription.attributeValueClassName = @"NSDate";
-    [properties addObject:attributeDescription];
-    
-    NSEntityDescription *entityDescription = [[NSEntityDescription alloc] init];
-    entityDescription.name = @"MQTTFlow";
-    entityDescription.managedObjectClassName = @"MQTTFlow";
-    entityDescription.abstract = FALSE;
-    entityDescription.properties = properties;
-    
-    [entities addObject:entityDescription];
-    [managedObjectModel setEntities:entities];
-    
-    return managedObjectModel;
 }
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-    if (persistentStoreCoordinator != nil) {
+    @synchronized (lock) {
+        if (persistentStoreCoordinator != nil) {
+            return persistentStoreCoordinator;
+        }
+        
+        NSURL *persistentStoreURL = [[self applicationDocumentsDirectory]
+                                     URLByAppendingPathComponent:@"MQTTClient"];
+        if (DEBUGPERSIST) NSLog(@"Persistent store: %@", persistentStoreURL.path);
+        
+        
+        NSError *error = nil;
+        persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]
+                                      initWithManagedObjectModel:[self managedObjectModel]];
+        NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
+                                  NSInferMappingModelAutomaticallyOption: @YES,
+                                  NSSQLiteAnalyzeOption: @YES,
+                                  NSSQLiteManualVacuumOption: @YES};
+        
+        if (![persistentStoreCoordinator addPersistentStoreWithType:self.persistent ? NSSQLiteStoreType : NSInMemoryStoreType
+                                                      configuration:nil
+                                                                URL:self.persistent ? persistentStoreURL : nil
+                                                            options:options
+                                                              error:&error]) {
+            if (DEBUGPERSIST) NSLog(@"managedObjectContext save: %@", error);
+            persistentStoreCoordinator = nil;
+        }
+        
         return persistentStoreCoordinator;
     }
-    
-    NSURL *persistentStoreURL = [[self applicationDocumentsDirectory]
-                               URLByAppendingPathComponent:@"MQTTClient"];
-     if (DEBUGPERSIST) NSLog(@"Persistent store: %@", persistentStoreURL.path);
-
-    
-    NSError *error = nil;
-    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]
-                                   initWithManagedObjectModel:[self managedObjectModel]];
-    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
-                              NSInferMappingModelAutomaticallyOption: @YES,
-                              NSSQLiteAnalyzeOption: @YES,
-                              NSSQLiteManualVacuumOption: @YES};
-    
-    if (![persistentStoreCoordinator addPersistentStoreWithType:self.persistent ? NSSQLiteStoreType : NSInMemoryStoreType
-                                                   configuration:nil
-                                                             URL:self.persistent ? persistentStoreURL : nil
-                                                         options:options
-                                                           error:&error]) {
-        if (DEBUGPERSIST) NSLog(@"managedObjectContext save: %@", error);
-        persistentStoreCoordinator = nil;
-    }
-    
-    return persistentStoreCoordinator;
 }
 
 #pragma mark - Application's Documents directory
