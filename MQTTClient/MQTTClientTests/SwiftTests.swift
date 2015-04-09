@@ -9,10 +9,6 @@
 import Foundation
 
 class SwiftTests : XCTestCase, MQTTSessionDelegate {
-<<<<<<< HEAD
-=======
-    
->>>>>>> origin/master
     var session: MQTTSession?;
     var sessionConnected = false;
     var sessionError = false;
@@ -29,26 +25,15 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
             will: false,
             willTopic: nil,
             willMsg: nil,
-<<<<<<< HEAD
-            willQoS: MQTTQosLevel.QoSLevelAtMostOnce,
-=======
             willQoS: MQTTQosLevel.AtMostOnce,
->>>>>>> origin/master
             willRetainFlag: false,
             protocolLevel: 4,
             runLoop: nil,
             forMode: nil
         )
-<<<<<<< HEAD
-    
-        session!.delegate = self;
-        
-        session!.connectToHost("test.mosquitto.org",
-=======
         session!.delegate = self;
         
         session!.connectToHost("localhost",
->>>>>>> origin/master
             port: 1883,
             usingSSL: false)
         while !sessionConnected && !sessionError {
@@ -61,23 +46,14 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
     }
     
     func testSubscribe() {
-<<<<<<< HEAD
-        session!.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
-=======
         session!.subscribeToTopic("#", atLevel: MQTTQosLevel.AtMostOnce)
->>>>>>> origin/master
-        
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
         }
     }
     
     func testPublish() {
-<<<<<<< HEAD
-        session!.subscribeToTopic("#", atLevel: MQTTQosLevel.QoSLevelAtMostOnce)
-=======
         session!.subscribeToTopic("#", atLevel: MQTTQosLevel.AtMostOnce)
->>>>>>> origin/master
         
         while sessionConnected && !sessionError && !sessionSubAcked {
             NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))

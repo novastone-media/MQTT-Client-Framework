@@ -117,7 +117,7 @@
         for (int i = 0; i < ALOT; i++) {
             NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
-            self.sentMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQoSLevelAtMostOnce];
+            self.sentMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelAtMostOnce];
             NSLog(@"testing publish %d", self.sentMid);
         }
         [self shutdown:parameters];
@@ -406,7 +406,10 @@
 - (void)testPublishCloseExpected:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos
 {
     [self testPublishCore:data onTopic:topic retain:retain atLevel:qos];
-    XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"No MQTTSessionEventConnectionClosedByBroker happened");
+    XCTAssert(
+              (self.event == MQTTSessionEventConnectionClosedByBroker) ||
+              (self.event == MQTTSessionEventConnectionError),
+              @"No MQTTSessionEventConnectionClosedByBroker or MQTTSessionEventConnectionError happened");
 }
 
 - (void)testPublish:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos
