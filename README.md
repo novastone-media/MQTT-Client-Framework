@@ -48,19 +48,7 @@ Documentation generated with doxygen http://doxygen.org
 
 #### Comparison MQTT Clients for iOS (incomplete)
 
-|AAA|BBB|CCC|DDD|EEE|FFF|GGG|HHH|III|JJJ|
-|---|---|---|---|---|---|---|---|---|---|
-|Sample|https://github.com/ibm-messaging/mqtt-ios-sample|https://github.com/relayr/apple-mqtt-example|https://github.com/ghvillasboas/MosquitoChat|||||||
-|Wrapper|||MQTTKit|Marquette|Moscapsule|Musqueteer|MQTT-Client|MqttSDK|CocoaMQTT|
-|||https://github.com/mobile-web-messaging/MQTTKit|https://github.com/smaye81/ios-mqtt|https://github.com/flightonary/Moscapsule|https://github.com/gscalzo/Musquetteer|https://github.com/ckrey/MQTT-Client-Framework|git://git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.objc.git|https://github.com/slimpp/CocoaMQTT|
-|||Objective-C|Objective-C|Swift|Objective-C|Objective-C|Objective-C|Swift|
-Library|IBM|Paho|Mosquitto||||native|native|native|
-|Mobile WebSphere MQ Client Pack|git://git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.c.git|git://git.eclipse.org/gitroot/mosquitto/org.eclipse.mosquitto.git|||||||
-|C|C|C|||||||
-||||||||||
-Qos 2||||||||||
-Persistence||||||||||
-TLS||||||||||
-||||||||||
-||||||||||
-||||||||||
+|Wrapper|---|----|MQTTKit  |Marquette|Moscapsule|Musqueteer|MQTT-Client|MqttSDK|CocoaMQTT|
+|-------|---|----|---------|---------|----------|----------|-----------|-------|---------|
+|       |   |    |Obj-C    |Obj-C    |Swift     |Obj-C     |Obj-C      |Obj-C  |Swift    |
+|Library|IBM|Paho|Mosquitto|Mosquitto|Mosquitto |Mosquitto |native     |native |native   |
