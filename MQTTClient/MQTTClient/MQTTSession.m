@@ -637,19 +637,22 @@
                                                 retainFlag:retainFlag
                                                    dupFlag:FALSE];
     if (qos) {
-        if (![self.persistence storeMessageForClientId:self.clientId
-                                            topic:topic
-                                             data:data
-                                       retainFlag:retainFlag
-                                              qos:qos
-                                            msgId:msgId
-                                           incomingFlag:NO]) {
+        MQTTFlow *flow = [self.persistence storeMessageForClientId:self.clientId
+                                                             topic:topic
+                                                              data:data
+                                                        retainFlag:retainFlag
+                                                               qos:qos
+                                                             msgId:msgId
+                                                      incomingFlag:NO];
+
+        if (!flow) {
             if (DEBUGSESS) NSLog(@"%@ dropping outgoing messages", self);
             msgId = 0;
         } else {
             [self tell];
             if ([self.persistence windowSize:self.clientId] <= self.persistence.maxWindowSize) {
                 [self send:msg];
+                flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
             }
         }
     } else {

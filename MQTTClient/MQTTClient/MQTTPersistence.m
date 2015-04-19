@@ -71,7 +71,7 @@ static unsigned long long fileSystemFreeSize;
     return windowSize;
 }
 
-- (BOOL)storeMessageForClientId:(NSString *)clientId
+- (MQTTFlow *)storeMessageForClientId:(NSString *)clientId
                           topic:(NSString *)topic
                            data:(NSData *)data
                      retainFlag:(BOOL)retainFlag
@@ -94,9 +94,9 @@ static unsigned long long fileSystemFreeSize;
         }
         flow.deadline = [NSDate dateWithTimeIntervalSinceNow:0];
         [self sync];
-        return true;
+        return flow;
     } else {
-        return false;
+        return nil;
     }
 }
 

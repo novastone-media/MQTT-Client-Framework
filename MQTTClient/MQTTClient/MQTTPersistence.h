@@ -30,7 +30,7 @@
 @property (nonatomic) NSUInteger maxSize;
 
 - (NSUInteger)windowSize:(NSString *)clientId;
-- (BOOL)storeMessageForClientId:(NSString *)clientId
+- (MQTTFlow *)storeMessageForClientId:(NSString *)clientId
                           topic:(NSString *)topic
                            data:(NSData *)data
                      retainFlag:(BOOL)retainFlag
