@@ -651,8 +651,9 @@
         } else {
             [self tell];
             if ([self.persistence windowSize:self.clientId] <= self.persistence.maxWindowSize) {
-                [self send:msg];
-                flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+                if ([self send:msg]) {
+                    flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+                }
             }
         }
     } else {
@@ -822,6 +823,7 @@
         }
     }
     for (MQTTFlow *flow in flows) {
+        if (DEBUGSESS)  NSLog(@"%@ %@ flow %@ %@ %@", self, self.clientId, flow.deadline, flow.commandType, flow.messageId);
         if ([flow.deadline compare:[NSDate date]] == NSOrderedAscending) {
             switch ([flow.commandType intValue]) {
                 case 0:
