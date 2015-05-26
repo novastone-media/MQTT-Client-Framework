@@ -211,7 +211,7 @@
             break;
         }
         case MQTTSessionEventConnectionClosed:
-            self.state = MQTTSessionStatusClosed;
+            self.state = MQTTSessionManagerStateClosed;
             if (self.backgroundTask) {
                 [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
                 self.backgroundTask = UIBackgroundTaskInvalid;
