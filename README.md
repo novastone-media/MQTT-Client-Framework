@@ -3,6 +3,17 @@ MQTT-Client-Framework
 
 an Objective-C native MQTT Framework http://mqtt.org
 
+### Tested with
+
+* mosquitto
+* paho
+* rabbitmq
+* hivemq
+* rsmb
+* mosca
+* vernemq
+* emqtt
+
 ### Howto
 
 Add MQTTClient.framework from the dist directory to your IOS project

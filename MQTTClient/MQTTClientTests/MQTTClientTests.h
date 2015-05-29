@@ -17,7 +17,7 @@
 #define MULTI 15  // some test servers are limited in concurrent sessions
 #define BULK 99 
 
-//#define BROKERLIST @[@"local", @"mosquitto", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m"]
+//#define BROKERLIST @[@"local", @"mosquitto", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd"]
 #define BROKERLIST @[@"local"]
 
 #define BROKERS @{ \
@@ -27,7 +27,7 @@
 @"port": @1883,  \
 @"tls": @NO, \
 @"protocollevel": @4, \
-@"timeout": @120 \
+@"timeout": @10 \
 }, \
 \
 @"mosquitto": @{ \
@@ -97,6 +97,22 @@
 @"mosca": @{ \
 @"host": @"localhost",  \
 @"port": @1885,  \
+@"tls": @NO, \
+@"protocollevel": @4, \
+@"timeout": @10 \
+}, \
+\
+@"vernemq": @{ \
+@"host": @"localhost",  \
+@"port": @1886,  \
+@"tls": @NO, \
+@"protocollevel": @4, \
+@"timeout": @10 \
+}, \
+\
+@"emqttd": @{ \
+@"host": @"localhost",  \
+@"port": @1887,  \
 @"tls": @NO, \
 @"protocollevel": @4, \
 @"timeout": @10 \

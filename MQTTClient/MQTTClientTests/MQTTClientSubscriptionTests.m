@@ -13,8 +13,13 @@
 @interface MQTTClientSubscriptionTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
 @property (nonatomic) int event;
-@property (nonatomic) UInt16 mid;
-@property (nonatomic) UInt16 sentMid;
+@property (nonatomic) UInt16 subMid;
+@property (nonatomic) UInt16 unsubMid;
+@property (nonatomic) UInt16 messageMid;
+@property (nonatomic) BOOL SYSreceived;
+@property (nonatomic) UInt16 sentSubMid;
+@property (nonatomic) UInt16 sentUnsubMid;
+@property (nonatomic) UInt16 sentMessageMid;
 @property (nonatomic) NSArray *qoss;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) NSTimeInterval timeoutValue;
@@ -77,19 +82,20 @@
     }
 }
 
-- (void)testSubscribeWMultipleTopics_a_lot
+- (void)testSubscribeWMultipleTopics_16_to_256
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-#define TOPICS 256
-        NSMutableDictionary *topics = [[NSMutableDictionary alloc] initWithCapacity:TOPICS];
-        for (int i = 0; i < TOPICS; i++) {
-            [topics setObject:@(1) forKey:[NSString stringWithFormat:@"MQTTClient/a/lot/%d", i]];
+        for (int TOPICS = 16; TOPICS <= 256; TOPICS += 16) {
+            NSMutableDictionary *topics = [[NSMutableDictionary alloc] initWithCapacity:TOPICS];
+            for (int i = 0; i < TOPICS; i++) {
+                [topics setObject:@(1) forKey:[NSString stringWithFormat:@"MQTTClient/a/lot/%d", i]];
+            }
+            NSLog(@"testing %d subscriptions", TOPICS);
+            [self testMultiSubscribeSubackExpected:topics];
         }
-
-        [self testMultiSubscribeSubackExpected:topics];
         [self shutdown:parameters];
     }
 }
@@ -236,11 +242,34 @@
     }
 }
 
+- (void)testSubscribeWildcardSYS_MQTT_4_7_2_1
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"#" atLevel:0];
+
+        self.timeout = false;
+        self.SYSreceived = false;
+        [self performSelector:@selector(ackTimeout:)
+                   withObject:nil
+                   afterDelay:self.timeoutValue];
+
+        while (!self.SYSreceived && !self.timeout) {
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        XCTAssertFalse(self.SYSreceived, @"The Server MUST NOT match Topic Filters starting with a wildcard character (# or +) with Topic Names beginning with a $ character [MQTT-4.7.2-1].");
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+
+        [self shutdown:parameters];
+    }
+}
+
 - (void)testSubscribeTopic_0x00_in_topic
 {
     NSLog(@"can't test [MQTT-4.7.3-2]");
 }
-
 
 - (void)testSubscribeLong_MQTT_4_7_3_3
 {
@@ -502,9 +531,10 @@
 - (void)testSubscribeSubackExpected:(NSString *)topic atLevel:(UInt8)qos
 {
     [self testSubscribe:topic atLevel:qos];
-    XCTAssertFalse(self.timeout, @"No SUBACK received within %d seconds [MQTT-3.8.4-1]", 10);
+    XCTAssertFalse(self.timeout, @"No SUBACK received within %f seconds [MQTT-3.8.4-1]", self.timeoutValue);
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     XCTAssert(self.event == -1, @"Event %ld happened", (long)self.event);
-    XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.mid, self.sentMid);
+    XCTAssertEqual(self.subMid, self.sentSubMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.subMid, self.sentSubMid);
     for (NSNumber *qos in self.qoss) {
         XCTAssertNotEqual([qos intValue], 0x80, @"Returncode in SUBACK is 0x80");
         XCTAssert([qos intValue] == 0x00 || [qos intValue] == 0x01 || [qos intValue] == 0x02, @"Returncode in SUBACK invalid [MQTT-3.9.3-2]");
@@ -514,9 +544,10 @@
 - (void)testMultiSubscribeSubackExpected:(NSDictionary *)topics
 {
     [self testMultiSubscribe:topics];
-    XCTAssertFalse(self.timeout, @"No SUBACK received within %d seconds [MQTT-3.8.4-1]", 10);
+    XCTAssertFalse(self.timeout, @"No SUBACK received within %f seconds [MQTT-3.8.4-1]", self.timeoutValue);
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     XCTAssert(self.event == -1, @"Event %ld happened", (long)self.event);
-    XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.mid, self.sentMid);
+    XCTAssertEqual(self.subMid, self.sentSubMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.subMid, self.sentSubMid);
     for (NSNumber *qos in self.qoss) {
         XCTAssert([qos intValue] == 0x00 || [qos intValue] == 0x01 || [qos intValue] == 0x02, @"Returncode %d in SUBACK invalid [MQTT-3.9.3-2]", [qos intValue]);
     }
@@ -525,24 +556,27 @@
 - (void)testSubscribeCloseExpected:(NSString *)topic atLevel:(UInt8)qos
 {
     [self testSubscribe:topic atLevel:qos];
-    XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
+    XCTAssertFalse(self.timeout, @"No close within %f seconds", self.timeoutValue);
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testMultiSubscribeCloseExpected:(NSDictionary *)topics
 {
     [self testMultiSubscribe:topics];
-    XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
-    XCTAssert(self.mid == 0, @"SUBACK received");
+    XCTAssertFalse(self.timeout, @"No close within %f seconds", self.timeoutValue);
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    XCTAssert(self.subMid == 0, @"SUBACK received");
     XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testSubscribeFailureExpected:(NSString *)topic atLevel:(UInt8)qos
 {
     [self testSubscribe:topic atLevel:qos];
-    XCTAssertFalse(self.timeout, @"No SUBACK received within %d seconds [MQTT-3.8.4-1]", 10);
+    XCTAssertFalse(self.timeout, @"No SUBACK received within %f seconds [MQTT-3.8.4-1]", self.timeoutValue);
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     XCTAssert(self.event == -1, @"Event %ld happened", (long)self.event);
-    XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.mid, self.sentMid);
+    XCTAssertEqual(self.subMid, self.sentSubMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.subMid, self.sentSubMid);
     for (NSNumber *qos in self.qoss) {
         XCTAssertEqual([qos intValue], 0x80, @"Returncode in SUBACK is not 0x80");
     }
@@ -550,108 +584,133 @@
 
 - (void)testSubscribe:(NSString *)topic atLevel:(UInt8)qos
 {
-    self.mid = 0;
-    self.sentMid = [self.session subscribeToTopic:topic atLevel:qos];
+    self.subMid = 0;
+    self.qoss = nil;
+    self.event = -1;
+    self.timeout = false;
+    self.sentSubMid = [self.session subscribeToTopic:topic atLevel:qos];
+    NSLog(@"sent mid(SUBSCRIBE): %d", self.sentSubMid);
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
                afterDelay:self.timeoutValue];
 
-    while (self.mid == 0 && !self.timeout && self.event == -1) {
+    while (self.subMid == 0 && !self.qoss && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
 }
 
 - (void)testMultiSubscribe:(NSDictionary *)topics
 {
-    self.mid = 0;
-    self.sentMid = [self.session subscribeToTopics:topics];
+    self.subMid = 0;
+    self.qoss = nil;
+    self.event = -1;
+    self.timeout = false;
+    self.sentSubMid = [self.session subscribeToTopics:topics];
+    NSLog(@"sent mid(SUBSCRIBE multi): %d", self.sentSubMid);
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
                afterDelay:self.timeoutValue];
 
-    while (self.mid == 0 && !self.timeout && self.event == -1) {
+    while (self.subMid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
 }
 
 - (void)testUnsubscribeTopic:(NSString *)topic
 {
-    self.mid = 0;
-    self.sentMid = [self.session unsubscribeTopic:topic];
+    self.unsubMid = 0;
+    self.event = -1;
+    self.timeout = false;
+    self.sentUnsubMid = [self.session unsubscribeTopic:topic];
+    NSLog(@"sent mid(UNSUBSCRIBE): %d", self.sentUnsubMid);
+
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
                afterDelay:self.timeoutValue];
 
-    while (self.mid == 0 && !self.timeout && self.event == -1) {
+    while (self.unsubMid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
-    XCTAssertFalse(self.timeout, @"No UNSUBACK received [MQTT-3.10.3-5] within %d seconds", 10);
-    XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in UNSUBACK does not match msgID(%d) in UNSUBSCRIBE [MQTT-3.10.3-4]", self.mid, self.sentMid);
+    XCTAssertFalse(self.timeout, @"No UNSUBACK received [MQTT-3.10.3-5] within %f seconds", self.timeoutValue);
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    XCTAssertEqual(self.unsubMid, self.sentUnsubMid, @"msgID(%d) in UNSUBACK does not match msgID(%d) in UNSUBSCRIBE [MQTT-3.10.3-4]", self.unsubMid, self.sentUnsubMid);
 }
 
 - (void)testUnsubscribeTopicCloseExpected:(NSString *)topic
 {
-    self.mid = 0;
-    self.sentMid = [self.session unsubscribeTopic:topic];
+    self.unsubMid = 0;
+    self.event = -1;
+    self.timeout = false;
+    self.sentUnsubMid = [self.session unsubscribeTopic:topic];
+    NSLog(@"sent mid(UNSUBSCRIBE): %d", self.sentUnsubMid);
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
                afterDelay:self.timeoutValue];
 
-    while (self.mid == 0 && !self.timeout && self.event == -1) {
+    while (self.unsubMid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
-    XCTAssertFalse(self.timeout, @"No close within %d seconds", 10);
+    XCTAssertFalse(self.timeout, @"No close within %f seconds",self.timeoutValue);
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testMultiUnsubscribeTopic:(NSArray *)topics
 {
-    self.mid = 0;
-    self.sentMid = [self.session unsubscribeTopics:topics];
+    self.unsubMid = 0;
+    self.event = -1;
+    self.timeout = false;
+    self.sentUnsubMid = [self.session unsubscribeTopics:topics];
+    NSLog(@"sent mid(UNSUBSCRIBE multi): %d", self.sentUnsubMid);
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
                afterDelay:self.timeoutValue];
 
-    while (self.mid == 0 && !self.timeout && self.event == -1) {
+    while (self.unsubMid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
-    XCTAssertFalse(self.timeout, @"No UNSUBACK received [MQTT-3.10.3-5] within %d seconds", 10);
-    XCTAssertEqual(self.mid, self.sentMid, @"msgID(%d) in UNSUBACK does not match msgID(%d) in UNSUBSCRIBE [MQTT-3.10.3-4]", self.mid, self.sentMid);
+    XCTAssertFalse(self.timeout, @"No UNSUBACK received [MQTT-3.10.3-5] within %f seconds", self.timeoutValue);
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    XCTAssertEqual(self.unsubMid, self.sentUnsubMid, @"msgID(%d) in UNSUBACK does not match msgID(%d) in UNSUBSCRIBE [MQTT-3.10.3-4]", self.unsubMid, self.sentUnsubMid);
 }
 
 - (void)ackTimeout:(NSTimeInterval)timeout
 {
+    NSLog(@"timeout");
     self.timeout = TRUE;
 }
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
 {
-    //NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
+    NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
+    self.messageMid = mid;
+    if (topic && [topic hasPrefix:@"$"]) {
+        self.SYSreceived = true;
+    }
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    //NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
+    NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
 }
 
 - (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQoss:(NSArray *)qoss
 {
-    //NSLog(@"subAckReceived:%d grantedQoss:%@", msgID, qoss);
-    self.mid = msgID;
+    NSLog(@"subAckReceived:%d grantedQoss:%@", msgID, qoss);
+    self.subMid = msgID;
     self.qoss = qoss;
 }
 
 - (void)unsubAckReceived:(MQTTSession *)session msgID:(UInt16)msgID
 {
-    //NSLog(@"unsubAckReceived:%d", msgID);
-    self.mid = msgID;
+    NSLog(@"unsubAckReceived:%d", msgID);
+    self.unsubMid = msgID;
 }
 
 - (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
 {
-    //NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
-
+    NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
     self.type = type;
 }
 
@@ -672,6 +731,7 @@
     self.session.delegate = self;
     self.event = -1;
 
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     self.timeout = FALSE;
     self.timeoutValue = [parameters[@"timeout"] doubleValue];
     [self performSelector:@selector(ackTimeout:)
@@ -688,26 +748,21 @@
 
     XCTAssert(!self.timeout, @"timeout");
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-
-    self.timeout = FALSE;
-    self.type = -1;
-    self.mid = 0;
-    self.qoss = @[];
-    self.event = -1;
 }
 
 - (void)shutdown:(NSDictionary *)parameters {
     self.event = -1;
 
-    self.timeout = FALSE;
+
+    self.timeout = false;
     [self performSelector:@selector(ackTimeout:)
-               withObject:parameters[@"timeout"]
-               afterDelay:[parameters[@"timeout"] intValue]];
+               withObject:nil
+               afterDelay:self.timeoutValue];
 
     [self.session close];
 
     while (self.event == -1 && !self.timeout) {
-        //NSLog(@"waiting for disconnect");
+        NSLog(@"waiting for disconnect");
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     
