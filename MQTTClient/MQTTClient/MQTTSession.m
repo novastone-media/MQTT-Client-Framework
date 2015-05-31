@@ -413,13 +413,15 @@
     CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
     
     if (usingSSL) {
-        const void *keys[] = { kCFStreamSSLLevel,
-            kCFStreamSSLPeerName };
+        const void *keys[] = {
+            kCFStreamSSLLevel
+        };
         
-        const void *vals[] = { kCFStreamSocketSecurityLevelNegotiatedSSL,
-            kCFNull };
+        const void *vals[] = {
+            kCFStreamSocketSecurityLevelNegotiatedSSL
+        };
         
-        CFDictionaryRef sslSettings = CFDictionaryCreate(kCFAllocatorDefault, keys, vals, 2,
+        CFDictionaryRef sslSettings = CFDictionaryCreate(kCFAllocatorDefault, keys, vals, sizeof(keys) / sizeof(void*),
                                                          &kCFTypeDictionaryKeyCallBacks,
                                                          &kCFTypeDictionaryValueCallBacks);
         
