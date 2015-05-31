@@ -429,11 +429,11 @@
         CFRelease(sslSettings);
     }
     
-    self.encoder = [[MQTTEncoder alloc] initWithStream:(__bridge NSOutputStream*)writeStream
+    self.encoder = [[MQTTEncoder alloc] initWithStream:(__bridge_transfer NSOutputStream*)writeStream
                                                runLoop:self.runLoop
                                            runLoopMode:self.runLoopMode];
     
-    self.decoder = [[MQTTDecoder alloc] initWithStream:(__bridge NSInputStream*)readStream
+    self.decoder = [[MQTTDecoder alloc] initWithStream:(__bridge_transfer NSInputStream*)readStream
                                                runLoop:self.runLoop
                                            runLoopMode:self.runLoopMode];
     
