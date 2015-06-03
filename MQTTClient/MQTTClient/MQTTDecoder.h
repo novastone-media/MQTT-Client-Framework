@@ -19,6 +19,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MQTTMessage.h"
+#import "MQTTSSLSecurityPolicy.h"
 
 typedef enum {
     MQTTDecoderEventProtocolError,
@@ -61,6 +62,13 @@ typedef enum {
 - (id)initWithStream:(NSInputStream *)stream
              runLoop:(NSRunLoop *)runLoop
          runLoopMode:(NSString *)mode;
+
+- (id)initWithStream:(NSInputStream *)stream
+             runLoop:(NSRunLoop *)runLoop
+         runLoopMode:(NSString *)mode
+        securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
+        securityDomain:(NSString *)securityDomain;
+
 - (void)open;
 - (void)close;
 - (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode;

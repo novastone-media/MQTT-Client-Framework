@@ -25,16 +25,39 @@
 #define DEBUGDEC FALSE
 #endif
 
+@interface MQTTDecoder()
+@property BOOL securityPolicyAlreadyApplied;
+@property(strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
+@property(strong, nonatomic) NSString *securityDomain;
+- (BOOL)applySSLSecurityPolicy:(NSStream *)readStream withEvent:(NSStreamEvent)eventCode;
+@end
+
 @implementation MQTTDecoder
 
 - (id)initWithStream:(NSInputStream *)stream
              runLoop:(NSRunLoop *)runLoop
          runLoopMode:(NSString *)mode {
+    return [self initWithStream:stream
+                       runLoop:runLoop
+                   runLoopMode:mode
+                securityPolicy:nil
+                securityDomain:nil];
+}
+
+- (id)initWithStream:(NSInputStream *)stream
+             runLoop:(NSRunLoop *)runLoop
+         runLoopMode:(NSString *)mode
+      securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
+      securityDomain:(NSString *)securityDomain
+{
     self.status = MQTTDecoderStatusInitializing;
     self.stream = stream;
     [self.stream setDelegate:self];
     self.runLoop = runLoop;
     self.runLoopMode = mode;
+    self.securityPolicy = securityPolicy;
+    self.securityDomain = securityDomain;
+    self.securityPolicyAlreadyApplied = NO;
     return self;
 }
 
@@ -50,6 +73,26 @@
     [self.stream setDelegate:nil];
 }
 
+- (BOOL)applySSLSecurityPolicy:(NSStream *)readStream withEvent:(NSStreamEvent)eventCode{
+    if(!self.securityPolicy){
+        return YES;
+    }
+
+    // apply the policy only once.
+    if(self.securityPolicyAlreadyApplied){
+        return YES;
+    }
+
+    SecTrustRef serverTrust = (__bridge SecTrustRef) [readStream propertyForKey: (__bridge NSString *)kCFStreamPropertySSLPeerTrust];
+    if(!serverTrust){
+        return NO;
+    }
+
+    BOOL isValid = [self.securityPolicy evaluateServerTrust:serverTrust forDomain:self.securityDomain];
+    self.securityPolicyAlreadyApplied = isValid;
+    return isValid;
+}
+
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
     if (DEBUGDEC) NSLog(@"%@ handleEvent 0x%02lx", self, (long)eventCode);
     if(self.stream == nil) {
@@ -62,6 +105,15 @@
             self.status = MQTTDecoderStatusDecodingHeader;
             break;
         case NSStreamEventHasBytesAvailable:
+            // apply security before process any data
+            if(![self applySSLSecurityPolicy:sender withEvent:eventCode]){
+                self.status = MQTTDecoderStatusConnectionError;
+                NSError * sslError = [NSError errorWithDomain:@"MQTT"
+                                                         code:errSSLXCertChainInvalid
+                                                     userInfo:@{NSLocalizedDescriptionKey : @"Unable to apply security policy, the SSL connection is insecure!"}];
+                [self.delegate decoder:self handleEvent:MQTTDecoderEventProtocolError error:sslError];
+            }
+
             if (self.status == MQTTDecoderStatusDecodingHeader) {
                 UInt8 buffer;
                 NSInteger n = [self.stream read:&buffer maxLength:1];
@@ -76,6 +128,7 @@
                 }
             }
             while (self.status == MQTTDecoderStatusDecodingLength) {
+                // TODO: check max packet length(prevent evil server response)
                 UInt8 digit;
                 NSInteger n = [self.stream read:&digit maxLength:1];
                 if (n == -1) {
