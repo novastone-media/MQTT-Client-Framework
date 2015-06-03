@@ -93,6 +93,11 @@
               <Anchor>a5d4657d074b0dd745de2a8bded6b0308</Anchor>
              </Node>
              <Node>
+              <Name>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>accf20d5a5b630ff96b84ab88f92468fe</Anchor>
+             </Node>
+             <Node>
               <Name>initWithClientId:userName:password:keepAlive:cleanSession:willTopic:willMsg:willQoS:willRetainFlag:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a7dc7dfa1a3fc8bc9be7b668f39b748d2</Anchor>
@@ -261,6 +266,11 @@
               <Name>runLoopMode</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a3ab2f0926aa51b0dc7969c66bae215e4</Anchor>
+             </Node>
+             <Node>
+              <Name>securityPolicy</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a74f593a2857ccf22a5073a71a408e465</Anchor>
              </Node>
              <Node>
               <Name>status</Name>

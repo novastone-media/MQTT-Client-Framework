@@ -19,7 +19,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MQTTMessage.h"
-
+#import "MQTTSSLSecurityPolicy.h"
 
 typedef enum {
     MQTTEncoderEventReady,
@@ -51,9 +51,16 @@ typedef enum {
 @property (nonatomic)    NSInteger       byteIndex;
 @property (weak, nonatomic)    id<MQTTEncoderDelegate>              delegate;
 
-- (id)initWithStream:(NSOutputStream*)stream
-             runLoop:(NSRunLoop*)runLoop
-         runLoopMode:(NSString*)mode;
+- (id)initWithStream:(NSOutputStream *)stream
+             runLoop:(NSRunLoop *)runLoop
+         runLoopMode:(NSString *)mode;
+
+- (id)initWithStream:(NSOutputStream *)stream
+             runLoop:(NSRunLoop *)runLoop
+         runLoopMode:(NSString *)mode
+      securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
+      securityDomain:(NSString *)securityDomain;
+
 - (void)open;
 - (void)close;
 - (MQTTEncoderStatus)status;

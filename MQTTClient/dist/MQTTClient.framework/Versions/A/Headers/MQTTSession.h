@@ -23,6 +23,7 @@
 #import "MQTTPersistence.h"
 
 @class MQTTSession;
+@class MQTTSSLSecurityPolicy;
 
 /** Session delegate gives your application control over the MQTTSession
  @note handleEvent and newMessage are required interfaces, the rest is optional
@@ -311,6 +312,19 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 @property (strong, nonatomic) NSString *runLoopMode;
 
+// ssl security policy
+/**
+* The security policy used to evaluate server trust for secure connections.
+*
+* if your app using security model which require pinning SSL certificates to helps prevent man-in-the-middle attacks
+* and other vulnerabilities. you need to set securityPolicy to properly value(see MQTTSSLSecurityPolicy.h for more detail).
+*
+* NOTE: about self-signed server certificates:
+* if your server using Self-signed certificates to establish SSL/TLS connection, you need to set property:
+* MQTTSSLSecurityPolicy.allowInvalidCertificates=YES.
+*/
+@property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
+
 /** for mqttio-OBJC backward compatibility
  the connect message used is stored here
  */
@@ -402,12 +416,91 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
                           runLoop:(NSRunLoop *)runLoop
                           forMode:(NSString *)runLoopMode;
 
-/** for mqttio-OBJC backward compatibility
- @param theClientId see initWithClientId for description.
- @return the initialised MQTTSession object
- All other parameters are set to defaults
- */
-- (id)initWithClientId:(NSString*)theClientId;
+/** initialises the MQTT session
+*
+* this constructor can specifies SSL securityPolicy. the default value of securityPolicy is nil(which do nothing).
+*
+* if SSL is enabled, by default it only evaluate server's certificates using CA infrastructure, and for most case, this type of check is enough.
+* However, if your app using security model which require pinning SSL certificates to helps prevent man-in-the-middle attacks
+* and other vulnerabilities. you may need to set securityPolicy to properly value(see MQTTSSLSecurityPolicy.h for more detail).
+*
+* NOTE: about self-signed server certificates:
+* In CA infrastructure, you may establish a SSL/TLS connection with server which using self-signed certificates
+* by install the certificates into OS keychain(either programmatically or manually). however, this method has some disadvantages:
+*  1. every socket you app created will trust certificates you added.
+*  2. if user choice to remove certificates from keychain, you app need to handling certificates re-adding.
+*
+* If you only want to verify the cert for the socket you are creating and for no other sockets in your app, you need to use
+* MQTTSSLSecurityPolicy.
+* And if you use self-signed server certificates, your need to set property: MQTTSSLSecurityPolicy.allowInvalidCertificates=YES
+* (see MQTTSSLSecurityPolicy.h for more detail).
+*
+* @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
+* @param userName an NSString object containing the user's name (or ID) for authentication. May be nil.
+* @param password an NSString object containing the user's password. If userName is nil, password must be nil as well.
+* @param keepAliveInterval The Keep Alive is a time interval measured in seconds. The MQTTClient ensures that the interval between Control Packets being sent does not exceed the Keep Alive value. In the  absence of sending any other Control Packets, the Client sends a PINGREQ Packet.
+* @param cleanSessionFlag specifies if the server should discard previous session information.
+* @param willFlag If the Will Flag is set to YES this indicates that a Will Message MUST be published by the Server when the Server detects that the Client is disconnected for any reason other than the Client flowing a DISCONNECT Packet.
+* @param willTopic If the Will Flag is set to YES, the Will Topic is a string, nil otherwise.
+* @param willMsg If the Will Flag is set to YES the Will Message must be specified, nil otherwise.
+* @param willQoS specifies the QoS level to be used when publishing the Will Message. If the Will Flag is set to NO, then the Will QoS MUST be set to 0. If the Will Flag is set to YES, the value of Will QoS can be 0 (0x00), 1 (0x01), or 2 (0x02).
+* @param willRetainFlag indicates if the server should publish the Will Messages with retainFlag. If the Will Flag is set to NO, then the Will Retain Flag MUST be set to NO . If the Will Flag is set to YES: If Will Retain is set to NO, the Server MUST publish the Will Message as a non-retained publication [MQTT-3.1.2-14]. If Will Retain is set to YES, the Server MUST publish the Will Message as a retained publication [MQTT-3.1.2-15].
+* @param protocolLevel specifies the protocol to be used. The value of the Protocol Level field for the version 3.1.1 of the protocol is 4. The value for the version 3.1 is 3.
+* @param runLoop The runLoop where the streams are scheduled. If nil, defaults to [NSRunLoop currentRunLoop].
+* @param runLoopMode The runLoopMode where the streams are scheduled. If nil, defaults to NSRunLoopCommonModes.
+* @param securityPolicy The security policy used to evaluate server trust for secure connections.
+* @return the initialised MQTTSession object
+* @exception NSInternalInconsistencyException if the parameters are invalid
+*
+* @code
+    #import "MQTTClient.h"
+
+    NSString* certificate = [[NSBundle bundleForClass:[MQTTSession class]] pathForResource:@"certificate" ofType:@"cer"]; 
+    MQTTSSLSecurityPolicy *securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+    securityPolicy.pinnedCertificates = @[ [NSData dataWithContentsOfFile:certificate] ];
+    securityPolicy.allowInvalidCertificates = YES; // if your certificate is self-signed(which didn't coupled with CA infrastructure)
+
+    MQTTSession *session = [[MQTTSession alloc]
+                            initWithClientId:@"example-1234"
+                            userName:@"user"
+                            password:@"secret"
+                            keepAlive:60
+                            cleanSession:YES
+                            will:YES
+                            willTopic:@"example/status"
+                            willMsg:[[@"Client off-line"] dataUsingEncoding:NSUTF8StringEncoding]
+                            willQoS:2
+                            willRetainFlag:YES
+                            protocolLevel:4
+                            runLoop:[NSRunLoop currentRunLoop]
+                            forMode:NSRunLoopCommonModes
+                            securityPolicy:securityPolicy];
+
+    [session connectToHost:@"example-1234" port:1883 usingSSL:YES];
+@endcode
+*/
+- (MQTTSession *)initWithClientId:(NSString *)clientId
+                         userName:(NSString *)userName
+                         password:(NSString *)password
+                        keepAlive:(UInt16)keepAliveInterval
+                     cleanSession:(BOOL)cleanSessionFlag
+                             will:(BOOL)willFlag
+                        willTopic:(NSString *)willTopic
+                          willMsg:(NSData *)willMsg
+                          willQoS:(MQTTQosLevel)willQoS
+                   willRetainFlag:(BOOL)willRetainFlag
+                    protocolLevel:(UInt8)protocolLevel
+                          runLoop:(NSRunLoop *)runLoop
+                          forMode:(NSString *)runLoopMode
+                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy;
+
+/**
+* for mqttio-OBJC backward compatibility
+* @param theClientId see initWithClientId for description.
+* @return the initialised MQTTSession object
+* All other parameters are set to defaults
+*/
+- (id)initWithClientId:(NSString *)theClientId;
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.

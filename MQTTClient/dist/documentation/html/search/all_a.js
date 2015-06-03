@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['securitypolicy',['securityPolicy',['../interface_m_q_t_t_session.html#a74f593a2857ccf22a5073a71a408e465',1,'MQTTSession']]],
   ['sending_3atype_3aqos_3aretained_3aduped_3amid_3adata_3a',['sending:type:qos:retained:duped:mid:data:',['../protocol_m_q_t_t_session_delegate-p.html#a8c16339f900bfe2aa98a2aabdca44484',1,'MQTTSessionDelegate-p']]],
   ['session_3ahandleevent_3a',['session:handleEvent:',['../protocol_m_q_t_t_session_delegate-p.html#a469397d413d288d61b98112f643d0f9c',1,'MQTTSessionDelegate-p']]],
   ['session_3anewmessage_3aontopic_3a',['session:newMessage:onTopic:',['../protocol_m_q_t_t_session_delegate-p.html#a7c379d26811e242b52a05d09cf60d804',1,'MQTTSessionDelegate-p']]],

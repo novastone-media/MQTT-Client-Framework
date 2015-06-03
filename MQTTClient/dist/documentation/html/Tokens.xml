@@ -34,6 +34,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>accf20d5a5b630ff96b84ab88f92468fe</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>initWithClientId:</Name>
       <APILanguage>occ</APILanguage>
       <Type>instm</Type>
@@ -596,6 +607,16 @@
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
     <Anchor>a3ab2f0926aa51b0dc7969c66bae215e4</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>securityPolicy</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instp</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a74f593a2857ccf22a5073a71a408e465</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
