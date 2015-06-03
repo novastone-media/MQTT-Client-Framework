@@ -319,8 +319,8 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 * if your app using security model which require pinning SSL certificates to helps prevent man-in-the-middle attacks
 * and other vulnerabilities. you need to set securityPolicy to properly value(see MQTTSSLSecurityPolicy.h for more detail).
 *
-* NOTE: about self-signed server certification:
-* if your server using Self-signed certification to establish SSL/TLS connection, you need to set property:
+* NOTE: about self-signed server certificates:
+* if your server using Self-signed certificates to establish SSL/TLS connection, you need to set property:
 * MQTTSSLSecurityPolicy.allowInvalidCertificates=YES.
 */
 @property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
@@ -420,19 +420,19 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 *
 * this constructor can specifies SSL securityPolicy. the default value of securityPolicy is nil(which do nothing).
 *
-* if SSL is enabled, by default it only evaluate server's certification using CA infrastructure, and for most case, this type of check is enough.
+* if SSL is enabled, by default it only evaluate server's certificates using CA infrastructure, and for most case, this type of check is enough.
 * However, if your app using security model which require pinning SSL certificates to helps prevent man-in-the-middle attacks
 * and other vulnerabilities. you may need to set securityPolicy to properly value(see MQTTSSLSecurityPolicy.h for more detail).
 *
-* NOTE: about self-signed server certification:
-* In CA infrastructure, you may establish a SSL/TLS connection with server which using self-signed certification
-* by install the certification into OS keychain(either programmatically or manually). however, this method has some disadvantages:
-*  1. every socket you app created will trust certification you added.
-*  2. if user choice to remove certification from keychain, you app need to handling certification re-adding.
+* NOTE: about self-signed server certificates:
+* In CA infrastructure, you may establish a SSL/TLS connection with server which using self-signed certificates
+* by install the certificates into OS keychain(either programmatically or manually). however, this method has some disadvantages:
+*  1. every socket you app created will trust certificates you added.
+*  2. if user choice to remove certificates from keychain, you app need to handling certificates re-adding.
 *
 * If you only want to verify the cert for the socket you are creating and for no other sockets in your app, you need to use
 * MQTTSSLSecurityPolicy.
-* And if you use self-signed server certification, your need to set property: MQTTSSLSecurityPolicy.allowInvalidCertificates=YES
+* And if you use self-signed server certificates, your need to set property: MQTTSSLSecurityPolicy.allowInvalidCertificates=YES
 * (see MQTTSSLSecurityPolicy.h for more detail).
 *
 * @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.

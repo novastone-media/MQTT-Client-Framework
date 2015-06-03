@@ -84,7 +84,7 @@ Note: Array item type: NSData - Bytes of X.509 certificate file in der format.
 
 /**
 Whether or not to trust servers with an invalid or expired SSL certificates. Defaults to `NO`.
-Note: If your server-certifications are self signed, your should set this property to 'YES'.
+Note: If your server-certificates are self signed, your should set this property to 'YES'.
 */
 @property (nonatomic, assign) BOOL allowInvalidCertificates;
 

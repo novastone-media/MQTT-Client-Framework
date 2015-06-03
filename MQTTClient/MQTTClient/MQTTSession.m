@@ -447,9 +447,9 @@
         }
         else
         {
-            // delegate certification verify operation to our secure policy.
+            // delegate certificates verify operation to our secure policy.
             // by disabling chain validation, it becomes our responsibility to verify that the host at the other end can be trusted.
-            // the server's certification will be verified during MQTT encoder/decoder processing.
+            // the server's certificates will be verified during MQTT encoder/decoder processing.
             const void *keys[] = {kCFStreamSSLLevel, kCFStreamSSLValidatesCertificateChain};
             const void *vals[] = {kCFStreamSocketSecurityLevelNegotiatedSSL, kCFBooleanFalse};
             sslSettings = CFDictionaryCreate(kCFAllocatorDefault, keys, vals, sizeof(keys) / sizeof(void*),
