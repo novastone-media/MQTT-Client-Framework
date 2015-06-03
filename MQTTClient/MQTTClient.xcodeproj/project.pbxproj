@@ -72,6 +72,21 @@
 		84B1AFF2196D99170056B959 /* MQTTSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B1AFF0196D99170056B959 /* MQTTSessionManager.h */; };
 		84B1AFF3196D99170056B959 /* MQTTSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B1AFF1196D99170056B959 /* MQTTSessionManager.m */; };
 		84B739B31A66F07A00B103F4 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B739B21A66F07A00B103F4 /* SwiftTests.swift */; };
+		C21D3C6C1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = C21D3C6A1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C21D3C6D1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = C21D3C6B1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.m */; };
+		C21D3C711B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */; };
+		C21D3C961B1EC4000012DD2F /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
+		C21D3C971B1EC4010012DD2F /* NoDomains.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FEBFE55BBF61F564981F /* NoDomains.cer */; };
+		C21D3C981B1EC4030012DD2F /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
+		C21D3C991B1EC4070012DD2F /* httpbinorg_01162016.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F79296C7162FC7094249 /* httpbinorg_01162016.cer */; };
+		C21D3C9A1B1EC4090012DD2F /* AddTrust_External_CA_Root.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE76A4BC8055ED6BE604 /* AddTrust_External_CA_Root.cer */; };
+		C21D3C9B1B1EC40A0012DD2F /* COMODO_RSA_Certification_Authority.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FBB3707F74CF8A39DC5D /* COMODO_RSA_Certification_Authority.cer */; };
+		C21D3C9C1B1EC40C0012DD2F /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F89078C0CB2EE866B368 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer */; };
+		C21D3C9E1B1EC4400012DD2F /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
+		C21D3CA01B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */; };
+		C21D3CA21B1EC63E0012DD2F /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
+		C21D3CA41B1EC6420012DD2F /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
+		C21D3CA61B1EC6450012DD2F /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +144,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = foobar.com.cer; sourceTree = "<group>"; };
+		6BC7F79296C7162FC7094249 /* httpbinorg_01162016.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = httpbinorg_01162016.cer; sourceTree = "<group>"; };
+		6BC7F89078C0CB2EE866B368 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = COMODO_RSA_Domain_Validation_Secure_Server_CA.cer; sourceTree = "<group>"; };
+		6BC7FBB3707F74CF8A39DC5D /* COMODO_RSA_Certification_Authority.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = COMODO_RSA_Certification_Authority.cer; sourceTree = "<group>"; };
+		6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = AltName.cer; sourceTree = "<group>"; };
+		6BC7FE76A4BC8055ED6BE604 /* AddTrust_External_CA_Root.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = AddTrust_External_CA_Root.cer; sourceTree = "<group>"; };
+		6BC7FEBFE55BBF61F564981F /* NoDomains.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = NoDomains.cer; sourceTree = "<group>"; };
 		840507C2193DCE4B002EBBD2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		840507C4193DCF2E002EBBD2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientPublishTests.m; sourceTree = "<group>"; };
@@ -178,6 +200,16 @@
 		84B739B11A66F07900B103F4 /* MQTTClientTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MQTTClientTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		84B739B21A66F07A00B103F4 /* SwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTests.swift; sourceTree = "<group>"; };
 		84E0010118E22C9600C07F23 /* MQTTClientTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTClientTests.h; sourceTree = "<group>"; };
+		C21D3C6A1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTSSLSecurityPolicy.h; sourceTree = "<group>"; };
+		C21D3C6B1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSSLSecurityPolicy.m; sourceTree = "<group>"; };
+		C21D3C6E1B1EBB0E0012DD2F /* MQTTClientSubscriptionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientSubscriptionTests.m; sourceTree = "<group>"; };
+		C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSSLSecurityPolicyTests.m; sourceTree = "<group>"; };
+		C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ADNNetServerTrustChain; sourceTree = "<group>"; };
+		C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HTTPBinOrgServerTrustChain; sourceTree = "<group>"; };
+		C21D3CA11B1EC63E0012DD2F /* adn_0.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_0.cer; path = ADN.net/ADNNetServerTrustChain/adn_0.cer; sourceTree = "<group>"; };
+		C21D3CA31B1EC6420012DD2F /* adn_1.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_1.cer; path = ADN.net/ADNNetServerTrustChain/adn_1.cer; sourceTree = "<group>"; };
+		C21D3CA51B1EC6450012DD2F /* adn_2.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_2.cer; path = ADN.net/ADNNetServerTrustChain/adn_2.cer; sourceTree = "<group>"; };
+		C21D3CA71B1ED2F40012DD2F /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +252,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6BC7F2729125FE9CAD2DBEAD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C21D3CA71B1ED2F40012DD2F /* server.der */,
+				C21D3CA11B1EC63E0012DD2F /* adn_0.cer */,
+				C21D3CA31B1EC6420012DD2F /* adn_1.cer */,
+				C21D3CA51B1EC6450012DD2F /* adn_2.cer */,
+				6BC7F325461BF8B697FD80A9 /* ADN.net */,
+				6BC7F28A42D484BA33A2CDF7 /* HTTPBin.org */,
+				6BC7F6500E0B0ACB831C6F97 /* SelfSigned */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		6BC7F28A42D484BA33A2CDF7 /* HTTPBin.org */ = {
+			isa = PBXGroup;
+			children = (
+				C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */,
+				6BC7F79296C7162FC7094249 /* httpbinorg_01162016.cer */,
+				6BC7FE76A4BC8055ED6BE604 /* AddTrust_External_CA_Root.cer */,
+				6BC7FBB3707F74CF8A39DC5D /* COMODO_RSA_Certification_Authority.cer */,
+				6BC7F89078C0CB2EE866B368 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer */,
+			);
+			path = HTTPBin.org;
+			sourceTree = "<group>";
+		};
+		6BC7F325461BF8B697FD80A9 /* ADN.net */ = {
+			isa = PBXGroup;
+			children = (
+				C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */,
+			);
+			path = ADN.net;
+			sourceTree = "<group>";
+		};
+		6BC7F6500E0B0ACB831C6F97 /* SelfSigned */ = {
+			isa = PBXGroup;
+			children = (
+				6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */,
+				6BC7FEBFE55BBF61F564981F /* NoDomains.cer */,
+				6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */,
+			);
+			path = SelfSigned;
+			sourceTree = "<group>";
+		};
 		840F3C641A80054D00575235 /* MQTTSDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +370,8 @@
 		8461912F1883E56800101409 /* MQTTClient */ = {
 			isa = PBXGroup;
 			children = (
+				C21D3C6A1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.h */,
+				C21D3C6B1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.m */,
 				846191FC1883E8FD00101409 /* MQTTDecoder.h */,
 				846191E81883E8B900101409 /* MQTTDecoder.m */,
 				846191FD1883E8FD00101409 /* MQTTEncoder.h */,
@@ -323,6 +401,8 @@
 		846191431883E56800101409 /* MQTTClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */,
+				C21D3C6E1B1EBB0E0012DD2F /* MQTTClientSubscriptionTests.m */,
 				84E0010118E22C9600C07F23 /* MQTTClientTests.h */,
 				846191491883E56800101409 /* MQTTClientTests.m */,
 				84B1AFED196C7AF60056B959 /* MultiThreadingTests.m */,
@@ -334,6 +414,7 @@
 				8442BEE81A97B15100D00E55 /* SwiftTests2.swift */,
 				84B739B11A66F07900B103F4 /* MQTTClientTests-Bridging-Header.h */,
 				846191441883E56800101409 /* Supporting Files */,
+				6BC7F2729125FE9CAD2DBEAD /* Resources */,
 			);
 			path = MQTTClientTests;
 			sourceTree = "<group>";
@@ -359,6 +440,7 @@
 				846192021883E8FD00101409 /* MQTTEncoder.h in Headers */,
 				846192031883E8FD00101409 /* MQTTMessage.h in Headers */,
 				846243691ABE9E5900B72519 /* MQTTPersistence.h in Headers */,
+				C21D3C6C1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.h in Headers */,
 				846192041883E8FD00101409 /* MQTTSession.h in Headers */,
 				846192011883E8FD00101409 /* MQTTDecoder.h in Headers */,
 			);
@@ -494,6 +576,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				846191481883E56800101409 /* InfoPlist.strings in Resources */,
+				C21D3C9E1B1EC4400012DD2F /* ADNNetServerTrustChain in Resources */,
+				C21D3CA01B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain in Resources */,
+				C21D3C991B1EC4070012DD2F /* httpbinorg_01162016.cer in Resources */,
+				C21D3C9A1B1EC4090012DD2F /* AddTrust_External_CA_Root.cer in Resources */,
+				C21D3C9B1B1EC40A0012DD2F /* COMODO_RSA_Certification_Authority.cer in Resources */,
+				C21D3C9C1B1EC40C0012DD2F /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */,
+				C21D3C961B1EC4000012DD2F /* AltName.cer in Resources */,
+				C21D3C971B1EC4010012DD2F /* NoDomains.cer in Resources */,
+				C21D3C981B1EC4030012DD2F /* foobar.com.cer in Resources */,
+				C21D3CA21B1EC63E0012DD2F /* adn_0.cer in Resources */,
+				C21D3CA61B1EC6450012DD2F /* adn_2.cer in Resources */,
+				C21D3CA41B1EC6420012DD2F /* adn_1.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,6 +666,7 @@
 				84B1AFF3196D99170056B959 /* MQTTSessionManager.m in Sources */,
 				846191EF1883E8B900101409 /* MQTTMessage.m in Sources */,
 				846191EE1883E8B900101409 /* MQTTEncoder.m in Sources */,
+				C21D3C6D1B1EBAC70012DD2F /* MQTTSSLSecurityPolicy.m in Sources */,
 				846191F01883E8B900101409 /* MQTTSession.m in Sources */,
 				846191ED1883E8B900101409 /* MQTTDecoder.m in Sources */,
 				8462436A1ABE9E5900B72519 /* MQTTPersistence.m in Sources */,
@@ -582,6 +677,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C21D3C711B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				840785A918A2AA26009158D5 /* MQTTClientPublishTests.m in Sources */,
 				8461914A1883E56800101409 /* MQTTClientTests.m in Sources */,
 				844C93AB1A81645D00CA4A03 /* MQTTACLTests.m in Sources */,

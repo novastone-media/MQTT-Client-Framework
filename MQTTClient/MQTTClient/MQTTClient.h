@@ -17,4 +17,4 @@
 
 #import <MQTTClient/MQTTSession.h>
 #import <MQTTClient/MQTTMessage.h>
-
+#import <MQTTClient/MQTTSSLSecurityPolicy.h>

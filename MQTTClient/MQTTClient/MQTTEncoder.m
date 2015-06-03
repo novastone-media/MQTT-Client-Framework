@@ -25,17 +25,39 @@
 #define DEBUGENC FALSE
 #endif
 
+@interface MQTTEncoder()
+@property BOOL securityPolicyAlreadyApplied;
+@property(strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
+@property(strong, nonatomic) NSString *securityDomain;
+- (BOOL)applySSLSecurityPolicy:(NSStream *)writeStream withEvent:(NSStreamEvent)eventCode;
+@end
 
 @implementation MQTTEncoder
 
-- (id)initWithStream:(NSOutputStream*)stream
-             runLoop:(NSRunLoop*)runLoop
-         runLoopMode:(NSString*)mode {
+- (id)initWithStream:(NSOutputStream *)stream
+             runLoop:(NSRunLoop *)runLoop
+         runLoopMode:(NSString *)mode {
+    return [self initWithStream:stream
+                        runLoop:runLoop
+                    runLoopMode:mode
+                 securityPolicy:nil
+                 securityDomain:nil];
+}
+
+- (id)initWithStream:(NSOutputStream *)stream
+             runLoop:(NSRunLoop *)runLoop
+         runLoopMode:(NSString *)mode
+      securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
+      securityDomain:(NSString *)securityDomain
+{
     self.status = MQTTEncoderStatusInitializing;
     self.stream = stream;
     [self.stream setDelegate:self];
     self.runLoop = runLoop;
     self.runLoopMode = mode;
+    self.securityPolicy = securityPolicy;
+    self.securityDomain = securityDomain;
+    self.securityPolicyAlreadyApplied = NO;
     return self;
 }
 
@@ -51,6 +73,27 @@
     [self.stream setDelegate:nil];
 }
 
+- (BOOL)applySSLSecurityPolicy:(NSStream *)writeStream withEvent:(NSStreamEvent)eventCode;
+{
+    if(!self.securityPolicy){
+        return YES;
+    }
+
+    // apply the policy only once.
+    if(self.securityPolicyAlreadyApplied){
+       return YES;
+    }
+
+    SecTrustRef serverTrust = (__bridge SecTrustRef) [writeStream propertyForKey: (__bridge NSString *)kCFStreamPropertySSLPeerTrust];
+    if(!serverTrust){
+        return NO;
+    }
+
+    BOOL isValid = [self.securityPolicy evaluateServerTrust:serverTrust forDomain:self.securityDomain];
+    self.securityPolicyAlreadyApplied = isValid;
+    return isValid;
+}
+
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
     if (DEBUGENC) NSLog(@"%@ handleEvent 0x%02lx", self, (long)eventCode);
     if(self.stream == nil) {
@@ -61,12 +104,22 @@
     switch (eventCode) {
         case NSStreamEventOpenCompleted:
             break;
-        case NSStreamEventHasSpaceAvailable:
+        case NSStreamEventHasSpaceAvailable: {
+            // apply security before process any data
+            if(![self applySSLSecurityPolicy:sender withEvent:eventCode]){
+                self.status = MQTTEncoderStatusError;
+                NSError * sslError = [NSError errorWithDomain:@"MQTT"
+                                                         code:errSSLXCertChainInvalid
+                        userInfo:@{NSLocalizedDescriptionKey : @"Unable to apply security policy, the SSL connection is insecure!"}];
+                [self.delegate encoder:self handleEvent:MQTTEncoderEventErrorOccurred error:sslError];
+            }
+
             if (self.status == MQTTEncoderStatusInitializing) {
                 self.status = MQTTEncoderStatusReady;
                 [self.delegate encoder:self handleEvent:MQTTEncoderEventReady error:nil];
             }
             else if (self.status == MQTTEncoderStatusReady) {
+                // notify handler that we are ready and waiting for send event.
                 [self.delegate encoder:self handleEvent:MQTTEncoderEventReady error:nil];
             }
             else if (self.status == MQTTEncoderStatusSending) {
@@ -91,6 +144,7 @@
                 }
             }
             break;
+        }
         case NSStreamEventErrorOccurred:
         case NSStreamEventEndEncountered:
             if (self.status != MQTTEncoderStatusError) {
