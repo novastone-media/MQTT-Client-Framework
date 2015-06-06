@@ -160,7 +160,9 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeCloseExpected:@"#MQTTClient" atLevel:0];
+        NSString *topic = @"#MQTTClient";
+        NSLog(@"subscribing to topic %@", topic);
+        [self testSubscribeCloseExpected:topic atLevel:0];
         [self shutdown:parameters];
     }
 }
@@ -215,7 +217,9 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testSubscribeCloseExpected:@"MQTTClient+" atLevel:0];
+        NSString *topic = @"MQTTClient+";
+        NSLog(@"subscribing to topic %@", topic);
+        [self testSubscribeCloseExpected:topic atLevel:0];
         [self shutdown:parameters];
     }
 }
@@ -475,7 +479,7 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testUnsubscribeTopic:nil];
+        [self testUnsubscribeTopicCloseExpected:nil];
         [self shutdown:parameters];
     }
 }
@@ -497,7 +501,7 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        [self testMultiUnsubscribeTopic:@[]];
+        [self testMultiUnsubscribeTopicCloseExpected:@[]];
         [self shutdown:parameters];
     }
 }
@@ -665,13 +669,32 @@
     [self performSelector:@selector(ackTimeout:)
                withObject:nil
                afterDelay:self.timeoutValue];
-
+    
     while (self.unsubMid == 0 && !self.timeout && self.event == -1) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     XCTAssertFalse(self.timeout, @"No UNSUBACK received [MQTT-3.10.3-5] within %f seconds", self.timeoutValue);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     XCTAssertEqual(self.unsubMid, self.sentUnsubMid, @"msgID(%d) in UNSUBACK does not match msgID(%d) in UNSUBSCRIBE [MQTT-3.10.3-4]", self.unsubMid, self.sentUnsubMid);
+}
+
+- (void)testMultiUnsubscribeTopicCloseExpected:(NSArray *)topics
+{
+    self.unsubMid = 0;
+    self.event = -1;
+    self.timeout = false;
+    self.sentUnsubMid = [self.session unsubscribeTopics:topics];
+    NSLog(@"sent mid(UNSUBSCRIBE multi): %d", self.sentUnsubMid);
+    [self performSelector:@selector(ackTimeout:)
+               withObject:nil
+               afterDelay:self.timeoutValue];
+    
+    while (self.unsubMid == 0 && !self.timeout && self.event == -1) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+    XCTAssertFalse(self.timeout, @"No close within %f seconds",self.timeoutValue);
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
 }
 
 - (void)ackTimeout:(NSTimeInterval)timeout

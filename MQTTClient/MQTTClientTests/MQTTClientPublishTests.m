@@ -242,8 +242,12 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
+
+        NSString *topic = [NSString stringWithFormat:@"%@/+%s", TOPIC, __FUNCTION__];
+        NSLog(@"publishing to topic:%@", topic);
+
         [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
-                               onTopic:[NSString stringWithFormat:@"%@/+%s", TOPIC, __FUNCTION__]
+                               onTopic:topic
                                 retain:YES
                                atLevel:2];
         [self shutdown:parameters];
@@ -256,8 +260,11 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
+        NSString *topic = [NSString stringWithFormat:@"%@/#%s", TOPIC, __FUNCTION__];
+        NSLog(@"publishing to topic:%@", topic);
+
         [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
-                               onTopic:[NSString stringWithFormat:@"%@/#%s", TOPIC, __FUNCTION__]
+                               onTopic:topic
                                 retain:YES
                                atLevel:2];
         [self shutdown:parameters];
