@@ -2,10 +2,11 @@ MQTT-Client-Framework iOS Release Notes
 =======================================
 
 ## MQTT-Client-Framework 0.2.1
->Release date: 2015-06-??
+>Release date: 2015-06-19
 
-Further testing results...
+Multithreading Violation with NSManagedObjectContext
 
+[NEW] merged PR #37 - thanks
 [NEW] elaborated on test cases
 
 ## MQTT-Client-Framework 0.2.0

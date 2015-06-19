@@ -401,9 +401,9 @@
 		846191431883E56800101409 /* MQTTClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				84E0010118E22C9600C07F23 /* MQTTClientTests.h */,
 				C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */,
 				C21D3C6E1B1EBB0E0012DD2F /* MQTTClientSubscriptionTests.m */,
-				84E0010118E22C9600C07F23 /* MQTTClientTests.h */,
 				846191491883E56800101409 /* MQTTClientTests.m */,
 				84B1AFED196C7AF60056B959 /* MultiThreadingTests.m */,
 				844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */,

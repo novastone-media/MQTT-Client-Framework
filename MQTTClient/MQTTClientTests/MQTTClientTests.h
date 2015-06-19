@@ -18,7 +18,7 @@
 #define BULK 99 
 
 //#define BROKERLIST @[@"local", @"mosquitto", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd"]
-#define BROKERLIST @[@"vernemq"]
+#define BROKERLIST @[@"local"]
 
 #define BROKERS @{ \
 \
