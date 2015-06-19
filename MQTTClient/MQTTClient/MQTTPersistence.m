@@ -72,12 +72,12 @@ static unsigned long long fileSystemFreeSize;
 }
 
 - (MQTTFlow *)storeMessageForClientId:(NSString *)clientId
-                          topic:(NSString *)topic
-                           data:(NSData *)data
-                     retainFlag:(BOOL)retainFlag
-                            qos:(MQTTQosLevel)qos
-                          msgId:(UInt16)msgId
-                   incomingFlag:(BOOL)incomingFlag {
+                                topic:(NSString *)topic
+                                 data:(NSData *)data
+                           retainFlag:(BOOL)retainFlag
+                                  qos:(MQTTQosLevel)qos
+                                msgId:(UInt16)msgId
+                         incomingFlag:(BOOL)incomingFlag {
     if (([self allFlowsforClientId:clientId incomingFlag:incomingFlag].count <= self.maxMessages) &&
         (fileSize <= self.maxSize)) {
         MQTTFlow *flow = [self createFlowforClientId:clientId
@@ -101,7 +101,9 @@ static unsigned long long fileSystemFreeSize;
 }
 
 - (void)deleteFlow:(MQTTFlow *)flow {
-    [self.managedObjectContext deleteObject:flow];
+    [self.managedObjectContext performBlockAndWait:^{
+        [self.managedObjectContext deleteObject:flow];
+    }];
 }
 
 - (void)deleteAllFlowsForClientId:(NSString *)clientId {
@@ -117,18 +119,20 @@ static unsigned long long fileSystemFreeSize;
 }
 
 - (void)sync {
-    if (self.managedObjectContext.hasChanges) {
-        if (DEBUGPERSIST) NSLog(@"sync: i%lu u%lu d%lu",
-                                (unsigned long)self.managedObjectContext.insertedObjects.count,
-                                (unsigned long)self.managedObjectContext.updatedObjects.count,
-                                (unsigned long)self.managedObjectContext.deletedObjects.count
-                                );
-        NSError *error = nil;
-        if (![self.managedObjectContext save:&error]) {
-            if (DEBUGPERSIST) NSLog(@"sync %@", error);
+    [self.managedObjectContext performBlockAndWait:^{
+        if (self.managedObjectContext.hasChanges) {
+            if (DEBUGPERSIST) NSLog(@"sync: i%lu u%lu d%lu",
+                                    (unsigned long)self.managedObjectContext.insertedObjects.count,
+                                    (unsigned long)self.managedObjectContext.updatedObjects.count,
+                                    (unsigned long)self.managedObjectContext.deletedObjects.count
+                                    );
+            NSError *error = nil;
+            if (![self.managedObjectContext save:&error]) {
+                if (DEBUGPERSIST) NSLog(@"sync %@", error);
+            }
+            [self sizes];
         }
-        [self sizes];
-    }
+    }];
 }
 
 - (NSArray *)allFlowsforClientId:(NSString *)clientId
@@ -140,12 +144,14 @@ static unsigned long long fileSystemFreeSize;
                               @(incomingFlag)
                               ];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"deadline" ascending:YES]];
-    
-    NSError *error = nil;
-    NSArray *flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    if (!flows) {
-        if (DEBUGPERSIST) NSLog(@"allFlowsforClientId %@", error);
-    }
+    __block NSArray *flows;
+    [self.managedObjectContext performBlockAndWait:^{
+        NSError *error = nil;
+        flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+        if (!flows) {
+            if (DEBUGPERSIST) NSLog(@"allFlowsforClientId %@", error);
+        }
+    }];
     return flows;
 }
 
@@ -160,9 +166,11 @@ static unsigned long long fileSystemFreeSize;
                               @(incomingFlag),
                               @(messageId)
                               ];
-    NSError *error = nil;
-    NSArray *flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    
+    __block NSArray *flows;
+    __block NSError *error = nil;
+    [self.managedObjectContext performBlockAndWait:^{
+        flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    }];
     if (!flows) {
         if (DEBUGPERSIST) NSLog(@"flowForClientId %@", error);
     } else {
