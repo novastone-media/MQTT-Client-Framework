@@ -604,6 +604,102 @@
     }
 }
 
+/*
+ * Client Certificate
+ */
+- (void)test_client_certificate {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        if (!parameters[@"clientp12"]) continue;
+        if (!parameters[@"clientp12pass"]) continue;
+        
+        NSString *path = [[NSBundle bundleForClass:[MQTTClientTests class]] pathForResource:parameters[@"clientp12"]
+                                                                                     ofType:@"p12"];
+        
+        NSArray *myCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
+        if (!myCerts) {
+            XCTFail(@"invalid p12 file");
+            continue;
+        }
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:nil
+                                                    password:nil
+                                                   keepAlive:60
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:4
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:nil
+                                                certificates:myCerts];
+        [self connect:self.session parameters:parameters];
+        [self.session subscribeTopic:TOPIC];
+        [self.session publishData:[@"Data" dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC];
+        
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+        [self shutdown:parameters];
+    }
+}
+
+/*
+ * Pinned Certificate
+ */
+- (void)test_pinned_certificate {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        if (!parameters[@"serverCER"]) continue;
+
+        NSString *path = [[NSBundle bundleForClass:[MQTTClientTests class]] pathForResource:parameters[@"serverCER"]
+                                                                                     ofType:@"cer"];
+        if (!path) {
+            XCTFail(@"cer file not found");
+            continue;
+        }
+        
+        NSData *certificateData = [NSData dataWithContentsOfFile:path];
+        if (!certificateData) {
+            XCTFail(@"error reading cer file");
+            continue;
+        }
+    
+        MQTTSSLSecurityPolicy *secpol = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+        secpol.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
+        secpol.validatesCertificateChain = NO;
+        secpol.allowInvalidCertificates = TRUE;
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:nil
+                                                    password:nil
+                                                   keepAlive:60
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:4
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:secpol
+                                                certificates:nil];
+        [self connect:self.session parameters:parameters];
+        [self.session subscribeTopic:TOPIC];
+        [self.session publishData:[@"Data" dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC];
+        
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+        [self shutdown:parameters];
+    }
+}
+
 #pragma mark helpers
 
 - (void)no_cleansession:(MQTTQosLevel)qos {
@@ -783,7 +879,7 @@
 }
 
 - (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
-    //NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
+    NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
     self.type = type;
 }
 
@@ -792,13 +888,13 @@
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
-    //NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
+    NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
     self.error = error;
 }
 
 - (void)ackTimeout:(NSNumber *)timeout {
-    //NSLog(@"ackTimeout: %f", [timeout doubleValue]);
+    NSLog(@"ackTimeout: %f", [timeout doubleValue]);
     self.timeout = TRUE;
 }
 
@@ -806,12 +902,11 @@
     session.delegate = self;
     self.event = -1;
 
-    /* NSLog(@"connecting to:%@ port:%d tls:%d",
+    NSLog(@"connecting to:%@ port:%d tls:%d",
           parameters[@"host"],
           [parameters[@"port"] intValue],
-          [parameters[@"tls"] boolValue],
-          self.);
-     */
+          [parameters[@"tls"] boolValue]
+    );
     
     [session connectToHost:parameters[@"host"]
                       port:[parameters[@"port"] intValue]
@@ -843,7 +938,7 @@
         [self.session close];
 
         while (self.event == -1 && !self.timeout) {
-            //NSLog(@"waiting for disconnect");
+            NSLog(@"waiting for disconnect");
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
 

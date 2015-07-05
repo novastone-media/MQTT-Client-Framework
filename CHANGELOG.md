@@ -1,6 +1,13 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.2.2
+>Release date: 2015-07-05
+
+Support TLS Client Certificates
+
+[NEW] Client Certificates
+
 ## MQTT-Client-Framework 0.2.1
 >Release date: 2015-06-19
 

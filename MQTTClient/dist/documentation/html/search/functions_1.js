@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['clientcertsfromp12_3apassphrase_3a',['clientCertsFromP12:passphrase:',['../interface_m_q_t_t_session.html#a77824ce439d089ae8811acc2ed119824',1,'MQTTSession']]],
   ['close',['close',['../interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440',1,'MQTTSession']]],
   ['closeandwait',['closeAndWait',['../interface_m_q_t_t_session.html#a08591f1296d67a36a8fa31d021bf544a',1,'MQTTSession']]],
   ['connectandwaittohost_3aport_3ausingssl_3a',['connectAndWaitToHost:port:usingSSL:',['../interface_m_q_t_t_session.html#abde5a7876357d84972d414fe25843f89',1,'MQTTSession']]],

@@ -125,16 +125,50 @@
                     protocolLevel:(UInt8)protocolLevel
                           runLoop:(NSRunLoop *)runLoop
                           forMode:(NSString *)runLoopMode
+                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy {
+    return [self initWithClientId:clientId
+                         userName:userName
+                         password:password
+                        keepAlive:keepAliveInterval
+                     cleanSession:cleanSessionFlag
+                             will:willFlag
+                        willTopic:willTopic
+                          willMsg:willMsg
+                          willQoS:willQoS
+                   willRetainFlag:willRetainFlag
+                    protocolLevel:protocolLevel
+                          runLoop:runLoop
+                          forMode:runLoopMode
+                   securityPolicy:securityPolicy
+                     certificates:nil];
+
+}
+
+- (MQTTSession *)initWithClientId:(NSString *)clientId
+                         userName:(NSString *)userName
+                         password:(NSString *)password
+                        keepAlive:(UInt16)keepAliveInterval
+                     cleanSession:(BOOL)cleanSessionFlag
+                             will:(BOOL)willFlag
+                        willTopic:(NSString *)willTopic
+                          willMsg:(NSData *)willMsg
+                          willQoS:(MQTTQosLevel)willQoS
+                   willRetainFlag:(BOOL)willRetainFlag
+                    protocolLevel:(UInt8)protocolLevel
+                          runLoop:(NSRunLoop *)runLoop
+                          forMode:(NSString *)runLoopMode
                    securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
-{
+                     certificates:(NSArray *)certificates {
     self = [super init];
     if (DEBUGSESS) NSLog(@"MQTTClient %s %s", __DATE__, __TIME__);
 
     if (DEBUGSESS)
         NSLog(@"%@ %s:%d - initWithClientId:%@ userName:%@ keepAlive:%d cleanSession:%d will:%d willTopic:%@ "
-                        "willMsg:%@ willQos:%d willRetainFlag:%d protocolLevel:%d runLoop:%@ forMode:%@ securityPolicy:%@", self, __func__, __LINE__,
-                clientId, userName, keepAliveInterval,cleanSessionFlag, willFlag, willTopic,
-                willMsg, willQoS, willRetainFlag, protocolLevel, @"runLoop", runLoopMode, securityPolicy);
+              "willMsg:%@ willQos:%d willRetainFlag:%d protocolLevel:%d runLoop:%@ forMode:%@ "
+              "securityPolicy:%@ certificates:%@", self, __func__, __LINE__,
+              clientId, userName, keepAliveInterval,cleanSessionFlag, willFlag, willTopic,
+              willMsg, willQoS, willRetainFlag, protocolLevel, @"runLoop", runLoopMode,
+              securityPolicy, certificates);
 
     self.clientId = clientId;
     self.userName = userName;
@@ -150,6 +184,7 @@
     self.runLoop = runLoop;
     self.runLoopMode = runLoopMode;
     self.securityPolicy = securityPolicy;
+    self.certificates = certificates;
 
     self.txMsgId = 1;
     self.persistence = [[MQTTPersistence alloc] init];
@@ -435,39 +470,44 @@
     CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
     
     if (usingSSL) {
-        CFDictionaryRef sslSettings;
+        NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
 
-        if(!self.securityPolicy)
+        if (!self.securityPolicy)
         {
             // use OS CA model
-            const void *keys[] = {kCFStreamSSLLevel}; // use server-negotiated protocol
-            const void *vals[] = {kCFStreamSocketSecurityLevelNegotiatedSSL};
-            sslSettings = CFDictionaryCreate(kCFAllocatorDefault, keys, vals, sizeof(keys) / sizeof(void*),
-                    &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+            [sslOptions setObject:(NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
+                           forKey:(NSString*)kCFStreamSSLLevel];
+            if (self.certificates) {
+                [sslOptions setObject:self.certificates
+                               forKey:(NSString *)kCFStreamSSLCertificates];
+            }
         }
         else
         {
             // delegate certificates verify operation to our secure policy.
             // by disabling chain validation, it becomes our responsibility to verify that the host at the other end can be trusted.
             // the server's certificates will be verified during MQTT encoder/decoder processing.
-            const void *keys[] = {kCFStreamSSLLevel, kCFStreamSSLValidatesCertificateChain};
-            const void *vals[] = {kCFStreamSocketSecurityLevelNegotiatedSSL, kCFBooleanFalse};
-            sslSettings = CFDictionaryCreate(kCFAllocatorDefault, keys, vals, sizeof(keys) / sizeof(void*),
-                    &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+            [sslOptions setObject:(NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
+                           forKey:(NSString*)kCFStreamSSLLevel];
+            [sslOptions setObject:[NSNumber numberWithBool:NO]
+                           forKey:(NSString *)kCFStreamSSLValidatesCertificateChain];
+            if (self.certificates) {
+                [sslOptions setObject:self.certificates
+                               forKey:(NSString *)kCFStreamSSLCertificates];
+            }
+
         }
 
-        if(!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, sslSettings)){
+        if(!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
             connectError = [NSError errorWithDomain:@"MQTT"
                                                code:errSSLInternal
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl input stream!"}];
         }
-        if(!CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, sslSettings)){
+        if(!CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
             connectError = [NSError errorWithDomain:@"MQTT"
                                                code:errSSLInternal
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl output stream!"}];
         }
-
-        CFRelease(sslSettings);
     }
 
     if(!connectError){
@@ -1410,6 +1450,57 @@
                       flowingIn:incoming
                      flowingOut:outflowing];
     }
+}
+
++ (NSArray *)clientCertsFromP12:(NSString *)path passphrase:(NSString *)passphrase {
+    if (!path) {
+        NSLog(@"no p12 path given");
+        return nil;
+    }
+    
+    NSData *pkcs12data = [[NSData alloc] initWithContentsOfFile:path];
+    if (!pkcs12data) {
+        NSLog(@"reading p12 failed");
+        return nil;
+    }
+    
+    if (!passphrase) {
+        NSLog(@"no passphrase given");
+        return nil;
+    }
+    CFArrayRef keyref = NULL;
+    OSStatus importStatus = SecPKCS12Import((__bridge CFDataRef)pkcs12data,
+                                            (__bridge CFDictionaryRef)[NSDictionary
+                                                                       dictionaryWithObject:passphrase
+                                                                       forKey:(__bridge id)kSecImportExportPassphrase],
+                                            &keyref);
+    if (importStatus != noErr) {
+        NSLog(@"Error while importing pkcs12 [%d]", (int)importStatus);
+        return nil;
+    }
+    
+    CFDictionaryRef identityDict = CFArrayGetValueAtIndex(keyref, 0);
+    if (!identityDict) {
+        NSLog(@"could not CFArrayGetValueAtIndex");
+        return nil;
+    }
+    
+    SecIdentityRef identityRef = (SecIdentityRef)CFDictionaryGetValue(identityDict,
+                                                                      kSecImportItemIdentity);
+    if (!identityRef) {
+        NSLog(@"could not CFDictionaryGetValue");
+        return nil;
+    };
+    
+    SecCertificateRef cert = NULL;
+    OSStatus status = SecIdentityCopyCertificate(identityRef, &cert);
+    if (status != noErr) {
+        NSLog(@"SecIdentityCopyCertificate failed [%d]", (int)status);
+        return nil;
+    }
+    
+    NSArray *clientCerts = [[NSArray alloc] initWithObjects:(__bridge id)identityRef, (__bridge id)cert, nil];
+    return clientCerts;
 }
 
 @end

@@ -18,7 +18,7 @@
 #define BULK 99 
 
 //#define BROKERLIST @[@"local", @"mosquitto", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd"]
-#define BROKERLIST @[@"local"]
+#define BROKERLIST @[@"local", @"mosquitto"]
 
 #define BROKERS @{ \
 \
@@ -28,6 +28,43 @@
 @"tls": @NO, \
 @"protocollevel": @4, \
 @"timeout": @10 \
+}, \
+\
+@"localTls": @{ \
+@"host": @"localhost",  \
+@"port": @8883,  \
+@"tls": @YES, \
+@"protocollevel": @4, \
+@"timeout": @10 \
+}, \
+\
+@"localTlsCerts": @{ \
+@"host": @"localhost",  \
+@"port": @8884,  \
+@"tls": @YES, \
+@"protocollevel": @4, \
+@"timeout": @10, \
+@"clientp12": @"info@owntracks.org", \
+@"clientp12pass": @"12345678" \
+}, \
+\
+@"mosquittoTls": @{ \
+@"host": @"test.mosquitto.org",  \
+@"port": @8883,  \
+@"tls": @YES, \
+@"protocollevel": @4, \
+@"timeout": @10, \
+@"serverCER": @"mosquitto.org" \
+}, \
+\
+@"mosquittoTlsCerts": @{ \
+@"host": @"test.mosquitto.org",  \
+@"port": @8884,  \
+@"tls": @YES, \
+@"protocollevel": @4, \
+@"timeout": @10, \
+@"clientp12": @"KreyChristoph", \
+@"clientp12pass": @"abcde" \
 }, \
 \
 @"mosquitto": @{ \

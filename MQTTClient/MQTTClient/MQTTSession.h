@@ -325,6 +325,10 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 */
 @property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
 
+/** see initWithClientId for description
+*/
+@property (strong, nonatomic) NSArray *certificates;
+
 /** for mqttio-OBJC backward compatibility
  the connect message used is stored here
  */
@@ -340,67 +344,22 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  */
 - (MQTTSession *)init;
 
-/** initialises the MQTT session
- 
- @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
- 
- @param userName an NSString object containing the user's name (or ID) for authentification. May be nil.
- 
- @param password an NSString object containing the user's password. If userName is nil, password must be nil as well.
- 
- @param keepAliveInterval The Keep Alive is a time interval measured in seconds. The MQTTClient ensures that the interval
- between Control Packets being sent does not exceed the Keep Alive value. In the  absence of sending any other Control Packets, the Client sends a PINGREQ Packet.
-
- @param cleanSessionFlag specifies if the server should discard previous session information.
- 
- @param willFlag If the Will Flag is set to YES this indicates that a Will Message MUST be published by the Server when the
-        Server detects that the Client is disconnected for any reason other than the Client flowing a DISCONNECT Packet.
-
- @param willTopic If the Will Flag is set to YES, the Will Topic is a string, nil otherwise.
- 
- @param willMsg If the Will Flag is set to YES the Will Message must be specified, nil otherwise.
-
- @param willQoS specifies the QoS level to be used when publishing the Will Message.
-    If the Will Flag is set to NO, then the Will QoS MUST be set to 0.
-    If the Will Flag is set to YES, the value of Will QoS can be 0 (0x00), 1 (0x01), or 2 (0x02).
-
- @param willRetainFlag indicates if the server should publish the Will Messages with retainFlag
-    If the Will Flag is set to NO, then the Will Retain Flag MUST be set to NO .
-    If the Will Flag is set to YES:
-        If Will Retain is set to NO, the Server MUST publish the Will Message as a non-retained publication [MQTT-3.1.2-14].
-        If Will Retain is set to YES, the Server MUST publish the Will Message as a retained publication [MQTT-3.1.2-15].
- 
- @param protocolLevel specifies the protocol to be used.
-    The value of the Protocol Level field for the version 3.1.1 of the protocol is 4. The value for the version 3.1 is 3.
- 
- @param runLoop The runLoop where the streams are scheduled. If nil, defaults to [NSRunLoop currentRunLoop].
- 
- @param runLoopMode The runLoopMode where the streams are scheduled. If nil, defaults to NSRunLoopCommonModes.
- 
+/** alternative initializer
+ @param clientId see initWithClientId for description.
+ @param userName see initWithClientId for description.
+ @param password see initWithClientId for description.
+ @param keepAliveInterval see initWithClientId for description.
+ @param cleanSessionFlag see initWithClientId for description.
+ @param willFlag see initWithClientId for description.
+ @param willTopic see initWithClientId for description.
+ @param willMsg see initWithClientId for description.
+ @param willQoS see initWithClientId for description.
+ @param willRetainFlag see initWithClientId for description.
+ @param protocolLevel see initWithClientId for description.
+ @param runLoop see initWithClientId for description.
+ @param runLoopMode see initWithClientId for description.
  @return the initialised MQTTSession object
- 
  @exception NSInternalInconsistencyException if the parameters are invalid
- 
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc]
-                            initWithClientId:@"example-1234"
-                            userName:@"user"
-                            password:@"secret"
-                            keepAlive:60
-                            cleanSession:YES
-                            will:YES
-                            willTopic:@"example/status"
-                            willMsg:[[@"Client off-line"] dataUsingEncoding:NSUTF8StringEncoding]
-                            willQoS:2
-                            willRetainFlag:YES
-                            protocolLevel:4
-                            runLoop:[NSRunLoop currentRunLoop]
-                            forMode:NSRunLoopCommonModes];
- @endcode
-
- 
  */
  - (MQTTSession *)initWithClientId:(NSString *)clientId
                          userName:(NSString *)userName
@@ -415,6 +374,39 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
                     protocolLevel:(UInt8)protocolLevel
                           runLoop:(NSRunLoop *)runLoop
                           forMode:(NSString *)runLoopMode;
+
+/** alternative initializer
+ @param clientId see initWithClientId for description.
+ @param userName see initWithClientId for description.
+ @param password see initWithClientId for description.
+ @param keepAliveInterval see initWithClientId for description.
+ @param cleanSessionFlag see initWithClientId for description.
+ @param willFlag see initWithClientId for description.
+ @param willTopic see initWithClientId for description.
+ @param willMsg see initWithClientId for description.
+ @param willQoS see initWithClientId for description.
+ @param willRetainFlag see initWithClientId for description.
+ @param protocolLevel see initWithClientId for description.
+ @param runLoop see initWithClientId for description.
+ @param runLoopMode see initWithClientId for description.
+ @param securityPolicy see initWithClientId for description.
+ @return the initialised MQTTSession object
+ @exception NSInternalInconsistencyException if the parameters are invalid
+ */
+- (MQTTSession *)initWithClientId:(NSString *)clientId
+                         userName:(NSString *)userName
+                         password:(NSString *)password
+                        keepAlive:(UInt16)keepAliveInterval
+                     cleanSession:(BOOL)cleanSessionFlag
+                             will:(BOOL)willFlag
+                        willTopic:(NSString *)willTopic
+                          willMsg:(NSData *)willMsg
+                          willQoS:(MQTTQosLevel)willQoS
+                   willRetainFlag:(BOOL)willRetainFlag
+                    protocolLevel:(UInt8)protocolLevel
+                          runLoop:(NSRunLoop *)runLoop
+                          forMode:(NSString *)runLoopMode
+                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy;
 
 /** initialises the MQTT session
 *
@@ -449,6 +441,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 * @param runLoop The runLoop where the streams are scheduled. If nil, defaults to [NSRunLoop currentRunLoop].
 * @param runLoopMode The runLoopMode where the streams are scheduled. If nil, defaults to NSRunLoopCommonModes.
 * @param securityPolicy The security policy used to evaluate server trust for secure connections.
+* @param certificates An identity certificate used to reply to a server requiring client certificates according to the description given for SSLSetCertificate(). You may build the certificates array yourself or use the sundry method clientCertFromP12
 * @return the initialised MQTTSession object
 * @exception NSInternalInconsistencyException if the parameters are invalid
 *
@@ -474,7 +467,8 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
                             protocolLevel:4
                             runLoop:[NSRunLoop currentRunLoop]
                             forMode:NSRunLoopCommonModes
-                            securityPolicy:securityPolicy];
+                            securityPolicy:securityPolicy
+                            certificates:certificates];
 
     [session connectToHost:@"example-1234" port:1883 usingSSL:YES];
 @endcode
@@ -492,7 +486,8 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
                     protocolLevel:(UInt8)protocolLevel
                           runLoop:(NSRunLoop *)runLoop
                           forMode:(NSString *)runLoopMode
-                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy;
+                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
+                     certificates:(NSArray *)certificates;
 
 /**
 * for mqttio-OBJC backward compatibility
@@ -1053,5 +1048,43 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  
  */
 - (void)closeAndWait;
+
+/** reads the content of a PKCS12 file and converts it to an certificates array for initWith...
+ @param path the path to a PKCS12 file
+ @param passphrase the passphrase to unlock the PKCS12 file
+ @returns a certificates array or nil if an error occured
+ 
+ @code
+ NSString *path = [[NSBundle bundleForClass:[MQTTClientTests class]] pathForResource:@"filename"
+ ofType:@"p12"];
+ 
+ NSArray *myCerts = [MQTTSession clientCertsFromP12:path passphrase:@"passphrase"];
+ if (myCerts) {
+ 
+ self.session = [[MQTTSession alloc] initWithClientId:nil
+    userName:nil
+    password:nil
+    keepAlive:60
+    cleanSession:YES
+    will:NO
+    willTopic:nil
+    willMsg:nil
+    willQoS:0
+    willRetainFlag:NO
+    protocolLevel:4
+    runLoop:[NSRunLoop currentRunLoop]
+    forMode:NSRunLoopCommonModes
+    securityPolicy:nil
+    certificates:myCerts];
+ [self.session connectToHost:@"localhost" port:8884 usingSSL:YES];
+ ...
+ }
+
+ @endcode
+ 
+ */
+
++ (NSArray *)clientCertsFromP12:(NSString *)path passphrase:(NSString *)passphrase;
+
 
 @end

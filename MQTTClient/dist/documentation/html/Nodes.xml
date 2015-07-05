@@ -98,6 +98,11 @@
               <Anchor>accf20d5a5b630ff96b84ab88f92468fe</Anchor>
              </Node>
              <Node>
+              <Name>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:certificates:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a8a4605e8dc395b784f686f5d96401ee8</Anchor>
+             </Node>
+             <Node>
               <Name>initWithClientId:userName:password:keepAlive:cleanSession:willTopic:willMsg:willQoS:willRetainFlag:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a7dc7dfa1a3fc8bc9be7b668f39b748d2</Anchor>
@@ -206,6 +211,11 @@
               <Name>unsubscribeTopics:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>ae59a9a8f94477a1504178c59fc664cb9</Anchor>
+             </Node>
+             <Node>
+              <Name>certificates</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a8093f2231e12c54af5eb1791cc60b06f</Anchor>
              </Node>
              <Node>
               <Name>cleanSessionFlag</Name>

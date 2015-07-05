@@ -45,6 +45,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:certificates:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a8a4605e8dc395b784f686f5d96401ee8</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>initWithClientId:</Name>
       <APILanguage>occ</APILanguage>
       <Type>instm</Type>
@@ -430,6 +441,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>clientCertsFromP12:passphrase:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>clm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a77824ce439d089ae8811acc2ed119824</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>delegate</Name>
       <APILanguage>occ</APILanguage>
       <Type>instp</Type>
@@ -617,6 +639,16 @@
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
     <Anchor>a74f593a2857ccf22a5073a71a408e465</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>certificates</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instp</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a8093f2231e12c54af5eb1791cc60b06f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>

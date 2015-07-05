@@ -96,14 +96,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p><a href="MQTTClient/dist/documentation/html/index.html">Documentation</a></p>
 <h3>Usage</h3>
 <p>Create a new client and connect to a broker:</p>
-<p>```objective-c <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> *session = [[<a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> alloc]initWithClientId:"&lt;client_id&gt;"]</p>
+<p>```objective-c <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> *session = [[<a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> alloc]initWithClientId:"client_id"]</p>
 <p>// Set delegate appropriately to receive various events // See <a class="el" href="_m_q_t_t_session_8h_source.html">MQTTSession.h</a> for information on various handlers // you can subscribe to. [session setDelegate:self];</p>
-<p>[session connectAndWaitToHost:"&lt;host&gt;" port:1883 usingSSL:NO];</p>
+<p>[session connectAndWaitToHost:"host" port:1883 usingSSL:NO];</p>
 <p>```</p>
 <p>Subscribe to a topic:</p>
 <p>```objective-c [session subscribeToTopic:topic atLevel:MQTTQosLevelAtLeastOnce]; ```</p>
 <p>Publish a message to a topic:</p>
-<p>```objective-c [session publishAndWaitData:&lt;your data="" here&gt;=""&gt; onTopic:"&lt;topic here&gt;=""&gt;" retain:NO qos:MQTTQosLevelAtLeastOnce] ```</p>
+<p>```objective-c [session publishAndWaitData:data onTopic:"topic" retain:NO qos:MQTTQosLevelAtLeastOnce] ```</p>
 <h3>License</h3>
 <p>Copyright (C) 2013-2015 Christoph Krey</p>
 <p>Based on and fully API backward compatible with</p>
@@ -129,7 +129,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 3 2015 10:56:25 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jul 5 2015 12:45:50 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

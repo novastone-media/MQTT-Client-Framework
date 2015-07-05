@@ -26,14 +26,14 @@ or use the CocoaPod MQTTClient
 Create a new client and connect to a broker:
 
 ```objective-c
-MQTTSession *session = [[MQTTSession alloc]initWithClientId:@"<client_id>"]
+MQTTSession *session = [[MQTTSession alloc]initWithClientId:@"client_id"]
 
 // Set delegate appropriately to receive various events
 // See MQTTSession.h for information on various handlers
 // you can subscribe to.
 [session setDelegate:self];
 
-[session connectAndWaitToHost:@"<host>" port:1883 usingSSL:NO];
+[session connectAndWaitToHost:@"host" port:1883 usingSSL:NO];
 
 ```
 
@@ -46,8 +46,8 @@ Subscribe to a topic:
 Publish a message to a topic:
 
 ```objective-c
-[session publishAndWaitData:<your data here>
-	                onTopic:@"<topic here>"
+[session publishAndWaitData:data
+	                onTopic:@"topic"
 	                 retain:NO
 				        qos:MQTTQosLevelAtLeastOnce]
 ```
