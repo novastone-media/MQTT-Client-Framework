@@ -49,7 +49,7 @@
     NSLog(@"can't test [MQTT-3.10.1-1]");
 }
 
-- (void)testSubscribeWMultipleTopics_None
+- (void)testSubscribeWMultipleTopics_None_MQTT_3_8_3_3
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
@@ -154,70 +154,12 @@
     }
 }
 
-- (void)testSubscribeTopicHashnotalone
-{
+- (void)testSubscribeTopicHashnotalone_MQTT_4_7_1_2 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
         NSString *topic = @"#MQTTClient";
-        NSLog(@"subscribing to topic %@", topic);
-        [self testSubscribeCloseExpected:topic atLevel:0];
-        [self shutdown:parameters];
-    }
-}
-
-- (void)testSubscribeTopicEmpty
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        [self connect:parameters];
-        [self testSubscribeCloseExpected:@"" atLevel:0];
-        [self shutdown:parameters];
-    }
-}
-
-- (void)testSubscribeTopicHashnotlast
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        [self connect:parameters];
-        [self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0];
-        [self shutdown:parameters];
-    }
-}
-
-- (void)testSubscribeTopicPlus
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        [self connect:parameters];
-        [self testSubscribeSubackExpected:@"+" atLevel:0];
-        [self shutdown:parameters];
-    }
-}
-
-- (void)testSubscribeTopicSlash
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        [self connect:parameters];
-        [self testSubscribeSubackExpected:@"/" atLevel:0];
-        [self shutdown:parameters];
-    }
-}
-
-- (void)testSubscribeTopicPlusnotalone_MQTT_4_7_1_3
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        [self connect:parameters];
-        NSString *topic = @"MQTTClient+";
         NSLog(@"subscribing to topic %@", topic);
         [self testSubscribeCloseExpected:topic atLevel:0];
         [self shutdown:parameters];
@@ -235,7 +177,49 @@
     }
 }
 
-- (void)testSubscribeTopicNone
+- (void)testSubscribeTopicHashnotlast_MQTT_4_7_1_2 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0];
+        [self shutdown:parameters];
+    }
+}
+
+- (void)testSubscribeTopicPlus {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"+" atLevel:0];
+        [self shutdown:parameters];
+    }
+}
+
+- (void)testSubscribeTopicSlash {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testSubscribeSubackExpected:@"/" atLevel:0];
+        [self shutdown:parameters];
+    }
+}
+
+- (void)testSubscribeTopicPlusnotalone_MQTT_4_7_1_3 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        NSString *topic = @"MQTTClient+";
+        NSLog(@"subscribing to topic %@", topic);
+        [self testSubscribeCloseExpected:topic atLevel:0];
+        [self shutdown:parameters];
+    }
+}
+
+- (void)testSubscribeTopicNone_MQTT_3_8_3_3
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
@@ -440,8 +424,7 @@
     }
 }
 
-- (void)testUnsubscribeTopicHashnotalone
-{
+- (void)testUnsubscribeTopicHashnotalone_MQTT_4_7_1_2 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
@@ -462,7 +445,7 @@
     }
 }
 
-- (void)testUnsubscribeTopicEmpty
+- (void)testUnsubscribeTopicEmpty_MQTT_4_7_3_1
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
@@ -473,7 +456,7 @@
     }
 }
 
-- (void)testUnsubscribeTopicNone
+- (void)testUnsubscribeTopicNone_MQTT_3_10_3_2
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
@@ -484,7 +467,7 @@
     }
 }
 
-- (void)testUnsubscribeTopicZero
+- (void)testUnsubscribeTopicZero_MQTT_4_7_3_1
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
@@ -495,7 +478,7 @@
     }
 }
 
-- (void)testMultiUnsubscribe_None
+- (void)testMultiUnsubscribe_None_MQTT_3_10_3_2
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);

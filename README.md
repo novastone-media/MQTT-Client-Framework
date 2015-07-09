@@ -13,6 +13,7 @@ an Objective-C native MQTT Framework http://mqtt.org
 * mosca
 * vernemq
 * emqtt
+* moquette
 
 ### Howto
 

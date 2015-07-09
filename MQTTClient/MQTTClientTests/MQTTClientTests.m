@@ -61,7 +61,13 @@
                                                      forMode:NSRunLoopCommonModes];
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
-        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+        if (self.event == MQTTSessionEventConnected) {
+            // ok
+        } else if (self.event == MQTTSessionEventConnectionRefused) {
+            XCTAssert(self.error.code == 0x02, @"error = %@", self.error);
+        } else {
+            XCTFail(@"Not Connected %ld %@", (long)self.event, self.error);
+        }
         [self shutdown:parameters];
     }
 }
@@ -452,7 +458,7 @@
  * continue processing the CONNECT packet in accordance with some other specification.
  * In the latter case, the Server MUST NOT continue to process the CONNECT packet in line with this specification.
  */
-- (void)test_connect_illegal_protocollevel0_MQTT_3_1_2_1 {
+- (void)test_connect_illegal_protocollevel0_and_protocolname_MQTT_3_1_2_1 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];

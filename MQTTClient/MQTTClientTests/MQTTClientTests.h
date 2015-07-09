@@ -17,12 +17,20 @@
 #define MULTI 15  // some test servers are limited in concurrent sessions
 #define BULK 99 
 
-//#define BROKERLIST @[@"local", @"mosquitto", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd"]
-#define BROKERLIST @[@"local", @"mosquitto"]
+//#define BROKERLIST @[@"local", @"localTls", @"localTlsCerts", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd", @"moquette"]
+#define BROKERLIST @[@"local"]
 
 #define BROKERS @{ \
 \
 @"local": @{ \
+@"host": @"localhost",  \
+@"port": @1883,  \
+@"tls": @NO, \
+@"protocollevel": @4, \
+@"timeout": @10 \
+}, \
+\
+@"moquette": @{ \
 @"host": @"localhost",  \
 @"port": @1883,  \
 @"tls": @NO, \
@@ -163,10 +171,8 @@
 // Cloudmqtt not tested
 // Eurotech Everywhere Device Cloud not tested
 // Xively not tested
-// eMQTT not tested
 // Apache ActiveMQ not tested
 // Apache Apollo not tested
-// Moquette not tested
 // Litmus Automation Loop not tested
 // webMethods Nirvana Messaging not tested
 
