@@ -415,6 +415,63 @@
              </Node>
             </Subnodes>
            </Node>
+           <Node>
+            <Name>MQTTSessionManager</Name>
+            <Path>interface_m_q_t_t_session_manager.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:willTopic:will:willQos:willRetainFlag:withClientId:</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>af0b3aa800e54438a160b1c1b78b27898</Anchor>
+             </Node>
+             <Node>
+              <Name>connectToLast</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>a6bd1e45c0504df0b0d2599f86f84f884</Anchor>
+             </Node>
+             <Node>
+              <Name>disconnect</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>a71161804d040ca10e164578d7e7eb855</Anchor>
+             </Node>
+             <Node>
+              <Name>sendData:topic:qos:retain:</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>a9593770a0aac359c57aee9260b2280a8</Anchor>
+             </Node>
+             <Node>
+              <Name>delegate</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>abc07e05f3c0593b0bd851e8d69255381</Anchor>
+             </Node>
+             <Node>
+              <Name>lastErrorCode</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>aa2522a9c3be18812cea22cf2f6a40754</Anchor>
+             </Node>
+             <Node>
+              <Name>state</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>a4caf1f5fe21b8d36700d97b68b3bf978</Anchor>
+             </Node>
+             <Node>
+              <Name>subscriptions</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>aad73993729e0ec889972042e99449957</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>&lt;MQTTSessionManagerDelegate&gt;</Name>
+            <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>handleMessage:onTopic:retained:</Name>
+              <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
+              <Anchor>aa607c1d6a9a1b2a9ea9a707706c393bb</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
           </Subnodes>
          </Node>
          <Node>
@@ -436,6 +493,20 @@
              <Node>
               <Name>&lt;MQTTSessionDelegate&gt;</Name>
               <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>MQTTSessionManager</Name>
+                <Path>interface_m_q_t_t_session_manager.html</Path>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>MQTTSessionManager</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+             </Node>
+             <Node>
+              <Name>&lt;MQTTSessionManagerDelegate&gt;</Name>
+              <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
              </Node>
             </Subnodes>
            </Node>
@@ -472,6 +543,10 @@
            <Node>
             <Name>MQTTSession.h</Name>
             <Path>_m_q_t_t_session_8h_source.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTSessionManager.h</Name>
+            <Path>_m_q_t_t_session_manager_8h_source.html</Path>
            </Node>
           </Subnodes>
          </Node>

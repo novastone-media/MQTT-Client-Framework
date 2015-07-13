@@ -78,6 +78,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="#index_b"><span>b</span></a></li>
       <li><a href="#index_c"><span>c</span></a></li>
+      <li><a href="#index_d"><span>d</span></a></li>
       <li><a href="#index_h"><span>h</span></a></li>
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_m"><span>m</span></a></li>
@@ -144,6 +145,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>connectionRefused:error:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a179c4f9104394b3843a20862d50fd813">&lt;MQTTSessionDelegate&gt;</a>
 </li>
+<li>connectTo:port:tls:keepalive:clean:auth:user:pass:willTopic:will:willQos:willRetainFlag:withClientId:
+: <a class="el" href="interface_m_q_t_t_session_manager.html#af0b3aa800e54438a160b1c1b78b27898">MQTTSessionManager</a>
+</li>
 <li>connectToHost:port:
 : <a class="el" href="interface_m_q_t_t_session.html#abc2b0b1291a5da11028761e3a3ed097b">MQTTSession</a>
 </li>
@@ -156,12 +160,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>connectToHost:port:withConnectionHandler:messageHandler:
 : <a class="el" href="interface_m_q_t_t_session.html#acdad8a7c44b78c04eaaef5f6bc2593ec">MQTTSession</a>
 </li>
+<li>connectToLast
+: <a class="el" href="interface_m_q_t_t_session_manager.html#a6bd1e45c0504df0b0d2599f86f84f884">MQTTSessionManager</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
+<li>disconnect
+: <a class="el" href="interface_m_q_t_t_session_manager.html#a71161804d040ca10e164578d7e7eb855">MQTTSessionManager</a>
+</li>
 </ul>
 
 
 <h3><a class="anchor" id="index_h"></a>- h -</h3><ul>
 <li>handleEvent:event:error:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a168b8ff4bd95ffbfe61a8b10236860f8">&lt;MQTTSessionDelegate&gt;</a>
+</li>
+<li>handleMessage:onTopic:retained:
+: <a class="el" href="protocol_m_q_t_t_session_manager_delegate-p.html#aa607c1d6a9a1b2a9ea9a707706c393bb">&lt;MQTTSessionManagerDelegate&gt;</a>
 </li>
 </ul>
 
@@ -271,6 +288,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
+<li>sendData:topic:qos:retain:
+: <a class="el" href="interface_m_q_t_t_session_manager.html#a9593770a0aac359c57aee9260b2280a8">MQTTSessionManager</a>
+</li>
 <li>sending:type:qos:retained:duped:mid:data:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a8c16339f900bfe2aa98a2aabdca44484">&lt;MQTTSessionDelegate&gt;</a>
 </li>
@@ -321,7 +341,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jul 5 2015 12:45:50 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 13 2015 14:27:22 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

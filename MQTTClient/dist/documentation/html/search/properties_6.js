@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['securitypolicy',['securityPolicy',['../interface_m_q_t_t_session.html#a74f593a2857ccf22a5073a71a408e465',1,'MQTTSession']]],
-  ['status',['status',['../interface_m_q_t_t_session.html#adff1474fe186b8af3bb4cac1ccd4ff2d',1,'MQTTSession']]]
+  ['runloop',['runLoop',['../interface_m_q_t_t_session.html#a49e106f38faead00b6d9d53a77a50472',1,'MQTTSession']]],
+  ['runloopmode',['runLoopMode',['../interface_m_q_t_t_session.html#a3ab2f0926aa51b0dc7969c66bae215e4',1,'MQTTSession']]]
 ];
