@@ -36,6 +36,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] init];
+        self.session.userName = parameters[@"user"];
+        self.session.password = parameters[@"pass"];
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
@@ -47,8 +49,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:@""
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -86,8 +88,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:@""
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:NO
                                                         will:NO
@@ -111,8 +113,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:@"123456789.123456789.1234"
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -135,8 +137,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -159,8 +161,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -183,8 +185,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES];
         [self connect:self.session parameters:parameters];
@@ -210,8 +212,8 @@
         NSDictionary *parameters = BROKERS[broker];
 
         MQTTSession *subscribingSession = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
-                                                                       userName:nil
-                                                                       password:nil
+                                                                       userName:parameters[@"user"]
+                                                                       password:parameters[@"pass"]
                                                                       keepAlive:60
                                                                    cleanSession:YES
                                                                            will:NO
@@ -228,8 +230,8 @@
         [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
 
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:10
                                                 cleanSession:YES
                                                         will:YES
@@ -261,8 +263,8 @@
         NSDictionary *parameters = BROKERS[broker];
 
         self.session = [[MQTTSession alloc] initWithClientId:@"MQTTClient"
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:10
                                                 cleanSession:YES
                                                         will:NO
@@ -279,8 +281,8 @@
 
 
         MQTTSession *sameSession = [[MQTTSession alloc] initWithClientId:@"MQTTClient"
-                                                                userName:nil
-                                                                password:nil
+                                                                userName:parameters[@"user"]
+                                                                password:parameters[@"pass"]
                                                                keepAlive:60
                                                             cleanSession:YES
                                                                     will:NO
@@ -318,8 +320,8 @@
         NSDictionary *parameters = BROKERS[broker];
 
         MQTTSession *subscribingSession = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
-                                                                       userName:nil
-                                                                       password:nil
+                                                                       userName:parameters[@"user"]
+                                                                       password:parameters[@"pass"]
                                                                       keepAlive:60
                                                                    cleanSession:YES
                                                                            will:NO
@@ -336,8 +338,8 @@
         [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
 
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:10
                                                 cleanSession:YES
                                                         will:YES
@@ -367,8 +369,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:@"ClientID"
-                                                    userName:@"username"
-                                                    password:@"password"
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:10
                                                 cleanSession:YES
                                                         will:YES
@@ -399,8 +401,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -432,8 +434,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -446,6 +448,7 @@
                                                      forMode:NSRunLoopCommonModes];
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
+        
         XCTAssertEqual(self.event, MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
         XCTAssert(self.error.code == 0x01, @"error = %@", self.error);
         [self shutdown:parameters];
@@ -463,8 +466,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -477,7 +480,9 @@
                                                      forMode:NSRunLoopCommonModes];
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
-        if (self.event == MQTTSessionEventConnectionClosedByBroker || (self.event == MQTTSessionEventConnectionRefused && self.error && self.error.code == 0x01)) {
+        if (self.event == MQTTSessionEventConnectionClosedByBroker ||
+            self.event == MQTTSessionEventConnectionError ||
+            (self.event == MQTTSessionEventConnectionRefused && self.error && self.error.code == 0x01)) {
             // Success, although week definition
         } else {
             XCTFail(@"connect returned event:%d, error:%@", self.event, self.error);
@@ -491,8 +496,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:5
                                                 cleanSession:YES
                                                         will:NO
@@ -587,8 +592,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -630,8 +635,8 @@
         }
         
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -682,8 +687,8 @@
         secpol.allowInvalidCertificates = TRUE;
         
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -715,8 +720,8 @@
 
         NSLog(@"Cleaning topic");
         MQTTSession *sendingSession = [[MQTTSession alloc] initWithClientId:@"MQTTClient-pub"
-                                                                   userName:nil
-                                                                   password:nil
+                                                                   userName:parameters[@"user"]
+                                                                   password:parameters[@"pass"]
                                                                   keepAlive:60
                                                                cleanSession:YES
                                                                        will:NO
@@ -734,8 +739,8 @@
 
         NSLog(@"Clearing old subs");
         self.session = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -751,8 +756,8 @@
 
         NSLog(@"Subscribing to topic");
         self.session = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:NO
                                                         will:NO
@@ -776,8 +781,8 @@
 
         NSLog(@"receiving from topic");
         self.session = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:NO
                                                         will:NO
@@ -812,8 +817,8 @@
 
         NSLog(@"Cleaning topic");
         MQTTSession *sendingSession = [[MQTTSession alloc] initWithClientId:@"MQTTClient-pub"
-                                                                   userName:nil
-                                                                   password:nil
+                                                                   userName:parameters[@"user"]
+                                                                   password:parameters[@"pass"]
                                                                   keepAlive:60
                                                                cleanSession:YES
                                                                        will:NO
@@ -831,8 +836,8 @@
 
         NSLog(@"Clearing old subs");
         self.session = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -848,8 +853,8 @@
 
         NSLog(@"Subscribing to topic");
         self.session = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
-                                                    userName:nil
-                                                    password:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO
@@ -908,12 +913,6 @@
     session.delegate = self;
     self.event = -1;
 
-    NSLog(@"connecting to:%@ port:%d tls:%d",
-          parameters[@"host"],
-          [parameters[@"port"] intValue],
-          [parameters[@"tls"] boolValue]
-    );
-    
     [session connectToHost:parameters[@"host"]
                       port:[parameters[@"port"] intValue]
                   usingSSL:[parameters[@"tls"] boolValue]];

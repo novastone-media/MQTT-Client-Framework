@@ -41,8 +41,8 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:@"user w/ password"
-                                                    password:@"password"
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES
                                                         will:NO

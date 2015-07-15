@@ -24,8 +24,8 @@
     self.parameters = parameters;
 
     self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:nil
-                                                password:nil
+                                                userName:parameters[@"user"]
+                                                password:parameters[@"pass"]
                                                keepAlive:60
                                             cleanSession:YES
                                                     will:NO

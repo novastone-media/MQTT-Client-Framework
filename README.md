@@ -14,6 +14,8 @@ an Objective-C native MQTT Framework http://mqtt.org
 * vernemq
 * emqtt
 * moquette
+* ActiveMQ
+* Apollo
 
 ### Howto
 

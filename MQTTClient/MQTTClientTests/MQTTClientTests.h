@@ -17,7 +17,7 @@
 #define MULTI 15  // some test servers are limited in concurrent sessions
 #define BULK 99 
 
-//#define BROKERLIST @[@"local", @"localTls", @"localTlsCerts", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd", @"moquette"]
+//#define BROKERLIST @[@"local", @"localTls", @"localTlsCerts", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd", @"moquette", @"activemq", @"apollo"]
 #define BROKERLIST @[@"local"]
 
 #define BROKERS @{ \
@@ -123,6 +123,24 @@
 @"timeout": @10 \
 }, \
 \
+@"activemq": @{ \
+@"host": @"localhost",  \
+@"port": @1883,  \
+@"tls": @NO, \
+@"protocollevel": @4, \
+@"timeout": @10 \
+}, \
+\
+@"apollo": @{ \
+@"host": @"localhost",  \
+@"port": @61613,  \
+@"tls": @NO, \
+@"protocollevel": @4, \
+@"timeout": @10, \
+@"user": @"admin", \
+@"pass": @"password" \
+}, \
+\
 @"pahotest": @{ \
 @"host": @"localhost",  \
 @"port": @1884,  \
@@ -171,8 +189,6 @@
 // Cloudmqtt not tested
 // Eurotech Everywhere Device Cloud not tested
 // Xively not tested
-// Apache ActiveMQ not tested
-// Apache Apollo not tested
 // Litmus Automation Loop not tested
 // webMethods Nirvana Messaging not tested
 

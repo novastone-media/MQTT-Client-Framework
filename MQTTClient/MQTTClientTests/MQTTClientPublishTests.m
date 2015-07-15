@@ -13,6 +13,7 @@
 @interface MQTTClientPublishTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
 @property (nonatomic) NSInteger event;
+@property (strong, nonatomic) NSError *error;
 @property (nonatomic) UInt16 mid;
 @property (nonatomic) UInt16 sentMid;
 @property (nonatomic) NSInteger qos;
@@ -472,6 +473,7 @@
 {
     //NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
+    self.error = error;
 }
 
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID
@@ -496,8 +498,8 @@
 
 - (void)connect:(NSDictionary *)parameters {
     self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:nil
-                                                password:nil
+                                                userName:parameters[@"user"]
+                                                password:parameters[@"pass"]
                                                keepAlive:60
                                             cleanSession:YES
                                                     will:NO
@@ -526,6 +528,8 @@
     }
 
     XCTAssert(!self.timeout, @"timeout");
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
     self.timeout = FALSE;

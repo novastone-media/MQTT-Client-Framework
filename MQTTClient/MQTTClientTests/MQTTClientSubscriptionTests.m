@@ -13,6 +13,7 @@
 @interface MQTTClientSubscriptionTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
 @property (nonatomic) int event;
+@property (strong, nonatomic) NSError *error;
 @property (nonatomic) UInt16 subMid;
 @property (nonatomic) UInt16 unsubMid;
 @property (nonatomic) UInt16 messageMid;
@@ -288,6 +289,27 @@
         [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
 
         topic = @"dd";
+        for (UInt32 i = 2; i < 32768; i *= 2) {
+            topic = [topic stringByAppendingString:topic];
+        }
+        NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+        [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
+
+        topic = @"ee";
+        for (UInt32 i = 2; i <= 32768; i *= 2) {
+            topic = [topic stringByAppendingString:topic];
+        }
+        NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:15] UTF8String]));
+        [self testSubscribeSubackExpected:[topic substringFromIndex:15] atLevel:0];
+        
+        topic = @"ff";
+        for (UInt32 i = 2; i <= 32768; i *= 2) {
+            topic = [topic stringByAppendingString:topic];
+        }
+        NSLog(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:2] UTF8String]));
+        [self testSubscribeSubackExpected:[topic substringFromIndex:2] atLevel:0];
+        
+        topic = @"gg";
         for (UInt32 i = 2; i <= 32768; i *= 2) {
             topic = [topic stringByAppendingString:topic];
         }
@@ -699,6 +721,7 @@
 {
     NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
+    self.error = error;
 }
 
 - (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQoss:(NSArray *)qoss
@@ -722,8 +745,8 @@
 
 - (void)connect:(NSDictionary *)parameters {
     self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:nil
-                                                password:nil
+                                                userName:parameters[@"user"]
+                                                password:parameters[@"pass"]
                                                keepAlive:60
                                             cleanSession:YES
                                                     will:NO
@@ -753,6 +776,8 @@
     }
 
     XCTAssert(!self.timeout, @"timeout");
+    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 
