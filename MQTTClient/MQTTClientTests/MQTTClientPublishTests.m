@@ -108,7 +108,6 @@
     }
 }
 
-#define ALOT 1024
 - (void)testPublish_a_lot_of_q0
 {
     for (NSString *broker in BROKERLIST) {

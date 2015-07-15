@@ -15,10 +15,11 @@
 
 #define TOPIC @"MQTTClient"
 #define MULTI 15  // some test servers are limited in concurrent sessions
-#define BULK 99 
+#define BULK 99
+#define ALOT 1024
 
-//#define BROKERLIST @[@"local", @"localTls", @"localTlsCerts", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd", @"moquette", @"activemq", @"apollo"]
-#define BROKERLIST @[@"local"]
+//#define BROKERLIST @[@"local", @"localTls", @"localTlsCerts", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd", @"moquette", @"activemq", @"apollo", @"cloudmqtt"]
+#define BROKERLIST @[@"localhost"]
 
 #define BROKERS @{ \
 \
@@ -179,6 +180,16 @@
 @"tls": @NO, \
 @"protocollevel": @4, \
 @"timeout": @10 \
+}, \
+\
+@"cloudmqtt": @{ \
+@"host": @"mxx.cloudmqtt.com",  \
+@"port": @10000,  \
+@"tls": @NO, \
+@"protocollevel": @4, \
+@"timeout": @10, \
+@"user": @"xxxxxxxxx", \
+@"pass": @"xxxxxxxxxxx" \
 } \
 \
 }
@@ -186,7 +197,6 @@
 // IBM Websphere MQ Telemetry not tested
 // IBM MessageSight not tested
 // IBM Integration Bus not tested
-// Cloudmqtt not tested
 // Eurotech Everywhere Device Cloud not tested
 // Xively not tested
 // Litmus Automation Loop not tested
