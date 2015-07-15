@@ -194,14 +194,4 @@
 \
 }
 
-// IBM Websphere MQ Telemetry not tested
-// IBM MessageSight not tested
-// IBM Integration Bus not tested
-// Eurotech Everywhere Device Cloud not tested
-// Xively not tested
-// Litmus Automation Loop not tested
-// webMethods Nirvana Messaging not tested
-
-
-
 #endif
