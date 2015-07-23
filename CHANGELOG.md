@@ -1,6 +1,13 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.2.3
+>Release date: 2015-07-23
+
+Important Bug Fix 
+
+[FIX] File Persistence is not saved to disk closes #41
+
 ## MQTT-Client-Framework 0.2.2
 >Release date: 2015-07-05
 

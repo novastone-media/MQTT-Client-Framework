@@ -188,12 +188,6 @@
 
     self.txMsgId = 1;
     self.persistence = [[MQTTPersistence alloc] init];
-    if (cleanSessionFlag) {
-        [self.persistence deleteAllFlowsForClientId:self.clientId];
-    }
-    
-    [self tell];
-    
     return self;
 }
 
@@ -458,6 +452,12 @@
         host = @"localhost";
     }
     
+    if (self.cleanSessionFlag) {
+        [self.persistence deleteAllFlowsForClientId:self.clientId];
+    }
+    [self tell];
+    
+
     NSError* connectError;
     self.status = MQTTSessionStatusCreated;
     
