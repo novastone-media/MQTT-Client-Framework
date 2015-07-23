@@ -38,6 +38,7 @@
                                                  forMode:NSRunLoopCommonModes];
 
     self.session.delegate = self;
+    self.session.persistence.persistent = PERSISTENT;
     return self;
 }
 

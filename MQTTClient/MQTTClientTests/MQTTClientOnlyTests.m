@@ -37,6 +37,7 @@
 - (void)test_connect_host_not_found
 {
     self.session = [[MQTTSession alloc] init];
+    self.session.persistence.persistent = PERSISTENT;
     self.session.delegate = self;
     self.event = -1;
     [self.session connectToHost:@"abc" port:1883 usingSSL:NO];
@@ -52,6 +53,7 @@
 - (void)test_connect_1889
 {
     self.session = [[MQTTSession alloc] init];
+    self.session.persistence.persistent = PERSISTENT;
     self.session.delegate = self;
     self.event = -1;
     [self.session connectToHost:@"localhost" port:1889 usingSSL:NO];

@@ -758,6 +758,7 @@
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
     self.session.delegate = self;
+    self.session.persistence.persistent = PERSISTENT;
     self.event = -1;
 
     [NSObject cancelPreviousPerformRequestsWithTarget:self];

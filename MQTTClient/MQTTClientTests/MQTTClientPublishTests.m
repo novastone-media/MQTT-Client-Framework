@@ -158,7 +158,6 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         [self connect:parameters];
-        self.session.persistence.persistent = NO;
         for (int i = 0; i < ALOT; i++) {
             NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
@@ -510,6 +509,8 @@
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes];
     self.session.delegate = self;
+    self.session.persistence.persistent = PERSISTENT;
+
     self.event = -1;
 
     self.timeout = FALSE;

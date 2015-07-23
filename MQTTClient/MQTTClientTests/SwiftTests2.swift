@@ -27,6 +27,7 @@ class SwiftTests2 : XCTestCase, MQTTSessionDelegate {
         )
 
         session!.delegate = self;
+        session!.persistence.persistent = true;
         
         session!.connectToHost("localhost",
             port: 1883,

@@ -36,6 +36,7 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         self.session = [[MQTTSession alloc] init];
+        self.session.persistence.persistent = PERSISTENT;
         self.session.userName = parameters[@"user"];
         self.session.password = parameters[@"pass"];
         [self connect:self.session parameters:parameters];
@@ -61,6 +62,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         if (self.event == MQTTSessionEventConnected) {
@@ -100,6 +102,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
@@ -149,6 +152,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -173,6 +177,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -189,6 +194,7 @@
                                                     password:parameters[@"pass"]
                                                    keepAlive:60
                                                 cleanSession:YES];
+        self.session.persistence.persistent = TRUE;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -224,6 +230,7 @@
                                                                   protocolLevel:[parameters[@"protocollevel"] intValue]
                                                                         runLoop:[NSRunLoop currentRunLoop]
                                                                         forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         if (![subscribingSession connectAndWaitToHost:parameters[@"host"] port:[parameters[@"port"] intValue] usingSSL:[parameters[@"tls"] boolValue]]) {
             XCTFail(@"no connection for sub to %@", broker);
         }
@@ -242,6 +249,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -275,6 +283,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -293,6 +302,7 @@
                                                            protocolLevel:[parameters[@"protocollevel"] intValue]
                                                                  runLoop:[NSRunLoop currentRunLoop]
                                                                  forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         if (![sameSession connectAndWaitToHost:parameters[@"host"]
                                           port:[parameters[@"port"] intValue]
                                       usingSSL:[parameters[@"tls"] boolValue]]) {
@@ -332,6 +342,7 @@
                                                                   protocolLevel:[parameters[@"protocollevel"] intValue]
                                                                         runLoop:[NSRunLoop currentRunLoop]
                                                                         forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         if (![subscribingSession connectAndWaitToHost:parameters[@"host"] port:[parameters[@"port"] intValue] usingSSL:[parameters[@"tls"] boolValue]]) {
             XCTFail(@"no connection for sub to %@", broker);
         }
@@ -350,6 +361,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -381,6 +393,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -413,6 +426,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue] == 3 ? 4 : 3
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
@@ -446,6 +460,7 @@
                                                protocolLevel:5
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         
@@ -478,6 +493,7 @@
                                                protocolLevel:0
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         if (self.event == MQTTSessionEventConnectionClosedByBroker ||
@@ -508,6 +524,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
@@ -604,6 +621,7 @@
                                                protocolLevel:5
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         [self.session subscribeTopic:TOPIC];
         [self.session publishData:[@"Data" dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC];
@@ -649,6 +667,7 @@
                                                      forMode:NSRunLoopCommonModes
                                               securityPolicy:nil
                                                 certificates:myCerts];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         [self.session subscribeTopic:TOPIC];
         [self.session publishData:[@"Data" dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC];
@@ -701,6 +720,7 @@
                                                      forMode:NSRunLoopCommonModes
                                               securityPolicy:secpol
                                                 certificates:nil];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         [self.session subscribeTopic:TOPIC];
         [self.session publishData:[@"Data" dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC];
@@ -732,6 +752,7 @@
                                                               protocolLevel:[parameters[@"protocollevel"] intValue]
                                                                     runLoop:[NSRunLoop currentRunLoop]
                                                                     forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         if (![sendingSession connectAndWaitToHost:parameters[@"host"] port:[parameters[@"port"] intValue] usingSSL:[parameters[@"tls"] boolValue]]) {
             XCTFail(@"no connection for pub to %@", broker);
         }
@@ -751,6 +772,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         [self shutdown:parameters];
 
@@ -793,6 +815,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
 
@@ -829,6 +852,7 @@
                                                               protocolLevel:[parameters[@"protocollevel"] intValue]
                                                                     runLoop:[NSRunLoop currentRunLoop]
                                                                     forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         if (![sendingSession connectAndWaitToHost:parameters[@"host"] port:[parameters[@"port"] intValue] usingSSL:[parameters[@"tls"] boolValue]]) {
             XCTFail(@"no connection for pub to %@", broker);
         }
@@ -848,6 +872,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         [self shutdown:parameters];
 
@@ -865,6 +890,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos];
 

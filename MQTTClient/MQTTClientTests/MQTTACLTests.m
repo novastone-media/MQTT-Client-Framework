@@ -53,6 +53,7 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
@@ -82,6 +83,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
+
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
@@ -111,6 +114,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
+
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
@@ -139,6 +144,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
+
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"Not Rejected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
