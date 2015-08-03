@@ -558,6 +558,7 @@
     XCTAssert(self.event == -1, @"Event %ld happened", (long)self.event);
     XCTAssertEqual(self.subMid, self.sentSubMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.subMid, self.sentSubMid);
     for (NSNumber *qos in self.qoss) {
+        XCTAssertNotEqual([qos intValue], 0x80, @"Returncode in SUBACK is 0x80");
         XCTAssert([qos intValue] == 0x00 || [qos intValue] == 0x01 || [qos intValue] == 0x02, @"Returncode %d in SUBACK invalid [MQTT-3.9.3-2]", [qos intValue]);
     }
 }
@@ -567,7 +568,15 @@
     [self testSubscribe:topic atLevel:qos];
     XCTAssertFalse(self.timeout, @"No close within %f seconds", self.timeoutValue);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
+    if (self.event == MQTTSessionEventConnectionClosedByBroker) {
+        XCTAssert(self.subMid == 0, @"SUBACK received");
+        XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
+    } else {
+        XCTAssertEqual(self.subMid, self.sentSubMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.subMid, self.sentSubMid);
+        for (NSNumber *qos in self.qoss) {
+            XCTAssertEqual([qos intValue], 0x80, @"Returncode in SUBACK is not 0x80");
+        }
+    }
 }
 
 - (void)testMultiSubscribeCloseExpected:(NSDictionary *)topics
@@ -575,8 +584,14 @@
     [self testMultiSubscribe:topics];
     XCTAssertFalse(self.timeout, @"No close within %f seconds", self.timeoutValue);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    XCTAssert(self.subMid == 0, @"SUBACK received");
-    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
+    if (self.event == MQTTSessionEventConnectionClosedByBroker) {
+        XCTAssert(self.subMid == 0, @"SUBACK received");
+        XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
+    }
+    XCTAssertEqual(self.subMid, self.sentSubMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.subMid, self.sentSubMid);
+    for (NSNumber *qos in self.qoss) {
+        XCTAssertEqual([qos intValue], 0x80, @"Returncode in SUBACK is not 0x80");
+    }
 }
 
 - (void)testSubscribeFailureExpected:(NSString *)topic atLevel:(UInt8)qos

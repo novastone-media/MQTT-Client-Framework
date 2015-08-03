@@ -19,7 +19,7 @@
 #define ALOT 1024
 #define PERSISTENT true
 
-//#define BROKERLIST @[@"local", @"localTls", @"localTlsCerts", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd", @"moquette", @"activemq", @"apollo", @"cloudmqtt"]
+//#define BROKERLIST @[@"local", @"localTls", @"localTlsCerts", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd", @"moquette", @"activemq", @"apollo", @"cloudmqtt", @"hbmqtt"]
 #define BROKERLIST @[@"local"]
 
 #define BROKERS @{ \
@@ -33,6 +33,14 @@
 }, \
 \
 @"moquette": @{ \
+@"host": @"localhost",  \
+@"port": @1883,  \
+@"tls": @NO, \
+@"protocollevel": @4, \
+@"timeout": @10 \
+}, \
+\
+@"hbmqtt": @{ \
 @"host": @"localhost",  \
 @"port": @1883,  \
 @"tls": @NO, \
