@@ -1,6 +1,13 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.2.4
+>Release date: 2015-08-16
+
+Relaxed check for incoming Publishes (mosca 0.31.1 incompability)
+
+[NEW] zero message id is accepted on incoming publish closes #42
+
 ## MQTT-Client-Framework 0.2.3
 >Release date: 2015-07-23
 

@@ -878,11 +878,8 @@
     
     [self tell];
     self.synchronPub = FALSE;
-    self.synchronPubMid = 0;
     self.synchronSub = FALSE;
-    self.synchronSubMid = 0;
     self.synchronUnsub = FALSE;
-    self.synchronUnsubMid = 0;
     self.synchronConnect = FALSE;
     self.synchronDisconnect = FALSE;
     self.selfReference = nil;
@@ -1208,31 +1205,29 @@
         if ([data length] >= 2) {
             bytes = [data bytes];
             UInt16 msgId = 256 * bytes[0] + bytes[1];
-            if (msgId != 0) {
-                msg.mid = msgId;
-                data = [data subdataWithRange:NSMakeRange(2, [data length] - 2)];
-                if ([msg qos] == 1) {
-                    if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
-                        [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:msgId];
-                    }
-                    if(self.messageHandler){
-                        self.messageHandler(data, topic);
-                    }
-                    [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
-                    return;
+            msg.mid = msgId;
+            data = [data subdataWithRange:NSMakeRange(2, [data length] - 2)];
+            if ([msg qos] == 1) {
+                if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
+                    [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:msgId];
+                }
+                if(self.messageHandler){
+                    self.messageHandler(data, topic);
+                }
+                [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
+                return;
+            } else {
+                if (![self.persistence storeMessageForClientId:self.clientId
+                                                         topic:topic
+                                                          data:data
+                                                    retainFlag:msg.retainFlag
+                                                           qos:msg.qos
+                                                         msgId:msgId
+                                                  incomingFlag:YES]) {
+                    if (DEBUGSESS) NSLog(@"%@ dropping incoming messages", self);
                 } else {
-                    if (![self.persistence storeMessageForClientId:self.clientId
-                                                        topic:topic
-                                                         data:data
-                                                   retainFlag:msg.retainFlag
-                                                          qos:msg.qos
-                                                        msgId:msgId
-                                                 incomingFlag:YES]) {
-                        if (DEBUGSESS) NSLog(@"%@ dropping incoming messages", self);
-                    } else {
-                        [self tell];
-                        [self send:[MQTTMessage pubrecMessageWithMessageId:msgId]];
-                    }
+                    [self tell];
+                    [self send:[MQTTMessage pubrecMessageWithMessageId:msgId]];
                 }
             }
         }
@@ -1244,22 +1239,20 @@
     if ([[msg data] length] == 2) {
         UInt8 const *bytes = [[msg data] bytes];
         UInt16 messageId = (256 * bytes[0] + bytes[1]);
-        if (messageId != 0) {
-            msg.mid = messageId;
-            MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
-                                                  incomingFlag:NO
-                                                     messageId:messageId];
-            if (flow) {
-                if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelAtLeastOnce) {
-                    [self.persistence deleteFlow:flow];
-                    [self.persistence sync];
-                    [self tell];
-                    if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
-                        [self.delegate messageDelivered:self msgID:messageId];
-                    }
-                    if (self.synchronPub && self.synchronPubMid == messageId) {
-                        self.synchronPub = FALSE;
-                    }
+        msg.mid = messageId;
+        MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
+                                              incomingFlag:NO
+                                                 messageId:messageId];
+        if (flow) {
+            if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelAtLeastOnce) {
+                [self.persistence deleteFlow:flow];
+                [self.persistence sync];
+                [self tell];
+                if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
+                    [self.delegate messageDelivered:self msgID:messageId];
+                }
+                if (self.synchronPub && self.synchronPubMid == messageId) {
+                    self.synchronPub = FALSE;
                 }
             }
         }
@@ -1305,23 +1298,21 @@
     if ([[msg data] length] == 2) {
         UInt8 const *bytes = [[msg data] bytes];
         UInt16 messageId = (256 * bytes[0] + bytes[1]);
-        if (messageId != 0) {
-            msg.mid = messageId;
-            MQTTMessage *pubrelmsg = [MQTTMessage pubrelMessageWithMessageId:messageId];
-            MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
-                                                  incomingFlag:NO
-                                                     messageId:messageId];
-            if (flow) {
-                if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelExactlyOnce) {
-                    flow.commandType = @(MQTTPubrel);
-                    flow.topic = nil;
-                    flow.data = nil;
-                    flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
-                    [self.persistence sync];
-                }
+        msg.mid = messageId;
+        MQTTMessage *pubrelmsg = [MQTTMessage pubrelMessageWithMessageId:messageId];
+        MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
+                                              incomingFlag:NO
+                                                 messageId:messageId];
+        if (flow) {
+            if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelExactlyOnce) {
+                flow.commandType = @(MQTTPubrel);
+                flow.topic = nil;
+                flow.data = nil;
+                flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+                [self.persistence sync];
             }
-            [self send:pubrelmsg];
         }
+        [self send:pubrelmsg];
     }
 }
 
@@ -1330,30 +1321,28 @@
     if ([[msg data] length] == 2) {
         UInt8 const *bytes = [[msg data] bytes];
         UInt16 messageId = (256 * bytes[0] + bytes[1]);
-        if (messageId != 0) {
-            MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
-                                                  incomingFlag:YES
-                                                     messageId:messageId];
-            if (flow) {
-                if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
-                    [self.delegate newMessage:self
-                                         data:flow.data
-                                      onTopic:flow.topic
-                                          qos:[flow.qosLevel intValue]
-                                     retained:[flow.retainedFlag boolValue]
-                                          mid:[flow.messageId intValue]
-                     ];
-                }
-                if(self.messageHandler){
-                    self.messageHandler(flow.data, flow.topic);
-                }
-                
-                [self.persistence deleteFlow:flow];
-                [self.persistence sync];
-                [self tell];
+        MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
+                                              incomingFlag:YES
+                                                 messageId:messageId];
+        if (flow) {
+            if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
+                [self.delegate newMessage:self
+                                     data:flow.data
+                                  onTopic:flow.topic
+                                      qos:[flow.qosLevel intValue]
+                                 retained:[flow.retainedFlag boolValue]
+                                      mid:[flow.messageId intValue]
+                 ];
             }
-            [self send:[MQTTMessage pubcompMessageWithMessageId:messageId]];
+            if(self.messageHandler){
+                self.messageHandler(flow.data, flow.topic);
+            }
+            
+            [self.persistence deleteFlow:flow];
+            [self.persistence sync];
+            [self tell];
         }
+        [self send:[MQTTMessage pubcompMessageWithMessageId:messageId]];
     }
 }
 
@@ -1361,20 +1350,18 @@
     if ([[msg data] length] == 2) {
         UInt8 const *bytes = [[msg data] bytes];
         UInt16 messageId = (256 * bytes[0] + bytes[1]);
-        if (messageId != 0) {
-            MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
-                                                  incomingFlag:NO
-                                                     messageId:messageId];
-            if (flow && [flow.commandType intValue] == MQTTPubrel) {
-                [self.persistence deleteFlow:flow];
-                [self.persistence sync];
-                [self tell];
-                if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
-                    [self.delegate messageDelivered:self msgID:messageId];
-                }
-                if (self.synchronPub && self.synchronPubMid == messageId) {
-                    self.synchronPub = FALSE;
-                }
+        MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
+                                              incomingFlag:NO
+                                                 messageId:messageId];
+        if (flow && [flow.commandType intValue] == MQTTPubrel) {
+            [self.persistence deleteFlow:flow];
+            [self.persistence sync];
+            [self tell];
+            if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
+                [self.delegate messageDelivered:self msgID:messageId];
+            }
+            if (self.synchronPub && self.synchronPubMid == messageId) {
+                self.synchronPub = FALSE;
             }
         }
     }
@@ -1407,11 +1394,8 @@
     }
     
     self.synchronPub = FALSE;
-    self.synchronPubMid = 0;
     self.synchronSub = FALSE;
-    self.synchronSubMid = 0;
     self.synchronUnsub = FALSE;
-    self.synchronUnsubMid = 0;
     self.synchronConnect = FALSE;
     self.synchronDisconnect = FALSE;
 }
