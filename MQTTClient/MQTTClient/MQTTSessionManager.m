@@ -24,11 +24,11 @@
 @property (nonatomic) NSInteger keepalive;
 @property (nonatomic) BOOL clean;
 @property (nonatomic) BOOL auth;
-@property (nonatomic) BOOL willSend;
+@property (nonatomic) BOOL will;
 @property (strong, nonatomic) NSString *user;
 @property (strong, nonatomic) NSString *pass;
 @property (strong, nonatomic) NSString *willTopic;
-@property (strong, nonatomic) NSData *will;
+@property (strong, nonatomic) NSData *willMsg;
 @property (nonatomic) NSInteger willQos;
 @property (nonatomic) BOOL willRetainFlag;
 @property (strong, nonatomic) NSString *clientId;
@@ -118,9 +118,9 @@
                auth:auth
                user:user
                pass:pass
-           willSend:YES
+               will:YES
           willTopic:willTopic
-               will:will
+            willMsg:will
             willQos:willQos
      willRetainFlag:willRetainFlag
        withClientId:clientId];
@@ -134,9 +134,9 @@
              auth:(BOOL)auth
              user:(NSString *)user
              pass:(NSString *)pass
-         willSend:(BOOL)willSend
+             will:(BOOL)will
         willTopic:(NSString *)willTopic
-             will:(NSData *)will
+          willMsg:(NSData *)willMsg
           willQos:(MQTTQosLevel)willQos
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId
@@ -163,9 +163,9 @@
         self.auth = auth;
         self.user = user;
         self.pass = pass;
-        self.willTopic = willTopic;
         self.will = will;
-        self.willSend=willSend;
+        self.willTopic = willTopic;
+        self.willMsg=willMsg;
         self.willQos = willQos;
         self.willRetainFlag = willRetainFlag;
         self.clientId = clientId;
@@ -175,9 +175,9 @@
                                                     password:auth ? pass : nil
                                                    keepAlive:keepalive
                                                 cleanSession:clean
-                                                        will:willSend
+                                                        will:will
                                                    willTopic:willTopic
-                                                     willMsg:will
+                                                     willMsg:willMsg
                                                      willQoS:willQos
                                               willRetainFlag:willRetainFlag
                                                protocolLevel:4
