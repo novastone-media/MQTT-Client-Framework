@@ -85,9 +85,9 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
              auth:(BOOL)auth
              user:(NSString *)user
              pass:(NSString *)pass
-         willSend:(BOOL)willSend
+             will:(BOOL)will
         willTopic:(NSString *)willTopic
-             will:(NSData *)will
+          willMsg:(NSData *)willMsg
           willQos:(MQTTQosLevel)willQos
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId;
