@@ -85,18 +85,35 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
              auth:(BOOL)auth
              user:(NSString *)user
              pass:(NSString *)pass
+         willSend:(BOOL)willSend
         willTopic:(NSString *)willTopic
              will:(NSData *)will
           willQos:(MQTTQosLevel)willQos
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId;
 
+     /** Backward compatability for calls without willSend*/
+
+     - (void)connectTo:(NSString *)host
+                  port:(NSInteger)port
+                   tls:(BOOL)tls
+             keepalive:(NSInteger)keepalive
+                 clean:(BOOL)clean
+                  auth:(BOOL)auth
+                  user:(NSString *)user
+                  pass:(NSString *)pass
+             willTopic:(NSString *)willTopic
+                  will:(NSData *)will
+               willQos:(MQTTQosLevel)willQos
+        willRetainFlag:(BOOL)willRetainFlag
+          withClientId:(NSString *)clientId;
+
 /** Re-Connects to the MQTT broker using the parameters for given in the connectTo method
  */
 - (void)connectToLast;
 
 /** publishes data on a given topic at a specified QoS level and retain flag
- 
+
  @param data the data to be sent. length may range from 0 to 268,435,455 - 4 - _lengthof-topic_ bytes. Defaults to length 0.
  @param topic the Topic to identify the data
  @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES

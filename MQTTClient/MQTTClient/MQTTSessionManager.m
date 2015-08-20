@@ -24,6 +24,7 @@
 @property (nonatomic) NSInteger keepalive;
 @property (nonatomic) BOOL clean;
 @property (nonatomic) BOOL auth;
+@property (nonatomic) BOOL willSend;
 @property (strong, nonatomic) NSString *user;
 @property (strong, nonatomic) NSString *pass;
 @property (strong, nonatomic) NSString *willTopic;
@@ -46,28 +47,28 @@
 #define BACKGROUND_DISCONNECT_AFTER 8.0
 
 
-@implementation MQTTSessionManager 
+@implementation MQTTSessionManager
 - (id)init
 {
     self = [super init];
-    
+
 
     self.state = MQTTSessionManagerStateStarting;
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.completionHandler = nil;
 
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
+
     [defaultCenter addObserver:self
                       selector:@selector(appWillResignActive)
                           name:UIApplicationWillResignActiveNotification
                         object:nil];
-    
+
     [defaultCenter addObserver:self
                       selector:@selector(appDidEnterBackground)
                           name:UIApplicationDidEnterBackgroundNotification
                         object:nil];
-    
+
     [defaultCenter addObserver:self
                       selector:@selector(appDidBecomeActive)
                           name:UIApplicationDidBecomeActiveNotification
@@ -109,6 +110,37 @@
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId
 {
+  [self connectTo:host
+               port:port
+                tls:tls
+          keepalive:keepalive
+              clean:clean
+               auth:auth
+               user:user
+               pass:pass
+           willSend:YES
+          willTopic:willTopic
+               will:will
+            willQos:willQos
+     willRetainFlag:willRetainFlag
+       withClientId:clientId];
+}
+
+- (void)connectTo:(NSString *)host
+             port:(NSInteger)port
+              tls:(BOOL)tls
+        keepalive:(NSInteger)keepalive
+            clean:(BOOL)clean
+             auth:(BOOL)auth
+             user:(NSString *)user
+             pass:(NSString *)pass
+         willSend:(BOOL)willSend
+        willTopic:(NSString *)willTopic
+             will:(NSData *)will
+          willQos:(MQTTQosLevel)willQos
+   willRetainFlag:(BOOL)willRetainFlag
+     withClientId:(NSString *)clientId
+{
     if (!self.session ||
         ![host isEqualToString:self.host] ||
         port != self.port ||
@@ -119,7 +151,7 @@
         ![user isEqualToString:self.user] ||
         ![pass isEqualToString:self.pass] ||
         ![willTopic isEqualToString:self.willTopic] ||
-        //![will isEqualToData:self.will] ||
+        //![willMsg isEqualToData:self.willMsg] ||
         willQos != self.willQos ||
         willRetainFlag != self.willRetainFlag ||
         ![clientId isEqualToString:self.clientId]) {
@@ -133,16 +165,17 @@
         self.pass = pass;
         self.willTopic = willTopic;
         self.will = will;
+        self.willSend=willSend;
         self.willQos = willQos;
         self.willRetainFlag = willRetainFlag;
         self.clientId = clientId;
-        
+
         self.session = [[MQTTSession alloc] initWithClientId:clientId
                                                     userName:auth ? user : nil
                                                     password:auth ? pass : nil
                                                    keepAlive:keepalive
                                                 cleanSession:clean
-                                                        will:YES
+                                                        will:willSend
                                                    willTopic:willTopic
                                                      willMsg:will
                                                      willQoS:willQos
@@ -173,7 +206,7 @@
 {
     self.state = MQTTSessionManagerStateClosing;
     [self.session close];
-    
+
     if (self.reconnectTimer) {
         [self.reconnectTimer invalidate];
         self.reconnectTimer = nil;
@@ -200,14 +233,14 @@
         {
             self.lastErrorCode = nil;
             self.state = MQTTSessionManagerStateConnected;
-            
+
             if (self.clean || !self.reconnectFlag) {
                 if (self.subscriptions && [self.subscriptions count]) {
                     [self.session subscribeToTopics:self.subscriptions];
                 }
                 self.reconnectFlag = TRUE;
             }
-            
+
             break;
         }
         case MQTTSessionEventConnectionClosed:
@@ -234,7 +267,7 @@
             NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
             [runLoop addTimer:self.reconnectTimer
                       forMode:NSDefaultRunLoopMode];
-            
+
             self.state = MQTTSessionManagerStateError;
             self.lastErrorCode = error;
             break;
@@ -263,7 +296,7 @@
 {
     self.reconnectTimer = nil;
     self.state = MQTTSessionManagerStateStarting;
-    
+
     if (self.reconnectTime < RECONNECT_TIMER_MAX) {
         self.reconnectTime *= 2;
     }
@@ -273,9 +306,23 @@
 - (void)connectToLast
 {
     self.reconnectTime = RECONNECT_TIMER;
-    
+
     [self connectToInternal];
 }
 
-@end
+- (void)setSubscriptions:(NSMutableDictionary *)newSubscriptions
+{
+  if (self.state==MQTTSessionManagerStateConnected) {
+      if (self.subscriptions && [self.subscriptions count]) {
+          [self.session unsubscribeAndWaitTopics:self.subscriptions];
+      }
+      _subscriptions=newSubscriptions;
+      if (self.subscriptions && [self.subscriptions count]) {
+          [self.session subscribeToTopics:self.subscriptions];
+      }
+  } else {
+     _subscriptions=newSubscriptions;
+  }
+}
 
+@end
