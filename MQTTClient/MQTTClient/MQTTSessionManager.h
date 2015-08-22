@@ -69,8 +69,9 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param auth specifies the user and pass parameters should be used for authenthication
  * @param user an NSString object containing the user's name (or ID) for authentication. May be nil.
  * @param pass an NSString object containing the user's password. If userName is nil, password must be nil as well.
+ * @param will indicates whether a will shall be sent
  * @param willTopic the Will Topic is a string, must not be nil
- * @param will the Will Message, might be zero length
+ * @param willMsg the Will Message, might be zero length
  * @param willQos specifies the QoS level to be used when publishing the Will Message.
  * @param willRetainFlag indicates if the server should publish the Will Messages with retainFlag.
  * @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
@@ -92,7 +93,22 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId;
 
-     /** Backward compatability for calls without willSend*/
+/** Connects to the MQTT broker and stores the parameters for subsequent reconnects
+ * @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
+ * @param port spefies the port to connect to
+ * @param tls specifies whether to use SSL or not
+ * @param keepalive The Keep Alive is a time interval measured in seconds. The MQTTClient ensures that the interval between Control Packets being sent does not exceed the Keep Alive value. In the  absence of sending any other Control Packets, the Client sends a PINGREQ Packet.
+ * @param clean specifies if the server should discard previous session information.
+ * @param auth specifies the user and pass parameters should be used for authenthication
+ * @param user an NSString object containing the user's name (or ID) for authentication. May be nil.
+ * @param pass an NSString object containing the user's password. If userName is nil, password must be nil as well.
+ * @param willTopic the Will Topic is a string, must not be nil
+ * @param will the Will Message, might be zero length
+ * @param willQos specifies the QoS level to be used when publishing the Will Message.
+ * @param willRetainFlag indicates if the server should publish the Will Messages with retainFlag.
+ * @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
+ * @return the initialised MQTTSessionManager object
+ */
 
      - (void)connectTo:(NSString *)host
                   port:(NSInteger)port

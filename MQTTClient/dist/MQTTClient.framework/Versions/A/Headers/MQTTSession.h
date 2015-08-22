@@ -250,7 +250,8 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 /** Control MQTT persistence by setting the properties of persistence before connecting to an MQTT broker.
     The settings are specific to a clientId.
  
-    persistence.persistent = YES or NO (default) to establish file or in memory persistence
+    persistence.persistent = YES or NO (default) to establish file or in memory persistence. IMPORTANT: set immediately after creating the MQTTSession before calling any other method. Otherwise the default value (NO) will be used
+        for this session.
  
     persistence.maxWindowSize (a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are
         stored and transmitted later.

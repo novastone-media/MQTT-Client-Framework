@@ -7,7 +7,7 @@
       <Subnodes>
        <Node>
         <Name>Classes</Name>
-        <Path></Path>
+        <Path>annotated.html</Path>
         <Subnodes>
          <Node>
           <Name>Class List</Name>
@@ -419,6 +419,11 @@
             <Name>MQTTSessionManager</Name>
             <Path>interface_m_q_t_t_session_manager.html</Path>
             <Subnodes>
+             <Node>
+              <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>af50a6c56e8d19ef1e739cccb9e11722a</Anchor>
+             </Node>
              <Node>
               <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:willTopic:will:willQos:willRetainFlag:withClientId:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>

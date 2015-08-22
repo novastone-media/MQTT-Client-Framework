@@ -1,6 +1,15 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.2.5
+>Release date: 2015-08-22
+
+[NEW] Will option on SessionManager closes #44
+[NEW] Change SessionManager subscriptions while connected
+[FIX] Correct SessionManager subscriptions according to server session present
+
+[NEW] zero message id is accepted on incoming publish closes #42
+
 ## MQTT-Client-Framework 0.2.4
 >Release date: 2015-08-16
 
