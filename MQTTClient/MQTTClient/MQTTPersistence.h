@@ -31,12 +31,12 @@
 
 - (NSUInteger)windowSize:(NSString *)clientId;
 - (MQTTFlow *)storeMessageForClientId:(NSString *)clientId
-                          topic:(NSString *)topic
-                           data:(NSData *)data
-                     retainFlag:(BOOL)retainFlag
-                            qos:(MQTTQosLevel)qos
-                          msgId:(UInt16)msgId
-                   incomingFlag:(BOOL)incomingFlag;
+                                topic:(NSString *)topic
+                                 data:(NSData *)data
+                           retainFlag:(BOOL)retainFlag
+                                  qos:(MQTTQosLevel)qos
+                                msgId:(UInt16)msgId
+                         incomingFlag:(BOOL)incomingFlag;
 
 - (void)deleteFlow:(MQTTFlow *)flow;
 - (void)deleteAllFlowsForClientId:(NSString *)clientId;

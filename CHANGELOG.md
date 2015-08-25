@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.2.6
+>Release date: 2015-08-25
+
+[NEW] MQTTSessionManager init with Persistence settings
+[NEW] MQTTSessionManager with optional SSL security policy
+
 ## MQTT-Client-Framework 0.2.5
 >Release date: 2015-08-22
 

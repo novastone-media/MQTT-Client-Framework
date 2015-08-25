@@ -425,6 +425,11 @@
               <Anchor>af50a6c56e8d19ef1e739cccb9e11722a</Anchor>
              </Node>
              <Node>
+              <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:securityPolicy:certificates:</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>a58a397cb2851b3bb5c3cf2a49c109204</Anchor>
+             </Node>
+             <Node>
               <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:willTopic:will:willQos:willRetainFlag:withClientId:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
               <Anchor>af0b3aa800e54438a160b1c1b78b27898</Anchor>
@@ -438,6 +443,11 @@
               <Name>disconnect</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
               <Anchor>a71161804d040ca10e164578d7e7eb855</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>a99bcb6e9ae06072f890947a4f53d7dd2</Anchor>
              </Node>
              <Node>
               <Name>sendData:topic:qos:retain:</Name>

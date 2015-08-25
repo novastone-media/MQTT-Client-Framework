@@ -32,11 +32,18 @@
 @property (nonatomic) NSInteger willQos;
 @property (nonatomic) BOOL willRetainFlag;
 @property (strong, nonatomic) NSString *clientId;
+@property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
+@property (strong, nonatomic) NSArray *certificates;
 
 @property (strong, nonatomic) NSTimer *disconnectTimer;
 @property (strong, nonatomic) NSTimer *activityTimer;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 @property (strong, nonatomic) void (^completionHandler)(UIBackgroundFetchResult);
+
+@property (nonatomic) BOOL persistent;
+@property (nonatomic) NSUInteger maxWindowSize;
+@property (nonatomic) NSUInteger maxSize;
+@property (nonatomic) NSUInteger maxMessages;
 
 @end
 
@@ -48,7 +55,6 @@
 - (id)init
 {
     self = [super init];
-
 
     self.state = MQTTSessionManagerStateStarting;
     self.backgroundTask = UIBackgroundTaskInvalid;
@@ -70,6 +76,18 @@
                       selector:@selector(appDidBecomeActive)
                           name:UIApplicationDidBecomeActiveNotification
                         object:nil];
+    return self;
+}
+
+- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
+                              maxWindowSize:(NSUInteger)maxWindowSize
+                                maxMessages:(NSUInteger)maxMessages
+                                    maxSize:(NSUInteger)maxSize {
+    self = [self init];
+    self.persistent = persistent;
+    self.maxWindowSize = maxWindowSize;
+    self.maxSize = maxSize;
+    self.maxMessages = maxMessages;
     return self;
 }
 
@@ -138,6 +156,41 @@
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId
 {
+    [self connectTo:host
+               port:port
+                tls:tls
+          keepalive:keepalive
+              clean:clean
+               auth:auth
+               user:user
+               pass:pass
+               will:will
+          willTopic:willTopic
+            willMsg:willMsg
+            willQos:willQos
+     willRetainFlag:willRetainFlag
+       withClientId:clientId
+     securityPolicy:nil
+       certificates:nil];
+}
+
+- (void)connectTo:(NSString *)host
+             port:(NSInteger)port
+              tls:(BOOL)tls
+        keepalive:(NSInteger)keepalive
+            clean:(BOOL)clean
+             auth:(BOOL)auth
+             user:(NSString *)user
+             pass:(NSString *)pass
+             will:(BOOL)will
+        willTopic:(NSString *)willTopic
+          willMsg:(NSData *)willMsg
+          willQos:(MQTTQosLevel)willQos
+   willRetainFlag:(BOOL)willRetainFlag
+     withClientId:(NSString *)clientId
+   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
+     certificates:(NSArray *)certificates
+{
     if (!self.session ||
         ![host isEqualToString:self.host] ||
         port != self.port ||
@@ -151,7 +204,9 @@
         ![willMsg isEqualToData:self.willMsg] ||
         willQos != self.willQos ||
         willRetainFlag != self.willRetainFlag ||
-        ![clientId isEqualToString:self.clientId]) {
+        ![clientId isEqualToString:self.clientId] ||
+        securityPolicy != self.securityPolicy ||
+        certificates != self.certificates) {
         self.host = host;
         self.port = (int)port;
         self.tls = tls;
@@ -166,6 +221,8 @@
         self.willQos = willQos;
         self.willRetainFlag = willRetainFlag;
         self.clientId = clientId;
+        self.securityPolicy = securityPolicy;
+        self.certificates = certificates;
 
         self.session = [[MQTTSession alloc] initWithClientId:clientId
                                                     userName:auth ? user : nil
@@ -179,7 +236,15 @@
                                               willRetainFlag:willRetainFlag
                                                protocolLevel:4
                                                      runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSDefaultRunLoopMode];
+                                                     forMode:NSDefaultRunLoopMode
+                                              securityPolicy:securityPolicy
+                                                certificates:certificates];
+        
+        self.session.persistence.persistent = self.persistent;
+        self.session.persistence.maxWindowSize = self.maxWindowSize;
+        self.session.persistence.maxSize = self.maxSize;
+        self.session.persistence.maxMessages = self.maxMessages;
+        
         self.session.delegate = self;
         self.reconnectTime = RECONNECT_TIMER;
         self.reconnectFlag = FALSE;

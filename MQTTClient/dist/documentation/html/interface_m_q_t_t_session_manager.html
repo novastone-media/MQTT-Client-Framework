@@ -105,6 +105,10 @@ Inheritance diagram for MQTTSessionManager:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Instance Methods</h2></td></tr>
+<tr class="memitem:a99bcb6e9ae06072f890947a4f53d7dd2"><td class="memItemLeft" align="right" valign="top">(<a class="el" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> *)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_m_q_t_t_session_manager.html#a99bcb6e9ae06072f890947a4f53d7dd2">initWithPersistence:maxWindowSize:maxMessages:maxSize:</a></td></tr>
+<tr class="separator:a99bcb6e9ae06072f890947a4f53d7dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58a397cb2851b3bb5c3cf2a49c109204"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_m_q_t_t_session_manager.html#a58a397cb2851b3bb5c3cf2a49c109204">connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:securityPolicy:certificates:</a></td></tr>
+<tr class="separator:a58a397cb2851b3bb5c3cf2a49c109204"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af50a6c56e8d19ef1e739cccb9e11722a"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_m_q_t_t_session_manager.html#af50a6c56e8d19ef1e739cccb9e11722a">connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:</a></td></tr>
 <tr class="separator:af50a6c56e8d19ef1e739cccb9e11722a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0b3aa800e54438a160b1c1b78b27898"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_m_q_t_t_session_manager.html#af0b3aa800e54438a160b1c1b78b27898">connectTo:port:tls:keepalive:clean:auth:user:pass:willTopic:will:willQos:willRetainFlag:withClientId:</a></td></tr>
@@ -262,10 +266,139 @@ Properties</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Convenience alternative to full paramter connectTo </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">host</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">port</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">tls</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">keepalive</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">clean</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">auth</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">user</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">pass</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">will</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">willTopic</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">willMsg</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">willQos</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">willRetainFlag</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">clientId</td><td>see connectTo description </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a58a397cb2851b3bb5c3cf2a49c109204"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void) connectTo: </td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>host</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">port:</td>
+          <td></td>
+          <td class="paramtype">(NSInteger)&#160;</td>
+          <td class="paramname"><em>port</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">tls:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>tls</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">keepalive:</td>
+          <td></td>
+          <td class="paramtype">(NSInteger)&#160;</td>
+          <td class="paramname"><em>keepalive</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">clean:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>clean</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">auth:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>auth</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">user:</td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>user</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">pass:</td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>pass</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">will:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>will</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">willTopic:</td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>willTopic</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">willMsg:</td>
+          <td></td>
+          <td class="paramtype">(NSData *)&#160;</td>
+          <td class="paramname"><em>willMsg</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">willQos:</td>
+          <td></td>
+          <td class="paramtype">(MQTTQosLevel)&#160;</td>
+          <td class="paramname"><em>willQos</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">willRetainFlag:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>willRetainFlag</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">withClientId:</td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>clientId</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">securityPolicy:</td>
+          <td></td>
+          <td class="paramtype">(MQTTSSLSecurityPolicy *)&#160;</td>
+          <td class="paramname"><em>securityPolicy</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">certificates:</td>
+          <td></td>
+          <td class="paramtype">(NSArray *)&#160;</td>
+          <td class="paramname"><em>certificates</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 <p>Connects to the MQTT broker and stores the parameters for subsequent reconnects </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">host</td><td>specifies the hostname or ip address to connect to. Defaults to "localhost". </td></tr>
-    <tr><td class="paramname">port</td><td>spefies the port to connect to </td></tr>
+    <tr><td class="paramname">port</td><td>specifies the port to connect to </td></tr>
     <tr><td class="paramname">tls</td><td>specifies whether to use SSL or not </td></tr>
     <tr><td class="paramname">keepalive</td><td>The Keep Alive is a time interval measured in seconds. The MQTTClient ensures that the interval between Control Packets being sent does not exceed the Keep Alive value. In the absence of sending any other Control Packets, the Client sends a PINGREQ Packet. </td></tr>
     <tr><td class="paramname">clean</td><td>specifies if the server should discard previous session information. </td></tr>
@@ -273,15 +406,16 @@ Properties</h2></td></tr>
     <tr><td class="paramname">user</td><td>an NSString object containing the user's name (or ID) for authentication. May be nil. </td></tr>
     <tr><td class="paramname">pass</td><td>an NSString object containing the user's password. If userName is nil, password must be nil as well. </td></tr>
     <tr><td class="paramname">will</td><td>indicates whether a will shall be sent </td></tr>
-    <tr><td class="paramname">willTopic</td><td>the Will Topic is a string, must not be nil </td></tr>
-    <tr><td class="paramname">willMsg</td><td>the Will Message, might be zero length </td></tr>
+    <tr><td class="paramname">willTopic</td><td>the Will Topic is a string, may be nil </td></tr>
+    <tr><td class="paramname">willMsg</td><td>the Will Message, might be zero length or nil </td></tr>
     <tr><td class="paramname">willQos</td><td>specifies the QoS level to be used when publishing the Will Message. </td></tr>
     <tr><td class="paramname">willRetainFlag</td><td>indicates if the server should publish the Will Messages with retainFlag. </td></tr>
     <tr><td class="paramname">clientId</td><td>The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated. </td></tr>
+    <tr><td class="paramname">securityPolicy</td><td>A custom SSL security policy or nil. </td></tr>
+    <tr><td class="paramname">certificates</td><td>An NSArray of the pinned certificates to use or nil. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the initialised <a class="el" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> object </dd></dl>
 
 </div>
 </div>
@@ -374,25 +508,24 @@ Properties</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Connects to the MQTT broker and stores the parameters for subsequent reconnects </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Convenience alternative to full paramter connectTo </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">host</td><td>specifies the hostname or ip address to connect to. Defaults to "localhost". </td></tr>
-    <tr><td class="paramname">port</td><td>spefies the port to connect to </td></tr>
-    <tr><td class="paramname">tls</td><td>specifies whether to use SSL or not </td></tr>
-    <tr><td class="paramname">keepalive</td><td>The Keep Alive is a time interval measured in seconds. The MQTTClient ensures that the interval between Control Packets being sent does not exceed the Keep Alive value. In the absence of sending any other Control Packets, the Client sends a PINGREQ Packet. </td></tr>
-    <tr><td class="paramname">clean</td><td>specifies if the server should discard previous session information. </td></tr>
-    <tr><td class="paramname">auth</td><td>specifies the user and pass parameters should be used for authenthication </td></tr>
-    <tr><td class="paramname">user</td><td>an NSString object containing the user's name (or ID) for authentication. May be nil. </td></tr>
-    <tr><td class="paramname">pass</td><td>an NSString object containing the user's password. If userName is nil, password must be nil as well. </td></tr>
+    <tr><td class="paramname">host</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">port</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">tls</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">keepalive</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">clean</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">auth</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">user</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">pass</td><td>see connectTo description </td></tr>
     <tr><td class="paramname">willTopic</td><td>the Will Topic is a string, must not be nil </td></tr>
     <tr><td class="paramname">will</td><td>the Will Message, might be zero length </td></tr>
-    <tr><td class="paramname">willQos</td><td>specifies the QoS level to be used when publishing the Will Message. </td></tr>
-    <tr><td class="paramname">willRetainFlag</td><td>indicates if the server should publish the Will Messages with retainFlag. </td></tr>
-    <tr><td class="paramname">clientId</td><td>The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated. </td></tr>
+    <tr><td class="paramname">willQos</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">willRetainFlag</td><td>see connectTo description </td></tr>
+    <tr><td class="paramname">clientId</td><td>see connectTo description </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the initialised <a class="el" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> object </dd></dl>
 
 </div>
 </div>
@@ -425,6 +558,54 @@ Properties</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Disconnects gracefully from the MQTT broker </p>
+
+</div>
+</div>
+<a class="anchor" id="a99bcb6e9ae06072f890947a4f53d7dd2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (<a class="el" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> *) initWithPersistence: </td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>persistent</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">maxWindowSize:</td>
+          <td></td>
+          <td class="paramtype">(NSUInteger)&#160;</td>
+          <td class="paramname"><em>maxWindowSize</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">maxMessages:</td>
+          <td></td>
+          <td class="paramtype">(NSUInteger)&#160;</td>
+          <td class="paramname"><em>maxMessages</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">maxSize:</td>
+          <td></td>
+          <td class="paramtype">(NSUInteger)&#160;</td>
+          <td class="paramname"><em>maxSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>initWithPersistence sets the MQTTPersistence properties other than default </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">persistent</td><td>YES or NO (default) to establish file or in memory persistence. </td></tr>
+    <tr><td class="paramname">maxWindowSize</td><td>(a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are stored and transmitted later. </td></tr>
+    <tr><td class="paramname">maxSize</td><td>(a positive number of bytes, default is 64 MB) to limit the size of the persistence file. Messages published after the limit is reached are dropped. </td></tr>
+    <tr><td class="paramname">maxMessages</td><td>(a positive number, default is 1024) to limit the number of messages stored. Additional messages published are dropped. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the initialized <a class="el" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> object </dd></dl>
 
 </div>
 </div>
@@ -569,7 +750,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Aug 22 2015 13:05:39 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Aug 25 2015 15:06:14 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>
