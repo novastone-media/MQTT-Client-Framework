@@ -112,6 +112,7 @@
                                                          code:errSSLXCertChainInvalid
                                                      userInfo:@{NSLocalizedDescriptionKey : @"Unable to apply security policy, the SSL connection is insecure!"}];
                 [self.delegate decoder:self handleEvent:MQTTDecoderEventProtocolError error:sslError];
+                break;
             }
 
             if (self.status == MQTTDecoderStatusDecodingHeader) {
@@ -121,6 +122,7 @@
                 if (n == -1) {
                     self.status = MQTTDecoderStatusConnectionError;
                     [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:self.stream.streamError];
+                    break;
                 } else if (n == 1) {
                     self.length = 0;
                     self.lengthMultiplier = 1;
@@ -158,6 +160,7 @@
                     if (n == -1) {
                         self.status = MQTTDecoderStatusConnectionError;
                         [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:self.stream.streamError];
+                        break;
                     } else {
                         [self.dataBuffer appendBytes:buffer length:n];
                     }
