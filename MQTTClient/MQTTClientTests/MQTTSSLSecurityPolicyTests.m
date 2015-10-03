@@ -5,7 +5,6 @@
 //  Created by @bobwenx on 15/6/1.
 //
 
-#import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "MQTTSSLSecurityPolicy.h"
 

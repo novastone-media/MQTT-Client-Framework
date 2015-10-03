@@ -105,6 +105,8 @@ Inheritance diagram for &lt;MQTTSessionManagerDelegate&gt;:</div>
 Instance Methods</h2></td></tr>
 <tr class="memitem:aa607c1d6a9a1b2a9ea9a707706c393bb"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_manager_delegate-p.html#aa607c1d6a9a1b2a9ea9a707706c393bb">handleMessage:onTopic:retained:</a></td></tr>
 <tr class="separator:aa607c1d6a9a1b2a9ea9a707706c393bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae58c6a8f7ac61d31c85a9ea311fbd57d"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_manager_delegate-p.html#ae58c6a8f7ac61d31c85a9ea311fbd57d">messageDelivered:</a></td></tr>
+<tr class="separator:ae58c6a8f7ac61d31c85a9ea311fbd57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>delegate gives your application access to received messages </p>
@@ -149,13 +151,44 @@ Instance Methods</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae58c6a8f7ac61d31c85a9ea311fbd57d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void) messageDelivered: </td>
+          <td></td>
+          <td class="paramtype">(UInt16)&#160;</td>
+          <td class="paramname"><em>msgID</em></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>gets called when a published message was actually delivered </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msgID</td><td>the Message Identifier of the delivered message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>this method is called after a publish with qos 1 or 2 only </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this protocol was generated from the following file:<ul>
 <li><a class="el" href="_m_q_t_t_session_manager_8h_source.html">MQTTSessionManager.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 25 2015 15:06:14 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Oct 3 2015 17:39:05 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

@@ -1171,7 +1171,7 @@
       <Scope>MQTTSessionManager</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session_manager.html</Path>
-    <Anchor>aad73993729e0ec889972042e99449957</Anchor>
+    <Anchor>a7a78a03d8bef2780209c38b6b42d399a</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -1212,6 +1212,17 @@
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
     <Anchor>aa607c1d6a9a1b2a9ea9a707706c393bb</Anchor>
+    <DeclaredIn>MQTTSessionManager.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>messageDelivered:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>intfm</Type>
+      <Scope>MQTTSessionManagerDelegate-p</Scope>
+    </TokenIdentifier>
+    <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
+    <Anchor>ae58c6a8f7ac61d31c85a9ea311fbd57d</Anchor>
     <DeclaredIn>MQTTSessionManager.h</DeclaredIn>
   </Token>
 </Tokens>

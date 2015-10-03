@@ -27,7 +27,7 @@ class SwiftTests2 : XCTestCase, MQTTSessionDelegate {
         )
 
         session!.delegate = self;
-        session!.persistence.persistent = true;
+        session!.persistence.persistent = false;
         
         session!.connectToHost("localhost",
             port: 1883,
@@ -79,7 +79,7 @@ class SwiftTests2 : XCTestCase, MQTTSessionDelegate {
     }
     
     func newMessage(session: MQTTSession!, data: NSData!, onTopic topic: String!, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
-        println("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
+        print("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
         sessionReceived = true;
     }
     

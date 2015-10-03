@@ -13,5 +13,5 @@ var searchData=
   ['subscribetopic_3a',['subscribeTopic:',['../interface_m_q_t_t_session.html#af3bb097c036b9441ce48adff45917322',1,'MQTTSession']]],
   ['subscribetotopic_3aatlevel_3a',['subscribeToTopic:atLevel:',['../interface_m_q_t_t_session.html#ace91fa3ca0b5eb08a2a48706c840dab3',1,'MQTTSession']]],
   ['subscribetotopics_3a',['subscribeToTopics:',['../interface_m_q_t_t_session.html#aba1debfec65602b53c6e4b9c3bdf4af1',1,'MQTTSession']]],
-  ['subscriptions',['subscriptions',['../interface_m_q_t_t_session_manager.html#aad73993729e0ec889972042e99449957',1,'MQTTSessionManager']]]
+  ['subscriptions',['subscriptions',['../interface_m_q_t_t_session_manager.html#a7a78a03d8bef2780209c38b6b42d399a',1,'MQTTSessionManager']]]
 ];

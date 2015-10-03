@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Christoph Krey. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "MQTTSessionManager.h"
 #import "MQTTClientTests.h"
@@ -122,6 +121,10 @@
     if ([topic isEqualToString:@"MQTTSessionManager"]) {
         self.received++;
     }
+}
+
+- (void)messageDelivered:(UInt16)msgID {
+    NSLog(@"messageDelivered %d", msgID);
 }
 
 - (void)timeout:(NSTimer *)timer {

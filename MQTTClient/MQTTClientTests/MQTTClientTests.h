@@ -17,7 +17,7 @@
 #define MULTI 15  // some test servers are limited in concurrent sessions
 #define BULK 99
 #define ALOT 1024
-#define PERSISTENT true
+#define PERSISTENT false
 
 //#define BROKERLIST @[@"local", @"localTls", @"localTlsCerts", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"pahotest", @"rabbitmq", @"hivemq", @"rsmb", @"mosca", @"m2m", @"vernemq", @"emqttd", @"moquette", @"activemq", @"apollo", @"cloudmqtt", @"hbmqtt"]
 #define BROKERLIST @[@"local"]

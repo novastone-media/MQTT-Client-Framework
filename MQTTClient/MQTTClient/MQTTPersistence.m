@@ -58,7 +58,6 @@ static unsigned long long fileSystemFreeSize;
     return self;
 }
 
-
 - (NSUInteger)windowSize:(NSString *)clientId {
     NSUInteger windowSize = 0;
     NSArray *flows = [self allFlowsforClientId:clientId

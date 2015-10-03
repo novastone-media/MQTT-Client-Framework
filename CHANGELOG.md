@@ -1,6 +1,13 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.3.0
+>Release date: 2015-10-03
+
+[NEW] provide support for tvOS, OSX and iOS closes #50
+[NEW] add messageDelivered delegate message in MQTTSessionManager closes #49
+[FIX] clarification of changing subscriptions in MQTTSessionManager closes #47
+
 ## MQTT-Client-Framework 0.2.6
 >Release date: 2015-08-25
 

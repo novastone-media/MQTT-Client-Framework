@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Christoph Krey. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "MQTTClient.h"
 #import "MQTTClientTests.h"

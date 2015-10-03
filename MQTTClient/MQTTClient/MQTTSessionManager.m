@@ -37,13 +37,16 @@
 
 @property (strong, nonatomic) NSTimer *disconnectTimer;
 @property (strong, nonatomic) NSTimer *activityTimer;
+#ifndef TARGET_OS_MAC
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
-@property (strong, nonatomic) void (^completionHandler)(UIBackgroundFetchResult);
+#endif
 
 @property (nonatomic) BOOL persistent;
 @property (nonatomic) NSUInteger maxWindowSize;
 @property (nonatomic) NSUInteger maxSize;
 @property (nonatomic) NSUInteger maxMessages;
+
+@property (strong, nonatomic) NSMutableDictionary *internalSubscriptions;
 
 @end
 
@@ -57,8 +60,8 @@
     self = [super init];
 
     self.state = MQTTSessionManagerStateStarting;
+#ifndef TARGET_OS_MAC
     self.backgroundTask = UIBackgroundTaskInvalid;
-    self.completionHandler = nil;
 
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 
@@ -76,6 +79,7 @@
                       selector:@selector(appDidBecomeActive)
                           name:UIApplicationDidBecomeActiveNotification
                         object:nil];
+#endif
     return self;
 }
 
@@ -91,6 +95,7 @@
     return self;
 }
 
+#ifndef TARGET_OS_MAC
 - (void)appWillResignActive
 {
     [self disconnect];
@@ -110,6 +115,7 @@
 {
     [self connectToLast];
 }
+#endif
 
 - (void)connectTo:(NSString *)host
              port:(NSInteger)port
@@ -301,15 +307,12 @@
         case MQTTSessionEventConnectionClosed:
         case MQTTSessionEventConnectionClosedByBroker:
             self.state = MQTTSessionManagerStateClosed;
+#ifndef TARGET_OS_MAC
             if (self.backgroundTask) {
                 [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
                 self.backgroundTask = UIBackgroundTaskInvalid;
             }
-            if (self.completionHandler) {
-                self.completionHandler(UIBackgroundFetchResultNewData);
-                self.completionHandler = nil;
-            }
-
+#endif
             self.state = MQTTSessionManagerStateStarting;
             break;
         case MQTTSessionEventProtocolError:
@@ -335,7 +338,9 @@
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
 {
-    [self.delegate handleMessage:data onTopic:topic retained:retained];
+    if (self.delegate) {
+        [self.delegate handleMessage:data onTopic:topic retained:retained];
+    }
 }
 
 - (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
@@ -344,6 +349,14 @@
             [self.session subscribeToTopics:self.subscriptions];
         }
         self.reconnectFlag = TRUE;
+    }
+}
+
+- (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID {
+    if (self.delegate) {
+        if ([self.delegate respondsToSelector:@selector(messageDelivered:)]) {
+            [self.delegate messageDelivered:msgID];
+        }
     }
 }
 
@@ -376,7 +389,11 @@
     [self connectToInternal];
 }
 
-- (void)setSubscriptions:(NSMutableDictionary *)newSubscriptions
+- (NSDictionary *)subscriptions {
+    return self.internalSubscriptions;
+}
+
+- (void)setSubscriptions:(NSDictionary *)newSubscriptions
 {
     if (self.state==MQTTSessionManagerStateConnected) {
         for (NSString *topicFilter in self.subscriptions) {
@@ -393,7 +410,7 @@
             }
         }
     }
-    _subscriptions=newSubscriptions;
+    _internalSubscriptions=[newSubscriptions mutableCopy];
 }
 
 @end

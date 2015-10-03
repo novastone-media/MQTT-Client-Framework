@@ -161,8 +161,8 @@ Instance Methods</h2></td></tr>
 Properties</h2></td></tr>
 <tr class="memitem:abc07e05f3c0593b0bd851e8d69255381"><td class="memItemLeft" align="right" valign="top">id&lt; <a class="el" href="protocol_m_q_t_t_session_manager_delegate-p.html">MQTTSessionManagerDelegate</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#abc07e05f3c0593b0bd851e8d69255381">delegate</a></td></tr>
 <tr class="separator:abc07e05f3c0593b0bd851e8d69255381"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad73993729e0ec889972042e99449957"><td class="memItemLeft" align="right" valign="top">NSMutableDictionary *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#aad73993729e0ec889972042e99449957">subscriptions</a></td></tr>
-<tr class="separator:aad73993729e0ec889972042e99449957"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a78a03d8bef2780209c38b6b42d399a"><td class="memItemLeft" align="right" valign="top">NSDictionary *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#a7a78a03d8bef2780209c38b6b42d399a">subscriptions</a></td></tr>
+<tr class="separator:a7a78a03d8bef2780209c38b6b42d399a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4caf1f5fe21b8d36700d97b68b3bf978"><td class="memItemLeft" align="right" valign="top">MQTTSessionManagerState&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#a4caf1f5fe21b8d36700d97b68b3bf978">state</a></td></tr>
 <tr class="separator:a4caf1f5fe21b8d36700d97b68b3bf978"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2522a9c3be18812cea22cf2f6a40754"><td class="memItemLeft" align="right" valign="top">NSError *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#aa2522a9c3be18812cea22cf2f6a40754">lastErrorCode</a></td></tr>
@@ -723,7 +723,7 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aad73993729e0ec889972042e99449957"></a>
+<a class="anchor" id="a7a78a03d8bef2780209c38b6b42d399a"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -731,7 +731,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">- (NSMutableDictionary*) subscriptions</td>
+          <td class="memname">- (NSDictionary*) subscriptions</td>
         </tr>
       </table>
   </td>
@@ -740,7 +740,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>subscriptions as a dictionary of NSNumber instances indicating the MQTTQoSLevel. The keys are topic filters. The SessionManager subscribes to the given subscriptions after successfull (re-)connect according to the cleansession parameter and the state of the session as indicated by the broker. </p>
+<p>subscriptions as a dictionary of NSNumber instances indicating the MQTTQoSLevel. The keys are topic filters. The SessionManager subscribes to the given subscriptions after successfull (re-)connect according to the cleansession parameter and the state of the session as indicated by the broker. Setting a new subscriptions dictionary initiates SUBSCRIBE or UNSUBSCRIBE messages by SessionManager by comparing the old and new subscriptions. </p>
 
 </div>
 </div>
@@ -750,7 +750,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 25 2015 15:06:14 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Oct 3 2015 17:39:05 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

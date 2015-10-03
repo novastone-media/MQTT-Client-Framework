@@ -83,7 +83,7 @@ class SwiftTests : XCTestCase, MQTTSessionDelegate {
     }
     
     func newMessage(session: MQTTSession!, data: NSData!, onTopic topic: String!, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
-        println("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
+        print("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
         sessionReceived = true;
     }
     
