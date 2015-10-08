@@ -17,6 +17,10 @@
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) int type;
 @property (nonatomic) BOOL ungraceful;
+@property (nonatomic) int received;
+@property (nonatomic) int processed;
+@property (strong, nonatomic) NSTimer *processingSimulationTimer;
+
 @end
 
 @implementation MQTTClientTests
@@ -633,6 +637,179 @@
     }
 }
 
+#define PROCESSING_NUMBER 20
+#define PROCESSING_INTERVAL 0.1
+#define PROCESSING_TIMEOUT 30
+
+- (void)test_throttling_incoming_q0 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:60
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:4
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+
+        self.processed = 0;
+        self.received = 0;
+
+        self.processingSimulationTimer = [NSTimer scheduledTimerWithTimeInterval:PROCESSING_INTERVAL
+                                                                          target:self
+                                                                        selector:@selector(processingSimulation:)
+                                                                        userInfo:nil
+                                                                         repeats:true];
+        [self.session subscribeToTopic:TOPIC atLevel:MQTTQosLevelAtMostOnce];
+
+        for (int i = 0; i < PROCESSING_NUMBER; i++) {
+            NSString *payload = [NSString stringWithFormat:@"Data %d", i];
+            [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:MQTTQosLevelAtMostOnce];
+        }
+
+        self.timeout = FALSE;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self performSelector:@selector(ackTimeout:)
+                   withObject:nil
+                   afterDelay:PROCESSING_TIMEOUT];
+
+        while ((self.processed != self.received || self.received != PROCESSING_NUMBER) && !self.timeout) {
+            NSLog(@"waiting for processing");
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+
+        XCTAssert(!self.timeout, @"timeout");
+        
+        [self shutdown:parameters];
+    }
+}
+
+- (void)test_throttling_incoming_q1 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:60
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:4
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+
+        self.processed = 0;
+        self.received = 0;
+
+        self.processingSimulationTimer = [NSTimer scheduledTimerWithTimeInterval:PROCESSING_INTERVAL
+                                                                          target:self
+                                                                        selector:@selector(processingSimulation:)
+                                                                        userInfo:nil
+                                                                         repeats:true];
+        [self.session subscribeToTopic:TOPIC atLevel:MQTTQosLevelAtLeastOnce];
+
+        for (int i = 0; i < PROCESSING_NUMBER; i++) {
+            NSString *payload = [NSString stringWithFormat:@"Data %d", i];
+            [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:MQTTQosLevelAtLeastOnce];
+        }
+
+        self.timeout = FALSE;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self performSelector:@selector(ackTimeout:)
+                   withObject:nil
+                   afterDelay:PROCESSING_TIMEOUT];
+
+        while ((self.processed != self.received || self.received != PROCESSING_NUMBER) && !self.timeout) {
+            NSLog(@"waiting for processing");
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+
+        XCTAssert(!self.timeout, @"timeout");
+        
+        [self shutdown:parameters];
+    }
+}
+
+- (void)test_throttling_incoming_q2 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:60
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:4
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+
+        self.processed = 0;
+        self.received = 0;
+
+        self.processingSimulationTimer = [NSTimer scheduledTimerWithTimeInterval:PROCESSING_INTERVAL
+                                                                          target:self
+                                                                        selector:@selector(processingSimulation:)
+                                                                        userInfo:nil
+                                                                         repeats:true];
+        [self.session subscribeToTopic:TOPIC atLevel:MQTTQosLevelExactlyOnce];
+
+        for (int i = 0; i < PROCESSING_NUMBER; i++) {
+            NSString *payload = [NSString stringWithFormat:@"Data %d", i];
+            [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:MQTTQosLevelExactlyOnce];
+        }
+
+        self.timeout = FALSE;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self performSelector:@selector(ackTimeout:)
+                   withObject:nil
+                   afterDelay:PROCESSING_TIMEOUT];
+
+        while ((self.processed != self.received || self.received != PROCESSING_NUMBER) && !self.timeout) {
+            NSLog(@"waiting for processing");
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+
+        XCTAssert(!self.timeout, @"timeout");
+        
+        [self shutdown:parameters];
+    }
+}
+
+- (void)processingSimulation:(id)userInfo {
+    NSLog(@"processingSimulation %d/%d", self.processed, self.received);
+    if (self.received > self.processed) {
+        self.processed++;
+    }
+}
+
 /*
  * Client Certificate
  */
@@ -921,7 +1098,17 @@
 }
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
-    NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
+    NSLog(@"newMessage(%d):%@ onTopic:%@ qos:%d retained:%d mid:%d", self.received, data, topic, qos, retained, mid);
+}
+
+- (BOOL)newMessageWithFeedback:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
+    NSLog(@"newMessageWithFeedback(%d):%@ onTopic:%@ qos:%d retained:%d mid:%d", self.processed, data, topic, qos, retained, mid);
+    if (self.processed > self.received - 10) {
+        self.received++;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {

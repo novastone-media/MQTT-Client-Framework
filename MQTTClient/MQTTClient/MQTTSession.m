@@ -1195,10 +1195,24 @@
     NSRange range = NSMakeRange(2 + topicLength, [data length] - topicLength - 2);
     data = [data subdataWithRange:range];
     if ([msg qos] == 0) {
+        BOOL processed = true;
         if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
-            [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:0];
+            [self.delegate newMessage:self
+                                 data:data
+                              onTopic:topic
+                                  qos:msg.qos
+                             retained:msg.retainFlag
+                                  mid:0];
         }
-        if(self.messageHandler){
+        if ([self.delegate respondsToSelector:@selector(newMessageWithFeedback:data:onTopic:qos:retained:mid:)]) {
+            processed = [self.delegate newMessageWithFeedback:self
+                                                         data:data
+                                                      onTopic:topic
+                                                          qos:msg.qos
+                                                     retained:msg.retainFlag
+                                                          mid:0];
+        }
+        if (self.messageHandler) {
             self.messageHandler(data, topic);
         }
     } else {
@@ -1208,13 +1222,29 @@
             msg.mid = msgId;
             data = [data subdataWithRange:NSMakeRange(2, [data length] - 2)];
             if ([msg qos] == 1) {
+                BOOL processed = true;
                 if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
-                    [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:msgId];
+                    [self.delegate newMessage:self
+                                         data:data
+                                      onTopic:topic
+                                          qos:msg.qos
+                                     retained:msg.retainFlag
+                                          mid:msgId];
                 }
-                if(self.messageHandler){
+                if ([self.delegate respondsToSelector:@selector(newMessageWithFeedback:data:onTopic:qos:retained:mid:)]) {
+                    processed = [self.delegate newMessageWithFeedback:self
+                                                                 data:data
+                                                              onTopic:topic
+                                                                  qos:msg.qos
+                                                             retained:msg.retainFlag
+                                                                  mid:0];
+                }
+                if (self.messageHandler) {
                     self.messageHandler(data, topic);
                 }
-                [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
+                if (processed) {
+                    [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
+                }
                 return;
             } else {
                 if (![self.persistence storeMessageForClientId:self.clientId
@@ -1325,6 +1355,7 @@
                                               incomingFlag:YES
                                                  messageId:messageId];
         if (flow) {
+            BOOL processed = true;
             if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
                 [self.delegate newMessage:self
                                      data:flow.data
@@ -1334,15 +1365,25 @@
                                       mid:[flow.messageId intValue]
                  ];
             }
+            if ([self.delegate respondsToSelector:@selector(newMessageWithFeedback:data:onTopic:qos:retained:mid:)]) {
+                processed = [self.delegate newMessageWithFeedback:self
+                                                             data:flow.data
+                                                          onTopic:flow.topic
+                                                              qos:[flow.qosLevel intValue]
+                                                         retained:[flow.retainedFlag boolValue]
+                                                              mid:[flow.messageId intValue]
+                             ];
+            }
             if(self.messageHandler){
                 self.messageHandler(flow.data, flow.topic);
             }
-            
-            [self.persistence deleteFlow:flow];
-            [self.persistence sync];
-            [self tell];
+            if (processed) {
+                [self.persistence deleteFlow:flow];
+                [self.persistence sync];
+                [self tell];
+                [self send:[MQTTMessage pubcompMessageWithMessageId:messageId]];
+            }
         }
-        [self send:[MQTTMessage pubcompMessageWithMessageId:messageId]];
     }
 }
 

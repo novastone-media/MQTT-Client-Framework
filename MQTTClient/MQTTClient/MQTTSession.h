@@ -72,6 +72,22 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
           retained:(BOOL)retained
                mid:(unsigned int)mid;
 
+/** gets called when a new message was received
+ @param session the MQTTSession reporting the new message
+ @param data the data received, might be zero length
+ @param topic the topic the data was published to
+ @param qos the qos of the message
+ @param retained indicates if the data retransmitted from server storage
+ @param mid the Message Identifier of the message if qos = 1 or 2, zero otherwise
+ @return true if the message was or will be processed, false if the message shall not be ack-ed
+ */
+- (BOOL)newMessageWithFeedback:(MQTTSession *)session
+                          data:(NSData *)data
+                       onTopic:(NSString *)topic
+                           qos:(MQTTQosLevel)qos
+                      retained:(BOOL)retained
+                           mid:(unsigned int)mid;
+
 /** for mqttio-OBJC backward compatibility
  @param session see newMessage for description
  @param data see newMessage for description

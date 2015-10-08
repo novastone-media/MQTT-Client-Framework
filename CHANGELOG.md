@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.3.1
+>Release date: 2015-10-08
+
+[NEW] comment out tvOS until Cocoapods supports it
+[NEW] inbound throttling closes #54
+
 ## MQTT-Client-Framework 0.3.0
 >Release date: 2015-10-03
 
