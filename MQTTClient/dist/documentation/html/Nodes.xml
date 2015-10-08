@@ -379,6 +379,11 @@
               <Anchor>a85ecb50aa7dfb9865ec6acfd1192b92c</Anchor>
              </Node>
              <Node>
+              <Name>newMessageWithFeedback:data:onTopic:qos:retained:mid:</Name>
+              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+              <Anchor>a5e103157ac155294481ebca786bfb5fd</Anchor>
+             </Node>
+             <Node>
               <Name>protocolError:error:</Name>
               <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
               <Anchor>a6ed1b59122ad0e0557b8bcf5de89f7ca</Anchor>

@@ -106,6 +106,8 @@ Inheritance diagram for &lt;MQTTSessionDelegate&gt;:</div>
 Instance Methods</h2></td></tr>
 <tr class="memitem:a85ecb50aa7dfb9865ec6acfd1192b92c"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a85ecb50aa7dfb9865ec6acfd1192b92c">newMessage:data:onTopic:qos:retained:mid:</a></td></tr>
 <tr class="separator:a85ecb50aa7dfb9865ec6acfd1192b92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e103157ac155294481ebca786bfb5fd"><td class="memItemLeft" align="right" valign="top">(BOOL)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a5e103157ac155294481ebca786bfb5fd">newMessageWithFeedback:data:onTopic:qos:retained:mid:</a></td></tr>
+<tr class="separator:a5e103157ac155294481ebca786bfb5fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c379d26811e242b52a05d09cf60d804"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a7c379d26811e242b52a05d09cf60d804">session:newMessage:onTopic:</a></td></tr>
 <tr class="separator:a7c379d26811e242b52a05d09cf60d804"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a168b8ff4bd95ffbfe61a8b10236860f8"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a168b8ff4bd95ffbfe61a8b10236860f8">handleEvent:event:error:</a></td></tr>
@@ -666,6 +668,76 @@ Instance Methods</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5e103157ac155294481ebca786bfb5fd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (BOOL) newMessageWithFeedback: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> *)&#160;</td>
+          <td class="paramname"><em>session</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">data:</td>
+          <td></td>
+          <td class="paramtype">(NSData *)&#160;</td>
+          <td class="paramname"><em>data</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">onTopic:</td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>topic</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">qos:</td>
+          <td></td>
+          <td class="paramtype">(MQTTQosLevel)&#160;</td>
+          <td class="paramname"><em>qos</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">retained:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>retained</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">mid:</td>
+          <td></td>
+          <td class="paramtype">(unsigned int)&#160;</td>
+          <td class="paramname"><em>mid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>gets called when a new message was received </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">session</td><td>the <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> reporting the new message </td></tr>
+    <tr><td class="paramname">data</td><td>the data received, might be zero length </td></tr>
+    <tr><td class="paramname">topic</td><td>the topic the data was published to </td></tr>
+    <tr><td class="paramname">qos</td><td>the qos of the message </td></tr>
+    <tr><td class="paramname">retained</td><td>indicates if the data retransmitted from server storage </td></tr>
+    <tr><td class="paramname">mid</td><td>the Message Identifier of the message if qos = 1 or 2, zero otherwise </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the message was or will be processed, false if the message shall not be ack-ed </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a6ed1b59122ad0e0557b8bcf5de89f7ca"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1043,7 +1115,7 @@ Instance Methods</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Oct 3 2015 17:39:05 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 8 2015 22:01:59 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

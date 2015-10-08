@@ -684,12 +684,13 @@
                    withObject:nil
                    afterDelay:PROCESSING_TIMEOUT];
 
-        while ((self.processed != self.received || self.received != PROCESSING_NUMBER) && !self.timeout) {
+        while ((self.processed != self.received || self.received == 0) && !self.timeout) {
             NSLog(@"waiting for processing");
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
 
         XCTAssert(!self.timeout, @"timeout");
+        [self.processingSimulationTimer invalidate];
         
         [self shutdown:parameters];
     }
@@ -744,7 +745,8 @@
         }
 
         XCTAssert(!self.timeout, @"timeout");
-        
+        [self.processingSimulationTimer invalidate];
+
         [self shutdown:parameters];
     }
 }
@@ -798,7 +800,8 @@
         }
 
         XCTAssert(!self.timeout, @"timeout");
-        
+        [self.processingSimulationTimer invalidate];
+
         [self shutdown:parameters];
     }
 }
