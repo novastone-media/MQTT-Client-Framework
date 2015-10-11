@@ -36,7 +36,6 @@
 /* Begin PBXBuildFile section */
 		840507C5193DCF2E002EBBD2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840507C4193DCF2E002EBBD2 /* UIKit.framework */; };
 		840715FA1BBE999700FBB3CB /* mosquitto.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C91B49332700D81CC8 /* mosquitto.org.cer */; };
-		840715FB1BBE999700FBB3CB /* info@owntracks.org.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C51B4922E100D81CC8 /* info@owntracks.org.p12 */; };
 		840715FC1BBE999700FBB3CB /* KreyChristoph.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C31B49110200D81CC8 /* KreyChristoph.p12 */; };
 		840715FD1BBE999700FBB3CB /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA71B1ED2F40012DD2F /* server.der */; };
 		840715FE1BBE999700FBB3CB /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
@@ -74,7 +73,6 @@
 		8407163E1BBEF16E00FBB3CB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8407163D1BBEF16E00FBB3CB /* CFNetwork.framework */; };
 		840716401BBEF17600FBB3CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8407163F1BBEF17600FBB3CB /* Foundation.framework */; };
 		840716411BBEF18B00FBB3CB /* mosquitto.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C91B49332700D81CC8 /* mosquitto.org.cer */; };
-		840716421BBEF18B00FBB3CB /* info@owntracks.org.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C51B4922E100D81CC8 /* info@owntracks.org.p12 */; };
 		840716431BBEF18B00FBB3CB /* KreyChristoph.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C31B49110200D81CC8 /* KreyChristoph.p12 */; };
 		840716441BBEF18B00FBB3CB /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA71B1ED2F40012DD2F /* server.der */; };
 		840716451BBEF18B00FBB3CB /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
@@ -149,7 +147,6 @@
 		8462436C1ABEAAF900B72519 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8462436B1ABEAAF900B72519 /* CoreData.framework */; };
 		8462436D1ABEAB2900B72519 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8462436B1ABEAAF900B72519 /* CoreData.framework */; };
 		8482D3C41B49110200D81CC8 /* KreyChristoph.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C31B49110200D81CC8 /* KreyChristoph.p12 */; };
-		8482D3C61B4922E200D81CC8 /* info@owntracks.org.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C51B4922E100D81CC8 /* info@owntracks.org.p12 */; };
 		8482D3CA1B49332700D81CC8 /* mosquitto.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C91B49332700D81CC8 /* mosquitto.org.cer */; };
 		848BB8F3195FF7A2004FCAE2 /* MQTTClientOnlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */; };
 		84B1AFEE196C7AF60056B959 /* MultiThreadingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B1AFED196C7AF60056B959 /* MultiThreadingTests.m */; };
@@ -291,7 +288,6 @@
 		846243681ABE9E5900B72519 /* MQTTPersistence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTPersistence.m; sourceTree = "<group>"; };
 		8462436B1ABEAAF900B72519 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		8482D3C31B49110200D81CC8 /* KreyChristoph.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = KreyChristoph.p12; sourceTree = "<group>"; };
-		8482D3C51B4922E100D81CC8 /* info@owntracks.org.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "info@owntracks.org.p12"; sourceTree = "<group>"; };
 		8482D3C91B49332700D81CC8 /* mosquitto.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = mosquitto.org.cer; sourceTree = "<group>"; };
 		848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientOnlyTests.m; sourceTree = "<group>"; };
 		84B1AFED196C7AF60056B959 /* MultiThreadingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiThreadingTests.m; sourceTree = "<group>"; };
@@ -375,7 +371,6 @@
 			isa = PBXGroup;
 			children = (
 				8482D3C91B49332700D81CC8 /* mosquitto.org.cer */,
-				8482D3C51B4922E100D81CC8 /* info@owntracks.org.p12 */,
 				8482D3C31B49110200D81CC8 /* KreyChristoph.p12 */,
 				C21D3CA71B1ED2F40012DD2F /* server.der */,
 				C21D3CA11B1EC63E0012DD2F /* adn_0.cer */,
@@ -770,7 +765,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				840716411BBEF18B00FBB3CB /* mosquitto.org.cer in Resources */,
-				840716421BBEF18B00FBB3CB /* info@owntracks.org.p12 in Resources */,
 				840716431BBEF18B00FBB3CB /* KreyChristoph.p12 in Resources */,
 				840716441BBEF18B00FBB3CB /* server.der in Resources */,
 				840716451BBEF18B00FBB3CB /* adn_0.cer in Resources */,
@@ -796,7 +790,6 @@
 				840716081BBE99B000FBB3CB /* adn_1.cer in Resources */,
 				840716091BBE99B000FBB3CB /* adn_2.cer in Resources */,
 				840715FA1BBE999700FBB3CB /* mosquitto.org.cer in Resources */,
-				840715FB1BBE999700FBB3CB /* info@owntracks.org.p12 in Resources */,
 				840715FC1BBE999700FBB3CB /* KreyChristoph.p12 in Resources */,
 				840715FD1BBE999700FBB3CB /* server.der in Resources */,
 				840715FE1BBE999700FBB3CB /* ADNNetServerTrustChain in Resources */,
@@ -823,7 +816,6 @@
 				8482D3CA1B49332700D81CC8 /* mosquitto.org.cer in Resources */,
 				C21D3C9B1B1EC40A0012DD2F /* COMODO_RSA_Certification_Authority.cer in Resources */,
 				C21D3C9C1B1EC40C0012DD2F /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */,
-				8482D3C61B4922E200D81CC8 /* info@owntracks.org.p12 in Resources */,
 				8482D3C41B49110200D81CC8 /* KreyChristoph.p12 in Resources */,
 				C21D3C961B1EC4000012DD2F /* AltName.cer in Resources */,
 				C21D3C971B1EC4010012DD2F /* NoDomains.cer in Resources */,
@@ -1022,6 +1014,7 @@
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1041,6 +1034,7 @@
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1380,6 +1374,7 @@
 				8407161C1BBEEF9C00FBB3CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8407163A1BBEF13A00FBB3CB /* Build configuration list for PBXNativeTarget "MQTTClientOSXTests" */ = {
 			isa = XCConfigurationList;
@@ -1388,6 +1383,7 @@
 				8407163C1BBEF13A00FBB3CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8425D6DF1BBE8B45005AD733 /* Build configuration list for PBXNativeTarget "MQTTClientTV" */ = {
 			isa = XCConfigurationList;

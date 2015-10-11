@@ -11,6 +11,7 @@
 #import <UIKit/UIKit.h>
 #endif
 #import "MQTTSession.h"
+#import "MQTTSSLSecurityPolicy.h"
 
 /** delegate gives your application access to received messages
  */

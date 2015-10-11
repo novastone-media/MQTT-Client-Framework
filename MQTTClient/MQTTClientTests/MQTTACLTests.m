@@ -51,7 +51,9 @@
                                               willRetainFlag:NO
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -81,7 +83,9 @@
                                               willRetainFlag:NO
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
 
         [self connect:self.session parameters:parameters];
@@ -112,7 +116,9 @@
                                               willRetainFlag:NO
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
 
         [self connect:self.session parameters:parameters];
@@ -142,7 +148,9 @@
                                               willRetainFlag:NO
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
 
         [self connect:self.session parameters:parameters];
@@ -152,6 +160,46 @@
 }
  
 #pragma mark helpers
+
+- (NSArray *)clientCerts:(NSDictionary *)parameters {
+    NSArray *clientCerts = nil;
+    if (parameters[@"clientp12"] && parameters[@"clientp12pass"]) {
+        
+        NSString *path = [[NSBundle bundleForClass:[MQTTACLTests class]] pathForResource:parameters[@"clientp12"]
+                                                                                     ofType:@"p12"];
+        
+        clientCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
+        if (!clientCerts) {
+            XCTFail(@"invalid p12 file");
+        }
+    }
+    return clientCerts;
+}
+
+- (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters {
+    MQTTSSLSecurityPolicy *securityPolicy = nil;
+    
+    if (parameters[@"serverCER"]) {
+        
+        NSString *path = [[NSBundle bundleForClass:[MQTTACLTests class]] pathForResource:parameters[@"serverCER"]
+                                                                                     ofType:@"cer"];
+        if (path) {
+            NSData *certificateData = [NSData dataWithContentsOfFile:path];
+            if (certificateData) {
+                securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+                securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
+                securityPolicy.validatesCertificateChain = TRUE;
+                securityPolicy.allowInvalidCertificates = FALSE;
+                securityPolicy.validatesDomainName = TRUE;
+            } else {
+                XCTFail(@"error reading cer file");
+            }
+        } else {
+            XCTFail(@"cer file not found");
+        }
+    }
+    return securityPolicy;
+}
 
 - (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
     //NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);

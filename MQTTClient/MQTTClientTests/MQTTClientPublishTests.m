@@ -409,6 +409,46 @@
  * helpers
  */
 
+- (NSArray *)clientCerts:(NSDictionary *)parameters {
+    NSArray *clientCerts = nil;
+    if (parameters[@"clientp12"] && parameters[@"clientp12pass"]) {
+        
+        NSString *path = [[NSBundle bundleForClass:[MQTTClientPublishTests class]] pathForResource:parameters[@"clientp12"]
+                                                                                  ofType:@"p12"];
+        
+        clientCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
+        if (!clientCerts) {
+            XCTFail(@"invalid p12 file");
+        }
+    }
+    return clientCerts;
+}
+
+- (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters {
+    MQTTSSLSecurityPolicy *securityPolicy = nil;
+    
+    if (parameters[@"serverCER"]) {
+        
+        NSString *path = [[NSBundle bundleForClass:[MQTTClientPublishTests class]] pathForResource:parameters[@"serverCER"]
+                                                                                  ofType:@"cer"];
+        if (path) {
+            NSData *certificateData = [NSData dataWithContentsOfFile:path];
+            if (certificateData) {
+                securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+                securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
+                securityPolicy.validatesCertificateChain = TRUE;
+                securityPolicy.allowInvalidCertificates = FALSE;
+                securityPolicy.validatesDomainName = TRUE;
+            } else {
+                XCTFail(@"error reading cer file");
+            }
+        } else {
+            XCTFail(@"cer file not found");
+        }
+    }
+    return securityPolicy;
+}
+
 - (void)testPublishCloseExpected:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos
 {
     [self testPublishCore:data onTopic:topic retain:retain atLevel:qos];
@@ -507,7 +547,9 @@
                                           willRetainFlag:NO
                                            protocolLevel:[parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes];
+                                                 forMode:NSRunLoopCommonModes
+                                          securityPolicy:[self securityPolicy:parameters]
+                                            certificates:[self clientCerts:parameters]];
     self.session.delegate = self;
     self.session.persistence.persistent = PERSISTENT;
 

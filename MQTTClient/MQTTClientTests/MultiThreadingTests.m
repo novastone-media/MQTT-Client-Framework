@@ -35,7 +35,9 @@
                                           willRetainFlag:NO
                                            protocolLevel:[parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes];
+                                                 forMode:NSRunLoopCommonModes
+                                          securityPolicy:[self securityPolicy:parameters]
+                                            certificates:[self clientCerts:parameters]];
 
     self.session.delegate = self;
     self.session.persistence.persistent = PERSISTENT;
@@ -119,6 +121,42 @@
     self.event = eventCode;
     self.error = error;
 }
+
+- (NSArray *)clientCerts:(NSDictionary *)parameters {
+    NSArray *clientCerts = nil;
+    if (parameters[@"clientp12"] && parameters[@"clientp12pass"]) {
+        
+        NSString *path = [[NSBundle bundleForClass:[OneTest class]] pathForResource:parameters[@"clientp12"]
+                                                                                         ofType:@"p12"];
+        
+        clientCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
+    }
+    return clientCerts;
+}
+
+- (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters {
+    MQTTSSLSecurityPolicy *securityPolicy = nil;
+    
+    if (parameters[@"serverCER"]) {
+        
+        NSString *path = [[NSBundle bundleForClass:[OneTest class]] pathForResource:parameters[@"serverCER"]
+                                                                                         ofType:@"cer"];
+        if (path) {
+            NSData *certificateData = [NSData dataWithContentsOfFile:path];
+            if (certificateData) {
+                securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+                securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
+                securityPolicy.validatesCertificateChain = TRUE;
+                securityPolicy.allowInvalidCertificates = FALSE;
+                securityPolicy.validatesDomainName = TRUE;
+            }
+        }
+    }
+    return securityPolicy;
+}
+
+
+
 
 @end
 

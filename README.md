@@ -17,6 +17,7 @@ an Objective-C native MQTT Framework http://mqtt.org
 * ActiveMQ
 * Apollo
 * CloudMQTT
+* aws
 
 ### Howto
 

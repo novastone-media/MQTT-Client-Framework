@@ -65,7 +65,9 @@
                    willMsg:nil
                    willQos:MQTTQosLevelAtMostOnce
             willRetainFlag:FALSE
-              withClientId:@"MQTTSessionManager"];
+              withClientId:@"MQTTSessionManager"
+            securityPolicy:[self securityPolicy:parameters]
+              certificates:[self clientCerts:parameters]];
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             NSLog(@"waiting for connect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
@@ -164,7 +166,9 @@
                    willMsg:nil
                    willQos:MQTTQosLevelAtMostOnce
             willRetainFlag:FALSE
-              withClientId:@"MQTTSessionManager"];
+              withClientId:@"MQTTSessionManager"
+            securityPolicy:[self securityPolicy:parameters]
+              certificates:[self clientCerts:parameters]];
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             NSLog(@"waiting for connect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
@@ -214,6 +218,47 @@
         [timer invalidate];
     }
 }
+
+- (NSArray *)clientCerts:(NSDictionary *)parameters {
+    NSArray *clientCerts = nil;
+    if (parameters[@"clientp12"] && parameters[@"clientp12pass"]) {
+        
+        NSString *path = [[NSBundle bundleForClass:[MQTTSessionManagerTests class]] pathForResource:parameters[@"clientp12"]
+                                                                                     ofType:@"p12"];
+        
+        clientCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
+        if (!clientCerts) {
+            XCTFail(@"invalid p12 file");
+        }
+    }
+    return clientCerts;
+}
+
+- (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters {
+    MQTTSSLSecurityPolicy *securityPolicy = nil;
+    
+    if (parameters[@"serverCER"]) {
+        
+        NSString *path = [[NSBundle bundleForClass:[MQTTSessionManagerTests class]] pathForResource:parameters[@"serverCER"]
+                                                                                     ofType:@"cer"];
+        if (path) {
+            NSData *certificateData = [NSData dataWithContentsOfFile:path];
+            if (certificateData) {
+                securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+                securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
+                securityPolicy.validatesCertificateChain = TRUE;
+                securityPolicy.allowInvalidCertificates = FALSE;
+                securityPolicy.validatesDomainName = TRUE;
+            } else {
+                XCTFail(@"error reading cer file");
+            }
+        } else {
+            XCTFail(@"cer file not found");
+        }
+    }
+    return securityPolicy;
+}
+
 
 
 @end
