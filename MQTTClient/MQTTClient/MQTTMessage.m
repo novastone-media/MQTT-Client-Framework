@@ -262,16 +262,26 @@
 - (void)appendMQTTString:(NSString *)string
 {
     if (string) {
+//        UInt8 buf[2];
+//        if (DEBUGMSG) NSLog(@"String=%@", string);
+//        const char* utf8String = [string UTF8String];
+//        if (DEBUGMSG) NSLog(@"UTF8=%s", utf8String);
+//
+//        size_t strLen = strlen(utf8String);
+//        buf[0] = strLen / 256;
+//        buf[1] = strLen % 256;
+//        [self appendBytes:buf length:2];
+//        [self appendBytes:utf8String length:strLen];
+        
+// This updated code allows for all kind or UTF characters including 0x0000
+        NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
         UInt8 buf[2];
-        if (DEBUGMSG) NSLog(@"String=%@", string);
-        const char* utf8String = [string UTF8String];
-        if (DEBUGMSG) NSLog(@"UTF8=%s", utf8String);
+        UInt16 len = data.length;
+        buf[0] = len / 256;
+        buf[1] = len % 256;
 
-        size_t strLen = strlen(utf8String);
-        buf[0] = strLen / 256;
-        buf[1] = strLen % 256;
         [self appendBytes:buf length:2];
-        [self appendBytes:utf8String length:strLen];
+        [self appendData:data];
     }
 }
 

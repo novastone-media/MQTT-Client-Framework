@@ -79,9 +79,22 @@
  * include encodings of code points between U+D800 and U+DFFF. If a Server or Client receives a Control
  * Packet containing ill-formed UTF-8 it MUST close the Network Connection.
  */
-- (void)testPublish_r0_q0_0x00_MQTT_1_5_3_1
+- (void)testPublish_r0_q0_0xD800_MQTT_1_5_3_1
 {
     NSLog(@"can't test [MQTT-1.5.3-1]");
+    NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
+    NSLog(@"stringWithNull(%lu) %@", (unsigned long)stringWithD800.length, stringWithD800.description);
+    
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                               onTopic:stringWithD800
+                                retain:NO
+                               atLevel:MQTTQosLevelAtMostOnce];
+        [self shutdown:parameters];
+    }
 }
 
 /*
@@ -89,9 +102,21 @@
  * A UTF-8 encoded string MUST NOT include an encoding of the null character U+0000.
  * If a receiver (Server or Client) receives a Control Packet containing U+0000 it MUST close the Network Connection.
  */
-- (void)testPublish_r0_q0_0xD800_MQTT_1_5_3_2
+- (void)testPublish_r0_q0_0x0000_MQTT_1_5_3_2
 {
-    NSLog(@"can't test [MQTT-1.5.3-2]");
+    NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
+    NSLog(@"stringWithNull(%lu) %@", (unsigned long)stringWithNull.length, stringWithNull.description);
+
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                               onTopic:stringWithNull
+                                retain:NO
+                               atLevel:MQTTQosLevelAtMostOnce];
+        [self shutdown:parameters];
+    }
 }
 
 - (void)testPublish_r0_q1

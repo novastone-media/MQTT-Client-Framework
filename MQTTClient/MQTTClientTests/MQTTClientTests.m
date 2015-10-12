@@ -545,6 +545,15 @@
     }
 }
 
+/*
+ * [MQTT-3.1.0-1]
+ * After a Network Connection is established by a Client to a Server, the first Packet sent from the 
+ * Client to the Server MUST be a CONNECT Packet.
+ */
+- (void)test_first_packet_MQTT_3_1_0_1 {
+    NSLog(@"can't test [MQTT-3.1.0-1]");
+}
+
 - (void)test_ping {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
