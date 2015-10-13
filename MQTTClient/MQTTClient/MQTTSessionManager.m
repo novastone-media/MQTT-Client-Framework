@@ -197,6 +197,7 @@
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates
 {
+    BOOL shouldReconnect = self.session != nil;
     if (!self.session ||
         ![host isEqualToString:self.host] ||
         port != self.port ||
@@ -255,7 +256,14 @@
         self.reconnectTime = RECONNECT_TIMER;
         self.reconnectFlag = FALSE;
     }
-    [self connectToInternal];
+    if(shouldReconnect){
+        NSLog(@"MQTTSessionManager reconnecting");
+        [self disconnect];
+        [self reconnect];
+    }else{
+        NSLog(@"MQTTSessionManager connecting");
+        [self connectToInternal];
+    }
 }
 
 - (UInt16)sendData:(NSData *)data topic:(NSString *)topic qos:(MQTTQosLevel)qos retain:(BOOL)retainFlag
