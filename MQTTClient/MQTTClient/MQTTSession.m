@@ -141,7 +141,7 @@
                           forMode:runLoopMode
                    securityPolicy:securityPolicy
                      certificates:nil];
-
+    
 }
 
 - (MQTTSession *)initWithClientId:(NSString *)clientId
@@ -161,7 +161,7 @@
                      certificates:(NSArray *)certificates {
     self = [super init];
     if (DEBUGSESS) NSLog(@"MQTTClient %s %s", __DATE__, __TIME__);
-
+    
     if (DEBUGSESS)
         NSLog(@"%@ %s:%d - initWithClientId:%@ userName:%@ keepAlive:%d cleanSession:%d will:%d willTopic:%@ "
               "willMsg:%@ willQos:%d willRetainFlag:%d protocolLevel:%d runLoop:%@ forMode:%@ "
@@ -169,7 +169,7 @@
               clientId, userName, keepAliveInterval,cleanSessionFlag, willFlag, willTopic,
               willMsg, willQoS, willRetainFlag, protocolLevel, @"runLoop", runLoopMode,
               securityPolicy, certificates);
-
+    
     self.clientId = clientId;
     self.userName = userName;
     self.password = password;
@@ -185,7 +185,7 @@
     self.runLoopMode = runLoopMode;
     self.securityPolicy = securityPolicy;
     self.certificates = certificates;
-
+    
     self.txMsgId = 1;
     self.persistence = [[MQTTPersistence alloc] init];
     return self;
@@ -249,7 +249,7 @@
 }
 
 - (id)initWithClientId:(NSString*)theClientId {
-
+    
     return [self initWithClientId:theClientId
                          userName:nil
                          password:nil
@@ -268,7 +268,7 @@
 - (id)initWithClientId:(NSString*)theClientId
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode {
-
+    
     return [self initWithClientId:theClientId
                          userName:nil
                          password:nil
@@ -287,7 +287,7 @@
 - (id)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUsername
               password:(NSString*)thePassword {
-
+    
     return [self initWithClientId:theClientId
                          userName:theUsername
                          password:thePassword
@@ -308,7 +308,7 @@
               password:(NSString*)thePassword
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode {
-
+    
     return [self initWithClientId:theClientId
                          userName:theUserName
                          password:thePassword
@@ -329,7 +329,7 @@
               password:(NSString*)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
           cleanSession:(BOOL)cleanSessionFlag {
-
+    
     return [self initWithClientId:theClientId
                          userName:theUsername
                          password:thePassword
@@ -352,7 +352,7 @@
           cleanSession:(BOOL)theCleanSessionFlag
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theMode {
-
+    
     return [self initWithClientId:theClientId
                          userName:theUsername
                          password:thePassword
@@ -377,7 +377,7 @@
                willMsg:(NSData*)willMsg
                willQoS:(UInt8)willQoS
         willRetainFlag:(BOOL)willRetainFlag {
-
+    
     return [self initWithClientId:theClientId
                          userName:theUserName
                          password:thePassword
@@ -404,7 +404,7 @@
         willRetainFlag:(BOOL)willRetainFlag
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode {
-
+    
     return [self initWithClientId:theClientId
                          userName:theUserName
                          password:thePassword
@@ -425,7 +425,7 @@
         connectMessage:(MQTTMessage*)theConnectMessage
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode {
-
+    
     self.connectMessage = theConnectMessage;
     return [self initWithClientId:theClientId
                          userName:nil
@@ -457,7 +457,7 @@
     }
     [self tell];
     
-
+    
     NSError* connectError;
     self.status = MQTTSessionStatusCreated;
     
@@ -471,7 +471,7 @@
     
     if (usingSSL) {
         NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
-
+        
         if (!self.securityPolicy)
         {
             // use OS CA model
@@ -495,9 +495,9 @@
                 [sslOptions setObject:self.certificates
                                forKey:(NSString *)kCFStreamSSLCertificates];
             }
-
+            
         }
-
+        
         if(!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
             connectError = [NSError errorWithDomain:@"MQTT"
                                                code:errSSLInternal
@@ -509,23 +509,23 @@
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl output stream!"}];
         }
     }
-
+    
     if(!connectError){
         self.encoder = [[MQTTEncoder alloc] initWithStream:CFBridgingRelease(writeStream)
                                                    runLoop:self.runLoop
                                                runLoopMode:self.runLoopMode
                                             securityPolicy:usingSSL? self.securityPolicy : nil
                                             securityDomain:usingSSL? host : nil];
-
+        
         self.decoder = [[MQTTDecoder alloc] initWithStream:CFBridgingRelease(readStream)
                                                    runLoop:self.runLoop
                                                runLoopMode:self.runLoopMode
                                             securityPolicy:usingSSL? self.securityPolicy : nil
                                             securityDomain:usingSSL? host : nil];
-
+        
         self.encoder.delegate = self;
         self.decoder.delegate = self;
-
+        
         [self.encoder open];
         [self.decoder open];
     }
@@ -734,7 +734,7 @@
                                                                qos:qos
                                                              msgId:msgId
                                                       incomingFlag:NO];
-
+        
         if (!flow) {
             if (DEBUGSESS) NSLog(@"%@ dropping outgoing messages", self);
             msgId = 0;
@@ -857,17 +857,17 @@
         [self.keepAliveTimer invalidate];
         self.keepAliveTimer = nil;
     }
-
+    
     if(self.encoder){
         [self.encoder close];
         self.encoder.delegate = nil;
     }
-
+    
     if(self.decoder){
         [self.decoder close];
         self.decoder.delegate = nil;
     }
-
+    
     self.status = MQTTSessionStatusClosed;
     if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
         [self.delegate handleEvent:self event:MQTTSessionEventConnectionClosed error:nil];
@@ -1041,6 +1041,7 @@
 
 - (void)decoder:(MQTTDecoder*)sender newMessage:(MQTTMessage*)msg
 {
+    @synchronized(sender) {
     if ([self.delegate respondsToSelector:@selector(received:type:qos:retained:duped:mid:data:)]) {
         [self.delegate received:self
                            type:msg.type
@@ -1176,6 +1177,7 @@
         default:
             break;
     }
+    }
 }
 
 - (void)handlePublish:(MQTTMessage*)msg
@@ -1237,7 +1239,7 @@
                                                               onTopic:topic
                                                                   qos:msg.qos
                                                              retained:msg.retainFlag
-                                                                  mid:0];
+                                                                  mid:msgId];
                 }
                 if (self.messageHandler) {
                     self.messageHandler(data, topic);

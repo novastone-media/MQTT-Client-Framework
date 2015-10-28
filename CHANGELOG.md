@@ -1,6 +1,13 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.3.4
+>Release date: 2015-10-28
+
+[NEW] extensive flow tests
+[FIX] serialization of delegate newMessage* method calls
+[FIX] missing msgID for QoS=1 in newMessageWithFeedback
+
 ## MQTT-Client-Framework 0.3.3
 >Release date: 2015-10-10
 

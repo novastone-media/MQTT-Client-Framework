@@ -161,7 +161,6 @@
 @end
 
 @interface MultiThreadingTests : XCTestCase <MQTTSessionDelegate>
-@property (nonatomic) BOOL timeout;
 
 @end
 
@@ -293,12 +292,6 @@
             [thread cancel];
         }
     }
-}
-
-- (void)ackTimeout:(id)object
-{
-    //NSLog(@"ackTimeout");
-    self.timeout = TRUE;
 }
 
 - (void)runAsynch:(NSDictionary *)parameters
