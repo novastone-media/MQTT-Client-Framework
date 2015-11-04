@@ -1,6 +1,11 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.3.5
+>Release date: 2015-11-04
+
+[NEW] Add testcases for 3.1.2-11 .. 13 (Will flags in connect message)
+
 ## MQTT-Client-Framework 0.3.4
 >Release date: 2015-10-28
 

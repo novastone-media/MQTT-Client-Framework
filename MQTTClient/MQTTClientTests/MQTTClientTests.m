@@ -234,7 +234,7 @@
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
-
+        
         MQTTSession *subscribingSession = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
                                                                        userName:parameters[@"user"]
                                                                        password:parameters[@"pass"]
@@ -255,7 +255,7 @@
             XCTFail(@"no connection for sub to %@", broker);
         }
         [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
-
+        
         self.session = [[MQTTSession alloc] initWithClientId:nil
                                                     userName:parameters[@"user"]
                                                     password:parameters[@"pass"]
@@ -275,10 +275,399 @@
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
-
+        
         self.ungraceful = TRUE;
         [self shutdown:parameters];
         [subscribingSession closeAndWait];
+    }
+}
+
+/*
+ * [MQTT-3.1.2-8]
+ * If the Will Flag is set to 1 this indicates that, if the Connect request is accepted, a Will
+ * Message MUST be stored on the Server and associated with the Network Connection. The Will Message
+ * MUST be published when the Network Connection is subsequently closed unless the Will Message has
+ * been deleted by the Server on receipt of a DISCONNECT Packet.
+ * [MQTT-3.1.2-17]
+ * If the Will Flag is set to 1 and If Will Retain is set to 1, the Server MUST publish the Will
+ * Message as a retained message.
+ */
+- (void)test_connect_will_retained_MQTT_3_1_2_8_MQTT_3_1_2_17 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        MQTTSession *subscribingSession = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
+                                                                       userName:parameters[@"user"]
+                                                                       password:parameters[@"pass"]
+                                                                      keepAlive:60
+                                                                   cleanSession:YES
+                                                                           will:NO
+                                                                      willTopic:nil
+                                                                        willMsg:nil
+                                                                        willQoS:0
+                                                                 willRetainFlag:NO
+                                                                  protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                                        runLoop:[NSRunLoop currentRunLoop]
+                                                                        forMode:NSRunLoopCommonModes
+                                                                 securityPolicy:[self securityPolicy:parameters]
+                                                                   certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        if (![subscribingSession connectAndWaitToHost:parameters[@"host"] port:[parameters[@"port"] intValue] usingSSL:[parameters[@"tls"] boolValue]]) {
+            XCTFail(@"no connection for sub to %@", broker);
+        }
+        [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:YES
+                                                   willTopic:TOPIC
+                                                     willMsg:[@"will-qos0-retained" dataUsingEncoding:NSUTF8StringEncoding]
+                                                     willQoS:0
+                                              willRetainFlag:YES
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
+        [subscribingSession closeAndWait];
+    }
+}
+
+/*
+ * [MQTT-3.1.2-15]
+ * If the Will Flag is set to 0, then the Will Retain Flag MUST be set to 0.
+ */
+
+- (void)test_connect_will_unflagged_but_retain_not_0_MQTT_3_1_2_15 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:TRUE
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
+                       @"Protocol violation not detected by broker %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
+    }
+}
+
+
+/*
+ * [MQTT-3.1.2-13]
+ * If the Will Flag is set to 0, then the Will QoS MUST be set to 0 (0x00).
+ */
+- (void)test_connect_will_unflagged_but_qos_not_0_MQTT_3_1_2_13 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:MQTTQosLevelExactlyOnce
+                                              willRetainFlag:NO
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
+                       @"Protocol violation not detected by broker %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
+    }
+}
+
+
+/*
+ * [MQTT-3.1.2-14]
+ * If the Will Flag is set to 1, the value of Will QoS can be 0 (0x00), 1 (0x01), or 2 (0x02). It MUST NOT be 3 (0x03).
+ */
+- (void)test_connect_will_flagged_but_qos_3_MQTT_3_1_2_14 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:YES
+                                                   willTopic:@"MQTTClient"
+                                                     willMsg:[[NSData alloc] init]
+                                                     willQoS:3
+                                              willRetainFlag:NO
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
+                       @"Protocol violation not detected by broker %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
+    }
+}
+
+
+/*
+ * [MQTT-3.1.2-11]
+ * If the Will Flag is set to 0 the Will QoS and Will Retain fields in the Connect Flags
+ * MUST be set to zero and the Will Topic and Will Message fields MUST NOT be present in the payload.
+ */
+- (void)test_connect_will_unflagged_but_willMsg_MQTT_3_1_2_11 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:[@"test_connect_will_unflagged_but_willMsg" dataUsingEncoding:NSUTF8StringEncoding]
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
+                       @"Protocol violation not detected by broker %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-3.1.2-11]
+ * If the Will Flag is set to 0 the Will QoS and Will Retain fields in the Connect Flags
+ * MUST be set to zero and the Will Topic and Will Message fields MUST NOT be present in the payload.
+ */
+
+- (void)test_connect_will_unflagged_but_willTopic_MQTT_3_1_2_11 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:@"MQTTClient"
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
+                       @"Protocol violation not detected by broker %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-3.1.2-11]
+ * If the Will Flag is set to 0 the Will QoS and Will Retain fields in the Connect Flags
+ * MUST be set to zero and the Will Topic and Will Message fields MUST NOT be present in the payload.
+ */
+
+- (void)test_connect_will_unflagged_but_willMsg_and_willTopic_MQTT_3_1_2_11 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:NO
+                                                   willTopic:@"MQTTClient"
+                                                     willMsg:[@"test_connect_will_unflagged_but_willMsg_and_willTopic" dataUsingEncoding:NSUTF8StringEncoding]
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
+                       @"Protocol violation not detected by broker %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-3.1.2-9]
+ * If the Will Flag is set to 1, the Will QoS and Will Retain fields in the Connect Flags will
+ * be used by the Server, and the Will Topic and Will Message fields MUST be present in the payload.
+ */
+- (void)test_connect_will_flagged_but_no_willTopic_nor_willMsg_MQTT_3_1_2_9 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:YES
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
+                       @"Protocol violation not detected by broker %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-3.1.2-9]
+ * If the Will Flag is set to 1, the Will QoS and Will Retain fields in the Connect Flags will
+ * be used by the Server, and the Will Topic and Will Message fields MUST be present in the payload.
+ */
+- (void)test_connect_will_flagged_but_no_willTopic_MQTT_3_1_2_9 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:YES
+                                                   willTopic:nil
+                                                     willMsg:[[NSData alloc] init]
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
+                       @"Protocol violation not detected by broker %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-3.1.2-9]
+ * If the Will Flag is set to 1, the Will QoS and Will Retain fields in the Connect Flags will
+ * be used by the Server, and the Will Topic and Will Message fields MUST be present in the payload.
+ */
+- (void)test_connect_will_flagged_but_no_willMsg_MQTT_3_1_2_9 {
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:parameters[@"user"]
+                                                    password:parameters[@"pass"]
+                                                   keepAlive:10
+                                                cleanSession:YES
+                                                        will:YES
+                                                   willTopic:@"MQTTClient"
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                               protocolLevel:[parameters[@"protocollevel"] intValue]
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes
+                                              securityPolicy:[self securityPolicy:parameters]
+                                                certificates:[self clientCerts:parameters]];
+        self.session.persistence.persistent = PERSISTENT;
+        [self connect:self.session parameters:parameters];
+        XCTAssert(!self.timeout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
+                       @"Protocol violation not detected by broker %ld %@", (long)self.event, self.error);
+        
+        self.ungraceful = TRUE;
+        [self shutdown:parameters];
     }
 }
 
@@ -337,68 +726,6 @@
 
         [self shutdown:parameters];
         [sameSession closeAndWait];
-    }
-}
-
-/*
- * [MQTT-3.1.2-8]
- * If the Will Flag is set to 1 this indicates that, if the Connect request is accepted, a Will
- * Message MUST be stored on the Server and associated with the Network Connection. The Will Message
- * MUST be published when the Network Connection is subsequently closed unless the Will Message has
- * been deleted by the Server on receipt of a DISCONNECT Packet.
- * [MQTT-3.1.2-17]
- * If the Will Flag is set to 1 and If Will Retain is set to 1, the Server MUST publish the Will
- * Message as a retained message.
- */
-- (void)test_connect_will_retained_MQTT_3_1_2_8_MQTT_3_1_2_17 {
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-
-        MQTTSession *subscribingSession = [[MQTTSession alloc] initWithClientId:@"MQTTClient-sub"
-                                                                       userName:parameters[@"user"]
-                                                                       password:parameters[@"pass"]
-                                                                      keepAlive:60
-                                                                   cleanSession:YES
-                                                                           will:NO
-                                                                      willTopic:nil
-                                                                        willMsg:nil
-                                                                        willQoS:0
-                                                                 willRetainFlag:NO
-                                                                  protocolLevel:[parameters[@"protocollevel"] intValue]
-                                                                        runLoop:[NSRunLoop currentRunLoop]
-                                                                        forMode:NSRunLoopCommonModes
-                                                                 securityPolicy:[self securityPolicy:parameters]
-                                                                   certificates:[self clientCerts:parameters]];
-        self.session.persistence.persistent = PERSISTENT;
-        if (![subscribingSession connectAndWaitToHost:parameters[@"host"] port:[parameters[@"port"] intValue] usingSSL:[parameters[@"tls"] boolValue]]) {
-            XCTFail(@"no connection for sub to %@", broker);
-        }
-        [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
-
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:parameters[@"user"]
-                                                    password:parameters[@"pass"]
-                                                   keepAlive:10
-                                                cleanSession:YES
-                                                        will:YES
-                                                   willTopic:TOPIC
-                                                     willMsg:[@"will-qos0-retained" dataUsingEncoding:NSUTF8StringEncoding]
-                                                     willQoS:0
-                                              willRetainFlag:YES
-                                               protocolLevel:[parameters[@"protocollevel"] intValue]
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
-        self.session.persistence.persistent = PERSISTENT;
-        [self connect:self.session parameters:parameters];
-        XCTAssert(!self.timeout, @"timeout");
-        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
-
-        self.ungraceful = TRUE;
-        [self shutdown:parameters];
-        [subscribingSession closeAndWait];
     }
 }
 

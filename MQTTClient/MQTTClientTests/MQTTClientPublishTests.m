@@ -36,6 +36,34 @@
     [super tearDown];
 }
 
+- (void)testPublish_r0_q0_noPayload
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testPublish:nil
+                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                   retain:NO
+                  atLevel:0];
+        [self shutdown:parameters];
+    }
+}
+
+- (void)testPublish_r0_q0_zeroLengthPayload
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        [self testPublish:[[NSData alloc] init]
+                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                   retain:NO
+                  atLevel:0];
+        [self shutdown:parameters];
+    }
+}
+
 - (void)testPublish_r0_q0
 {
     for (NSString *broker in BROKERLIST) {

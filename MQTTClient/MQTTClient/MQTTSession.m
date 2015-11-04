@@ -710,9 +710,9 @@
                          retainFlag,
                          (long)qos);
     
-    if (!data) {
-        data = [[NSData alloc] init];
-    }
+//    if (!data) {
+//        data = [[NSData alloc] init];
+//    }
     
     //NSAssert(qos >= 0 && qos <= 2, @"qos must be 0, 1, or 2");
     
