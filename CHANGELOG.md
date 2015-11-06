@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS Release Notes
 =======================================
 
+## MQTT-Client-Framework 0.3.6
+>Release date: 2015-11-06
+
+[FIX] crashes when publishing from different threads closes #61
+[PROBABLE FIX] crashes when publishing from different threads #59 #56 #53 #45
+
 ## MQTT-Client-Framework 0.3.5
 >Release date: 2015-11-04
 
