@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#ifndef TARGET_OS_MAC
+#if TARGET_OS_IPHONE == 1
 #import <UIKit/UIKit.h>
 #endif
 #import "MQTTSession.h"

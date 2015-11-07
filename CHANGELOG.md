@@ -1,5 +1,10 @@
-MQTT-Client-Framework iOS Release Notes
-=======================================
+MQTT-Client-Framework iOS/OSX/tvOS Release Notes
+================================================
+
+MQTT-Client-Framework 0.3.7
+>Release date: 2015-11-07
+
+[FIX] wrong target OS preprocessor directives closes #63
 
 ## MQTT-Client-Framework 0.3.6
 >Release date: 2015-11-06

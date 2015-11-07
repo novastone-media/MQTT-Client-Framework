@@ -35,6 +35,43 @@
     [super tearDown];
 }
 
+/*
+ * |#define                |MAC      |IOS      |IOS SIMULATOR  |TV       |TV SIMULATOR |WATCH   |WATCH SIMULATOR |
+ * |-----------------------|---------|---------|---------------|---------|-------------|--------|----------------|
+ * |TARGET_OS_MAC          |    1    |    1    |       1       |    1    |      1      |        |                |
+ * |TARGET_OS_WIN32        |    0    |    0    |       0       |    0    |      0      |        |                |
+ * |TARGET_OS_UNIX         |    0    |    0    |       0       |    0    |      0      |        |                |
+ * |TARGET_OS_IPHONE       |    0    |    1    |       1       |    1    |      1      |        |                |
+ * |TARGET_OS_IOS          |    0    |    1    |       1       |    0    |      0      |        |                |
+ * |TARGET_OS_WATCH        |    0    |    0    |       0       |    0    |      0      |        |                |
+ * |TARGET_OS_TV           |    0    |    0    |       0       |    1    |      1      |        |                |
+ * |TARGET_OS_SIMULATOR    |    0    |    0    |       1       |    0    |      1      |        |                |
+ * |TARGET_OS_EMBEDDED     |    0    |    1    |       0       |    1    |      0      |        |                |
+ *
+ * define TARGET_IPHONE_SIMULATOR         TARGET_OS_SIMULATOR deprecated
+ * define TARGET_OS_NANO                  TARGET_OS_WATCH deprecated
+ *
+ * all #defines in TargetConditionals.h
+ */
+
+- (void)test_preprocessor {
+#if TARGET_OS_MAC == 1
+    NSLog(@"TARGET_OS_MAC==1");
+#endif
+#if TARGET_OS_MAC == 0
+    NSLog(@"TARGET_OS_MAC==0");
+#endif
+    NSLog(@"TARGET_OS_MAC %d", TARGET_OS_MAC);
+    NSLog(@"TARGET_OS_WIN32 %d", TARGET_OS_WIN32);
+    NSLog(@"TARGET_OS_UNIX %d", TARGET_OS_UNIX);
+    NSLog(@"TARGET_OS_IPHONE %d", TARGET_OS_IPHONE);
+    NSLog(@"TARGET_OS_IOS %d", TARGET_OS_IOS);
+    NSLog(@"TARGET_OS_WATCH %d", TARGET_OS_WATCH);
+    NSLog(@"TARGET_OS_TV %d", TARGET_OS_TV);
+    NSLog(@"TARGET_OS_SIMULATOR %d", TARGET_OS_SIMULATOR);
+    NSLog(@"TARGET_OS_EMBEDDED %d", TARGET_OS_EMBEDDED);
+}
+
 - (void)test_init {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);

@@ -37,7 +37,7 @@
 
 @property (strong, nonatomic) NSTimer *disconnectTimer;
 @property (strong, nonatomic) NSTimer *activityTimer;
-#ifndef TARGET_OS_MAC
+#if TARGET_OS_IPHONE == 1
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 #endif
 
@@ -60,7 +60,7 @@
     self = [super init];
 
     self.state = MQTTSessionManagerStateStarting;
-#ifndef TARGET_OS_MAC
+#if TARGET_OS_IPHONE == 1
     self.backgroundTask = UIBackgroundTaskInvalid;
 
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
@@ -95,7 +95,7 @@
     return self;
 }
 
-#ifndef TARGET_OS_MAC
+#if TARGET_OS_IPHONE == 1
 - (void)appWillResignActive
 {
     [self disconnect];
@@ -315,7 +315,7 @@
         case MQTTSessionEventConnectionClosed:
         case MQTTSessionEventConnectionClosedByBroker:
             self.state = MQTTSessionManagerStateClosed;
-#ifndef TARGET_OS_MAC
+#if TARGET_OS_IPHONE == 1
             if (self.backgroundTask) {
                 [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
                 self.backgroundTask = UIBackgroundTaskInvalid;
