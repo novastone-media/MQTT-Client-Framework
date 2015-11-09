@@ -34,7 +34,7 @@
 
 
 @interface MQTTPersistence()
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+//@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @end
 
 static NSRecursiveLock *lock;
@@ -76,7 +76,9 @@ static unsigned long long fileSystemFreeSize;
                            retainFlag:(BOOL)retainFlag
                                   qos:(MQTTQosLevel)qos
                                 msgId:(UInt16)msgId
-                         incomingFlag:(BOOL)incomingFlag {
+                         incomingFlag:(BOOL)incomingFlag
+                          commandType:(UInt8)commandType
+                             deadline:(NSDate *)deadline {
     if (([self allFlowsforClientId:clientId incomingFlag:incomingFlag].count <= self.maxMessages) &&
         (fileSize <= self.maxSize)) {
         MQTTFlow *flow = [self createFlowforClientId:clientId
@@ -86,13 +88,8 @@ static unsigned long long fileSystemFreeSize;
         flow.data = data;
         flow.retainedFlag = @(retainFlag);
         flow.qosLevel = @(qos);
-        if ([self windowSize:clientId] > self.maxWindowSize) {
-            flow.commandType = @(0);
-        } else {
-            flow.commandType = @(MQTTPublish);
-        }
-        flow.deadline = [NSDate dateWithTimeIntervalSinceNow:0];
-        [self sync];
+        flow.commandType = @(commandType);
+        flow.deadline = deadline;
         return flow;
     } else {
         return nil;
@@ -102,6 +99,7 @@ static unsigned long long fileSystemFreeSize;
 - (void)deleteFlow:(MQTTFlow *)flow {
     [self.managedObjectContext performBlockAndWait:^{
         [self.managedObjectContext deleteObject:flow];
+        [self sync];
     }];
 }
 
@@ -120,15 +118,23 @@ static unsigned long long fileSystemFreeSize;
 - (void)sync {
     [self.managedObjectContext performBlockAndWait:^{
         if (self.managedObjectContext.hasChanges) {
-            if (DEBUGPERSIST) NSLog(@"sync: i%lu u%lu d%lu",
+            if (DEBUGPERSIST) NSLog(@"pre-sync: i%lu u%lu d%lu",
                                     (unsigned long)self.managedObjectContext.insertedObjects.count,
                                     (unsigned long)self.managedObjectContext.updatedObjects.count,
                                     (unsigned long)self.managedObjectContext.deletedObjects.count
                                     );
             NSError *error = nil;
             if (![self.managedObjectContext save:&error]) {
-                if (DEBUGPERSIST) NSLog(@"sync %@", error);
+                NSLog(@"sync error %@", error);
             }
+            if (self.managedObjectContext.hasChanges) {
+                NSLog(@"sync not complete");
+            }
+            if (DEBUGPERSIST) NSLog(@"postsync: i%lu u%lu d%lu",
+                                    (unsigned long)self.managedObjectContext.insertedObjects.count,
+                                    (unsigned long)self.managedObjectContext.updatedObjects.count,
+                                    (unsigned long)self.managedObjectContext.deletedObjects.count
+                                    );
             [self sizes];
         }
     }];
@@ -136,15 +142,16 @@ static unsigned long long fileSystemFreeSize;
 
 - (NSArray *)allFlowsforClientId:(NSString *)clientId
                     incomingFlag:(BOOL)incomingFlag {
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:
-                              @"clientId = %@ and incomingFlag = %@",
-                              clientId,
-                              @(incomingFlag)
-                              ];
-    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"deadline" ascending:YES]];
-    __block NSArray *flows;
+    __block NSArray *flows = nil;
     [self.managedObjectContext performBlockAndWait:^{
+        
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:
+                                  @"clientId = %@ and incomingFlag = %@",
+                                  clientId,
+                                  @(incomingFlag)
+                                  ];
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"deadline" ascending:YES]];
         NSError *error = nil;
         flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (!flows) {
@@ -157,43 +164,48 @@ static unsigned long long fileSystemFreeSize;
 - (MQTTFlow *)flowforClientId:(NSString *)clientId
                  incomingFlag:(BOOL)incomingFlag
                     messageId:(UInt16)messageId {
-    MQTTFlow *flow = nil;
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:
-                              @"clientId = %@ and incomingFlag = %@ and messageId = %@",
-                              clientId,
-                              @(incomingFlag),
-                              @(messageId)
-                              ];
-    __block NSArray *flows;
-    __block NSError *error = nil;
+    __block MQTTFlow *flow = nil;
+    
     [self.managedObjectContext performBlockAndWait:^{
+        
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:
+                                  @"clientId = %@ and incomingFlag = %@ and messageId = %@",
+                                  clientId,
+                                  @(incomingFlag),
+                                  @(messageId)
+                                  ];
+        NSArray *flows;
+        NSError *error = nil;
         flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    }];
-    if (!flows) {
-        if (DEBUGPERSIST) NSLog(@"flowForClientId %@", error);
-    } else {
-        if ([flows count]) {
-            flow = [flows lastObject];
+        if (!flows) {
+            if (DEBUGPERSIST) NSLog(@"flowForClientId %@", error);
+        } else {
+            if ([flows count]) {
+                flow = [flows lastObject];
+            }
         }
-    }
+        
+    }];
+    
     return flow;
 }
 
 - (MQTTFlow *)createFlowforClientId:(NSString *)clientId
                        incomingFlag:(BOOL)incomingFlag
                           messageId:(UInt16)messageId {
-    MQTTFlow *flow = [self flowforClientId:clientId incomingFlag:incomingFlag messageId:messageId];
-    
+    __block MQTTFlow *flow = [self flowforClientId:clientId incomingFlag:incomingFlag messageId:messageId];
     if (!flow) {
-        flow = [NSEntityDescription insertNewObjectForEntityForName:@"MQTTFlow"
-                                             inManagedObjectContext:self.managedObjectContext];
-        
-        flow.clientId = clientId;
-        flow.incomingFlag = @(incomingFlag);
-        flow.messageId = @(messageId);
-        
+        [self.managedObjectContext performBlockAndWait:^{
+            flow = [NSEntityDescription insertNewObjectForEntityForName:@"MQTTFlow"
+                                                 inManagedObjectContext:self.managedObjectContext];
+            
+            flow.clientId = clientId;
+            flow.incomingFlag = @(incomingFlag);
+            flow.messageId = @(messageId);
+        }];
     }
+    
     return flow;
 }
 
@@ -201,8 +213,9 @@ static unsigned long long fileSystemFreeSize;
 
 - (NSManagedObjectContext *)managedObjectContext
 {
-    if (_managedObjectContext != nil) {
-        return _managedObjectContext;
+    NSManagedObjectContext *managedObjectContext = [[NSThread currentThread].threadDictionary valueForKey:@"MQTTClient"];
+    if (managedObjectContext != nil) {
+        return managedObjectContext;
     }
     
     @synchronized (lock) {
@@ -214,10 +227,11 @@ static unsigned long long fileSystemFreeSize;
             }
         }
         
-        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [_managedObjectContext setParentContext:parentManagedObjectContext];
+        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [managedObjectContext setParentContext:parentManagedObjectContext];
+        [[NSThread currentThread].threadDictionary setObject:managedObjectContext forKey:@"MQTTClient"];
         
-        return _managedObjectContext;
+        return managedObjectContext;
     }
 }
 

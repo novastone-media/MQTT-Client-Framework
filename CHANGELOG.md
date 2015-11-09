@@ -1,7 +1,14 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
-MQTT-Client-Framework 0.3.7
+## MQTT-Client-Framework 0.4.0
+>Release date: 2015-11-09
+
+Multi Threading support
+
+[FIX] Other crash issue when I publish lots of messages (multithreaded publisher). #64
+
+## MQTT-Client-Framework 0.3.7
 >Release date: 2015-11-07
 
 [FIX] wrong target OS preprocessor directives closes #63

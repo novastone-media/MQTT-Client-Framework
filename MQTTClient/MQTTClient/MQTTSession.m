@@ -723,29 +723,45 @@
                                                 retainFlag:retainFlag
                                                    dupFlag:FALSE];
     if (qos) {
-        MQTTFlow *flow = [self.persistence storeMessageForClientId:self.clientId
-                                                             topic:topic
-                                                              data:data
-                                                        retainFlag:retainFlag
-                                                               qos:qos
-                                                             msgId:msgId
-                                                      incomingFlag:NO];
-        
+        MQTTFlow *flow;
+        if ([self.persistence windowSize:self.clientId] <= self.persistence.maxWindowSize) {
+            flow = [self.persistence storeMessageForClientId:self.clientId
+                                                       topic:topic
+                                                        data:data
+                                                  retainFlag:retainFlag
+                                                         qos:qos
+                                                       msgId:msgId
+                                                incomingFlag:NO
+                                                 commandType:MQTTPublish
+                                                    deadline:[NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT]];
+        } else {
+            flow = [self.persistence storeMessageForClientId:self.clientId
+                                                       topic:topic
+                                                        data:data
+                                                  retainFlag:retainFlag
+                                                         qos:qos
+                                                       msgId:msgId
+                                                incomingFlag:NO
+                                                 commandType:0
+                                                    deadline:[NSDate date]];
+        }
         if (!flow) {
-            if (DEBUGSESS) NSLog(@"%@ dropping outgoing messages", self);
+            if (DEBUGSESS) NSLog(@"%@ dropping outgoing message %d", self, msgId);
             msgId = 0;
         } else {
-            [self tell];
-            if ([self.persistence windowSize:self.clientId] <= self.persistence.maxWindowSize) {
-                if ([self.encoder encodeMessage:msg]) {
-                    flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
-                }
+            [self.persistence sync];
+            if ([flow.commandType intValue] == MQTTPublish) {
+                if (DEBUGSESS) NSLog(@"%@ PUBLISH %d", self, msgId);
+                (void)[self.encoder encodeMessage:msg];
+            } else {
+                if (DEBUGSESS) NSLog(@"%@ queueing message %d", self, msgId);
+
             }
         }
     } else {
         (void)[self.encoder encodeMessage:msg];
     }
-    
+    [self tell];
     return msgId;
 }
 
@@ -900,6 +916,7 @@
 - (void)checkTxFlows {
     NSUInteger windowSize;
     MQTTMessage *message;
+
     NSArray *flows = [self.persistence allFlowsforClientId:self.clientId
                                               incomingFlag:NO];
     windowSize = 0;
@@ -916,39 +933,44 @@
             switch ([flow.commandType intValue]) {
                 case 0:
                     if (windowSize <= self.persistence.maxWindowSize) {
+                        if (DEBUGSESS) NSLog(@"PUBLISH queued message %@", flow.messageId);
                         message = [MQTTMessage publishMessageWithData:flow.data
                                                               onTopic:flow.topic
                                                                   qos:[flow.qosLevel intValue]
                                                                 msgId:[flow.messageId intValue]
                                                            retainFlag:[flow.retainedFlag boolValue]
                                                               dupFlag:NO];
-                        (void)[self.encoder encodeMessage:message];
                         flow.commandType = @(MQTTPublish);
                         flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+                        [self.persistence sync];
+                        (void)[self.encoder encodeMessage:message];
                         windowSize++;
                     }
                     break;
                 case MQTTPublish:
+                    if (DEBUGSESS) NSLog(@"resend PUBLISH %@", flow.messageId);
                     message = [MQTTMessage publishMessageWithData:flow.data
                                                           onTopic:flow.topic
                                                               qos:[flow.qosLevel intValue]
                                                             msgId:[flow.messageId intValue]
                                                        retainFlag:[flow.retainedFlag boolValue]
                                                           dupFlag:YES];
-                    (void)[self.encoder encodeMessage:message];
                     flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+                    [self.persistence sync];
+                    (void)[self.encoder encodeMessage:message];
                     break;
                 case MQTTPubrel:
+                    if (DEBUGSESS) NSLog(@"resend PUBREL %@", flow.messageId);
                     message = [MQTTMessage pubrelMessageWithMessageId:[flow.messageId intValue]];
-                    (void)[self.encoder encodeMessage:message];
                     flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+                    [self.persistence sync];
+                    (void)[self.encoder encodeMessage:message];
                     break;
                 default:
                     break;
             }
         }
     }
-    [self.persistence sync];
 }
 
 - (void)encoder:(MQTTEncoder*)sender handleEvent:(MQTTEncoderEvent)eventCode error:(NSError *)error
@@ -1251,9 +1273,12 @@
                                                     retainFlag:msg.retainFlag
                                                            qos:msg.qos
                                                          msgId:msgId
-                                                  incomingFlag:YES]) {
+                                                  incomingFlag:YES
+                                                   commandType:MQTTPubrec
+                                                      deadline:[NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT]]) {
                     if (DEBUGSESS) NSLog(@"%@ dropping incoming messages", self);
                 } else {
+                    [self.persistence sync];
                     [self tell];
                     (void)[self.encoder encodeMessage:[MQTTMessage pubrecMessageWithMessageId:msgId]];
                 }

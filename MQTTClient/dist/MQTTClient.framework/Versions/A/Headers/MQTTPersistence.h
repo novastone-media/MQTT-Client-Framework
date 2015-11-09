@@ -36,7 +36,9 @@
                            retainFlag:(BOOL)retainFlag
                                   qos:(MQTTQosLevel)qos
                                 msgId:(UInt16)msgId
-                         incomingFlag:(BOOL)incomingFlag;
+                         incomingFlag:(BOOL)incomingFlag
+                          commandType:(UInt8)commandType
+                             deadline:(NSDate *)deadline;
 
 - (void)deleteFlow:(MQTTFlow *)flow;
 - (void)deleteAllFlowsForClientId:(NSString *)clientId;
