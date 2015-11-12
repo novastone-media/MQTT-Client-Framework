@@ -371,7 +371,8 @@
 
 - (void)connectToInternal
 {
-    if (self.state == MQTTSessionManagerStateStarting) {
+    if (self.state == MQTTSessionManagerStateStarting
+        && self.session != nil) {
         self.state = MQTTSessionManagerStateConnecting;
         [self.session connectToHost:self.host
                                port:self.port
