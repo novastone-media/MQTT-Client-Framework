@@ -28,6 +28,11 @@
               <Anchor>a08591f1296d67a36a8fa31d021bf544a</Anchor>
              </Node>
              <Node>
+              <Name>closeWithDisconnectHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a5a617d3cee077dd60f48a340d4b34d99</Anchor>
+             </Node>
+             <Node>
               <Name>connectAndWaitToHost:port:usingSSL:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>abde5a7876357d84972d414fe25843f89</Anchor>
@@ -41,6 +46,11 @@
               <Name>connectToHost:port:usingSSL:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a97c0fc3b9a06d8c5eefa3012591feb82</Anchor>
+             </Node>
+             <Node>
+              <Name>connectToHost:port:usingSSL:connectHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>ae9b26d3af576b9b8bc0efcf6ac3a98d4</Anchor>
              </Node>
              <Node>
               <Name>connectToHost:port:usingSSL:withConnectionHandler:messageHandler:</Name>
@@ -133,6 +143,11 @@
               <Anchor>af76085443daa0ceadf01acc828c91370</Anchor>
              </Node>
              <Node>
+              <Name>publishData:onTopic:retain:qos:publishHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a1a76bb9e8855104282648afa0505e625</Anchor>
+             </Node>
+             <Node>
               <Name>publishDataAtLeastOnce:onTopic:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a73d4fe58c076c3cbcccd2d7a6c000e9e</Anchor>
@@ -188,9 +203,19 @@
               <Anchor>ace91fa3ca0b5eb08a2a48706c840dab3</Anchor>
              </Node>
              <Node>
+              <Name>subscribeToTopic:atLevel:subscribeHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a8deb1a3c1a12c4a3924c5ebc1e97f2db</Anchor>
+             </Node>
+             <Node>
               <Name>subscribeToTopics:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>aba1debfec65602b53c6e4b9c3bdf4af1</Anchor>
+             </Node>
+             <Node>
+              <Name>subscribeToTopics:subscribeHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a53eb6c502ef7dd7f2506c5b8542ca296</Anchor>
              </Node>
              <Node>
               <Name>unsubscribeAndWaitTopic:</Name>
@@ -208,9 +233,19 @@
               <Anchor>a0b9b75a7232586150cbc348b1262faaf</Anchor>
              </Node>
              <Node>
+              <Name>unsubscribeTopic:unsubscribeHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a07b306c66528e9887798476bccab1344</Anchor>
+             </Node>
+             <Node>
               <Name>unsubscribeTopics:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>ae59a9a8f94477a1504178c59fc664cb9</Anchor>
+             </Node>
+             <Node>
+              <Name>unsubscribeTopics:unsubscribeHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a2b0433b8f50ed03edce030d44ae9321e</Anchor>
              </Node>
              <Node>
               <Name>certificates</Name>
@@ -281,6 +316,11 @@
               <Name>securityPolicy</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a74f593a2857ccf22a5073a71a408e465</Anchor>
+             </Node>
+             <Node>
+              <Name>sessionPresent</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>ad0712c44abf0f514feb9462779d3e2b8</Anchor>
              </Node>
              <Node>
               <Name>status</Name>

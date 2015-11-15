@@ -7,7 +7,9 @@
  Using MQTT in your Objective-C application
  
  @author Christoph Krey krey.christoph@gmail.com
- @copyright Copyright (c) 2013-2015, Christoph Krey based on Copyright (c) 2011, 2013, 2lemetry LLC
+ @copyright Copyright (c) 2013-2015, Christoph Krey 
+ 
+ based on Copyright (c) 2011, 2013, 2lemetry LLC
     All rights reserved. This program and the accompanying materials
     are made available under the terms of the Eclipse Public License v1.0
     which accompanies this distribution, and is available at
@@ -227,6 +229,12 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 
 @end
 
+typedef void (^MQTTConnectHandler)(NSError *error);
+typedef void (^MQTTDisconnectHandler)(NSError *error);
+typedef void (^MQTTSubscribeHandler)(NSError *error, NSArray *gQoss);
+typedef void (^MQTTUnsubscribeHandler)(NSError *error);
+typedef void (^MQTTPublishHandler)(NSError *error);
+
 /** Session implements the MQTT protocol for your application
  */
 
@@ -288,6 +296,10 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 /** Session status
  */
 @property (nonatomic, readonly) MQTTSessionStatus status;
+
+/** Indicates if the broker found a persistent session when connecting with cleanSession:FALSE
+ */
+@property (nonatomic, readonly) BOOL sessionPresent;
 
 /** see initWithClientId for description
  */
@@ -653,18 +665,46 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 /** connects to the specified MQTT server
  
  @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
- @param port spefies the port to connect to
+ @param port specifies the port to connect to
  @param usingSSL specifies whether to use SSL or not
+ @param connectHandler identifies a block which is executed on successfull or unsuccessfull connect. Might be nil
+    error is nil in the case of a successful connect
+    sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
  
- @return nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and watch for events.
+ @return nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and
+    - watch for events
+    - watch for connect or connectionRefused messages
+    - watch for error messages
+    or use the connectHandler block
  
  @code
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO connectHandler:^(NSError *error, BOOL sessionPresent) {
+    if (error) {
+        NSLog(@"Error Connect %@", error.localizedDescription);
+    } else {
+        NSLog(@"Connected sessionPresent:%d", sessionPresent);
+    }
+ }];
  @endcode
+ 
+ */
+
+- (void)connectToHost:(NSString *)host
+                 port:(UInt32)port
+             usingSSL:(BOOL)usingSSL
+       connectHandler:(MQTTConnectHandler)connectHandler;
+
+/** connects to the specified MQTT server
+ 
+ @param host see connectToHost for description
+ @param port see connectToHost for description
+ @param usingSSL see connectToHost for description
+ 
+ @return see connectToHost for description
  
  */
 - (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
@@ -721,10 +761,36 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 
 /** subscribes to a topic at a specific QoS level
  
+ @param topic see subscribeToTopic:atLevel:subscribeHandler: for description
+ @param qosLevel  see subscribeToTopic:atLevel:subscribeHandler: for description
+ @return the Message Identifier of the SUBSCRIBE message.
+ 
+ @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session subscribeToTopic:@"example/#" atLevel:2];
+ 
+ @endcode
+ 
+ */
+
+- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;
+/** subscribes to a topic at a specific QoS level
+ 
  @param topic the Topic Filter to subscribe to.
  
  @param qosLevel specifies the QoS Level of the subscription.
  qosLevel can be 0, 1, or 2.
+ @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
+ Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+ array of grantes Qos
+ 
  
  @return the Message Identifier of the SUBSCRIBE message.
  
@@ -736,14 +802,20 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  MQTTSession *session = [[MQTTSession alloc] init];
  
  [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
- 
- [session subscribeToTopic:@"example/#" atLevel:2];
+ ...
+ [session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray *gQoss){
+    if (error) {
+        NSLog(@"Subscription failed %@", error.localizedDescription);
+    } else {
+        NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
+    }
+ }];
  
  @endcode
  
  */
 
-- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;
+- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
 
 /** for mqttio-OBJC backward compatibility
  @param theTopic see subscribeToTopic for description
@@ -801,6 +873,44 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 
 
 - (UInt16)subscribeToTopics:(NSDictionary *)topics;
+
+/** subscribes a number of topics
+ 
+ @param topics an NSDictionary containing the Topic Filters to subscribe to as keys and the corresponding QoS as NSNumber values
+ @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
+    Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+    array of grantes Qos
+ 
+ @return the Message Identifier of the SUBSCRIBE message.
+ 
+ @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session subscribeToTopics:@{
+    @"example/#": @(0),
+    @"example/status": @(2),
+    @"other/#": @(1)
+ } subscribeHandler:^(NSError *error, NSArray *gQoss){
+    if (error) {
+        NSLog(@"Subscription failed %@", error.localizedDescription);
+    } else {
+        NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
+    }
+ }];
+
+ 
+ @endcode
+ */
+
+
+- (UInt16)subscribeToTopics:(NSDictionary *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
+
 /** subscribes a number of topics
  
  @param topics an NSDictionary containing the Topic Filters to subscribe to as keys and the corresponding QoS as NSNumber values
@@ -829,7 +939,7 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 /** unsubscribes from a topic
  
  @param topic the Topic Filter to unsubscribe from.
- 
+
  @return the Message Identifier of the UNSUBSCRIBE message.
  
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
@@ -847,6 +957,22 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 
 - (UInt16)unsubscribeTopic:(NSString *)topic;
+
+/** unsubscribes from a topic
+ 
+ @param topic the Topic Filter to unsubscribe from.
+ @param unsubscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
+ Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+ array of grantes Qos
+ 
+ @return the Message Identifier of the UNSUBSCRIBE message.
+ 
+ @note returns immediately.
+ 
+ */
+
+
+- (UInt16)unsubscribeTopic:(NSString *)topic unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;
 
 /** unsubscribes from a topic synchronously
  
@@ -894,6 +1020,23 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 
 - (UInt16)unsubscribeTopics:(NSArray *)topics;
+
+/** unsubscribes from a number of topics
+ 
+ @param topics an NSArray of topics to unsubscribe from
+ 
+ @param unsubscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
+    Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+    array of grantes Qos
+ 
+ @return the Message Identifier of the UNSUBSCRIBE message.
+ 
+ @note returns immediately.
+ 
+ */
+
+
+- (UInt16)unsubscribeTopics:(NSArray *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;
 
 /** unsubscribes from a number of topics synchronously
  
@@ -948,6 +1091,41 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 
 - (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;
+
+/** publishes data on a given topic at a specified QoS level and retain flag
+ 
+ @param data the data to be sent. length may range from 0 to 268,435,455 - 4 - _lengthof-topic_ bytes. Defaults to length 0.
+ @param topic the Topic to identify the data
+ @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
+ @param qos specifies the Quality of Service for the publish
+ qos can be 0, 1, or 2.
+ 
+ 
+ @param publishHandler identifies a block which is executed on successfull or unsuccessfull connect. Might be nil
+ error is nil in the case of a successful connect
+ sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
+ 
+
+ @return the Message Identifier of the PUBLISH message. Zero if qos 0. If qos 1 or 2, zero if message was dropped
+ 
+ @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session publishData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
+ topic:@"example/data"
+ retain:YES
+ qos:1];
+ @endcode
+ 
+ */
+
+- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos publishHandler:(MQTTPublishHandler)publishHandler;
 
 /** for mqttio-OBJC backward compatibility
  @param theData see publishData for description
@@ -1030,6 +1208,8 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  
  If the connection was successfully established before, a DISCONNECT is sent.
  
+ @param disconnectHandler identifies a block which is executed on successfull or unsuccessfull disconnect. Might be nil. error is nil in the case of a successful disconnect
+
  @code
  #import "MQTTClient.h"
  
@@ -1039,11 +1219,21 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  
  ...
  
- [session close];
+ [session closeWithDisconnectHandler^(NSError *error) {
+    if (error) {
+        NSLog(@"Error Disconnect %@", error.localizedDescription);
+    }
+    NSLog(@"Session closed");
+ }];
+
  
  @endcode
  
  */
+- (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler;
+
+/** closes an MQTTSession gracefully
+  */
 - (void)close;
 
 /** closes an MQTTSession gracefully synchronously

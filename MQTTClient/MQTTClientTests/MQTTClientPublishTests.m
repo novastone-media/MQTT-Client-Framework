@@ -505,6 +505,7 @@
 - (void)testPublishCloseExpected:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos
 {
     [self testPublishCore:data onTopic:topic retain:retain atLevel:qos];
+    NSLog(@"testPublishCloseExpected event:%ld", (long)self.event);
     XCTAssert(
               (self.event == MQTTSessionEventConnectionClosedByBroker) ||
               (self.event == MQTTSessionEventConnectionError),
@@ -562,7 +563,7 @@
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    //NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
+    NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;
     self.error = error;
 }

@@ -52,6 +52,19 @@ typedef NS_ENUM(UInt8, MQTTQosLevel) {
     MQTTQosLevelExactlyOnce
 };
 
+/**
+ Enumeration of MQTT Connect return codes
+ */
+
+typedef NS_ENUM(NSUInteger, MQTTConnectReturnCode) {
+    MQTTConnectAccepted = 0,
+    MQTTConnectRefusedUnacceptableProtocolVersion,
+    MQTTConnectRefusedIdentiferRejected,
+    MQTTConnectRefusedServerUnavailable,
+    MQTTConnectRefusedBadUserNameOrPassword,
+    MQTTConnectRefusedNotAuthorized
+};
+
 // instance methods
 + (id)connectMessageWithClientId:(NSString*)clientId
                         userName:(NSString*)userName

@@ -1,6 +1,14 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.5.0
+>Release date: 2015-11-15
+
+API with blocks
+
+[NEW] API with blocks. closes #68
+[FIX] Messages queued while off-line are sent after 20 sec only. closes #67
+
 ## MQTT-Client-Framework 0.4.0
 >Release date: 2015-11-09
 

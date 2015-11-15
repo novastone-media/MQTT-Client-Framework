@@ -123,6 +123,9 @@
 		8425D7191BBE8EF1005AD733 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8425D7181BBE8EF1005AD733 /* CoreData.framework */; };
 		8425D71B1BBE8EF9005AD733 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8425D71A1BBE8EF9005AD733 /* Foundation.framework */; };
 		8429773F1B87CEF600A119FB /* MQTTSessionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTSessionManagerTests.m */; };
+		8435A25D1BF3C69200D2BF33 /* BlockTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* BlockTests.m */; };
+		8435A25E1BF3C69200D2BF33 /* BlockTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* BlockTests.m */; };
+		8435A25F1BF3C69200D2BF33 /* BlockTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* BlockTests.m */; };
 		8442BEE91A97B15100D00E55 /* SwiftTests2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests2.swift */; };
 		844C93AB1A81645D00CA4A03 /* MQTTACLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */; };
 		845DBE771884AAD700EDB183 /* MQTTClientSubscriptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */; };
@@ -266,6 +269,7 @@
 		8425D7181BBE8EF1005AD733 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		8425D71A1BBE8EF9005AD733 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		8429773E1B87CEF600A119FB /* MQTTSessionManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionManagerTests.m; sourceTree = "<group>"; };
+		8435A25C1BF3C69200D2BF33 /* BlockTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockTests.m; sourceTree = "<group>"; };
 		8442BEE81A97B15100D00E55 /* SwiftTests2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTests2.swift; sourceTree = "<group>"; };
 		844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTACLTests.m; sourceTree = "<group>"; };
 		845DBE761884AAD700EDB183 /* MQTTClientSubscriptionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientSubscriptionTests.m; sourceTree = "<group>"; };
@@ -525,6 +529,7 @@
 		846191431883E56800101409 /* MQTTClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				8435A25C1BF3C69200D2BF33 /* BlockTests.m */,
 				84E0010118E22C9600C07F23 /* MQTTClientTests.h */,
 				84C845A31BDD8DB400FEC354 /* FlowTests.m */,
 				C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */,
@@ -898,6 +903,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84C845A61BDD8DE300FEC354 /* FlowTests.m in Sources */,
+				8435A25F1BF3C69200D2BF33 /* BlockTests.m in Sources */,
 				840716511BBEF19E00FBB3CB /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				840716531BBEF19E00FBB3CB /* MQTTClientTests.m in Sources */,
 				840716541BBEF19E00FBB3CB /* MultiThreadingTests.m in Sources */,
@@ -930,6 +936,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84C845A51BDD8DD900FEC354 /* FlowTests.m in Sources */,
+				8435A25E1BF3C69200D2BF33 /* BlockTests.m in Sources */,
 				8425D70E1BBE8D68005AD733 /* MQTTClientSubscriptionTests.m in Sources */,
 				8407160D1BBEE6A000FBB3CB /* SwiftTests.swift in Sources */,
 				8407160E1BBEE6A000FBB3CB /* SwiftTests2.swift in Sources */,
@@ -962,6 +969,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8429773F1B87CEF600A119FB /* MQTTSessionManagerTests.m in Sources */,
+				8435A25D1BF3C69200D2BF33 /* BlockTests.m in Sources */,
 				C21D3C711B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				840785A918A2AA26009158D5 /* MQTTClientPublishTests.m in Sources */,
 				8461914A1883E56800101409 /* MQTTClientTests.m in Sources */,
