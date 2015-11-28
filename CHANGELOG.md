@@ -1,6 +1,13 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.5.2
+>Release date: 2015-11-28
+
+Added dynamic framework to integrate in Swift libraries
+
+[NEW] MQTTFramework targe added closes #78
+
 ## MQTT-Client-Framework 0.5.1
 >Release date: 2015-11-18
 
