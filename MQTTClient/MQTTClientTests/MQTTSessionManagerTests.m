@@ -51,6 +51,11 @@
         self.received = 0;
         MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
         manager.delegate = self;
+
+        [manager addObserver:self
+                  forKeyPath:@"effectiveSubscriptions"
+                     options:NSKeyValueObservingOptionInitial || NSKeyValueObservingOptionNew
+                     context:nil];
         manager.subscriptions = [@{@"#": @(0)} mutableCopy];
         [manager connectTo:parameters[@"host"]
                       port:[parameters[@"port"] intValue]
@@ -73,7 +78,7 @@
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
-        
+
         while (self.step <= 0) {
             NSLog(@"received %d on #", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
@@ -83,6 +88,7 @@
         XCTAssertEqual(self.received, self.sent);
         
         manager.subscriptions = [@{@"#": @(0),@"$SYS/#": @(0)} mutableCopy];
+
         while (self.step == 1) {
             NSLog(@"received %d on # or $SYS/#", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
@@ -92,6 +98,7 @@
         XCTAssertEqual(self.received, self.sent);
         
         manager.subscriptions = [@{@"$SYS/#": @(0)} mutableCopy];
+
         while (self.step <= 2) {
             NSLog(@"received %d on $SYS/#", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
@@ -100,6 +107,7 @@
         XCTAssertEqual(self.received, self.sent);
         
         manager.subscriptions = [@{} mutableCopy];
+
         while (self.step <= 3) {
             NSLog(@"received %d on nothing", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
@@ -108,12 +116,14 @@
         XCTAssertEqual(self.received, self.sent);
         
         [manager disconnect];
+
         while (self.step <= 4) {
             NSLog(@"received %d after disconnect", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         XCTAssertEqual(self.received, self.sent);
+        [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
         [timer invalidate];
     }
 }
@@ -152,6 +162,11 @@
                                                                           maxMessages:1024
                                                                               maxSize:64*1024*1024];
         manager.delegate = self;
+        [manager addObserver:self
+                  forKeyPath:@"effectiveSubscriptions"
+                     options:NSKeyValueObservingOptionInitial || NSKeyValueObservingOptionNew
+                     context:nil];
+
         manager.subscriptions = [@{@"#": @(0)} mutableCopy];
         [manager connectTo:parameters[@"host"]
                       port:[parameters[@"port"] intValue]
@@ -174,7 +189,7 @@
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
-        
+
         while (self.step <= 0) {
             NSLog(@"received %d on #", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
@@ -183,7 +198,8 @@
         }
         XCTAssertEqual(self.received, self.sent);
         
-        manager.subscriptions = [@{@"#": @(0),@"$SYS/#": @(0)} mutableCopy];
+        manager.subscriptions = [@{@"#": @(0),@"a": @(1),@"b": @(2),@"$SYS/#": @(0)} mutableCopy];
+
         while (self.step == 1) {
             NSLog(@"received %d on # or $SYS/#", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
@@ -193,6 +209,7 @@
         XCTAssertEqual(self.received, self.sent);
         
         manager.subscriptions = [@{@"$SYS/#": @(0)} mutableCopy];
+
         while (self.step <= 2) {
             NSLog(@"received %d on $SYS/#", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
@@ -201,6 +218,7 @@
         XCTAssertEqual(self.received, self.sent);
         
         manager.subscriptions = [@{} mutableCopy];
+
         while (self.step <= 3) {
             NSLog(@"received %d on nothing", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
@@ -209,12 +227,15 @@
         XCTAssertEqual(self.received, self.sent);
         
         [manager disconnect];
+
         while (self.step <= 4) {
             NSLog(@"received %d after disconnect", self.received);
             [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
         XCTAssertEqual(self.received, self.sent);
+        [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
+
         [timer invalidate];
     }
 }
@@ -257,6 +278,13 @@
         }
     }
     return securityPolicy;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"effectiveSubscriptions"]) {
+        MQTTSessionManager *manager = (MQTTSessionManager *)object;
+        NSLog(@"effectiveSubscriptions changed: %@", manager.effectiveSubscriptions);
+    }
 }
 
 

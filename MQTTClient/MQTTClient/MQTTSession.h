@@ -160,7 +160,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  @param qoss an array containing the granted QoS(s) related to the SUBSCRIBE message
     (see subscribeTopic, subscribeTopics)
  */
-- (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQoss:(NSArray *)qoss;
+- (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQoss:(NSArray<NSNumber *> *)qoss;
 
 /** gets called when an unsubscribe is acknowledged by the MQTT broker
  @param session the MQTTSession reporting the acknowledge
@@ -231,7 +231,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 
 typedef void (^MQTTConnectHandler)(NSError *error);
 typedef void (^MQTTDisconnectHandler)(NSError *error);
-typedef void (^MQTTSubscribeHandler)(NSError *error, NSArray *gQoss);
+typedef void (^MQTTSubscribeHandler)(NSError *error, NSArray<NSNumber *> *gQoss);
 typedef void (^MQTTUnsubscribeHandler)(NSError *error);
 typedef void (^MQTTPublishHandler)(NSError *error);
 
@@ -803,7 +803,7 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  
  [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
  ...
- [session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray *gQoss){
+ [session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
     if (error) {
         NSLog(@"Subscription failed %@", error.localizedDescription);
     } else {
@@ -849,7 +849,8 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 
 /** subscribes a number of topics
  
- @param topics an NSDictionary containing the Topic Filters to subscribe to as keys and the corresponding QoS as NSNumber values
+ @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
+    the corresponding QoS as NSNumber values
  
  @return the Message Identifier of the SUBSCRIBE message.
  
@@ -872,11 +873,12 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 
 
-- (UInt16)subscribeToTopics:(NSDictionary *)topics;
+- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics;
 
 /** subscribes a number of topics
  
- @param topics an NSDictionary containing the Topic Filters to subscribe to as keys and the corresponding QoS as NSNumber values
+ @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
+    the corresponding QoS as NSNumber values
  @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
     Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
     array of grantes Qos
@@ -896,7 +898,7 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
     @"example/#": @(0),
     @"example/status": @(2),
     @"other/#": @(1)
- } subscribeHandler:^(NSError *error, NSArray *gQoss){
+ } subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
     if (error) {
         NSLog(@"Subscription failed %@", error.localizedDescription);
     } else {
@@ -909,11 +911,12 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 
 
-- (UInt16)subscribeToTopics:(NSDictionary *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
+- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
 
 /** subscribes a number of topics
  
- @param topics an NSDictionary containing the Topic Filters to subscribe to as keys and the corresponding QoS as NSNumber values
+ @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
+    the corresponding QoS as NSNumber values
  
  @return TRUE if the subscribe was succesfull
  
@@ -934,7 +937,7 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 
 
-- (BOOL)subscribeAndWaitToTopics:(NSDictionary *)topics;
+- (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics;
 
 /** unsubscribes from a topic
  
@@ -996,7 +999,7 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 
 /** unsubscribes from a number of topics
  
- @param topics an NSArray of topics to unsubscribe from
+ @param topics an NSArray<NSString *> of topics to unsubscribe from
  
  @return the Message Identifier of the UNSUBSCRIBE message.
  
@@ -1019,11 +1022,11 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  
  */
 
-- (UInt16)unsubscribeTopics:(NSArray *)topics;
+- (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics;
 
 /** unsubscribes from a number of topics
  
- @param topics an NSArray of topics to unsubscribe from
+ @param topics an NSArray<NSString *> of topics to unsubscribe from
  
  @param unsubscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
     Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
@@ -1036,11 +1039,11 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 
 
-- (UInt16)unsubscribeTopics:(NSArray *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;
+- (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;
 
 /** unsubscribes from a number of topics synchronously
  
- @param topics an NSArray of topics to unsubscribe from
+ @param topics an NSArray<NSString *> of topics to unsubscribe from
  
  @return TRUE if the unsubscribe was successful
  
@@ -1061,7 +1064,7 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  
  */
 
-- (BOOL)unsubscribeAndWaitTopics:(NSArray *)topics;
+- (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics;
 
 
 /** publishes data on a given topic at a specified QoS level and retain flag

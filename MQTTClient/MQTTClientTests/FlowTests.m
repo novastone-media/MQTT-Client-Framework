@@ -276,8 +276,8 @@ secondPublisherWindow:32
          publisherQos:MQTTQosLevelExactlyOnce
    secondPublisherQos:MQTTQosLevelAtLeastOnce
      subscriberWindow:1000
-      publisherWindow:1000
-secondPublisherWindow:1000
+      publisherWindow:2000
+secondPublisherWindow:2000
      processingBuffer:1
        processingTime:0.001
               timeout:600];
@@ -489,10 +489,10 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
         self.subscriberReady = true;
         test.session.cleanSessionFlag = false;
         
-        while (test.processedCounter < self.count * 2)  {
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-        }
-        
+//        while (test.processedCounter < self.count * 2)  {
+//            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+//        }
+//        
         [test close];
         
         while (!test.closed) {
@@ -519,7 +519,7 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
         test.session.cleanSessionFlag = false;
         
         while (test.publishedCounter < self.count)  {
-            [test pub:self.publisherQos count:test.publishedCounter];
+            [test pub:self.publisherQos count:test.publishedCounter + 100000];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.0001]];
         }
         
@@ -553,7 +553,7 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
         test.session.cleanSessionFlag = false;
         
         while (test.publishedCounter < self.count)  {
-            [test pub:self.secondPublisherQos count:test.publishedCounter];
+            [test pub:self.secondPublisherQos count:test.publishedCounter + 200000];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.0001]];
         }
         

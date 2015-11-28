@@ -626,11 +626,11 @@
     }
 }
 
-- (UInt16)subscribeToTopics:(NSDictionary *)topics {
+- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics {
     return [self subscribeToTopics:topics subscribeHandler:nil];
 }
 
-- (UInt16)subscribeToTopics:(NSDictionary *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler {
+- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler {
     if (DEBUGSESS) NSLog(@"%@ subscribeToTopics:%@]", self, topics);
     
     //for (NSNumber *qos in [topics allValues]) {
@@ -649,7 +649,7 @@
     return mid;
 }
 
-- (BOOL)subscribeAndWaitToTopics:(NSDictionary *)topics
+- (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics
 {
     self.synchronSub = TRUE;
     UInt16 mid = [self subscribeToTopics:topics];
@@ -697,11 +697,11 @@
     }
 }
 
-- (UInt16)unsubscribeTopics:(NSArray *)topics {
+- (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics {
     return [self unsubscribeTopics:topics unsubscribeHandler:nil];
 }
 
-- (UInt16)unsubscribeTopics:(NSArray *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler {
+- (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler {
     if (DEBUGSESS) NSLog(@"%@ unsubscribeTopics:%@", self, topics);
     UInt16 mid = [self nextMsgId];
     if (unsubscribeHandler) {
@@ -714,7 +714,7 @@
     return mid;
 }
 
-- (BOOL)unsubscribeAndWaitTopics:(NSArray *)topics
+- (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics
 {
     self.synchronUnsub = TRUE;
     UInt16 mid = [self unsubscribeTopics:topics];

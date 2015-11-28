@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lasterrorcode',['lastErrorCode',['../interface_m_q_t_t_session_manager.html#aa2522a9c3be18812cea22cf2f6a40754',1,'MQTTSessionManager']]]
+  ['keepaliveinterval',['keepAliveInterval',['../interface_m_q_t_t_session.html#aa63e148680fef0724b66218d53caba6d',1,'MQTTSession']]]
 ];

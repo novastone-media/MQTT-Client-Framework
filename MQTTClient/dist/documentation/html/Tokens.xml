@@ -271,7 +271,7 @@
       <Scope>MQTTSession</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>aba1debfec65602b53c6e4b9c3bdf4af1</Anchor>
+    <Anchor>ad90eef680e3adc29a75556e4131bdbf6</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -282,7 +282,7 @@
       <Scope>MQTTSession</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>a53eb6c502ef7dd7f2506c5b8542ca296</Anchor>
+    <Anchor>aa4068492603a9fb752814af4d02cc7e2</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -293,7 +293,7 @@
       <Scope>MQTTSession</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>a42bce4703b36a0a18bd92a4b6a860767</Anchor>
+    <Anchor>a985135a5a68fbeedf5d7da55ba0f726f</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -337,7 +337,7 @@
       <Scope>MQTTSession</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>ae59a9a8f94477a1504178c59fc664cb9</Anchor>
+    <Anchor>ac93b09cbe98c4b8754180e344ef7e908</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -348,7 +348,7 @@
       <Scope>MQTTSession</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>a2b0433b8f50ed03edce030d44ae9321e</Anchor>
+    <Anchor>a101c813012ca11ff6c144db5a2c46c76</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -359,7 +359,7 @@
       <Scope>MQTTSession</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>af53fb3b6ad92239bf8d185a874e1c23e</Anchor>
+    <Anchor>a807913ee1f3c1793a2e10068d7e2f847</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -897,7 +897,7 @@
       <Scope>MQTTSessionDelegate-p</Scope>
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-    <Anchor>aa7ed5b2382112dd077a4863407bacacc</Anchor>
+    <Anchor>ab3a87b0ee36a0c9910e855fb6253a745</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -1193,7 +1193,7 @@
       <Scope>MQTTSessionDelegate-p</Scope>
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-    <Anchor>aa7ed5b2382112dd077a4863407bacacc</Anchor>
+    <Anchor>ab3a87b0ee36a0c9910e855fb6253a745</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -1280,7 +1280,17 @@
       <Scope>MQTTSessionManager</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session_manager.html</Path>
-    <Anchor>a7a78a03d8bef2780209c38b6b42d399a</Anchor>
+    <Anchor>a58ff79b8f16b7172d6466dfe55927428</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>effectiveSubscriptions</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instp</Type>
+      <Scope>MQTTSessionManager</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session_manager.html</Path>
+    <Anchor>a93848b47c7ea903993531a50368d15f5</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>

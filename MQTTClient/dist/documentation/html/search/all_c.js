@@ -1,11 +1,20 @@
 var searchData=
 [
-  ['unsubackreceived_3amsgid_3a',['unsubAckReceived:msgID:',['../protocol_m_q_t_t_session_delegate-p.html#ae1afb843f54b60cb82ce093b62b57101',1,'MQTTSessionDelegate-p']]],
-  ['unsubscribeandwaittopic_3a',['unsubscribeAndWaitTopic:',['../interface_m_q_t_t_session.html#a4c84d933d4a15e11e9fc7657b8253e28',1,'MQTTSession']]],
-  ['unsubscribeandwaittopics_3a',['unsubscribeAndWaitTopics:',['../interface_m_q_t_t_session.html#af53fb3b6ad92239bf8d185a874e1c23e',1,'MQTTSession']]],
-  ['unsubscribetopic_3a',['unsubscribeTopic:',['../interface_m_q_t_t_session.html#a0b9b75a7232586150cbc348b1262faaf',1,'MQTTSession']]],
-  ['unsubscribetopic_3aunsubscribehandler_3a',['unsubscribeTopic:unsubscribeHandler:',['../interface_m_q_t_t_session.html#a07b306c66528e9887798476bccab1344',1,'MQTTSession']]],
-  ['unsubscribetopics_3a',['unsubscribeTopics:',['../interface_m_q_t_t_session.html#ae59a9a8f94477a1504178c59fc664cb9',1,'MQTTSession']]],
-  ['unsubscribetopics_3aunsubscribehandler_3a',['unsubscribeTopics:unsubscribeHandler:',['../interface_m_q_t_t_session.html#a2b0433b8f50ed03edce030d44ae9321e',1,'MQTTSession']]],
-  ['username',['userName',['../interface_m_q_t_t_session.html#a23cc4596889bf5798bf3749ee0a9e61f',1,'MQTTSession']]]
+  ['securitypolicy',['securityPolicy',['../interface_m_q_t_t_session.html#a74f593a2857ccf22a5073a71a408e465',1,'MQTTSession']]],
+  ['senddata_3atopic_3aqos_3aretain_3a',['sendData:topic:qos:retain:',['../interface_m_q_t_t_session_manager.html#a9593770a0aac359c57aee9260b2280a8',1,'MQTTSessionManager']]],
+  ['sending_3atype_3aqos_3aretained_3aduped_3amid_3adata_3a',['sending:type:qos:retained:duped:mid:data:',['../protocol_m_q_t_t_session_delegate-p.html#a8c16339f900bfe2aa98a2aabdca44484',1,'MQTTSessionDelegate-p']]],
+  ['session_3ahandleevent_3a',['session:handleEvent:',['../protocol_m_q_t_t_session_delegate-p.html#a469397d413d288d61b98112f643d0f9c',1,'MQTTSessionDelegate-p']]],
+  ['session_3anewmessage_3aontopic_3a',['session:newMessage:onTopic:',['../protocol_m_q_t_t_session_delegate-p.html#a7c379d26811e242b52a05d09cf60d804',1,'MQTTSessionDelegate-p']]],
+  ['sessionpresent',['sessionPresent',['../interface_m_q_t_t_session.html#ad0712c44abf0f514feb9462779d3e2b8',1,'MQTTSession']]],
+  ['state',['state',['../interface_m_q_t_t_session_manager.html#a4caf1f5fe21b8d36700d97b68b3bf978',1,'MQTTSessionManager']]],
+  ['status',['status',['../interface_m_q_t_t_session.html#adff1474fe186b8af3bb4cac1ccd4ff2d',1,'MQTTSession']]],
+  ['subackreceived_3amsgid_3agrantedqoss_3a',['subAckReceived:msgID:grantedQoss:',['../protocol_m_q_t_t_session_delegate-p.html#ab3a87b0ee36a0c9910e855fb6253a745',1,'MQTTSessionDelegate-p']]],
+  ['subscribeandwaittotopic_3aatlevel_3a',['subscribeAndWaitToTopic:atLevel:',['../interface_m_q_t_t_session.html#a2ca74869642b16ebf62a4b707cdb17d6',1,'MQTTSession']]],
+  ['subscribeandwaittotopics_3a',['subscribeAndWaitToTopics:',['../interface_m_q_t_t_session.html#a985135a5a68fbeedf5d7da55ba0f726f',1,'MQTTSession']]],
+  ['subscribetopic_3a',['subscribeTopic:',['../interface_m_q_t_t_session.html#af3bb097c036b9441ce48adff45917322',1,'MQTTSession']]],
+  ['subscribetotopic_3aatlevel_3a',['subscribeToTopic:atLevel:',['../interface_m_q_t_t_session.html#ace91fa3ca0b5eb08a2a48706c840dab3',1,'MQTTSession']]],
+  ['subscribetotopic_3aatlevel_3asubscribehandler_3a',['subscribeToTopic:atLevel:subscribeHandler:',['../interface_m_q_t_t_session.html#a8deb1a3c1a12c4a3924c5ebc1e97f2db',1,'MQTTSession']]],
+  ['subscribetotopics_3a',['subscribeToTopics:',['../interface_m_q_t_t_session.html#ad90eef680e3adc29a75556e4131bdbf6',1,'MQTTSession']]],
+  ['subscribetotopics_3asubscribehandler_3a',['subscribeToTopics:subscribeHandler:',['../interface_m_q_t_t_session.html#aa4068492603a9fb752814af4d02cc7e2',1,'MQTTSession']]],
+  ['subscriptions',['subscriptions',['../interface_m_q_t_t_session_manager.html#a58ff79b8f16b7172d6466dfe55927428',1,'MQTTSessionManager']]]
 ];

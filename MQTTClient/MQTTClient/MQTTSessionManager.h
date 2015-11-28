@@ -53,14 +53,45 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 @property (weak, nonatomic) id<MQTTSessionManagerDelegate> delegate;
 
-/** subscriptions as a dictionary of NSNumber instances indicating the MQTTQoSLevel.
+/** subscriptions is a dictionary of NSNumber instances indicating the MQTTQoSLevel.
  *  The keys are topic filters.
  *  The SessionManager subscribes to the given subscriptions after successfull (re-)connect
  *  according to the cleansession parameter and the state of the session as indicated by the broker.
  *  Setting a new subscriptions dictionary initiates SUBSCRIBE or UNSUBSCRIBE messages by SessionManager
  *  by comparing the old and new subscriptions.
  */
-@property (strong, nonatomic) NSDictionary *subscriptions;
+@property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *subscriptions;
+
+/** effectiveSubscriptions s a dictionary of NSNumber instances indicating the granted MQTTQoSLevel, or 0x80 for subscription failure.
+ *  The keys are topic filters.
+ *  effectiveSubscriptions is observable and is updated everytime subscriptions change
+ *  @code
+        ...
+        MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
+        manager.delegate = self;
+ 
+        [manager addObserver:self
+            forKeyPath:@"effectiveSubscriptions"
+            options:NSKeyValueObservingOptionInitial || NSKeyValueObservingOptionNew
+            context:nil];
+            manager.subscriptions = [@{@"#": @(0)} mutableCopy];
+            [manager connectTo: ...
+        ...
+        [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
+        ...
+ 
+    - (void)observeValueForKeyPath:(NSString *)keyPath
+        ofObject:(id)object
+        change:(NSDictionary<NSString *,id> *)change
+        context:(void *)context {
+        if ([keyPath isEqualToString:@"effectiveSubscriptions"]) {
+            MQTTSessionManager *manager = (MQTTSessionManager *)object;
+            NSLog(@"effectiveSubscriptions changed: %@", manager.effectiveSubscriptions);
+        }
+    }
+ *  @endcode
+ */
+@property (readonly, strong, nonatomic) NSMutableDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
 
 /** SessionManager status
  */

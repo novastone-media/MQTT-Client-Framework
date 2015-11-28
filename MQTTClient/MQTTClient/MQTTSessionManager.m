@@ -46,7 +46,8 @@
 @property (nonatomic) NSUInteger maxSize;
 @property (nonatomic) NSUInteger maxMessages;
 
-@property (strong, nonatomic) NSMutableDictionary *internalSubscriptions;
+@property (strong, nonatomic) NSMutableDictionary<NSString *, NSNumber *> *internalSubscriptions;
+@property (strong, nonatomic) NSMutableDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
 
 @end
 
@@ -60,6 +61,9 @@
     self = [super init];
 
     self.state = MQTTSessionManagerStateStarting;
+    self.internalSubscriptions = [[NSMutableDictionary alloc] init];
+    self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
+
 #if TARGET_OS_IPHONE == 1
     self.backgroundTask = UIBackgroundTaskInvalid;
 
@@ -354,7 +358,20 @@
 - (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
     if (self.clean || !self.reconnectFlag || !sessionPresent) {
         if (self.subscriptions && [self.subscriptions count]) {
-            [self.session subscribeToTopics:self.subscriptions];
+            [self.effectiveSubscriptions removeAllObjects];
+            self.effectiveSubscriptions = self.effectiveSubscriptions;
+            [self.session subscribeToTopics:self.subscriptions subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
+                if (!error) {
+                    NSArray<NSString *> *allTopics = self.subscriptions.allKeys;
+                    for (int i = 0; i < allTopics.count; i++) {
+                        NSString *topic = allTopics[i];
+                        NSNumber *gQos = gQoss[i];
+                        [self.effectiveSubscriptions setObject:gQos forKey:topic];
+                        self.effectiveSubscriptions = self.effectiveSubscriptions;
+                    }
+                }
+            }];
+
         }
         self.reconnectFlag = TRUE;
     }
@@ -398,24 +415,35 @@
     [self connectToInternal];
 }
 
-- (NSDictionary *)subscriptions {
+- (NSDictionary<NSString *, NSNumber *> *)subscriptions {
     return self.internalSubscriptions;
 }
 
-- (void)setSubscriptions:(NSDictionary *)newSubscriptions
+- (void)setSubscriptions:(NSDictionary<NSString *, NSNumber *> *)newSubscriptions
 {
     if (self.state==MQTTSessionManagerStateConnected) {
-        for (NSString *topicFilter in self.subscriptions) {
+        for (NSString *topicFilter in self.effectiveSubscriptions) {
             if (![newSubscriptions objectForKey:topicFilter]) {
-                [self.session unsubscribeAndWaitTopic:topicFilter];
+                [self.session unsubscribeTopic:topicFilter unsubscribeHandler:^(NSError *error) {
+                    if (!error) {
+                        [self.effectiveSubscriptions removeObjectForKey:topicFilter];
+                        self.effectiveSubscriptions = self.effectiveSubscriptions;
+                    }
+                }];
             }
         }
         
         for (NSString *topicFilter in newSubscriptions) {
-            if (![self.subscriptions objectForKey:topicFilter]) {
+            if (![self.effectiveSubscriptions objectForKey:topicFilter]) {
                 NSNumber *number = newSubscriptions[topicFilter];
                 MQTTQosLevel qos = [number unsignedIntValue];
-                [self.session subscribeToTopic:topicFilter atLevel:qos];
+                [self.session subscribeToTopic:topicFilter atLevel:qos subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
+                    if (!error) {
+                        NSNumber *gQos = gQoss[0];
+                        [self.effectiveSubscriptions setObject:gQos forKey:topicFilter];
+                        self.effectiveSubscriptions = self.effectiveSubscriptions;
+                    }
+                }];
             }
         }
     }

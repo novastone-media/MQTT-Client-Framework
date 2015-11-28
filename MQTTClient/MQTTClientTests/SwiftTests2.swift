@@ -83,7 +83,7 @@ class SwiftTests2 : XCTestCase, MQTTSessionDelegate {
         sessionReceived = true;
     }
     
-    func subAckReceived(session: MQTTSession!, msgID: UInt16, grantedQoss qoss: [AnyObject]!) {
+    func subAckReceived(session: MQTTSession!, msgID: UInt16, grantedQoss qoss: [NSNumber]!) {
         sessionSubAcked = true;
     }
     

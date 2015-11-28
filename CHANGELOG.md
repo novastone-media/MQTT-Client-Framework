@@ -1,6 +1,13 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.5.1
+>Release date: 2015-11-18
+
+SessionManager with subscriptions feedback
+
+[NEW] feedback on effective subscription in MQTTSessionManager closes #65
+
 ## MQTT-Client-Framework 0.5.0
 >Release date: 2015-11-15
 
