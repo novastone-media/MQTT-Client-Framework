@@ -34,6 +34,7 @@ Create a new client and connect to a broker:
 MQTTSession *session = [[MQTTSession alloc]initWithClientId:@"client_id"]
 
 // Set delegate appropriately to receive various events
+// Set MQTTSessionDelegate eg: @interface SomeInterface : NSObject <MQTTSessionDelegate>
 // See MQTTSession.h for information on various handlers
 // you can subscribe to.
 [session setDelegate:self];
@@ -46,6 +47,14 @@ Subscribe to a topic:
 
 ```objective-c
 [session subscribeToTopic:topic atLevel:MQTTQosLevelAtLeastOnce];
+```
+
+Add the following to receive messages for the subscribed topics
+```objective-c
+ - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
+{
+
+}
 ```
 
 Publish a message to a topic:
