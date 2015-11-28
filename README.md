@@ -21,7 +21,8 @@ an Objective-C native MQTT Framework http://mqtt.org
 
 ### Howto
 
-Add MQTTClient.framework from the dist directory to your IOS project
+Add MQTTClient.framework from the dist directory to your IOS project,
+use the dynamic library created in the MQTTFramework target,
 or use the CocoaPod MQTTClient
 
 [Documentation](MQTTClient/dist/documentation/html/index.html)
@@ -31,12 +32,16 @@ or use the CocoaPod MQTTClient
 Create a new client and connect to a broker:
 
 ```objective-c
+
+\@interface MyDelegate : ... MQTTSessionDelegate>
+...
+
 MQTTSession *session = [[MQTTSession alloc]initWithClientId:@"client_id"]
 
 // Set delegate appropriately to receive various events
-// Set MQTTSessionDelegate eg: @interface SomeInterface : NSObject <MQTTSessionDelegate>
-// See MQTTSession.h for information on various handlers
+// Set MQTTSessionDelegate // See MQTTSession.h for information on various handlers
 // you can subscribe to.
+
 [session setDelegate:self];
 
 [session connectAndWaitToHost:@"host" port:1883 usingSSL:NO];
