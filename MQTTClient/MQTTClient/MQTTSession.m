@@ -28,6 +28,7 @@
 #import "MQTTDecoder.h"
 #import "MQTTEncoder.h"
 #import "MQTTMessage.h"
+#import "MQTTMessage.h"
 
 #import <CFNetwork/CFSocketStream.h>
 
@@ -258,200 +259,6 @@
     _runLoopMode = runLoopMode;
 }
 
-- (id)initWithClientId:(NSString*)theClientId {
-    
-    return [self initWithClientId:theClientId
-                         userName:nil
-                         password:nil
-                        keepAlive:60
-                     cleanSession:YES
-                             will:NO
-                        willTopic:nil
-                          willMsg:nil
-                          willQoS:MQTTQosLevelAtMostOnce
-                   willRetainFlag:FALSE
-                    protocolLevel:4
-                          runLoop:nil
-                          forMode:nil];
-}
-
-- (id)initWithClientId:(NSString*)theClientId
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode {
-    
-    return [self initWithClientId:theClientId
-                         userName:nil
-                         password:nil
-                        keepAlive:60
-                     cleanSession:YES
-                             will:NO
-                        willTopic:nil
-                          willMsg:nil
-                          willQoS:MQTTQosLevelAtMostOnce
-                   willRetainFlag:FALSE
-                    protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theRunLoopMode];
-}
-
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUsername
-              password:(NSString*)thePassword {
-    
-    return [self initWithClientId:theClientId
-                         userName:theUsername
-                         password:thePassword
-                        keepAlive:60
-                     cleanSession:YES
-                             will:NO
-                        willTopic:nil
-                          willMsg:nil
-                          willQoS:MQTTQosLevelAtMostOnce
-                   willRetainFlag:FALSE
-                    protocolLevel:4
-                          runLoop:nil
-                          forMode:nil];
-}
-
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUserName
-              password:(NSString*)thePassword
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode {
-    
-    return [self initWithClientId:theClientId
-                         userName:theUserName
-                         password:thePassword
-                        keepAlive:60
-                     cleanSession:YES
-                             will:NO
-                        willTopic:nil
-                          willMsg:nil
-                          willQoS:MQTTQosLevelAtMostOnce
-                   willRetainFlag:FALSE
-                    protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theRunLoopMode];
-}
-
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUsername
-              password:(NSString*)thePassword
-             keepAlive:(UInt16)theKeepAliveInterval
-          cleanSession:(BOOL)cleanSessionFlag {
-    
-    return [self initWithClientId:theClientId
-                         userName:theUsername
-                         password:thePassword
-                        keepAlive:theKeepAliveInterval
-                     cleanSession:cleanSessionFlag
-                             will:NO
-                        willTopic:nil
-                          willMsg:nil
-                          willQoS:MQTTQosLevelAtMostOnce
-                   willRetainFlag:FALSE
-                    protocolLevel:4
-                          runLoop:nil
-                          forMode:nil];
-}
-
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUsername
-              password:(NSString*)thePassword
-             keepAlive:(UInt16)theKeepAlive
-          cleanSession:(BOOL)theCleanSessionFlag
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theMode {
-    
-    return [self initWithClientId:theClientId
-                         userName:theUsername
-                         password:thePassword
-                        keepAlive:theKeepAlive
-                     cleanSession:theCleanSessionFlag
-                             will:NO
-                        willTopic:nil
-                          willMsg:nil
-                          willQoS:MQTTQosLevelAtMostOnce
-                   willRetainFlag:FALSE
-                    protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theMode];
-}
-
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUserName
-              password:(NSString*)thePassword
-             keepAlive:(UInt16)theKeepAliveInterval
-          cleanSession:(BOOL)theCleanSessionFlag
-             willTopic:(NSString*)willTopic
-               willMsg:(NSData*)willMsg
-               willQoS:(UInt8)willQoS
-        willRetainFlag:(BOOL)willRetainFlag {
-    
-    return [self initWithClientId:theClientId
-                         userName:theUserName
-                         password:thePassword
-                        keepAlive:theKeepAliveInterval
-                     cleanSession:theCleanSessionFlag
-                             will:YES
-                        willTopic:willTopic
-                          willMsg:willMsg
-                          willQoS:willQoS
-                   willRetainFlag:willRetainFlag
-                    protocolLevel:4
-                          runLoop:nil
-                          forMode:nil];
-}
-
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUserName
-              password:(NSString*)thePassword
-             keepAlive:(UInt16)theKeepAliveInterval
-          cleanSession:(BOOL)theCleanSessionFlag
-             willTopic:(NSString*)willTopic
-               willMsg:(NSData*)willMsg
-               willQoS:(UInt8)willQoS
-        willRetainFlag:(BOOL)willRetainFlag
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode {
-    
-    return [self initWithClientId:theClientId
-                         userName:theUserName
-                         password:thePassword
-                        keepAlive:theKeepAliveInterval
-                     cleanSession:theCleanSessionFlag
-                             will:YES
-                        willTopic:willTopic
-                          willMsg:willMsg
-                          willQoS:willQoS
-                   willRetainFlag:willRetainFlag
-                    protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theRunLoopMode];
-}
-
-- (id)initWithClientId:(NSString*)theClientId
-             keepAlive:(UInt16)theKeepAliveInterval
-        connectMessage:(MQTTMessage*)theConnectMessage
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode {
-    
-    self.connectMessage = theConnectMessage;
-    return [self initWithClientId:theClientId
-                         userName:nil
-                         password:nil
-                        keepAlive:theKeepAliveInterval
-                     cleanSession:YES
-                             will:NO
-                        willTopic:nil
-                          willMsg:nil
-                          willQoS:MQTTQosLevelAtMostOnce
-                   willRetainFlag:FALSE
-                    protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theRunLoopMode];
-}
-
 - (void)connectToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL {
     [self connectToHost:host port:port usingSSL:usingSSL connectHandler:nil];
 }
@@ -556,44 +363,6 @@
     }
 }
 
-- (void)connectToHost:(NSString*)ip port:(UInt32)port {
-    [self connectToHost:ip port:port usingSSL:NO];
-}
-
-- (void)connectToHost:(NSString*)ip port:(UInt32)port withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler messageHandler:(void (^)(NSData* data, NSString* topic))messHandler {
-    self.messageHandler = messHandler;
-    self.connectionHandler = connHandler;
-    
-    [self connectToHost:ip port:port usingSSL:NO];
-}
-
-- (void)connectToHost:(NSString*)ip port:(UInt32)port usingSSL:(BOOL)usingSSL withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler messageHandler:(void (^)(NSData* data, NSString* topic))messHandler {
-    self.messageHandler = messHandler;
-    self.connectionHandler = connHandler;
-    
-    [self connectToHost:ip port:port usingSSL:usingSSL];
-}
-
-- (BOOL)connectAndWaitToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL {
-    return [self connectAndWaitToHost:host port:port usingSSL:usingSSL timeout:0];
-}
-
-- (BOOL)connectAndWaitToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL timeout:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-    self.synchronConnect = TRUE;
-    
-    [self connectToHost:host port:port usingSSL:usingSSL];
-    
-    while (self.synchronConnect && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for connect", self);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    
-    if (DEBUGSESS) NSLog(@"%@ end connect", self);
-    
-    return (self.status == MQTTSessionStatusConnected);
-}
-
 - (UInt16)subscribeToTopic:(NSString *)topic
                    atLevel:(MQTTQosLevel)qosLevel {
     return [self subscribeToTopic:topic atLevel:qosLevel subscribeHandler:nil];
@@ -603,34 +372,6 @@
                    atLevel:(MQTTQosLevel)qosLevel
           subscribeHandler:(MQTTSubscribeHandler)subscribeHandler {
     return [self subscribeToTopics:topic ? @{topic: @(qosLevel)} : @{} subscribeHandler:subscribeHandler];
-}
-
-- (void)subscribeTopic:(NSString*)theTopic {
-    [self subscribeToTopic:theTopic atLevel:MQTTQosLevelAtLeastOnce];
-}
-
-- (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel {
-    return [self subscribeAndWaitToTopic:topic atLevel:qosLevel timeout:0];
-}
-
-- (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel timeout:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-    self.synchronSub = TRUE;
-    UInt16 mid = [self subscribeToTopic:topic atLevel:qosLevel];
-    self.synchronSubMid = mid;
-    
-    while (self.synchronSub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for suback %d", self, mid);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    
-    if (DEBUGSESS) NSLog(@"%@ end subscribe", self);
-    
-    if (self.synchronSubMid == mid) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
 }
 
 - (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics {
@@ -656,61 +397,12 @@
     return mid;
 }
 
-- (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics {
-    return [self subscribeAndWaitToTopics:topics timeout:0];
-}
-
-- (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics timeout:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-    self.synchronSub = TRUE;
-    UInt16 mid = [self subscribeToTopics:topics];
-    self.synchronSubMid = mid;
-    
-    while (self.synchronSub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for suback %d", self, mid);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    
-    if (DEBUGSESS) NSLog(@"%@ end subscribe", self);
-    
-    if (self.synchronSubMid == mid) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-}
-
 - (UInt16)unsubscribeTopic:(NSString*)topic {
     return [self unsubscribeTopic:topic unsubscribeHandler:nil];
 }
 
 - (UInt16)unsubscribeTopic:(NSString *)topic unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler {
     return [self unsubscribeTopics:topic ? @[topic] : @[] unsubscribeHandler:unsubscribeHandler];
-}
-
-- (BOOL)unsubscribeAndWaitTopic:(NSString *)theTopic {
-    return [self unsubscribeAndWaitTopic:theTopic timeout:0];
-}
-
-- (BOOL)unsubscribeAndWaitTopic:(NSString *)theTopic timeout:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-
-    self.synchronUnsub = TRUE;
-    UInt16 mid = [self unsubscribeTopic:theTopic];
-    self.synchronUnsubMid = mid;
-    
-    while (self.synchronUnsub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for unsuback %d", self, mid);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    
-    if (DEBUGSESS) NSLog(@"%@ end unsubscribe", self);
-    
-    if (self.synchronUnsubMid == mid) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
 }
 
 - (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics {
@@ -728,30 +420,6 @@
     (void)[self.encoder encodeMessage:[MQTTMessage unsubscribeMessageWithMessageId:mid
                                                                             topics:topics]];
     return mid;
-}
-
-- (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics {
-    return [self unsubscribeAndWaitTopics:topics timeout:0];
-}
-
-- (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics timeout:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-    self.synchronUnsub = TRUE;
-    UInt16 mid = [self unsubscribeTopics:topics];
-    self.synchronUnsubMid = mid;
-    
-    while (self.synchronUnsub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for unsuback %d", self, mid);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    
-    if (DEBUGSESS) NSLog(@"%@ end unsubscribe", self);
-    
-    if (self.synchronUnsubMid == mid) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
 }
 
 - (UInt16)publishData:(NSData*)data
@@ -855,80 +523,6 @@
     return msgId;
 }
 
-- (BOOL)publishAndWaitData:(NSData*)data
-                   onTopic:(NSString*)topic
-                    retain:(BOOL)retainFlag
-                       qos:(MQTTQosLevel)qos {
-    return [self publishAndWaitData:data onTopic:topic retain:retainFlag qos:qos timeout:0];
-}
-
-- (BOOL)publishAndWaitData:(NSData*)data
-                   onTopic:(NSString*)topic
-                    retain:(BOOL)retainFlag
-                       qos:(MQTTQosLevel)qos
-                   timeout:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-
-    if (qos != MQTTQosLevelAtMostOnce) {
-        self.synchronPub = TRUE;
-    }
-    
-    UInt16 mid = [self publishData:data onTopic:topic retain:retainFlag qos:qos];
-    if (qos == MQTTQosLevelAtMostOnce) {
-        return TRUE;
-    } else {
-        self.synchronPubMid = mid;
-        
-        while (self.synchronPub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-            if (DEBUGSESS) NSLog(@"%@ waiting for mid %d", self, mid);
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-        }
-        
-        if (DEBUGSESS) NSLog(@"%@ end publish", self);
-        
-        if (self.synchronPubMid == mid) {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-    }
-}
-
-- (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic {
-    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQosLevelAtLeastOnce];
-}
-
-- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic {
-    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQosLevelAtLeastOnce];
-}
-
-- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag {
-    [self publishData:theData onTopic:theTopic retain:retainFlag qos:MQTTQosLevelAtLeastOnce];
-}
-
-- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic {
-    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQosLevelAtMostOnce];
-}
-
-- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag {
-    [self publishData:theData onTopic:theTopic retain:retainFlag qos:MQTTQosLevelAtMostOnce];
-}
-
-- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic {
-    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQosLevelExactlyOnce];
-}
-
-- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag {
-    [self publishData:theData onTopic:theTopic retain:retainFlag qos:MQTTQosLevelExactlyOnce];
-}
-
-- (void)publishJson:(id)payload onTopic:(NSString*)theTopic {
-    NSData *data = [NSJSONSerialization dataWithJSONObject:payload options:0 error:nil];
-    if (data) {
-        [self publishData:data onTopic:theTopic retain:FALSE qos:MQTTQosLevelAtLeastOnce];
-    }
-}
-
 - (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler {
     if (DEBUGSESS) NSLog(@"%@ closeWithDisconnectHandler:%p ", self, disconnectHandler);
     self.disconnectHandler = disconnectHandler;
@@ -944,23 +538,6 @@
 
 - (void)close {
     [self closeWithDisconnectHandler:nil];
-}
-
-- (void)closeAndWait {
-    [self closeAndWait:0];
-}
-
-- (void)closeAndWait:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-    self.synchronDisconnect = TRUE;
-    [self close];
-    
-    while (self.synchronDisconnect && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for close", self);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    if (DEBUGSESS) NSLog(@"%@ end close", self);
-    
 }
 
 - (void)closeInternal
@@ -1820,5 +1397,7 @@
     NSError *error = [dict objectForKey:@"Error"];
     publishHandler(error);
 }
+
+
 
 @end

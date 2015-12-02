@@ -23,34 +23,9 @@
               <Anchor>a6e08af5a1b20daabe6be9b9a0618c440</Anchor>
              </Node>
              <Node>
-              <Name>closeAndWait</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a08591f1296d67a36a8fa31d021bf544a</Anchor>
-             </Node>
-             <Node>
-              <Name>closeAndWait:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a62db6fc2fde02011da0d102774e4f008</Anchor>
-             </Node>
-             <Node>
               <Name>closeWithDisconnectHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a5a617d3cee077dd60f48a340d4b34d99</Anchor>
-             </Node>
-             <Node>
-              <Name>connectAndWaitToHost:port:usingSSL:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>abde5a7876357d84972d414fe25843f89</Anchor>
-             </Node>
-             <Node>
-              <Name>connectAndWaitToHost:port:usingSSL:timeout:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>ac6f7a20800ce8baf5b791188770ae5d9</Anchor>
-             </Node>
-             <Node>
-              <Name>connectToHost:port:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>abc2b0b1291a5da11028761e3a3ed097b</Anchor>
              </Node>
              <Node>
               <Name>connectToHost:port:usingSSL:</Name>
@@ -63,49 +38,9 @@
               <Anchor>ae9b26d3af576b9b8bc0efcf6ac3a98d4</Anchor>
              </Node>
              <Node>
-              <Name>connectToHost:port:usingSSL:withConnectionHandler:messageHandler:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>af41a9384007931bb624c80bcf1101bd4</Anchor>
-             </Node>
-             <Node>
-              <Name>connectToHost:port:withConnectionHandler:messageHandler:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>acdad8a7c44b78c04eaaef5f6bc2593ec</Anchor>
-             </Node>
-             <Node>
               <Name>init</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>aee55d52a9b6395f1a0d73b672900629c</Anchor>
-             </Node>
-             <Node>
-              <Name>initWithClientId:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a47477e68d8200f0df23c313a2f6ee927</Anchor>
-             </Node>
-             <Node>
-              <Name>initWithClientId:keepAlive:connectMessage:runLoop:forMode:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a96b88231af9e3d5735fe981e4f6c73d4</Anchor>
-             </Node>
-             <Node>
-              <Name>initWithClientId:runLoop:forMode:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a1a346ceb51284cbad07ee3dadf0f4618</Anchor>
-             </Node>
-             <Node>
-              <Name>initWithClientId:userName:password:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>ab5b8767084a7ff67196351a0cbedd3f8</Anchor>
-             </Node>
-             <Node>
-              <Name>initWithClientId:userName:password:keepAlive:cleanSession:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>ad179c0ea11248b1056ecc60b1efe6aa1</Anchor>
-             </Node>
-             <Node>
-              <Name>initWithClientId:userName:password:keepAlive:cleanSession:runLoop:forMode:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a89f1d6be2eedc229c50c2e6e6c7549a4</Anchor>
              </Node>
              <Node>
               <Name>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:</Name>
@@ -123,36 +58,6 @@
               <Anchor>a8a4605e8dc395b784f686f5d96401ee8</Anchor>
              </Node>
              <Node>
-              <Name>initWithClientId:userName:password:keepAlive:cleanSession:willTopic:willMsg:willQoS:willRetainFlag:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a7dc7dfa1a3fc8bc9be7b668f39b748d2</Anchor>
-             </Node>
-             <Node>
-              <Name>initWithClientId:userName:password:keepAlive:cleanSession:willTopic:willMsg:willQoS:willRetainFlag:runLoop:forMode:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>aaf15fb90e0b68cc0e41ff4978d8b9d72</Anchor>
-             </Node>
-             <Node>
-              <Name>initWithClientId:userName:password:runLoop:forMode:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a52b198d36af634c4ecc9e5df460e2df6</Anchor>
-             </Node>
-             <Node>
-              <Name>publishAndWaitData:onTopic:retain:qos:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a9ae63de719c3a395c6382cf48e8926ad</Anchor>
-             </Node>
-             <Node>
-              <Name>publishAndWaitData:onTopic:retain:qos:timeout:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a8d84e5a41ca1ca05c52eaea9a67cba13</Anchor>
-             </Node>
-             <Node>
-              <Name>publishData:onTopic:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a51b3078f3a68d0ea0abe85683151d608</Anchor>
-             </Node>
-             <Node>
               <Name>publishData:onTopic:retain:qos:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>af76085443daa0ceadf01acc828c91370</Anchor>
@@ -161,66 +66,6 @@
               <Name>publishData:onTopic:retain:qos:publishHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a1a76bb9e8855104282648afa0505e625</Anchor>
-             </Node>
-             <Node>
-              <Name>publishDataAtLeastOnce:onTopic:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a73d4fe58c076c3cbcccd2d7a6c000e9e</Anchor>
-             </Node>
-             <Node>
-              <Name>publishDataAtLeastOnce:onTopic:retain:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a3e89f3d2f4567b7111dbad994f70106b</Anchor>
-             </Node>
-             <Node>
-              <Name>publishDataAtMostOnce:onTopic:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a2b6e9d695e1ed9258489276ad4d3e176</Anchor>
-             </Node>
-             <Node>
-              <Name>publishDataAtMostOnce:onTopic:retain:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a7c4e4bd2e5531a7c6e99584afc9ce75e</Anchor>
-             </Node>
-             <Node>
-              <Name>publishDataExactlyOnce:onTopic:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>aea24466e7d7f3a790d18f770ee96a336</Anchor>
-             </Node>
-             <Node>
-              <Name>publishDataExactlyOnce:onTopic:retain:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>aaefe746cdf09f309731265c8f01ab753</Anchor>
-             </Node>
-             <Node>
-              <Name>publishJson:onTopic:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a3a6bf970d3496e953941b258d1a9a73c</Anchor>
-             </Node>
-             <Node>
-              <Name>subscribeAndWaitToTopic:atLevel:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a2ca74869642b16ebf62a4b707cdb17d6</Anchor>
-             </Node>
-             <Node>
-              <Name>subscribeAndWaitToTopic:atLevel:timeout:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a51cff15f51f46d677aa93e663670ac51</Anchor>
-             </Node>
-             <Node>
-              <Name>subscribeAndWaitToTopics:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a985135a5a68fbeedf5d7da55ba0f726f</Anchor>
-             </Node>
-             <Node>
-              <Name>subscribeAndWaitToTopics:timeout:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a46c81a80b2101ee623dea742fc926adb</Anchor>
-             </Node>
-             <Node>
-              <Name>subscribeTopic:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>af3bb097c036b9441ce48adff45917322</Anchor>
              </Node>
              <Node>
               <Name>subscribeToTopic:atLevel:</Name>
@@ -241,26 +86,6 @@
               <Name>subscribeToTopics:subscribeHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>aa4068492603a9fb752814af4d02cc7e2</Anchor>
-             </Node>
-             <Node>
-              <Name>unsubscribeAndWaitTopic:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a4c84d933d4a15e11e9fc7657b8253e28</Anchor>
-             </Node>
-             <Node>
-              <Name>unsubscribeAndWaitTopic:timeout:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>aaddb982daad03dab2c26671c1e19468d</Anchor>
-             </Node>
-             <Node>
-              <Name>unsubscribeAndWaitTopics:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a807913ee1f3c1793a2e10068d7e2f847</Anchor>
-             </Node>
-             <Node>
-              <Name>unsubscribeAndWaitTopics:timeout:</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a1c09ce5e98f9972580777e1cc06a503b</Anchor>
              </Node>
              <Node>
               <Name>unsubscribeTopic:</Name>

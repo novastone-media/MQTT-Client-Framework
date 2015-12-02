@@ -243,11 +243,7 @@
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
         if (!parameters[@"serverCER"] && !parameters[@"clientp12"]) {
-            self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                        userName:parameters[@"user"]
-                                                        password:parameters[@"pass"]
-                                                       keepAlive:60
-                                                    cleanSession:YES];
+            self.session = [[MQTTSession alloc] initWithClientId:nil userName:parameters[@"user"] password:parameters[@"pass"] keepAlive:60 cleanSession:YES];
             self.session.persistence.persistent = TRUE;
             [self connect:self.session parameters:parameters];
             XCTAssert(!self.timeout, @"timeout");
