@@ -221,6 +221,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>connectAndWaitToHost:port:usingSSL:timeout:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>ac6f7a20800ce8baf5b791188770ae5d9</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>subscribeToTopic:atLevel:</Name>
       <APILanguage>occ</APILanguage>
       <Type>instm</Type>
@@ -265,6 +276,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>subscribeAndWaitToTopic:atLevel:timeout:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a51cff15f51f46d677aa93e663670ac51</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>subscribeToTopics:</Name>
       <APILanguage>occ</APILanguage>
       <Type>instm</Type>
@@ -294,6 +316,17 @@
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
     <Anchor>a985135a5a68fbeedf5d7da55ba0f726f</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>subscribeAndWaitToTopics:timeout:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a46c81a80b2101ee623dea742fc926adb</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -331,6 +364,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>unsubscribeAndWaitTopic:timeout:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>aaddb982daad03dab2c26671c1e19468d</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>unsubscribeTopics:</Name>
       <APILanguage>occ</APILanguage>
       <Type>instm</Type>
@@ -360,6 +404,17 @@
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
     <Anchor>a807913ee1f3c1793a2e10068d7e2f847</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>unsubscribeAndWaitTopics:timeout:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a1c09ce5e98f9972580777e1cc06a503b</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -485,6 +540,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>publishAndWaitData:onTopic:retain:qos:timeout:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a8d84e5a41ca1ca05c52eaea9a67cba13</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>closeWithDisconnectHandler:</Name>
       <APILanguage>occ</APILanguage>
       <Type>instm</Type>
@@ -514,6 +580,17 @@
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
     <Anchor>a08591f1296d67a36a8fa31d021bf544a</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>closeAndWait:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a62db6fc2fde02011da0d102774e4f008</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>

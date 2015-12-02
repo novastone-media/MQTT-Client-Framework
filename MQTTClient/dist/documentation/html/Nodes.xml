@@ -28,6 +28,11 @@
               <Anchor>a08591f1296d67a36a8fa31d021bf544a</Anchor>
              </Node>
              <Node>
+              <Name>closeAndWait:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a62db6fc2fde02011da0d102774e4f008</Anchor>
+             </Node>
+             <Node>
               <Name>closeWithDisconnectHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a5a617d3cee077dd60f48a340d4b34d99</Anchor>
@@ -36,6 +41,11 @@
               <Name>connectAndWaitToHost:port:usingSSL:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>abde5a7876357d84972d414fe25843f89</Anchor>
+             </Node>
+             <Node>
+              <Name>connectAndWaitToHost:port:usingSSL:timeout:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>ac6f7a20800ce8baf5b791188770ae5d9</Anchor>
              </Node>
              <Node>
               <Name>connectToHost:port:</Name>
@@ -133,6 +143,11 @@
               <Anchor>a9ae63de719c3a395c6382cf48e8926ad</Anchor>
              </Node>
              <Node>
+              <Name>publishAndWaitData:onTopic:retain:qos:timeout:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a8d84e5a41ca1ca05c52eaea9a67cba13</Anchor>
+             </Node>
+             <Node>
               <Name>publishData:onTopic:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a51b3078f3a68d0ea0abe85683151d608</Anchor>
@@ -188,9 +203,19 @@
               <Anchor>a2ca74869642b16ebf62a4b707cdb17d6</Anchor>
              </Node>
              <Node>
+              <Name>subscribeAndWaitToTopic:atLevel:timeout:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a51cff15f51f46d677aa93e663670ac51</Anchor>
+             </Node>
+             <Node>
               <Name>subscribeAndWaitToTopics:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a985135a5a68fbeedf5d7da55ba0f726f</Anchor>
+             </Node>
+             <Node>
+              <Name>subscribeAndWaitToTopics:timeout:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a46c81a80b2101ee623dea742fc926adb</Anchor>
              </Node>
              <Node>
               <Name>subscribeTopic:</Name>
@@ -223,9 +248,19 @@
               <Anchor>a4c84d933d4a15e11e9fc7657b8253e28</Anchor>
              </Node>
              <Node>
+              <Name>unsubscribeAndWaitTopic:timeout:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>aaddb982daad03dab2c26671c1e19468d</Anchor>
+             </Node>
+             <Node>
               <Name>unsubscribeAndWaitTopics:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a807913ee1f3c1793a2e10068d7e2f847</Anchor>
+             </Node>
+             <Node>
+              <Name>unsubscribeAndWaitTopics:timeout:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a1c09ce5e98f9972580777e1cc06a503b</Anchor>
              </Node>
              <Node>
               <Name>unsubscribeTopic:</Name>

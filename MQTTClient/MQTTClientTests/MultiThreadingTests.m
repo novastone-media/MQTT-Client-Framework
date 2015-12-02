@@ -49,16 +49,18 @@
 
     if ([self.session connectAndWaitToHost:self.parameters[@"host"]
                                       port:[self.parameters[@"port"] intValue]
-                                  usingSSL:[self.parameters[@"tls"] boolValue]]) {
+                                  usingSSL:[self.parameters[@"tls"] boolValue]
+                                   timeout:10]) {
 
-        [self.session subscribeAndWaitToTopic:@"#" atLevel:MQTTQosLevelAtLeastOnce];
+        [self.session subscribeAndWaitToTopic:@"#" atLevel:MQTTQosLevelAtLeastOnce timeout:10];
 
         [self.session publishAndWaitData:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
                                  onTopic:@"MQTTClient"
                                   retain:NO
-                                     qos:2];
+                                     qos:2
+                                 timeout:10];
 
-        [self.session closeAndWait];
+        [self.session closeAndWait:10];
         return true;
     } else {
         return false;

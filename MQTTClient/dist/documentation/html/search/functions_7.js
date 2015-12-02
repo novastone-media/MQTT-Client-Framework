@@ -2,6 +2,7 @@ var searchData=
 [
   ['protocolerror_3aerror_3a',['protocolError:error:',['../protocol_m_q_t_t_session_delegate-p.html#a6ed1b59122ad0e0557b8bcf5de89f7ca',1,'MQTTSessionDelegate-p']]],
   ['publishandwaitdata_3aontopic_3aretain_3aqos_3a',['publishAndWaitData:onTopic:retain:qos:',['../interface_m_q_t_t_session.html#a9ae63de719c3a395c6382cf48e8926ad',1,'MQTTSession']]],
+  ['publishandwaitdata_3aontopic_3aretain_3aqos_3atimeout_3a',['publishAndWaitData:onTopic:retain:qos:timeout:',['../interface_m_q_t_t_session.html#a8d84e5a41ca1ca05c52eaea9a67cba13',1,'MQTTSession']]],
   ['publishdata_3aontopic_3a',['publishData:onTopic:',['../interface_m_q_t_t_session.html#a51b3078f3a68d0ea0abe85683151d608',1,'MQTTSession']]],
   ['publishdata_3aontopic_3aretain_3aqos_3a',['publishData:onTopic:retain:qos:',['../interface_m_q_t_t_session.html#af76085443daa0ceadf01acc828c91370',1,'MQTTSession']]],
   ['publishdata_3aontopic_3aretain_3aqos_3apublishhandler_3a',['publishData:onTopic:retain:qos:publishHandler:',['../interface_m_q_t_t_session.html#a1a76bb9e8855104282648afa0505e625',1,'MQTTSession']]],

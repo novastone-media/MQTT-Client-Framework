@@ -1,6 +1,13 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.5.3
+>Release date: 2015-12-02
+
+Enhancements
+
+[NEW] add timeout to ...AndWait methods closes #70
+
 ## MQTT-Client-Framework 0.5.2
 >Release date: 2015-11-28
 

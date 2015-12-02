@@ -739,12 +739,11 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
        messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
 
-
 /** connects to the specified MQTT server synchronously
  
- @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
- @param port spefies the port to connect to
- @param usingSSL specifies whether to use SSL or not
+ @param host see connectAndWaitToHost:port:usingSSL:timeout: for details
+ @param port see connectAndWaitToHost:port:usingSSL:timeout: for details
+ @param usingSSL see connectAndWaitToHost:port:usingSSL:timeout: for details
  
  @return true if the connection was established
  
@@ -757,7 +756,31 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  @endcode
  
  */
-- (BOOL)connectAndWaitToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
+- (BOOL)connectAndWaitToHost:(NSString *)host
+                        port:(UInt32)port
+                    usingSSL:(BOOL)usingSSL;
+/** connects to the specified MQTT server synchronously
+ 
+ @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
+ @param port spefifies the port to connect to
+ @param usingSSL specifies whether to use SSL or not
+ @param timeout defines the maximum time to wait
+ 
+ @return true if the connection was established
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ @endcode
+ 
+ */
+- (BOOL)connectAndWaitToHost:(NSString *)host
+                        port:(UInt32)port
+                    usingSSL:(BOOL)usingSSL
+                     timeout:(NSTimeInterval)timeout;
 
 /** subscribes to a topic at a specific QoS level
  
@@ -828,7 +851,7 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  
  @param qosLevel specifies the QoS Level of the subscription.
  qosLevel can be 0, 1, or 2.
- 
+
  @return TRUE if successfully subscribed
  
  @code
@@ -844,8 +867,35 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  
  */
 
-- (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;
+- (BOOL)subscribeAndWaitToTopic:(NSString *)topic
+                        atLevel:(MQTTQosLevel)qosLevel;
 
+/** subscribes to a topic at a specific QoS level synchronously
+ 
+ @param topic the Topic Filter to subscribe to.
+ 
+ @param qosLevel specifies the QoS Level of the subscription.
+ qosLevel can be 0, 1, or 2.
+ @param timeout defines the maximum time to wait
+ 
+ @return TRUE if successfully subscribed
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session subscribeToTopic:@"example/#" atLevel:2 timeout:10];
+ 
+ @endcode
+ 
+ */
+
+- (BOOL)subscribeAndWaitToTopic:(NSString *)topic
+                        atLevel:(MQTTQosLevel)qosLevel
+                        timeout:(NSTimeInterval)timeout;
 
 /** subscribes a number of topics
  
@@ -938,6 +988,33 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 
 
 - (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics;
+/** subscribes a number of topics
+ 
+ @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
+ the corresponding QoS as NSNumber values
+ @param timeout defines the maximum time to wait
+ 
+ @return TRUE if the subscribe was succesfull
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session subscribeToTopics:@{
+ @"example/#": @(0),
+ @"example/status": @(2),
+ @"other/#": @(1)
+ }
+ timeout:10];
+ 
+ @endcode
+ */
+
+- (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics
+                         timeout:(NSTimeInterval)timeout;
 
 /** unsubscribes from a topic
  
@@ -996,6 +1073,28 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 
 - (BOOL)unsubscribeAndWaitTopic:(NSString *)topic;
+
+/** unsubscribes from a topic synchronously
+ 
+ @param topic the Topic Filter to unsubscribe from.
+ @param timeout defines the maximum time to wait
+ 
+ @return TRUE if sucessfully unsubscribed
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session unsubscribeTopic:@"example/#" timeout:10];
+ 
+ @endcode
+ */
+
+- (BOOL)unsubscribeAndWaitTopic:(NSString *)topic
+                        timeout:(NSTimeInterval)timeout;
 
 /** unsubscribes from a number of topics
  
@@ -1065,6 +1164,34 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 
 - (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics;
+
+/** unsubscribes from a number of topics synchronously
+ 
+ @param topics an NSArray<NSString *> of topics to unsubscribe from
+ @param timeout defines the maximum time to wait
+ 
+ @return TRUE if the unsubscribe was successful
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session unsubscribeTopics:@[
+ @"example/#",
+ @"example/status",
+ @"other/#"
+ ]
+ timeout:10];
+ 
+ @endcode
+ 
+ */
+
+- (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics
+                         timeout:(NSTimeInterval)timeout;
 
 
 /** publishes data on a given topic at a specified QoS level and retain flag
@@ -1181,13 +1308,12 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 - (void)publishJson:(id)payload onTopic:(NSString*)theTopic;
 
-/** publishes synchronously data on a given topic at a specified QoS level and retain flag
+/** publishes synchronously data
  
- @param data the data to be sent. length may range from 0 to 268,435,455 - 4 - _lengthof-topic_ bytes. Defaults to length 0.
- @param topic the Topic to identify the data
- @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
- @param qos specifies the Quality of Service for the publish
- qos can be 0, 1, or 2.
+ @param data see publishAndWaitData:onTopic:retain:qos:timeout: for details
+ @param topic see publishAndWaitData:onTopic:retain:qos:timeout: for details
+ @param retainFlag see publishAndWaitData:onTopic:retain:qos:timeout: for details
+ @param qos see publishAndWaitData:onTopic:retain:qos:timeout: for details
  @returns TRUE if the publish was successful
  
  @code
@@ -1205,7 +1331,42 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  
  */
 
-- (BOOL)publishAndWaitData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;
+- (BOOL)publishAndWaitData:(NSData *)data
+                   onTopic:(NSString *)topic
+                    retain:(BOOL)retainFlag
+                       qos:(MQTTQosLevel)qos;
+
+/** publishes synchronously data on a given topic at a specified QoS level and retain flag
+ 
+ @param data the data to be sent. length may range from 0 to 268,435,455 - 4 - _lengthof-topic_ bytes. Defaults to length 0.
+ @param topic the Topic to identify the data
+ @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
+ @param qos specifies the Quality of Service for the publish
+ qos can be 0, 1, or 2.
+ @param timeout defines the maximum time to wait
+ @returns TRUE if the publish was successful
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ [session publishAndWaitData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
+ topic:@"example/data"
+ retain:YES
+ qos:1
+ timeout:10];
+ @endcode
+ 
+ */
+
+- (BOOL)publishAndWaitData:(NSData *)data
+                   onTopic:(NSString *)topic
+                    retain:(BOOL)retainFlag
+                       qos:(MQTTQosLevel)qos
+                   timeout:(NSTimeInterval)timeout;
 
 /** closes an MQTTSession gracefully
  
@@ -1240,7 +1401,6 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 - (void)close;
 
 /** closes an MQTTSession gracefully synchronously
- 
  If the connection was successfully established before, a DISCONNECT is sent.
  
  @code
@@ -1257,7 +1417,29 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  @endcode
  
  */
+
 - (void)closeAndWait;
+/** closes an MQTTSession gracefully synchronously
+ @param timeout defines the maximum time to wait
+
+ If the connection was successfully established before, a DISCONNECT is sent.
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ 
+ ...
+ 
+ [session closeAndWait:10];
+ 
+ @endcode
+ 
+ */
+
+- (void)closeAndWait:(NSTimeInterval)timeout;
 
 /** reads the content of a PKCS12 file and converts it to an certificates array for initWith...
  @param path the path to a PKCS12 file
