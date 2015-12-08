@@ -1561,7 +1561,7 @@
     }
 }
 
-- (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
+- (void)received:(MQTTSession *)session type:(MQTTCommandType)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
     NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
     self.type = type;
 }
@@ -1595,17 +1595,16 @@
     session.delegate = self;
     self.event = -1;
 
-    [session connectToHost:parameters[@"host"]
-                      port:[parameters[@"port"] intValue]
-                  usingSSL:[parameters[@"tls"] boolValue]];
-
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     self.timeout = FALSE;
     [self performSelector:@selector(ackTimeout:)
                withObject:parameters[@"timeout"]
                afterDelay:[parameters[@"timeout"] intValue]];
      
-
+    [session connectToHost:parameters[@"host"]
+                      port:[parameters[@"port"] intValue]
+                  usingSSL:[parameters[@"tls"] boolValue]];
+    
     while (!self.timeout && self.event == -1) {
         NSLog(@"waiting for connection");
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];

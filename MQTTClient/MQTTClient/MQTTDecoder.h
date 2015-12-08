@@ -19,7 +19,6 @@
 
 #import <Foundation/Foundation.h>
 #import "MQTTMessage.h"
-#import "MQTTSSLSecurityPolicy.h"
 
 typedef enum {
     MQTTDecoderEventProtocolError,
@@ -28,50 +27,39 @@ typedef enum {
 } MQTTDecoderEvent;
 
 typedef enum {
-    MQTTDecoderStatusInitializing,
-    MQTTDecoderStatusDecodingHeader,
-    MQTTDecoderStatusDecodingLength,
-    MQTTDecoderStatusDecodingData,
-    MQTTDecoderStatusConnectionClosed,
-    MQTTDecoderStatusConnectionError,
-    MQTTDecoderStatusProtocolError
-} MQTTDecoderStatus;
+    MQTTDecoderStateInitializing,
+    MQTTDecoderStateDecodingHeader,
+    MQTTDecoderStateDecodingLength,
+    MQTTDecoderStateDecodingData,
+    MQTTDecoderStateConnectionClosed,
+    MQTTDecoderStateConnectionError,
+    MQTTDecoderStateProtocolError
+} MQTTDecoderState;
 
 @class MQTTDecoder;
 
 @protocol MQTTDecoderDelegate <NSObject>
 
-- (void)decoder:(MQTTDecoder *)sender newMessage:(MQTTMessage*)msg;
+- (void)decoder:(MQTTDecoder *)sender didReceiveMessage:(NSData *)data;
 - (void)decoder:(MQTTDecoder *)sender handleEvent:(MQTTDecoderEvent)eventCode error:(NSError *)error;
 
 @end
 
 
 @interface MQTTDecoder : NSObject <NSStreamDelegate>
-@property (nonatomic)    MQTTDecoderStatus       status;
-@property (strong, nonatomic)    NSInputStream*  stream;
+@property (nonatomic)    MQTTDecoderState       state;
 @property (strong, nonatomic)    NSRunLoop*      runLoop;
 @property (strong, nonatomic)    NSString*       runLoopMode;
-@property (nonatomic)    UInt8           header;
 @property (nonatomic)    UInt32          length;
 @property (nonatomic)    UInt32          lengthMultiplier;
+@property (nonatomic)    int          offset;
 @property (strong, nonatomic)    NSMutableData*  dataBuffer;
 
 @property (weak, nonatomic ) id<MQTTDecoderDelegate> delegate;
 
-- (id)initWithStream:(NSInputStream *)stream
-             runLoop:(NSRunLoop *)runLoop
-         runLoopMode:(NSString *)mode;
-
-- (id)initWithStream:(NSInputStream *)stream
-             runLoop:(NSRunLoop *)runLoop
-         runLoopMode:(NSString *)mode
-        securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-        securityDomain:(NSString *)securityDomain;
-
 - (void)open;
 - (void)close;
-- (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode;
+- (void)decodeMessage:(NSData *)data;
 @end
 
 

@@ -261,11 +261,11 @@
         self.reconnectFlag = FALSE;
     }
     if(shouldReconnect){
-        NSLog(@"MQTTSessionManager reconnecting");
+        NSLog(@"[MQTTSessionManager] reconnecting");
         [self disconnect];
         [self reconnect];
     }else{
-        NSLog(@"MQTTSessionManager connecting");
+        NSLog(@"[MQTTSessionManager] connecting");
         [self connectToInternal];
     }
 }
@@ -306,7 +306,7 @@
                                    @(MQTTSessionEventProtocolError): @"protocoll error",
                                    @(MQTTSessionEventConnectionClosedByBroker): @"connection closed by broker"
                                    };
-    NSLog(@"MQTTSession eventCode: %@ (%ld) %@", events[@(eventCode)], (long)eventCode, error);
+    NSLog(@"[MQTTSessionManager] eventCode: %@ (%ld) %@", events[@(eventCode)], (long)eventCode, error);
 #endif
     [self.reconnectTimer invalidate];
     switch (eventCode) {

@@ -1,0 +1,36 @@
+//
+//  MQTTCFSocketTransport.h
+//  MQTTClient
+//
+//  Created by Christoph Krey on 06.12.15.
+//  Copyright © 2015 Christoph Krey. All rights reserved.
+//
+
+#import "MQTTTransport.h"
+#import "MQTTSSLSecurityPolicy.h"
+#import "MQTTCFSocketDecoder.h"
+#import "MQTTCFSocketEncoder.h"
+
+@interface MQTTCFSocketTransport : NSObject <MQTTTransport, MQTTCFSocketDecoderDelegate, MQTTCFSocketEncoderDelegate>
+@property (strong, nonatomic) NSString *host;
+@property (nonatomic) UInt16 port;
+@property (nonatomic) BOOL tls;
+
+// ssl security policy
+/**
+ * The security policy used to evaluate server trust for secure connections.
+ *
+ * if your app using security model which require pinning SSL certificates to helps prevent man-in-the-middle attacks
+ * and other vulnerabilities. you need to set securityPolicy to properly value(see MQTTSSLSecurityPolicy.h for more detail).
+ *
+ * NOTE: about self-signed server certificates:
+ * if your server using Self-signed certificates to establish SSL/TLS connection, you need to set property:
+ * MQTTSSLSecurityPolicy.allowInvalidCertificates=YES.
+ */
+@property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
+
+/** see initWithClientId for description
+ */
+@property (strong, nonatomic) NSArray *certificates;
+
+@end

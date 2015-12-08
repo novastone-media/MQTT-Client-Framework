@@ -20,6 +20,7 @@
 #define PERSISTENT false
 
 //#define BROKERLIST @[@"local", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"hivemq", @"m2m", @"rabbitmq"]
+//#define BROKERLIST @[@"local"]
 #define BROKERLIST @[@"local"]
 
 #define BROKERS @{ \
@@ -29,6 +30,22 @@
 @"port": @1883,  \
 @"tls": @NO, \
 @"protocollevel": @4, \
+@"timeout": @10 \
+}, \
+\
+@"64": @{ \
+@"host": @"192.168.178.64",  \
+@"port": @1883,  \
+@"tls": @NO, \
+@"protocollevel": @4, \
+@"timeout": @10 \
+}, \
+\
+@"w64": @{ \
+@"host": @"192.168.178.64",  \
+@"port": @9001,  \
+@"tls": @NO, \
+@"protocollevel": @3, \
 @"timeout": @10 \
 }, \
 \

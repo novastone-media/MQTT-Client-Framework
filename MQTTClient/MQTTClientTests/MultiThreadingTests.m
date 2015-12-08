@@ -44,22 +44,22 @@
     return self;
 }
 
-- (BOOL)runSynch {
+- (BOOL)runSync {
     NSLog(@"%@ connecting", self.session.clientId);
-
+    
     if ([self.session connectAndWaitToHost:self.parameters[@"host"]
                                       port:[self.parameters[@"port"] intValue]
                                   usingSSL:[self.parameters[@"tls"] boolValue]
                                    timeout:10]) {
-
+        
         [self.session subscribeAndWaitToTopic:@"#" atLevel:MQTTQosLevelAtLeastOnce timeout:10];
-
+        
         [self.session publishAndWaitData:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
                                  onTopic:@"MQTTClient"
                                   retain:NO
                                      qos:2
                                  timeout:10];
-
+        
         [self.session closeAndWait:10];
         return true;
     } else {
@@ -178,21 +178,21 @@
     [super tearDown];
 }
 
-- (void)testAsynch
+- (void)testAsync
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
-        [self runAsynch:parameters];
+        [self runAsync:parameters];
     }
 }
 
-- (void)testSynch
+- (void)testSync
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
         NSDictionary *parameters = BROKERS[broker];
-        [self runSynch:parameters];
+        [self runSync:parameters];
     }
 }
 
@@ -246,7 +246,7 @@
     }
 }
 
-- (void)testAsynchThreads
+- (void)testAsyncThreads
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
@@ -255,7 +255,7 @@
         NSMutableArray *threads = [[NSMutableArray alloc] initWithCapacity:MULTI];
 
         for (int i = 0; i < MULTI; i++) {
-            NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(runAsynch:) object:parameters];
+            NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(runAsync:) object:parameters];
             [threads addObject:thread];
         }
 
@@ -271,7 +271,7 @@
     }
 }
 
-- (void)testSynchThreads
+- (void)testSyncThreads
 {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
@@ -280,7 +280,7 @@
         NSMutableArray *threads = [[NSMutableArray alloc] initWithCapacity:MULTI];
 
         for (int i = 0; i < MULTI; i++) {
-            NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(runSynch:) object:parameters];
+            NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(runSync:) object:parameters];
             [threads addObject:thread];
         }
 
@@ -296,7 +296,7 @@
     }
 }
 
-- (void)runAsynch:(NSDictionary *)parameters
+- (void)runAsync:(NSDictionary *)parameters
 {
     OneTest *test = [[OneTest alloc] init];
     [test setup:parameters];
@@ -336,14 +336,15 @@
     [test stop];
 }
 
-- (void)runSynch:(NSDictionary *)parameters
+- (void)runSync:(NSDictionary *)parameters
 {
     OneTest *test = [[OneTest alloc] init];
     [test setup:parameters];
     
-    if (![test runSynch]) {
+    if (![test runSync]) {
         XCTFail(@"%@ Not Connected %ld %@", test.session.clientId, (long)test.event, test.error);
     }
 }
+
 
 @end

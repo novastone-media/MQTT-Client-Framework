@@ -118,19 +118,19 @@ static unsigned long long fileSystemFreeSize;
 - (void)sync {
     [self.managedObjectContext performBlockAndWait:^{
         if (self.managedObjectContext.hasChanges) {
-            if (DEBUGPERSIST) NSLog(@"pre-sync: i%lu u%lu d%lu",
+            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
                                     (unsigned long)self.managedObjectContext.insertedObjects.count,
                                     (unsigned long)self.managedObjectContext.updatedObjects.count,
                                     (unsigned long)self.managedObjectContext.deletedObjects.count
                                     );
             NSError *error = nil;
             if (![self.managedObjectContext save:&error]) {
-                NSLog(@"sync error %@", error);
+                NSLog(@"[MQTTPersistence] sync error %@", error);
             }
             if (self.managedObjectContext.hasChanges) {
-                NSLog(@"sync not complete");
+                NSLog(@"[MQTTPersistence] sync not complete");
             }
-            if (DEBUGPERSIST) NSLog(@"postsync: i%lu u%lu d%lu",
+            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] postsync: i%lu u%lu d%lu",
                                     (unsigned long)self.managedObjectContext.insertedObjects.count,
                                     (unsigned long)self.managedObjectContext.updatedObjects.count,
                                     (unsigned long)self.managedObjectContext.deletedObjects.count
@@ -155,7 +155,7 @@ static unsigned long long fileSystemFreeSize;
         NSError *error = nil;
         flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (!flows) {
-            if (DEBUGPERSIST) NSLog(@"allFlowsforClientId %@", error);
+            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] allFlowsforClientId %@", error);
         }
     }];
     return flows;
@@ -179,7 +179,7 @@ static unsigned long long fileSystemFreeSize;
         NSError *error = nil;
         flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (!flows) {
-            if (DEBUGPERSIST) NSLog(@"flowForClientId %@", error);
+            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] flowForClientId %@", error);
         } else {
             if ([flows count]) {
                 flow = [flows lastObject];
@@ -324,7 +324,7 @@ static unsigned long long fileSystemFreeSize;
         
         NSURL *persistentStoreURL = [[self applicationDocumentsDirectory]
                                      URLByAppendingPathComponent:@"MQTTClient"];
-        if (DEBUGPERSIST) NSLog(@"Persistent store: %@", persistentStoreURL.path);
+        if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] Persistent store: %@", persistentStoreURL.path);
         
         
         NSError *error = nil;
@@ -340,7 +340,7 @@ static unsigned long long fileSystemFreeSize;
                                                                 URL:self.persistent ? persistentStoreURL : nil
                                                             options:options
                                                               error:&error]) {
-            if (DEBUGPERSIST) NSLog(@"managedObjectContext save: %@", error);
+            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] managedObjectContext save: %@", error);
             persistentStoreCoordinator = nil;
         }
         
@@ -373,6 +373,6 @@ static unsigned long long fileSystemFreeSize;
         fileSize = 0;
         fileSystemFreeSize = 0;
     }
-    if (DEBUGPERSIST) NSLog(@"sizes %llu/%llu", fileSize, fileSystemFreeSize);
+    if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] sizes %llu/%llu", fileSize, fileSystemFreeSize);
 }
 @end

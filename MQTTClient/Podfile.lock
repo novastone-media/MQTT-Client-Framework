@@ -1,0 +1,21 @@
+PODS:
+  - MQTTClient (0.5.0):
+    - MQTTClient/Websocket (= 0.5.0)
+  - MQTTClient/Websocket (0.5.0):
+    - SocketRocket
+  - SocketRocket (0.4.2)
+
+DEPENDENCIES:
+  - MQTTClient (from `..`)
+  - MQTTClient/Websocket (from `..`)
+  - SocketRocket
+
+EXTERNAL SOURCES:
+  MQTTClient:
+    :path: ..
+
+SPEC CHECKSUMS:
+  MQTTClient: dfa11de40fd05e628ccd36f1f3d411c99a7f47b1
+  SocketRocket: ffe08119b00ef982f6c37052a4705a057c8494ad
+
+COCOAPODS: 0.39.0

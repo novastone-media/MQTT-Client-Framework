@@ -1,0 +1,31 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+	target 'MQTTClientTests' do
+		platform :ios, '6.1'
+		pod 'SocketRocket'
+		pod 'MQTTClient', :path => '..'
+		pod 'MQTTClient/Websocket', :path => '..'
+	end
+	target 'MQTTClient' do
+		platform :ios, '6.1'
+		pod 'SocketRocket'
+	end
+
+	target 'MQTTClientTVTests' do
+		platform :tvos, '9.0'
+	end
+	target 'MQTTClientTV' do
+		platform :tvos, '9.0'
+	end
+
+	target 'MQTTClientOSXTests' do
+		platform :osx, '10.10'
+		pod 'SocketRocket'
+		pod 'MQTTClient', :path => '..'
+		pod 'MQTTClient/Websocket', :path => '..'
+	end
+	target 'MQTTClientOSX' do
+		platform :osx, '10.10'
+		pod 'SocketRocket'
+	end
+

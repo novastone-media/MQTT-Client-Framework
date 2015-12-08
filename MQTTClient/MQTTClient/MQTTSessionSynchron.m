@@ -13,8 +13,8 @@
  */
 
 #import "MQTTSession.h"
+#import "MQTTSessionLegacy.h"
 #import "MQTTSessionSynchron.h"
-
 
 #ifdef DEBUG
 #define DEBUGSESS FALSE
@@ -48,11 +48,11 @@
     [self connectToHost:host port:port usingSSL:usingSSL];
     
     while (self.synchronConnect && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for connect", self);
+        if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] waiting for connect");
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
-    if (DEBUGSESS) NSLog(@"%@ end connect", self);
+    if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] end connect");
     
     return (self.status == MQTTSessionStatusConnected);
 }
@@ -68,11 +68,11 @@
     self.synchronSubMid = mid;
     
     while (self.synchronSub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for suback %d", self, mid);
+        if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] waiting for suback %d", mid);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
-    if (DEBUGSESS) NSLog(@"%@ end subscribe", self);
+    if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] end subscribe");
     
     if (self.synchronSubMid == mid) {
         return TRUE;
@@ -92,11 +92,11 @@
     self.synchronSubMid = mid;
     
     while (self.synchronSub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for suback %d", self, mid);
+        if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] waiting for suback %d", mid);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
-    if (DEBUGSESS) NSLog(@"%@ end subscribe", self);
+    if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] end subscribe");
     
     if (self.synchronSubMid == mid) {
         return TRUE;
@@ -117,11 +117,11 @@
     self.synchronUnsubMid = mid;
     
     while (self.synchronUnsub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for unsuback %d", self, mid);
+        if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] waiting for unsuback %d", mid);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
-    if (DEBUGSESS) NSLog(@"%@ end unsubscribe", self);
+    if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] end unsubscribe");
     
     if (self.synchronUnsubMid == mid) {
         return TRUE;
@@ -141,11 +141,11 @@
     self.synchronUnsubMid = mid;
     
     while (self.synchronUnsub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for unsuback %d", self, mid);
+        if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] waiting for unsuback %d", mid);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     
-    if (DEBUGSESS) NSLog(@"%@ end unsubscribe", self);
+    if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] end unsubscribe");
     
     if (self.synchronUnsubMid == mid) {
         return TRUE;
@@ -179,11 +179,11 @@
         self.synchronPubMid = mid;
         
         while (self.synchronPub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-            if (DEBUGSESS) NSLog(@"%@ waiting for mid %d", self, mid);
+            if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] waiting for mid %d", mid);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
         
-        if (DEBUGSESS) NSLog(@"%@ end publish", self);
+        if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] end publish");
         
         if (self.synchronPubMid == mid) {
             return TRUE;
@@ -203,10 +203,10 @@
     [self close];
     
     while (self.synchronDisconnect && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
-        if (DEBUGSESS) NSLog(@"%@ waiting for close", self);
+        if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] waiting for close");
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
-    if (DEBUGSESS) NSLog(@"%@ end close", self);
+    if (DEBUGSESS) NSLog(@"[MQTTSessionSynchron] end close");
     
 }
 
