@@ -7,8 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <CocoaLumberjack/Cocoalumberjack.h>
+
 #import "MQTTClient.h"
-#import "MQTTClientTests.h"
+#import "MQTTTestHelpers.h"
 
 @interface MQTTClientTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
@@ -28,6 +30,12 @@
 - (void)setUp
 {
     [super setUp];
+    
+    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
+        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+
 }
 
 - (void)tearDown
@@ -105,8 +113,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -147,8 +155,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -175,8 +183,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -201,8 +209,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -228,8 +236,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -281,8 +289,8 @@
                                                                   protocolLevel:[parameters[@"protocollevel"] intValue]
                                                                         runLoop:[NSRunLoop currentRunLoop]
                                                                         forMode:NSRunLoopCommonModes
-                                                                 securityPolicy:[self securityPolicy:parameters]
-                                                                   certificates:[self clientCerts:parameters]];
+                                                                 securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                                   certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         if (![subscribingSession connectAndWaitToHost:parameters[@"host"] port:[parameters[@"port"] intValue] usingSSL:[parameters[@"tls"] boolValue]]) {
             XCTFail(@"no connection for sub to %@", broker);
@@ -302,8 +310,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -343,8 +351,8 @@
                                                                   protocolLevel:[parameters[@"protocollevel"] intValue]
                                                                         runLoop:[NSRunLoop currentRunLoop]
                                                                         forMode:NSRunLoopCommonModes
-                                                                 securityPolicy:[self securityPolicy:parameters]
-                                                                   certificates:[self clientCerts:parameters]];
+                                                                 securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                                   certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         if (![subscribingSession connectAndWaitToHost:parameters[@"host"] port:[parameters[@"port"] intValue] usingSSL:[parameters[@"tls"] boolValue]]) {
             XCTFail(@"no connection for sub to %@", broker);
@@ -364,8 +372,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -400,8 +408,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -436,8 +444,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -472,8 +480,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -509,8 +517,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -546,8 +554,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -583,8 +591,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -619,8 +627,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -655,8 +663,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -691,8 +699,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -727,8 +735,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -748,8 +756,8 @@
                                                            protocolLevel:[parameters[@"protocollevel"] intValue]
                                                                  runLoop:[NSRunLoop currentRunLoop]
                                                                  forMode:NSRunLoopCommonModes
-                                                          securityPolicy:[self securityPolicy:parameters]
-                                                            certificates:[self clientCerts:parameters]];
+                                                          securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                            certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         if (![sameSession connectAndWaitToHost:parameters[@"host"]
                                           port:[parameters[@"port"] intValue]
@@ -783,8 +791,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -818,8 +826,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue] == 3 ? 4 : 3
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -854,8 +862,8 @@
                                                protocolLevel:5
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -889,8 +897,8 @@
                                                protocolLevel:0
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -931,8 +939,8 @@
                                                protocolLevel:[parameters[@"protocollevel"] intValue]
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -1030,8 +1038,8 @@
                                                protocolLevel:5
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         [self.session subscribeTopic:TOPIC];
@@ -1063,8 +1071,8 @@
                                                protocolLevel:4
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -1109,8 +1117,8 @@
                                                protocolLevel:4
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -1166,8 +1174,8 @@
                                                protocolLevel:4
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -1223,8 +1231,8 @@
                                                protocolLevel:4
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         XCTAssert(!self.timeout, @"timeout");
@@ -1290,8 +1298,8 @@
                                                protocolLevel:4
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         [self.session subscribeTopic:TOPIC];
@@ -1324,8 +1332,8 @@
                                                protocolLevel:4
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSRunLoopCommonModes
-                                              securityPolicy:[self securityPolicy:parameters]
-                                                certificates:[self clientCerts:parameters]];
+                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
         self.session.persistence.persistent = PERSISTENT;
         [self connect:self.session parameters:parameters];
         [self.session subscribeTopic:TOPIC];
@@ -1338,46 +1346,6 @@
 }
 
 #pragma mark helpers
-
-- (NSArray *)clientCerts:(NSDictionary *)parameters {
-    NSArray *clientCerts = nil;
-    if (parameters[@"clientp12"] && parameters[@"clientp12pass"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[MQTTClientTests class]] pathForResource:parameters[@"clientp12"]
-                                                                                     ofType:@"p12"];
-        
-        clientCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
-        if (!clientCerts) {
-            XCTFail(@"invalid p12 file");
-        }
-    }
-    return clientCerts;
-}
-
-- (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters {
-    MQTTSSLSecurityPolicy *securityPolicy = nil;
-    
-    if (parameters[@"serverCER"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[MQTTClientTests class]] pathForResource:parameters[@"serverCER"]
-                                                                                     ofType:@"cer"];
-        if (path) {
-            NSData *certificateData = [NSData dataWithContentsOfFile:path];
-            if (certificateData) {
-                securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-                securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
-                securityPolicy.validatesCertificateChain = FALSE;
-                securityPolicy.allowInvalidCertificates = TRUE;
-                securityPolicy.validatesDomainName = FALSE;
-            } else {
-                XCTFail(@"error reading cer file");
-            }
-        } else {
-            XCTFail(@"cer file not found");
-        }
-    }
-    return securityPolicy;
-}
 
 - (void)no_cleansession:(MQTTQosLevel)qos {
     for (NSString *broker in BROKERLIST) {

@@ -1,17 +1,17 @@
 //
-//  MQTTClientTests.h
+//  MQTTTestHelpers.h
 //  MQTTClient
 //
-//  Created by Christoph Krey on 25.03.14.
-//  Copyright (c) 2014 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 09.12.15.
+//  Copyright © 2015 Christoph Krey. All rights reserved.
 //
 
-#ifndef MQTTClient_MQTTClientTests_h
-#define MQTTClient_MQTTClientTests_h
+#import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 
-/**
- * Test Coverage MQTT Brokers
- */
+#import "MQTTClient.h"
+#import "MQTTSSLSecurityPolicy.h"
+
 
 #define TOPIC @"MQTTClient"
 #define MULTI 15  // some test servers are limited in concurrent sessions
@@ -21,7 +21,7 @@
 
 //#define BROKERLIST @[@"local", @"mosquitto", @"mosquittoTls", @"mosquittoTlsCerts", @"eclipse", @"paho", @"hivemq", @"m2m", @"rabbitmq"]
 //#define BROKERLIST @[@"local"]
-#define BROKERLIST @[@"local"]
+#define BROKERLIST @[@"64", @"w64"]
 
 #define BROKERS @{ \
 \
@@ -30,7 +30,7 @@
 @"port": @1883,  \
 @"tls": @NO, \
 @"protocollevel": @4, \
-@"timeout": @10 \
+@"timeout": @30 \
 }, \
 \
 @"64": @{ \
@@ -38,15 +38,16 @@
 @"port": @1883,  \
 @"tls": @NO, \
 @"protocollevel": @4, \
-@"timeout": @10 \
+@"timeout": @30 \
 }, \
 \
 @"w64": @{ \
 @"host": @"192.168.178.64",  \
 @"port": @9001,  \
 @"tls": @NO, \
-@"protocollevel": @3, \
-@"timeout": @10 \
+@"protocollevel": @4, \
+@"timeout": @60, \
+@"websocket": @YES \
 }, \
 \
 @"mosquittoTls": @{ \
@@ -119,4 +120,32 @@
 \
 }
 
-#endif
+
+@interface MQTTTestHelpers : XCTestCase <MQTTSessionDelegate>
+- (void)timedout:(id)object;
+
++ (NSArray *)clientCerts:(NSDictionary *)parameters;
++ (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters;
+
+@property (strong, nonatomic) MQTTSession *session;
+@property (nonatomic) int event;
+@property (strong, nonatomic) NSError *error;
+
+@property (nonatomic) UInt16 subMid;
+@property (nonatomic) UInt16 unsubMid;
+@property (nonatomic) UInt16 messageMid;
+
+@property (nonatomic) UInt16 sentSubMid;
+@property (nonatomic) UInt16 sentUnsubMid;
+@property (nonatomic) UInt16 sentMessageMid;
+
+@property (nonatomic) BOOL SYSreceived;
+@property (nonatomic) NSArray *qoss;
+
+@property (nonatomic) BOOL timedout;
+@property (strong, nonatomic) NSTimer *timer;
+@property (nonatomic) NSTimeInterval timeoutValue;
+
+@property (nonatomic) int type;
+
+@end

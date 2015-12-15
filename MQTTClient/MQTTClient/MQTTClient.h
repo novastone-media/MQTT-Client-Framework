@@ -19,4 +19,6 @@
 #import <MQTTClient/MQTTSessionLegacy.h>
 #import <MQTTClient/MQTTSessionSynchron.h>
 #import <MQTTClient/MQTTMessage.h>
-#import <MQTTClient/MQTTSSLSecurityPolicy.h>
+#import <MQTTClient/MQTTTransport.h>
+#import <MQTTClient/MQTTCFSocketTransport.h>
+#import <MQTTClient/MQTTSSLSecurityPolicyTransport.h>

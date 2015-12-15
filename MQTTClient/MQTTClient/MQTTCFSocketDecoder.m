@@ -7,14 +7,16 @@
 
 #import "MQTTCFSocketDecoder.h"
 
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-#define DEBUGDEC TRUE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #else
-#define DEBUGDEC FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif
 
 @interface MQTTCFSocketDecoder()
-@property (nonatomic) BOOL securityPolicyApplied;
+
 @end
 
 @implementation MQTTCFSocketDecoder
@@ -22,14 +24,10 @@
 - (instancetype)init {
     self = [super init];
     self.state = MQTTCFSocketDecoderStateInitializing;
-    self.securityPolicyApplied = NO;
     
     self.stream = nil;
     self.runLoop = [NSRunLoop currentRunLoop];
     self.runLoopMode = NSRunLoopCommonModes;
-    self.securityPolicy = nil;
-    self.securityDomain = nil;
-    
     return self;
 }
 
@@ -50,44 +48,18 @@
     }
 }
 
-- (BOOL)applySSLSecurityPolicy:(NSStream *)readStream withEvent:(NSStreamEvent)eventCode{
-    if(!self.securityPolicy){
-        return YES;
-    }
-
-    if(self.securityPolicyApplied){
-        return YES;
-    }
-
-    SecTrustRef serverTrust = (__bridge SecTrustRef) [readStream propertyForKey: (__bridge NSString *)kCFStreamPropertySSLPeerTrust];
-    if(!serverTrust){
-        return NO;
-    }
-
-    self.securityPolicyApplied = [self.securityPolicy evaluateServerTrust:serverTrust forDomain:self.securityDomain];
-    return self.securityPolicyApplied;
-}
-
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
     
     if (eventCode & NSStreamEventOpenCompleted) {
-        if (DEBUGDEC) if (eventCode & NSStreamEventOpenCompleted) NSLog(@"[MQTTCFSocketDecoder] NSStreamEventOpenCompleted");
+        DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventOpenCompleted");
         self.state = MQTTCFSocketDecoderStateReady;
         [self.delegate decoderDidOpen:self];
     }
 
     if (eventCode &  NSStreamEventHasBytesAvailable) {
-        if (DEBUGDEC) if (eventCode & NSStreamEventHasBytesAvailable) NSLog(@"[MQTTCFSocketDecoder] NSStreamEventHasBytesAvailable");
-        if (![self applySSLSecurityPolicy:sender withEvent:eventCode]){
-            self.state = MQTTCFSocketDecoderStateError;
-            self.error = [NSError errorWithDomain:@"MQTT"
-                                             code:errSSLXCertChainInvalid
-                                         userInfo:@{NSLocalizedDescriptionKey: @"Unable to apply security policy, the SSL connection is insecure!"}];
-        }
-        
+        DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventHasBytesAvailable");
         if (self.state == MQTTCFSocketDecoderStateInitializing) {
             self.state = MQTTCFSocketDecoderStateReady;
-            
         }
         
         if (self.state == MQTTCFSocketDecoderStateReady) {
@@ -100,23 +72,25 @@
                 [self.delegate decoder:self didFailWithError:nil];
             } else {
                 NSData *data = [NSData dataWithBytes:buffer length:n];
+                DDLogVerbose(@"[MQTTCFSocketDecoder] received (%lu)=%@...", (unsigned long)data.length,
+                             [data subdataWithRange:NSMakeRange(0, MIN(256, data.length))]);
                 [self.delegate decoder:self didReceiveMessage:data];
             }
         }
     }
     if (eventCode &  NSStreamEventHasSpaceAvailable) {
-        if (DEBUGDEC) NSLog(@"[MQTTCFSocketDecoder] NSStreamEventHasSpaceAvailable");
+        DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventHasSpaceAvailable");
     }
     
     if (eventCode &  NSStreamEventEndEncountered) {
-        if (DEBUGDEC) NSLog(@"[MQTTCFSocketDecoder] NSStreamEventEndEncountered");
+        DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventEndEncountered");
         self.state = MQTTCFSocketDecoderStateInitializing;
         self.error = nil;
         [self.delegate decoderdidClose:self];
     }
     
     if (eventCode &  NSStreamEventErrorOccurred) {
-        if (DEBUGDEC) NSLog(@"[MQTTCFSocketDecoder] NSStreamEventErrorOccurred");
+        DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventErrorOccurred");
         self.state = MQTTCFSocketDecoderStateError;
         self.error = self.stream.streamError;
         [self.delegate decoder:self didFailWithError:self.error];

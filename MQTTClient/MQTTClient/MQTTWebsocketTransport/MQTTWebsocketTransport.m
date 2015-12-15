@@ -8,6 +8,15 @@
 
 #import "MQTTWebsocketTransport.h"
 
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
+#ifdef DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#else
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+
+
 @interface MQTTWebsocketTransport()
 @property (strong, nonatomic) SRWebSocket *websocket;
 @end
@@ -22,11 +31,13 @@
     self.host = @"localhost";
     self.port = 1883;
     self.tls = false;
+    self.allowUntrustedCertificates = false;
+    self.pinnedCertificates = nil;
     return self;
 }
 
 - (void)open {
-    NSLog(@"[MQTTWebsocketTransport] open");
+    DDLogVerbose(@"[MQTTWebsocketTransport] open");
     self.state = MQTTTransportOpening;
 
     NSString *protocol = (self.tls) ? @"wss" : @"ws";
@@ -39,26 +50,36 @@
                            portString,
                            path];
     NSURL *url = [NSURL URLWithString:urlString];
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+    urlRequest.SR_SSLPinnedCertificates = self.pinnedCertificates;
     
-    self.websocket = [[SRWebSocket alloc] initWithURL:url protocols:protocols];
+    self.websocket = [[SRWebSocket alloc] initWithURLRequest:urlRequest
+                                                   protocols:protocols
+                              allowsUntrustedSSLCertificates:self.allowUntrustedCertificates];
+    
     self.websocket.delegate = self;
     [self.websocket open];
 }
 
 - (BOOL)send:(NSData *)data {
-    NSLog(@"[MQTTWebsocketTransport] send(%ld):%@", data.length, data);
+    DDLogVerbose(@"[MQTTWebsocketTransport] send(%ld):%@", (unsigned long)data.length,
+                 [data subdataWithRange:NSMakeRange(0, MIN(256, data.length))]);
     [self.websocket send:data];
     return true;
 }
 
 - (void)close {
-    NSLog(@"[MQTTWebsocketTransport] close");
+    DDLogVerbose(@"[MQTTWebsocketTransport] close");
     self.state = MQTTTransportClosing;
     [self.websocket close];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
-    NSLog(@"[MQTTWebsocketTransport] didReceiveMessage():%@", message);
+    NSData *data;
+    if ([message isKindOfClass:[NSData class]]) {
+        data = (NSData *)message;
+    }
+    DDLogVerbose(@"[MQTTWebsocketTransport] didReceiveMessage(%ld)", data ? data.length : -1);
 
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(mqttTransport:didReceiveMessage:)]) {
@@ -68,7 +89,7 @@
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket{
-    NSLog(@"[MQTTWebsocketTransport] connected to websocket");
+    DDLogVerbose(@"[MQTTWebsocketTransport] connected to websocket");
     self.state = MQTTTransportOpen;
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(mqttTransportDidOpen:)]) {
@@ -78,7 +99,7 @@
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
-    NSLog(@"[MQTTWebsocketTransport] Failed to connect : %@",[error debugDescription]);
+    DDLogInfo(@"[MQTTWebsocketTransport] Failed to connect : %@",[error debugDescription]);
     self.state = MQTTTransportClosed;
     self.websocket.delegate = nil;
     [self.websocket close];
@@ -90,7 +111,7 @@
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
-    NSLog(@"[MQTTWebsocketTransport] ConnectionClosed : %@",reason);
+    DDLogVerbose(@"[MQTTWebsocketTransport] ConnectionClosed : %@",reason);
     self.state = MQTTTransportClosed;
     self.websocket.delegate = nil;
     if (self.delegate) {
@@ -101,7 +122,7 @@
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload{
-    NSLog(@"[MQTTWebsocketTransport] webSocket didReceivePong:%@", pongPayload);
+    DDLogVerbose(@"[MQTTWebsocketTransport] webSocket didReceivePong:%@", pongPayload);
 }
 
 @end

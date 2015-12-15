@@ -14,5 +14,7 @@
 @property (strong, nonatomic) NSString *host;
 @property (nonatomic) UInt16 port;
 @property (nonatomic) BOOL tls;
+@property (nonatomic) BOOL allowUntrustedCertificates;
+@property (strong, nonatomic) NSArray *pinnedCertificates;
 
 @end

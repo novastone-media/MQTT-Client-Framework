@@ -6,7 +6,10 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <CocoaLumberjack/Cocoalumberjack.h>
+
 #import "MQTTSSLSecurityPolicy.h"
+#import "MQTTTestHelpers.h"
 
 @interface MQTTSSLSecurityPolicyTests : XCTestCase
 @end
@@ -127,11 +130,14 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
+        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 

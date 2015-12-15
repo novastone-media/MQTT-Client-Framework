@@ -7,17 +7,15 @@
 
 #import "MQTTCFSocketEncoder.h"
 
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-#define DEBUGENC TRUE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #else
-#define DEBUGENC FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif
 
 @interface MQTTCFSocketEncoder()
-@property (nonatomic, readwrite) MQTTCFSocketEncoderState state;
-@property (nonatomic, readwrite) NSError *error;
-
-@property (nonatomic) BOOL securityPolicyApplied;
 @property (strong, nonatomic) NSMutableData *buffer;
 
 @end
@@ -27,14 +25,11 @@
 - (instancetype)init {
     self = [super init];
     self.state = MQTTCFSocketEncoderStateInitializing;
-    self.securityPolicyApplied = NO;
     self.buffer = [[NSMutableData alloc] init];
     
     self.stream = nil;
     self.runLoop = [NSRunLoop currentRunLoop];
     self.runLoopMode = NSRunLoopCommonModes;
-    self.securityPolicy = nil;
-    self.securityDomain = nil;
     
     return self;
 }
@@ -51,44 +46,18 @@
     [self.stream setDelegate:nil];
 }
 
-- (BOOL)applySSLSecurityPolicy:(NSStream *)writeStream withEvent:(NSStreamEvent)eventCode;
-{
-    if(!self.securityPolicy){
-        return YES;
-    }
-    
-    if(self.securityPolicyApplied){
-        return YES;
-    }
-    
-    SecTrustRef serverTrust = (__bridge SecTrustRef) [writeStream propertyForKey: (__bridge NSString *)kCFStreamPropertySSLPeerTrust];
-    if(!serverTrust){
-        return NO;
-    }
-    
-    self.securityPolicyApplied = [self.securityPolicy evaluateServerTrust:serverTrust forDomain:self.securityDomain];
-    return self.securityPolicyApplied;
-}
-
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
     
     if (eventCode & NSStreamEventOpenCompleted) {
-        if (DEBUGENC) NSLog(@"[MQTTCFSocketEncoder] NSStreamEventOpenCompleted");
+        DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventOpenCompleted");
 
     }
     if (eventCode & NSStreamEventHasBytesAvailable) {
-        if (DEBUGENC)  NSLog(@"[MQTTCFSocketEncoder] NSStreamEventHasBytesAvailable");
+        DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventHasBytesAvailable");
     }
     
     if (eventCode &  NSStreamEventHasSpaceAvailable) {
-        if (DEBUGENC) NSLog(@"[MQTTCFSocketEncoder] NSStreamEventHasSpaceAvailable");
-        if(![self applySSLSecurityPolicy:sender withEvent:eventCode]){
-            self.state = MQTTCFSocketEncoderStateError;
-            self.error = [NSError errorWithDomain:@"MQTT"
-                                             code:errSSLXCertChainInvalid
-                                         userInfo:@{NSLocalizedDescriptionKey: @"Unable to apply security policy, the SSL connection is insecure!"}];
-        }
-        
+        DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventHasSpaceAvailable");
         if (self.state == MQTTCFSocketEncoderStateInitializing) {
             self.state = MQTTCFSocketEncoderStateReady;
             [self.delegate encoderDidOpen:self];
@@ -102,14 +71,14 @@
     }
     
     if (eventCode &  NSStreamEventEndEncountered) {
-        if (DEBUGENC) NSLog(@"[MQTTCFSocketEncoder] NSStreamEventEndEncountered");
+        DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventEndEncountered");
         self.state = MQTTCFSocketEncoderStateInitializing;
         self.error = nil;
         [self.delegate encoderdidClose:self];
     }
     
     if (eventCode &  NSStreamEventErrorOccurred) {
-        if (DEBUGENC) NSLog(@"[MQTTCFSocketEncoder] NSStreamEventErrorOccurred");
+        DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventErrorOccurred");
         self.state = MQTTCFSocketEncoderStateError;
         self.error = self.stream.streamError;
         [self.delegate encoder:self didFailWithError:self.error];
@@ -119,7 +88,7 @@
 - (BOOL)send:(NSData *)data {
     @synchronized(self) {
         if (self.state != MQTTCFSocketEncoderStateReady) {
-            if (DEBUGENC) NSLog(@"[MQTTCFSocketEncoder] not MQTTCFSocketEncoderStateReady");
+            DDLogWarn(@"[MQTTCFSocketEncoder] not MQTTCFSocketEncoderStateReady");
             return FALSE;
         }
         
@@ -128,19 +97,20 @@
         }
         
         if (self.buffer.length) {
-            if (DEBUGENC) NSLog(@"[MQTTCFSocketEncoder] buffer to write (%lu)=%@...", (unsigned long)self.buffer.length,
-                                [self.buffer subdataWithRange:NSMakeRange(0, MIN(16, self.buffer.length))]);
+            DDLogVerbose(@"[MQTTCFSocketEncoder] buffer to write (%lu)=%@...",
+                         (unsigned long)self.buffer.length,
+                         [self.buffer subdataWithRange:NSMakeRange(0, MIN(256, self.buffer.length))]);
             
             NSInteger n = [self.stream write:self.buffer.bytes maxLength:self.buffer.length];
             
             if (n == -1) {
-                if (DEBUGENC) NSLog(@"[MQTTCFSocketEncoder] streamError: %@", self.error);
+                DDLogVerbose(@"[MQTTCFSocketEncoder] streamError: %@", self.error);
                 self.state = MQTTCFSocketEncoderStateError;
                 self.error = self.stream.streamError;
                 return FALSE;
             } else {
                 if (n < self.buffer.length) {
-                    if (DEBUGENC) NSLog(@"[MQTTCFSocketEncoder] buffer partially written: %ld", n);
+                    DDLogVerbose(@"[MQTTCFSocketEncoder] buffer partially written: %ld", (long)n);
                 }
                 [self.buffer replaceBytesInRange:NSMakeRange(0, n) withBytes:NULL length:0];
             }

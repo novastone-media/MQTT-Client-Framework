@@ -8,6 +8,14 @@
 
 #import "MQTTCFSocketTransport.h"
 
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
+#ifdef DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#else
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+
 @interface MQTTCFSocketTransport()
 @property (strong, nonatomic) MQTTCFSocketEncoder *encoder;
 @property (strong, nonatomic) MQTTCFSocketDecoder *decoder;
@@ -23,13 +31,12 @@
     self.host = @"localhost";
     self.port = 1883;
     self.tls = false;
-    self.securityPolicy = nil;
     self.certificates = nil;
     return self;
 }
 
 - (void)open {
-    NSLog(@"[MQTTCFSocketTransport] open");
+    DDLogVerbose(@"[MQTTCFSocketTransport] open");
     self.state = MQTTTransportOpening;
 
     NSError* connectError;
@@ -41,34 +48,16 @@
 
     CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
     CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
-
+    
     if (self.tls) {
         NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
         
-        if (!self.securityPolicy)
-        {
-            // use OS CA model
-            [sslOptions setObject:(NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
-                           forKey:(NSString*)kCFStreamSSLLevel];
-            if (self.certificates) {
-                [sslOptions setObject:self.certificates
-                               forKey:(NSString *)kCFStreamSSLCertificates];
-            }
-        }
-        else
-        {
-            // delegate certificates verify operation to our secure policy.
-            // by disabling chain validation, it becomes our responsibility to verify that the host at the other end can be trusted.
-            // the server's certificates will be verified during MQTT encoder/decoder processing.
-            [sslOptions setObject:(NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
-                           forKey:(NSString*)kCFStreamSSLLevel];
-            [sslOptions setObject:[NSNumber numberWithBool:NO]
-                           forKey:(NSString *)kCFStreamSSLValidatesCertificateChain];
-            if (self.certificates) {
-                [sslOptions setObject:self.certificates
-                               forKey:(NSString *)kCFStreamSSLCertificates];
-            }
-            
+        [sslOptions setObject:(NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
+                       forKey:(NSString*)kCFStreamSSLLevel];
+        
+        if (self.certificates) {
+            [sslOptions setObject:self.certificates
+                           forKey:(NSString *)kCFStreamSSLCertificates];
         }
         
         if(!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
@@ -86,15 +75,11 @@
     if(!connectError){
         self.encoder = [[MQTTCFSocketEncoder alloc] init];
         self.encoder.stream = CFBridgingRelease(writeStream);
-        self.encoder.securityPolicy = self.tls ? self.securityPolicy : nil;
-        self.encoder.securityDomain = self.tls ? self.host : nil;
         self.encoder.delegate = self;
         [self.encoder open];
         
         self.decoder = [[MQTTCFSocketDecoder alloc] init];
         self.decoder.stream =  CFBridgingRelease(readStream);
-        self.decoder.securityPolicy = self.tls ? self.securityPolicy : nil;
-        self.decoder.securityDomain = self.tls ? self.host : nil;
         self.decoder.delegate = self;
         [self.decoder open];
         
@@ -104,7 +89,7 @@
 }
 
 - (void)close {
-    NSLog(@"[MQTTCFSocketTransport] close");
+    DDLogVerbose(@"[MQTTCFSocketTransport] close");
     self.state = MQTTTransportClosing;
 
     if (self.encoder) {
@@ -152,4 +137,56 @@
     self.state = MQTTTransportOpen;
     [self.delegate mqttTransportDidOpen:self];
 }
+
++ (NSArray *)clientCertsFromP12:(NSString *)path passphrase:(NSString *)passphrase {
+    if (!path) {
+        DDLogWarn(@"[MQTTCFSocketTransport] no p12 path given");
+        return nil;
+    }
+    
+    NSData *pkcs12data = [[NSData alloc] initWithContentsOfFile:path];
+    if (!pkcs12data) {
+        DDLogWarn(@"[MQTTCFSocketTransport] reading p12 failed");
+        return nil;
+    }
+    
+    if (!passphrase) {
+        DDLogWarn(@"[MQTTCFSocketTransport] no passphrase given");
+        return nil;
+    }
+    CFArrayRef keyref = NULL;
+    OSStatus importStatus = SecPKCS12Import((__bridge CFDataRef)pkcs12data,
+                                            (__bridge CFDictionaryRef)[NSDictionary
+                                                                       dictionaryWithObject:passphrase
+                                                                       forKey:(__bridge id)kSecImportExportPassphrase],
+                                            &keyref);
+    if (importStatus != noErr) {
+        DDLogWarn(@"[MQTTCFSocketTransport] Error while importing pkcs12 [%d]", (int)importStatus);
+        return nil;
+    }
+    
+    CFDictionaryRef identityDict = CFArrayGetValueAtIndex(keyref, 0);
+    if (!identityDict) {
+        DDLogWarn(@"[MQTTCFSocketTransport] could not CFArrayGetValueAtIndex");
+        return nil;
+    }
+    
+    SecIdentityRef identityRef = (SecIdentityRef)CFDictionaryGetValue(identityDict,
+                                                                      kSecImportItemIdentity);
+    if (!identityRef) {
+        DDLogWarn(@"[MQTTCFSocketTransport] could not CFDictionaryGetValue");
+        return nil;
+    };
+    
+    SecCertificateRef cert = NULL;
+    OSStatus status = SecIdentityCopyCertificate(identityRef, &cert);
+    if (status != noErr) {
+        DDLogWarn(@"[MQTTCFSocketTransport] SecIdentityCopyCertificate failed [%d]", (int)status);
+        return nil;
+    }
+    
+    NSArray *clientCerts = [[NSArray alloc] initWithObjects:(__bridge id)identityRef, (__bridge id)cert, nil];
+    return clientCerts;
+}
+
 @end

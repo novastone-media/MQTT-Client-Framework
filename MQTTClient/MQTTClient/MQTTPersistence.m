@@ -21,10 +21,12 @@
 
 @end
 
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-#define DEBUGPERSIST FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #else
-#define DEBUGPERSIST FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif
 
 #define PERSISTENT NO
@@ -118,19 +120,19 @@ static unsigned long long fileSystemFreeSize;
 - (void)sync {
     [self.managedObjectContext performBlockAndWait:^{
         if (self.managedObjectContext.hasChanges) {
-            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
+            DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
                                     (unsigned long)self.managedObjectContext.insertedObjects.count,
                                     (unsigned long)self.managedObjectContext.updatedObjects.count,
                                     (unsigned long)self.managedObjectContext.deletedObjects.count
                                     );
             NSError *error = nil;
             if (![self.managedObjectContext save:&error]) {
-                NSLog(@"[MQTTPersistence] sync error %@", error);
+                DDLogError(@"[MQTTPersistence] sync error %@", error);
             }
             if (self.managedObjectContext.hasChanges) {
-                NSLog(@"[MQTTPersistence] sync not complete");
+                DDLogError(@"[MQTTPersistence] sync not complete");
             }
-            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] postsync: i%lu u%lu d%lu",
+            DDLogVerbose(@"[MQTTPersistence] postsync: i%lu u%lu d%lu",
                                     (unsigned long)self.managedObjectContext.insertedObjects.count,
                                     (unsigned long)self.managedObjectContext.updatedObjects.count,
                                     (unsigned long)self.managedObjectContext.deletedObjects.count
@@ -155,7 +157,7 @@ static unsigned long long fileSystemFreeSize;
         NSError *error = nil;
         flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (!flows) {
-            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] allFlowsforClientId %@", error);
+            DDLogError(@"[MQTTPersistence] allFlowsforClientId %@", error);
         }
     }];
     return flows;
@@ -179,7 +181,7 @@ static unsigned long long fileSystemFreeSize;
         NSError *error = nil;
         flows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (!flows) {
-            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] flowForClientId %@", error);
+            DDLogError(@"[MQTTPersistence] flowForClientId %@", error);
         } else {
             if ([flows count]) {
                 flow = [flows lastObject];
@@ -324,7 +326,7 @@ static unsigned long long fileSystemFreeSize;
         
         NSURL *persistentStoreURL = [[self applicationDocumentsDirectory]
                                      URLByAppendingPathComponent:@"MQTTClient"];
-        if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] Persistent store: %@", persistentStoreURL.path);
+        DDLogInfo(@"[MQTTPersistence] Persistent store: %@", persistentStoreURL.path);
         
         
         NSError *error = nil;
@@ -340,7 +342,7 @@ static unsigned long long fileSystemFreeSize;
                                                                 URL:self.persistent ? persistentStoreURL : nil
                                                             options:options
                                                               error:&error]) {
-            if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] managedObjectContext save: %@", error);
+            DDLogError(@"[MQTTPersistence] managedObjectContext save: %@", error);
             persistentStoreCoordinator = nil;
         }
         
@@ -373,6 +375,6 @@ static unsigned long long fileSystemFreeSize;
         fileSize = 0;
         fileSystemFreeSize = 0;
     }
-    if (DEBUGPERSIST) NSLog(@"[MQTTPersistence] sizes %llu/%llu", fileSize, fileSystemFreeSize);
+    DDLogVerbose(@"[MQTTPersistence] sizes %llu/%llu", fileSize, fileSystemFreeSize);
 }
 @end

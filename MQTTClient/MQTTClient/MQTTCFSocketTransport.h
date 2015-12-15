@@ -7,7 +7,6 @@
 //
 
 #import "MQTTTransport.h"
-#import "MQTTSSLSecurityPolicy.h"
 #import "MQTTCFSocketDecoder.h"
 #import "MQTTCFSocketEncoder.h"
 
@@ -16,21 +15,45 @@
 @property (nonatomic) UInt16 port;
 @property (nonatomic) BOOL tls;
 
-// ssl security policy
-/**
- * The security policy used to evaluate server trust for secure connections.
- *
- * if your app using security model which require pinning SSL certificates to helps prevent man-in-the-middle attacks
- * and other vulnerabilities. you need to set securityPolicy to properly value(see MQTTSSLSecurityPolicy.h for more detail).
- *
- * NOTE: about self-signed server certificates:
- * if your server using Self-signed certificates to establish SSL/TLS connection, you need to set property:
- * MQTTSSLSecurityPolicy.allowInvalidCertificates=YES.
- */
-@property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
-
 /** see initWithClientId for description
  */
 @property (strong, nonatomic) NSArray *certificates;
+
+/** reads the content of a PKCS12 file and converts it to an certificates array for initWith...
+ @param path the path to a PKCS12 file
+ @param passphrase the passphrase to unlock the PKCS12 file
+ @returns a certificates array or nil if an error occured
+ 
+ @code
+ NSString *path = [[NSBundle bundleForClass:[MQTTClientTests class]] pathForResource:@"filename"
+ ofType:@"p12"];
+ 
+ NSArray *myCerts = [MQTTCFSocketTransport clientCertsFromP12:path passphrase:@"passphrase"];
+ if (myCerts) {
+ 
+ self.session = [[MQTTSession alloc] initWithClientId:nil
+ userName:nil
+ password:nil
+ keepAlive:60
+ cleanSession:YES
+ will:NO
+ willTopic:nil
+ willMsg:nil
+ willQoS:0
+ willRetainFlag:NO
+ protocolLevel:4
+ runLoop:[NSRunLoop currentRunLoop]
+ forMode:NSRunLoopCommonModes
+ securityPolicy:nil
+ certificates:myCerts];
+ [self.session connectToHost:@"localhost" port:8884 usingSSL:YES];
+ ...
+ }
+ 
+ @endcode
+ 
+ */
+
++ (NSArray *)clientCertsFromP12:(NSString *)path passphrase:(NSString *)passphrase;
 
 @end

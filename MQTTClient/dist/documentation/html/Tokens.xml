@@ -23,61 +23,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:</Name>
-      <APILanguage>occ</APILanguage>
-      <Type>instm</Type>
-      <Scope>MQTTSession</Scope>
-    </TokenIdentifier>
-    <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>a5d4657d074b0dd745de2a8bded6b0308</Anchor>
-    <DeclaredIn>MQTTSession.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:</Name>
-      <APILanguage>occ</APILanguage>
-      <Type>instm</Type>
-      <Scope>MQTTSession</Scope>
-    </TokenIdentifier>
-    <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>accf20d5a5b630ff96b84ab88f92468fe</Anchor>
-    <DeclaredIn>MQTTSession.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:certificates:</Name>
-      <APILanguage>occ</APILanguage>
-      <Type>instm</Type>
-      <Scope>MQTTSession</Scope>
-    </TokenIdentifier>
-    <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>a8a4605e8dc395b784f686f5d96401ee8</Anchor>
-    <DeclaredIn>MQTTSession.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>connectToHost:port:usingSSL:connectHandler:</Name>
-      <APILanguage>occ</APILanguage>
-      <Type>instm</Type>
-      <Scope>MQTTSession</Scope>
-    </TokenIdentifier>
-    <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>ae9b26d3af576b9b8bc0efcf6ac3a98d4</Anchor>
-    <DeclaredIn>MQTTSession.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>connectToHost:port:usingSSL:</Name>
-      <APILanguage>occ</APILanguage>
-      <Type>instm</Type>
-      <Scope>MQTTSession</Scope>
-    </TokenIdentifier>
-    <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>a97c0fc3b9a06d8c5eefa3012591feb82</Anchor>
-    <DeclaredIn>MQTTSession.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>subscribeToTopic:atLevel:</Name>
       <APILanguage>occ</APILanguage>
       <Type>instm</Type>
@@ -210,17 +155,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>clientCertsFromP12:passphrase:</Name>
-      <APILanguage>occ</APILanguage>
-      <Type>clm</Type>
-      <Scope>MQTTSession</Scope>
-    </TokenIdentifier>
-    <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>a77824ce439d089ae8811acc2ed119824</Anchor>
-    <DeclaredIn>MQTTSession.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>delegate</Name>
       <APILanguage>occ</APILanguage>
       <Type>instp</Type>
@@ -238,6 +172,16 @@
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
     <Anchor>a0d2bf00e77c5f95fb0158f0ab729d1e9</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>connectHandler</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instp</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a9c836110637be354f6acb52d328035e7</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -387,7 +331,7 @@
       <Scope>MQTTSession</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>a1876938dddeed1f536fcbaabad6f763a</Anchor>
+    <Anchor>a12e20758c5f8a1f0f2bd7dac339fe88f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -611,7 +555,7 @@
       <Scope>MQTTSessionDelegate-p</Scope>
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-    <Anchor>a8c16339f900bfe2aa98a2aabdca44484</Anchor>
+    <Anchor>acb908b938b9b9af60c3da23feed5850b</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -622,7 +566,7 @@
       <Scope>MQTTSessionDelegate-p</Scope>
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-    <Anchor>aefaae4e610a97984e2135bbd902081ca</Anchor>
+    <Anchor>ae506789580b1b461901e7846407b9657</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -633,7 +577,7 @@
       <Scope>MQTTSessionDelegate-p</Scope>
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-    <Anchor>a83b477a650b00526b0a39599ddd6fd12</Anchor>
+    <Anchor>a267adcc60c332f2ec4eb0326a3f7e8d1</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -907,7 +851,7 @@
       <Scope>MQTTSessionDelegate-p</Scope>
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-    <Anchor>a8c16339f900bfe2aa98a2aabdca44484</Anchor>
+    <Anchor>acb908b938b9b9af60c3da23feed5850b</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -918,7 +862,7 @@
       <Scope>MQTTSessionDelegate-p</Scope>
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-    <Anchor>aefaae4e610a97984e2135bbd902081ca</Anchor>
+    <Anchor>ae506789580b1b461901e7846407b9657</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>
@@ -929,7 +873,7 @@
       <Scope>MQTTSessionDelegate-p</Scope>
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-    <Anchor>a83b477a650b00526b0a39599ddd6fd12</Anchor>
+    <Anchor>a267adcc60c332f2ec4eb0326a3f7e8d1</Anchor>
     <DeclaredIn>MQTTSession.h</DeclaredIn>
   </Token>
   <Token>

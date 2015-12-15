@@ -19,10 +19,12 @@
 
 #import "MQTTMessage.h"
 
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-#define DEBUGMSG TRUE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #else
-#define DEBUGMSG FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif
 
 @implementation MQTTMessage
@@ -280,11 +282,9 @@
         [buffer appendData:self.data];
     }
     
-    if (DEBUGMSG) {
-        NSLog(@"[MQTTMessage] wireFormat(%lu)=%@...",
+    DDLogVerbose(@"[MQTTMessage] wireFormat(%lu)=%@...",
               (unsigned long)buffer.length,
-              [buffer subdataWithRange:NSMakeRange(0, MIN(16, buffer.length))]);
-    }
+              [buffer subdataWithRange:NSMakeRange(0, MIN(256, buffer.length))]);
     
     return buffer;
 }
@@ -304,7 +304,7 @@
         UInt8 digit;
         do {
             if (data.length < offset) {
-                NSLog(@"[MQTTMessage] message data incomplete remaining length");
+                DDLogWarn(@"[MQTTMessage] message data incomplete remaining length");
                 offset = -1;
                 break;
             }
@@ -313,7 +313,7 @@
             remainingLength += (digit & 0x7f) * multiplier;
             multiplier *= 128;
             if (multiplier > 128*128*128) {
-                NSLog(@"[MQTTMessage] message data too long remaining length");
+                DDLogWarn(@"[MQTTMessage] message data too long remaining length");
                 multiplier = -1;
                 break;
             }
@@ -344,7 +344,7 @@
                     message.retainFlag = retainFlag == 1;
                     message.qos = qos;
                     message.data = [data subdataWithRange:NSMakeRange(offset, remainingLength)];
-                    if ((type == MQTTPublish && (qos == MQTTQosLevelAtLeastOnce && qos == MQTTQosLevelExactlyOnce)) ||
+                    if ((type == MQTTPublish && (qos == MQTTQosLevelAtLeastOnce || qos == MQTTQosLevelExactlyOnce)) ||
                         type == MQTTPuback ||
                         type == MQTTPubrec ||
                         type == MQTTPubrel ||
@@ -359,7 +359,7 @@
                             [message.data getBytes:&digit range:NSMakeRange(1, 1)];
                             message.mid += digit;
                         } else {
-                            NSLog(@"[MQTTMessage] missing packet identifier");
+                            DDLogWarn(@"[MQTTMessage] missing packet identifier");
                             message = nil;
                         }
                     }
@@ -369,7 +369,7 @@
                         type == MQTTPubcomp ||
                         type == MQTTUnsuback ) {
                         if (message.data.length > 2) {
-                            NSLog(@"[MQTTMessage] unexpected payload after packet identifier");
+                            DDLogWarn(@"[MQTTMessage] unexpected payload after packet identifier");
                             message = nil;
                         }
                     }
@@ -377,51 +377,51 @@
                         type == MQTTPingresp ||
                         type == MQTTDisconnect) {
                         if (message.data.length > 2) {
-                            NSLog(@"[MQTTMessage] unexpected payload");
+                            DDLogWarn(@"[MQTTMessage] unexpected payload");
                             message = nil;
                         }
                     }
                     if (type == MQTTConnect) {
                         if (message.data.length < 3) {
-                            NSLog(@"[MQTTMessage] mising connect variable header");
+                            DDLogWarn(@"[MQTTMessage] mising connect variable header");
                             message = nil;
                         }
                     }
                     if (type == MQTTConnack) {
                         if (message.data.length != 2) {
-                            NSLog(@"[MQTTMessage] mising connack variable header");
+                            DDLogWarn(@"[MQTTMessage] mising connack variable header");
                             message = nil;
                         }
                     }
                     if (type == MQTTSubscribe) {
                         if (message.data.length < 3) {
-                            NSLog(@"[MQTTMessage] mising subscribe variable header");
+                            DDLogWarn(@"[MQTTMessage] mising subscribe variable header");
                             message = nil;
                         }
                     }
                     if (type == MQTTSuback) {
                         if (message.data.length != 3) {
-                            NSLog(@"[MQTTMessage] mising suback variable header");
+                            DDLogWarn(@"[MQTTMessage] mising suback variable header");
                             message = nil;
                         }
                     }
                     if (type == MQTTUnsubscribe) {
                         if (message.data.length != 3) {
-                            NSLog(@"[MQTTMessage] mising unsubscribe variable header");
+                            DDLogWarn(@"[MQTTMessage] mising unsubscribe variable header");
                             message = nil;
                         }
                     }
                 } else {
-                    NSLog(@"[MQTTMessage] illegal header flags");
+                    DDLogWarn(@"[MQTTMessage] illegal header flags");
                 }
             } else {
-                NSLog(@"[MQTTMessage] remaining data wrong length");
+                DDLogWarn(@"[MQTTMessage] remaining data wrong length");
             }
         } else {
-            NSLog(@"[MQTTMessage] illegal message type");
+            DDLogWarn(@"[MQTTMessage] illegal message type");
         }
     } else {
-        NSLog(@"[MQTTMessage] message data length < 2");
+        DDLogWarn(@"[MQTTMessage] message data length < 2");
     }
     return message;
 }

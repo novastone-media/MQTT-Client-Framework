@@ -8,6 +8,14 @@
 
 #import "MQTTSessionManager.h"
 
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
+#ifdef DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#else
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+
 @interface MQTTSessionManager()
 @property (nonatomic, readwrite) MQTTSessionManagerState state;
 @property (nonatomic, readwrite) NSError *lastErrorCode;
@@ -201,6 +209,7 @@
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates
 {
+    DDLogVerbose(@"MQTTSessionManager connectTo:%@", host);
     BOOL shouldReconnect = self.session != nil;
     if (!self.session ||
         ![host isEqualToString:self.host] ||
@@ -448,6 +457,7 @@
         }
     }
     _internalSubscriptions=[newSubscriptions mutableCopy];
+    DDLogVerbose(@"MQTTSessionManager internalSubscriptions: %@", _internalSubscriptions);
 }
 
 @end

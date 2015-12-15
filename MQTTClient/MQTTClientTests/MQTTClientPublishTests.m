@@ -7,8 +7,11 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <CocoaLumberjack/Cocoalumberjack.h>
+
 #import "MQTTClient.h"
-#import "MQTTClientTests.h"
+#import "MQTTWebsocketTransport.h"
+#import "MQTTTestHelpers.h"
 
 @interface MQTTClientPublishTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
@@ -29,6 +32,12 @@
 - (void)setUp
 {
     [super setUp];
+    
+    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
+        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+
 }
 
 - (void)tearDown
@@ -278,6 +287,49 @@
     }
 }
 
+- (void)testPublish_r1_q2_long_topic
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        
+        NSString *topic = @"gg";
+        while (strlen([[topic substringFromIndex:1] UTF8String]) <= 32768) {
+            NSLog(@"LongPublishTopic (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+            [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                      onTopic:[NSString stringWithFormat:@"%@/%@", TOPIC, topic]
+                       retain:YES
+                      atLevel:2];
+            topic = [topic stringByAppendingString:topic];
+        }
+        
+        [self shutdown:parameters];
+    }
+}
+
+- (void)testPublish_r1_q2_long_payload
+{
+    for (NSString *broker in BROKERLIST) {
+        NSLog(@"testing broker %@", broker);
+        NSDictionary *parameters = BROKERS[broker];
+        [self connect:parameters];
+        
+        NSString *payload = @"gg";
+        while (strlen([[payload substringFromIndex:1] UTF8String]) <= 1000000) {
+            NSLog(@"LongPublishPayload (%lu)", strlen([[payload substringFromIndex:1] UTF8String]));
+            [self testPublish:[payload dataUsingEncoding:NSUTF8StringEncoding]
+                      onTopic:[NSString stringWithFormat:@"%@", TOPIC]
+                       retain:YES
+                      atLevel:2];
+            payload = [payload stringByAppendingString:payload];
+        }
+        
+        [self shutdown:parameters];
+    }
+}
+
+
 /*
  * [MQTT-3.3.2-1]
  * The Topic Name MUST be present as the first field in the PUBLISH Packet Variable header.
@@ -462,46 +514,6 @@
  * helpers
  */
 
-- (NSArray *)clientCerts:(NSDictionary *)parameters {
-    NSArray *clientCerts = nil;
-    if (parameters[@"clientp12"] && parameters[@"clientp12pass"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[MQTTClientPublishTests class]] pathForResource:parameters[@"clientp12"]
-                                                                                  ofType:@"p12"];
-        
-        clientCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
-        if (!clientCerts) {
-            XCTFail(@"invalid p12 file");
-        }
-    }
-    return clientCerts;
-}
-
-- (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters {
-    MQTTSSLSecurityPolicy *securityPolicy = nil;
-    
-    if (parameters[@"serverCER"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[MQTTClientPublishTests class]] pathForResource:parameters[@"serverCER"]
-                                                                                  ofType:@"cer"];
-        if (path) {
-            NSData *certificateData = [NSData dataWithContentsOfFile:path];
-            if (certificateData) {
-                securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-                securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
-                securityPolicy.validatesCertificateChain = TRUE;
-                securityPolicy.allowInvalidCertificates = FALSE;
-                securityPolicy.validatesDomainName = TRUE;
-            } else {
-                XCTFail(@"error reading cer file");
-            }
-        } else {
-            XCTFail(@"cer file not found");
-        }
-    }
-    return securityPolicy;
-}
-
 - (void)testPublishCloseExpected:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos
 {
     [self testPublishCore:data onTopic:topic retain:retain atLevel:qos];
@@ -589,21 +601,40 @@
 }
 
 - (void)connect:(NSDictionary *)parameters {
-    self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:parameters[@"user"]
-                                                password:parameters[@"pass"]
-                                               keepAlive:60
-                                            cleanSession:YES
-                                                    will:NO
-                                               willTopic:nil
-                                                 willMsg:nil
-                                                 willQoS:0
-                                          willRetainFlag:NO
-                                           protocolLevel:[parameters[@"protocollevel"] intValue]
-                                                 runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes
-                                          securityPolicy:[self securityPolicy:parameters]
-                                            certificates:[self clientCerts:parameters]];
+    id<MQTTTransport> transport;
+    
+    if ([parameters[@"websocket"] boolValue]) {
+        MQTTWebsocketTransport *websocketTransport = [[MQTTWebsocketTransport alloc] init];
+        websocketTransport.host = parameters[@"host"];
+        websocketTransport.port = [parameters[@"port"] intValue];
+        websocketTransport.tls = [parameters[@"tls"] boolValue];
+        transport = websocketTransport;
+    } else {
+        MQTTSSLSecurityPolicy *securityPolicy = [MQTTTestHelpers securityPolicy:parameters];
+        if (securityPolicy) {
+            MQTTSSLSecurityPolicyTransport *sslSecPolTransport = [[MQTTSSLSecurityPolicyTransport alloc] init];
+            sslSecPolTransport.host = parameters[@"host"];
+            sslSecPolTransport.port = [parameters[@"port"] intValue];
+            sslSecPolTransport.tls = [parameters[@"tls"] boolValue];
+            sslSecPolTransport.certificates = [MQTTTestHelpers clientCerts:parameters];
+            sslSecPolTransport.securityPolicy = securityPolicy;
+            transport = sslSecPolTransport;
+        } else {
+            MQTTCFSocketTransport *cfSocketTransport = [[MQTTCFSocketTransport alloc] init];
+            cfSocketTransport.host = parameters[@"host"];
+            cfSocketTransport.port = [parameters[@"port"] intValue];
+            cfSocketTransport.tls = [parameters[@"tls"] boolValue];
+            cfSocketTransport.certificates = [MQTTTestHelpers clientCerts:parameters];
+            transport = cfSocketTransport;
+        }
+    }
+    
+    self.session = [[MQTTSession alloc] init];
+    self.session.transport = transport;
+    self.session.clientId = nil;
+    self.session.userName = parameters[@"user"];
+    self.session.password = parameters[@"pass"];
+    self.session.protocolLevel = [parameters[@"protocollevel"] intValue];
     self.session.delegate = self;
     self.session.persistence.persistent = PERSISTENT;
 
@@ -615,9 +646,7 @@
                withObject:nil
                afterDelay:self.timeoutValue];
 
-    [self.session connectToHost:parameters[@"host"]
-                           port:[parameters[@"port"] intValue]
-                       usingSSL:[parameters[@"tls"] boolValue]];
+    [self.session CONNECT];
 
     while (self.event == -1 && !self.timeout) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];

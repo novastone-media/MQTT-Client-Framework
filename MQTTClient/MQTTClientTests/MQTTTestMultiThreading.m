@@ -7,8 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <CocoaLumberjack/Cocoalumberjack.h>
+
 #import "MQTTClient.h"
-#import "MQTTClientTests.h"
+#import "MQTTTestHelpers.h"
 
 @interface OneTest : NSObject <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
@@ -36,8 +38,8 @@
                                            protocolLevel:[parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes
-                                          securityPolicy:[self securityPolicy:parameters]
-                                            certificates:[self clientCerts:parameters]];
+                                          securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                            certificates:[MQTTTestHelpers clientCerts:parameters]];
 
     self.session.delegate = self;
     self.session.persistence.persistent = PERSISTENT;
@@ -124,53 +126,23 @@
     self.error = error;
 }
 
-- (NSArray *)clientCerts:(NSDictionary *)parameters {
-    NSArray *clientCerts = nil;
-    if (parameters[@"clientp12"] && parameters[@"clientp12pass"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[OneTest class]] pathForResource:parameters[@"clientp12"]
-                                                                                         ofType:@"p12"];
-        
-        clientCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
-    }
-    return clientCerts;
-}
+@end
 
-- (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters {
-    MQTTSSLSecurityPolicy *securityPolicy = nil;
-    
-    if (parameters[@"serverCER"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[OneTest class]] pathForResource:parameters[@"serverCER"]
-                                                                                         ofType:@"cer"];
-        if (path) {
-            NSData *certificateData = [NSData dataWithContentsOfFile:path];
-            if (certificateData) {
-                securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-                securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
-                securityPolicy.validatesCertificateChain = TRUE;
-                securityPolicy.allowInvalidCertificates = FALSE;
-                securityPolicy.validatesDomainName = TRUE;
-            }
-        }
-    }
-    return securityPolicy;
-}
-
-
-
+@interface MQTTTestMultiThreading : XCTestCase <MQTTSessionDelegate>
 
 @end
 
-@interface MultiThreadingTests : XCTestCase <MQTTSessionDelegate>
-
-@end
-
-@implementation MultiThreadingTests
+@implementation MQTTTestMultiThreading
 
 - (void)setUp
 {
     [super setUp];
+    
+    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
+        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+
 }
 
 - (void)tearDown

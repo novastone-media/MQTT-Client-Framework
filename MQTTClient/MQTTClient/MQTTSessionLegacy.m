@@ -29,11 +29,14 @@
 #import "MQTTSession.h"
 #import "MQTTSessionLegacy.h"
 #import "MQTTCFSocketTransport.h"
+#import "MQTTSSLSecurityPolicyTransport.h"
 
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-#define DEBUGSESS FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #else
-#define DEBUGSESS FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif
 
 @implementation MQTTSession(Legacy)
@@ -114,6 +117,8 @@
                           forMode:(NSString *)runLoopMode
                    securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
                      certificates:(NSArray *)certificates {
+    DDLogVerbose(@"MQTTSessionLegacy initWithClientId:%@ ", clientId);
+
     self = [self init];
     self.clientId = clientId;
     self.userName = userName;
@@ -336,13 +341,25 @@
                  port:(UInt32)port
              usingSSL:(BOOL)usingSSL
        connectHandler:(MQTTConnectHandler)connectHandler {
+    DDLogVerbose(@"MQTTSessionLegacy connectToHost:%@ port:%d usingSSL:%d connectHandler:%p",
+                 host, port, usingSSL, connectHandler);
     self.connectHandler = connectHandler;
     
-    MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
-    transport.host = host;
-    transport.port = port;
-    transport.tls = usingSSL;
-    self.transport = transport;
+    if (self.securityPolicy) {
+        MQTTSSLSecurityPolicyTransport *transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
+        transport.host = host;
+        transport.port = port;
+        transport.tls = usingSSL;
+        transport.securityPolicy = self.securityPolicy;
+        self.transport = transport;
+        
+    } else {
+        MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
+        transport.host = host;
+        transport.port = port;
+        transport.tls = usingSSL;
+        self.transport = transport;
+    }
     
     [self CONNECT];
 }

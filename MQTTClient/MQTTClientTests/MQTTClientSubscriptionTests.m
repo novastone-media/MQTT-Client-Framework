@@ -7,8 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <CocoaLumberjack/Cocoalumberjack.h>
+
 #import "MQTTClient.h"
-#import "MQTTClientTests.h"
+#import "MQTTTestHelpers.h"
 
 @interface MQTTClientSubscriptionTests : XCTestCase <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
@@ -33,6 +35,12 @@
 - (void)setUp
 {
     [super setUp];
+    
+    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
+        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+
 }
 
 - (void)tearDown
@@ -537,47 +545,6 @@
  * helpers
  */
 
-
-- (NSArray *)clientCerts:(NSDictionary *)parameters {
-    NSArray *clientCerts = nil;
-    if (parameters[@"clientp12"] && parameters[@"clientp12pass"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[MQTTClientSubscriptionTests class]] pathForResource:parameters[@"clientp12"]
-                                                                                            ofType:@"p12"];
-        
-        clientCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
-        if (!clientCerts) {
-            XCTFail(@"invalid p12 file");
-        }
-    }
-    return clientCerts;
-}
-
-- (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters {
-    MQTTSSLSecurityPolicy *securityPolicy = nil;
-    
-    if (parameters[@"serverCER"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[MQTTClientSubscriptionTests class]] pathForResource:parameters[@"serverCER"]
-                                                                                            ofType:@"cer"];
-        if (path) {
-            NSData *certificateData = [NSData dataWithContentsOfFile:path];
-            if (certificateData) {
-                securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-                securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
-                securityPolicy.validatesCertificateChain = TRUE;
-                securityPolicy.allowInvalidCertificates = FALSE;
-                securityPolicy.validatesDomainName = TRUE;
-            } else {
-                XCTFail(@"error reading cer file");
-            }
-        } else {
-            XCTFail(@"cer file not found");
-        }
-    }
-    return securityPolicy;
-}
-
 - (void)testSubscribeSubackExpected:(NSString *)topic atLevel:(UInt8)qos
 {
     [self testSubscribe:topic atLevel:qos];
@@ -813,8 +780,8 @@
                                            protocolLevel:[parameters[@"protocollevel"] intValue]
                                                  runLoop:[NSRunLoop currentRunLoop]
                                                  forMode:NSRunLoopCommonModes
-                                          securityPolicy:[self securityPolicy:parameters]
-                                            certificates:[self clientCerts:parameters]];
+                                          securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+                                            certificates:[MQTTTestHelpers clientCerts:parameters]];
     self.session.delegate = self;
     self.session.persistence.persistent = PERSISTENT;
     self.event = -1;

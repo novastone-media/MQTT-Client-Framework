@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MQTTSSLSecurityPolicy.h"
 
 typedef NS_ENUM(NSInteger, MQTTCFSocketDecoderState) {
     MQTTCFSocketDecoderStateInitializing,
@@ -26,12 +25,10 @@ typedef NS_ENUM(NSInteger, MQTTCFSocketDecoderState) {
 
 @interface MQTTCFSocketDecoder : NSObject <NSStreamDelegate>
 @property (nonatomic) MQTTCFSocketDecoderState state;
-@property (strong, nonatomic) NSInputStream *stream;
 @property (strong, nonatomic) NSError *error;
+@property (strong, nonatomic) NSInputStream *stream;
 @property (strong, nonatomic) NSRunLoop *runLoop;
 @property (strong, nonatomic) NSString *runLoopMode;
-@property(strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
-@property(strong, nonatomic) NSString *securityDomain;
 @property (weak, nonatomic ) id<MQTTCFSocketDecoderDelegate> delegate;
 
 - (void)open;

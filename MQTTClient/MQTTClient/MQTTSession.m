@@ -10,6 +10,14 @@
 #import "MQTTDecoder.h"
 #import "MQTTMessage.h"
 
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
+#ifdef DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#else
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+
 @interface MQTTSession() <MQTTDecoderDelegate, MQTTTransportDelegate>
 
 @property (nonatomic, readwrite) MQTTSessionStatus status;
@@ -41,16 +49,11 @@
 #define DUPTIMEOUT 20.0
 #define DUPLOOP 1.0
 
-#ifdef DEBUG
-#define DEBUGSESS TRUE
-#else
-#define DEBUGSESS FALSE
-#endif
-
 @implementation MQTTSession
 
 - (instancetype)init
 {
+    DDLogVerbose(@"[MQTTSession] init");
     self.txMsgId = 1;
     self.persistence = [[MQTTPersistence alloc] init];
     self.subscribeHandlers = [[NSMutableDictionary alloc] init];
@@ -148,7 +151,7 @@
 }
 
 - (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] subscribeToTopics:%@]", topics);
+    DDLogVerbose(@"[MQTTSession] subscribeToTopics:%@]", topics);
     
     //for (NSNumber *qos in [topics allValues]) {
     //NSAssert([qos intValue] >= 0 && [qos intValue] <= 2, @"qosLevel must be 0, 1, or 2");
@@ -179,7 +182,7 @@
 }
 
 - (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] unsubscribeTopics:%@", topics);
+    DDLogVerbose(@"[MQTTSession] unsubscribeTopics:%@", topics);
     UInt16 mid = [self nextMsgId];
     if (unsubscribeHandler) {
         [self.unsubscribeHandlers setObject:[unsubscribeHandler copy] forKey:@(mid)];
@@ -204,12 +207,12 @@
                   qos:(MQTTQosLevel)qos
        publishHandler:(MQTTPublishHandler)publishHandler
 {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] publishData:%@... onTopic:%@ retain:%d qos:%ld publishHandler:%p",
-                         [data subdataWithRange:NSMakeRange(0, MIN(16, data.length))],
-                         topic,
-                         retainFlag,
-                         (long)qos,
-                         publishHandler);
+    DDLogVerbose(@"[MQTTSession] publishData:%@... onTopic:%@ retain:%d qos:%ld publishHandler:%p",
+                 [data subdataWithRange:NSMakeRange(0, MIN(256, data.length))],
+                 [topic substringWithRange:NSMakeRange(0, MIN(256, topic.length))],
+                 retainFlag,
+                 (long)qos,
+                 publishHandler);
     
     //NSAssert(qos >= 0 && qos <= 2, @"qos must be 0, 1, or 2");
     
@@ -248,7 +251,7 @@
                                                     deadline:[NSDate date]];
         }
         if (!flow) {
-            if (DEBUGSESS) NSLog(@"[MQTTSession] dropping outgoing message %d", msgId);
+            DDLogWarn(@"[MQTTSession] dropping outgoing message %d", msgId);
             NSError *error = [NSError errorWithDomain:@"MQTT"
                                                  code:-6
                                              userInfo:@{NSLocalizedDescriptionKey : @"Dropping outgoing Message"}];
@@ -265,15 +268,15 @@
             }
 
             if ([flow.commandType intValue] == MQTTPublish) {
-                if (DEBUGSESS) NSLog(@"[MQTTSession] PUBLISH %d", msgId);
+                DDLogVerbose(@"[MQTTSession] PUBLISH %d", msgId);
                 if (![self ENCODE:msg]) {
-                    if (DEBUGSESS) NSLog(@"[MQTTSession] queueing message %d after unsuccessfull attempt", msgId);
+                    DDLogInfo(@"[MQTTSession] queueing message %d after unsuccessfull attempt", msgId);
                     flow.commandType = 0;
                     flow.deadline = [NSDate date];
                     [self.persistence sync];
                 }
             } else {
-                if (DEBUGSESS) NSLog(@"[MQTTSession] queueing message %d", msgId);
+                DDLogVerbose(@"[MQTTSession] queueing message %d", msgId);
             }
         }
     } else {
@@ -297,11 +300,11 @@
 }
 
 - (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] closeWithDisconnectHandler:%p ", disconnectHandler);
+    DDLogVerbose(@"[MQTTSession] closeWithDisconnectHandler:%p ", disconnectHandler);
     self.disconnectHandler = disconnectHandler;
     
     if (self.status == MQTTSessionStatusConnected) {
-        if (DEBUGSESS) NSLog(@"[MQTTSession] disconnecting");
+        DDLogVerbose(@"[MQTTSession] disconnecting");
         self.status = MQTTSessionStatusDisconnecting;
         (void)[self ENCODE:[MQTTMessage disconnectMessage]];
     } else {
@@ -311,7 +314,7 @@
 
 - (void)closeInternal
 {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] closeInternal");
+    DDLogVerbose(@"[MQTTSession] closeInternal");
     
     if (self.checkDupTimer) {
         [self.checkDupTimer invalidate];
@@ -374,13 +377,13 @@
 
 - (void)keepAlive:(NSTimer *)timer
 {
-    if (DEBUGSESS)  NSLog(@"[MQTTSession] keepAlive %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
+    DDLogVerbose(@"[MQTTSession] keepAlive %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
     (void)[self ENCODE:[MQTTMessage pingreqMessage]];
 }
 
 - (void)checkDup:(NSTimer *)timer
 {
-    if (DEBUGSESS)  NSLog(@"[MQTTSession] checkDup %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
+    DDLogVerbose(@"[MQTTSession] checkDup %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
     [self checkTxFlows];
 }
 
@@ -402,12 +405,12 @@
         }
     }
     for (MQTTFlow *flow in flows) {
-        if (DEBUGSESS)  NSLog(@"[MQTTSession] %@ flow %@ %@ %@", self.clientId, flow.deadline, flow.commandType, flow.messageId);
+        DDLogVerbose(@"[MQTTSession] %@ flow %@ %@ %@", self.clientId, flow.deadline, flow.commandType, flow.messageId);
         if ([flow.deadline compare:[NSDate date]] == NSOrderedAscending) {
             switch ([flow.commandType intValue]) {
                 case 0:
                     if (windowSize <= self.persistence.maxWindowSize) {
-                        if (DEBUGSESS) NSLog(@"[MQTTSession] PUBLISH queued message %@", flow.messageId);
+                        DDLogVerbose(@"[MQTTSession] PUBLISH queued message %@", flow.messageId);
                         message = [MQTTMessage publishMessageWithData:flow.data
                                                               onTopic:flow.topic
                                                                   qos:[flow.qosLevel intValue]
@@ -423,7 +426,7 @@
                     }
                     break;
                 case MQTTPublish:
-                    if (DEBUGSESS) NSLog(@"[MQTTSession] resend PUBLISH %@", flow.messageId);
+                    DDLogInfo(@"[MQTTSession] resend PUBLISH %@", flow.messageId);
                     message = [MQTTMessage publishMessageWithData:flow.data
                                                           onTopic:flow.topic
                                                               qos:[flow.qosLevel intValue]
@@ -436,7 +439,7 @@
                     }
                     break;
                 case MQTTPubrel:
-                    if (DEBUGSESS) NSLog(@"[MQTTSession] resend PUBREL %@", flow.messageId);
+                    DDLogInfo(@"[MQTTSession] resend PUBREL %@", flow.messageId);
                     message = [MQTTMessage pubrelMessageWithMessageId:[flow.messageId intValue]];
                     if ([self ENCODE:message]) {
                         flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
@@ -451,15 +454,16 @@
 }
 
 - (void)decoder:(MQTTDecoder*)sender handleEvent:(MQTTDecoderEvent)eventCode error:(NSError *)error {
-    if (DEBUGSESS) {
-        NSArray *events = @[
-                            @"MQTTDecoderEventProtocolError",
-                            @"MQTTDecoderEventConnectionClosed",
-                            @"MQTTDecoderEventConnectionError"
-                            ];
-        
-        NSLog(@"[MQTTSession] decoder handleEvent: %@ (%d) %@", events[eventCode % [events count]], eventCode, [error description]);
-    }
+    NSArray *events = @[
+                        @"MQTTDecoderEventProtocolError",
+                        @"MQTTDecoderEventConnectionClosed",
+                        @"MQTTDecoderEventConnectionError"
+                        ];
+    DDLogVerbose(@"[MQTTSession] decoder handleEvent: %@ (%d) %@",
+                 events[eventCode % [events count]],
+                 eventCode,
+                 [error description]);
+    
     switch (eventCode) {
         case MQTTDecoderEventConnectionClosed:
             [self error:MQTTSessionEventConnectionClosedByBroker error:error];
@@ -481,7 +485,7 @@
 - (void)decoder:(MQTTDecoder*)sender didReceiveMessage:(NSData *)data {
     MQTTMessage *message = [MQTTMessage messageFromData:data];
     if (!message) {
-        if (DEBUGSESS) NSLog(@"[MQTTSession] MQTT illegal message received");
+        DDLogError(@"[MQTTSession] MQTT illegal message received");
         NSError * error = [NSError errorWithDomain:@"MQTT"
                                               code:-7
                                           userInfo:@{NSLocalizedDescriptionKey : @"MQTT illegal message received"}];
@@ -730,7 +734,7 @@
                                                   incomingFlag:YES
                                                    commandType:MQTTPubrec
                                                       deadline:[NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT]]) {
-                    if (DEBUGSESS) NSLog(@"[MQTTSession] dropping incoming messages");
+                    DDLogWarn(@"[MQTTSession] dropping incoming messages");
                 } else {
                     [self.persistence sync];
                     [self tell];
@@ -890,8 +894,9 @@
         [self.delegate connectionError:self error:error];
     }
     if (self.connectHandler) {
+        MQTTConnectHandler connectHandler = self.connectHandler;
         self.connectHandler = nil;
-        [self onConnect:self.connectHandler error:error];
+        [self onConnect:connectHandler error:error];
     }
 }
 
@@ -949,57 +954,6 @@
                       flowingIn:incoming
                      flowingOut:outflowing];
     }
-}
-
-+ (NSArray *)clientCertsFromP12:(NSString *)path passphrase:(NSString *)passphrase {
-    if (!path) {
-        NSLog(@"[MQTTSession] no p12 path given");
-        return nil;
-    }
-    
-    NSData *pkcs12data = [[NSData alloc] initWithContentsOfFile:path];
-    if (!pkcs12data) {
-        NSLog(@"[MQTTSession] reading p12 failed");
-        return nil;
-    }
-    
-    if (!passphrase) {
-        NSLog(@"[MQTTSession] no passphrase given");
-        return nil;
-    }
-    CFArrayRef keyref = NULL;
-    OSStatus importStatus = SecPKCS12Import((__bridge CFDataRef)pkcs12data,
-                                            (__bridge CFDictionaryRef)[NSDictionary
-                                                                       dictionaryWithObject:passphrase
-                                                                       forKey:(__bridge id)kSecImportExportPassphrase],
-                                            &keyref);
-    if (importStatus != noErr) {
-        NSLog(@"[MQTTSession] Error while importing pkcs12 [%d]", (int)importStatus);
-        return nil;
-    }
-    
-    CFDictionaryRef identityDict = CFArrayGetValueAtIndex(keyref, 0);
-    if (!identityDict) {
-        NSLog(@"[MQTTSession] could not CFArrayGetValueAtIndex");
-        return nil;
-    }
-    
-    SecIdentityRef identityRef = (SecIdentityRef)CFDictionaryGetValue(identityDict,
-                                                                      kSecImportItemIdentity);
-    if (!identityRef) {
-        NSLog(@"[MQTTSession] could not CFDictionaryGetValue");
-        return nil;
-    };
-    
-    SecCertificateRef cert = NULL;
-    OSStatus status = SecIdentityCopyCertificate(identityRef, &cert);
-    if (status != noErr) {
-        NSLog(@"[MQTTSession] SecIdentityCopyCertificate failed [%d]", (int)status);
-        return nil;
-    }
-    
-    NSArray *clientCerts = [[NSArray alloc] initWithObjects:(__bridge id)identityRef, (__bridge id)cert, nil];
-    return clientCerts;
 }
 
 /*
@@ -1087,7 +1041,7 @@
 #pragma mark - MQTTTransport interface
 
 - (void)CONNECT {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] connecting");
+    DDLogVerbose(@"[MQTTSession] connecting");
     if (self.cleanSessionFlag) {
         [self.persistence deleteAllFlowsForClientId:self.clientId];
         [self.subscribeHandlers removeAllObjects];
@@ -1107,7 +1061,7 @@
 }
 
 - (void)DISCONNECT {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] sending DISCONNECT");
+    DDLogVerbose(@"[MQTTSession] sending DISCONNECT");
     self.status = MQTTSessionStatusDisconnecting;
     
     (void)[self ENCODE:[MQTTMessage disconnectMessage]];
@@ -1128,37 +1082,37 @@
                                       data:message.data];
                 }
             }
-            if (DEBUGSESS) NSLog(@"[MQTTSession] mqttTransport send");
+            DDLogVerbose(@"[MQTTSession] mqttTransport send");
             return [self.transport send:wireFormat];
         } else {
-            if (DEBUGSESS) NSLog(@"[MQTTSession] trying to send message without wire format");
+            DDLogError(@"[MQTTSession] trying to send message without wire format");
             return false;
         }
     } else {
-        if (DEBUGSESS) NSLog(@"[MQTTSession] trying to send nil message");
+        DDLogError(@"[MQTTSession] trying to send nil message");
         return false;
     }
 }
 
 #pragma mark - MQTTTransport delegate
 - (void)mqttTransport:(id<MQTTTransport>)mqttTransport didReceiveMessage:(NSData *)message {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] mqttTransport didReceiveMessage");
+    DDLogVerbose(@"[MQTTSession] mqttTransport didReceiveMessage");
 
     [self.decoder decodeMessage:message];
     
 }
 
 - (void)mqttTransportDidClose:(id<MQTTTransport>)mqttTransport {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] mqttTransport mqttTransportDidClose");
+    DDLogVerbose(@"[MQTTSession] mqttTransport mqttTransportDidClose");
 
     [self error:MQTTSessionEventConnectionClosedByBroker error:nil];
 
 }
 
 - (void)mqttTransportDidOpen:(id<MQTTTransport>)mqttTransport {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] mqttTransportDidOpen");
+    DDLogVerbose(@"[MQTTSession] mqttTransportDidOpen");
 
-    if (DEBUGSESS) NSLog(@"[MQTTSession] sending CONNECT");
+    DDLogVerbose(@"[MQTTSession] sending CONNECT");
 
     if (!self.connectMessage) {
         (void)[self ENCODE:[MQTTMessage connectMessageWithClientId:self.clientId
@@ -1178,7 +1132,7 @@
 }
 
 - (void)mqttTransport:(id<MQTTTransport>)mqttTransport didFailWithError:(NSError *)error {
-    if (DEBUGSESS) NSLog(@"[MQTTSession] mqttTransport didFailWithError %@", error);
+    DDLogWarn(@"[MQTTSession] mqttTransport didFailWithError %@", error);
 
     [self connectionError:error];
 }

@@ -7,8 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <CocoaLumberjack/Cocoalumberjack.h>
+
 #import "MQTTClient.h"
-#import "MQTTClientTests.h"
+#import "MQTTTestHelpers.h"
 
 @interface ATest : NSObject <MQTTSessionDelegate>
 
@@ -171,7 +173,7 @@
 
 @end
 
-@interface FlowTests : XCTestCase <MQTTSessionDelegate>
+@interface MQTTTestFlows : XCTestCase <MQTTSessionDelegate>
 @property (nonatomic) BOOL timedout;
 @property (nonatomic) BOOL subscriberReady;
 @property (strong, nonatomic) NSDictionary *parameters;
@@ -189,7 +191,23 @@
 
 @end
 
-@implementation FlowTests
+@implementation MQTTTestFlows
+
+- (void)setUp {
+    [super setUp];
+    
+    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
+        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+    
+}
+
+- (void)tearDown {
+    [super tearDown];
+}
+
+
 
 - (void)testFlow0 {
     [self testAnyFlow:1000

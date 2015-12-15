@@ -1,5 +1,5 @@
 //
-//  MQTTSessionManagerTests.m
+//  MQTTMQTTTestSessionManager.m
 //  MQTTClient
 //
 //  Created by Christoph Krey on 21.08.15.
@@ -7,20 +7,28 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "MQTTSessionManager.h"
-#import "MQTTClientTests.h"
+#import <CocoaLumberjack/Cocoalumberjack.h>
 
-@interface MQTTSessionManagerTests : XCTestCase <MQTTSessionManagerDelegate>
+#import "MQTTSessionManager.h"
+#import "MQTTCFSocketTransport.h"
+#import "MQTTTestHelpers.h"
+
+@interface MQTTTestSessionManager : XCTestCase <MQTTSessionManagerDelegate>
 @property (nonatomic) int received;
 @property (nonatomic) int sent;
 @property (nonatomic) BOOL timeout;
 @property (nonatomic) int step;
 @end
 
-@implementation MQTTSessionManagerTests
+@implementation MQTTTestSessionManager
 
 - (void)setUp {
     [super setUp];
+    
+    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
+        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
 }
 
 - (void)tearDown {
@@ -71,8 +79,8 @@
                    willQos:MQTTQosLevelAtMostOnce
             willRetainFlag:FALSE
               withClientId:@"MQTTSessionManager"
-            securityPolicy:[self securityPolicy:parameters]
-              certificates:[self clientCerts:parameters]];
+            securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+              certificates:[MQTTTestHelpers clientCerts:parameters]];
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             NSLog(@"waiting for connect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
@@ -128,22 +136,6 @@
     }
 }
 
-- (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained {
-    NSLog(@"handleMessage t:%@", topic);
-    if ([topic isEqualToString:@"MQTTSessionManager"]) {
-        self.received++;
-    }
-}
-
-- (void)messageDelivered:(UInt16)msgID {
-    NSLog(@"messageDelivered %d", msgID);
-}
-
-- (void)timeout:(NSTimer *)timer {
-    NSLog(@"timeout s:%d", self.step);
-    self.step++;
-}
-
 - (void)testMQTTSessionManagerPersistent {
     for (NSString *broker in BROKERLIST) {
         NSLog(@"testing broker %@", broker);
@@ -182,8 +174,8 @@
                    willQos:MQTTQosLevelAtMostOnce
             willRetainFlag:FALSE
               withClientId:@"MQTTSessionManager"
-            securityPolicy:[self securityPolicy:parameters]
-              certificates:[self clientCerts:parameters]];
+            securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+              certificates:[MQTTTestHelpers clientCerts:parameters]];
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             NSLog(@"waiting for connect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
@@ -240,44 +232,97 @@
     }
 }
 
-- (NSArray *)clientCerts:(NSDictionary *)parameters {
-    NSArray *clientCerts = nil;
-    if (parameters[@"clientp12"] && parameters[@"clientp12pass"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[MQTTSessionManagerTests class]] pathForResource:parameters[@"clientp12"]
-                                                                                     ofType:@"p12"];
-        
-        clientCerts = [MQTTSession clientCertsFromP12:path passphrase:parameters[@"clientp12pass"]];
-        if (!clientCerts) {
-            XCTFail(@"invalid p12 file");
-        }
+- (void)testSessionManagerShort {
+    
+    MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
+    manager.delegate = self;
+    [manager addObserver:self
+              forKeyPath:@"effectiveSubscriptions"
+                 options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                 context:nil];
+    
+    // allow 5 sec for connect
+    self.timeout = false;
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5
+                                                      target:self
+                                                    selector:@selector(timeout:)
+                                                    userInfo:nil
+                                                     repeats:false];
+    
+    
+    manager.subscriptions = @{@"#": [NSNumber numberWithInt:MQTTQosLevelExactlyOnce]};
+    [manager connectTo:@"localhost"
+                  port:1883
+                   tls:false
+             keepalive:60
+                 clean:TRUE
+                  auth:NO
+                  user:nil
+                  pass:nil
+                  will:NO
+             willTopic:nil
+               willMsg:nil
+               willQos:MQTTQosLevelAtMostOnce
+        willRetainFlag:FALSE
+          withClientId:@"MQTTSessionManager"
+        securityPolicy:nil
+          certificates:nil];
+    
+    while (!self.timeout && manager.state != MQTTSessionManagerStateConnected) {
+        NSLog(@"waiting for connect %d", manager.state);
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
-    return clientCerts;
+    if (timer.valid) [timer invalidate];
+    
+    // allow 5 sec for sending and receiving
+    self.timeout = false;
+    timer = [NSTimer scheduledTimerWithTimeInterval:5
+                                             target:self
+                                           selector:@selector(timeout:)
+                                           userInfo:nil
+                                            repeats:false];
+    
+    
+    while (!self.timeout) {
+        [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+    if (timer.valid) [timer invalidate];
+    
+    // allow 3 sec for disconnect
+    self.timeout = false;
+    timer = [NSTimer scheduledTimerWithTimeInterval:3
+                                             target:self
+                                           selector:@selector(timeout:)
+                                           userInfo:nil
+                                            repeats:false];
+    
+    [manager disconnect];
+    while (!self.timeout && manager.state != MQTTSessionStatusClosed) {
+        NSLog(@"waiting for disconnect %d", manager.state);
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
+    }
+    if (timer.valid) [timer invalidate];
+    [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
 }
 
-- (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters {
-    MQTTSSLSecurityPolicy *securityPolicy = nil;
-    
-    if (parameters[@"serverCER"]) {
-        
-        NSString *path = [[NSBundle bundleForClass:[MQTTSessionManagerTests class]] pathForResource:parameters[@"serverCER"]
-                                                                                     ofType:@"cer"];
-        if (path) {
-            NSData *certificateData = [NSData dataWithContentsOfFile:path];
-            if (certificateData) {
-                securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-                securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
-                securityPolicy.validatesCertificateChain = TRUE;
-                securityPolicy.allowInvalidCertificates = FALSE;
-                securityPolicy.validatesDomainName = TRUE;
-            } else {
-                XCTFail(@"error reading cer file");
-            }
-        } else {
-            XCTFail(@"cer file not found");
-        }
+#pragma mark - helpers
+
+
+- (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained {
+    NSLog(@"handleMessage t:%@", topic);
+    if ([topic isEqualToString:@"MQTTSessionManager"]) {
+        self.received++;
     }
-    return securityPolicy;
+}
+
+- (void)messageDelivered:(UInt16)msgID {
+    NSLog(@"messageDelivered %d", msgID);
+}
+
+- (void)timeout:(NSTimer *)timer {
+    NSLog(@"timeout s:%d", self.step);
+    self.step++;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
@@ -286,7 +331,5 @@
         NSLog(@"effectiveSubscriptions changed: %@", manager.effectiveSubscriptions);
     }
 }
-
-
 
 @end
