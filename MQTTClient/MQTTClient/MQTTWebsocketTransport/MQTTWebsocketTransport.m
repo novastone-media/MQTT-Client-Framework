@@ -64,8 +64,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 - (BOOL)send:(NSData *)data {
     DDLogVerbose(@"[MQTTWebsocketTransport] send(%ld):%@", (unsigned long)data.length,
                  [data subdataWithRange:NSMakeRange(0, MIN(256, data.length))]);
-    [self.websocket send:data];
-    return true;
+    if (self.websocket.readyState == SR_OPEN) {
+        [self.websocket send:data];
+        return true;
+    } else {
+        return false;
+    }
 }
 
 - (void)close {
