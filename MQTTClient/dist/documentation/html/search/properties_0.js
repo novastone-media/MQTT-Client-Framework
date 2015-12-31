@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['certificates',['certificates',['../interface_m_q_t_t_session.html#a8093f2231e12c54af5eb1791cc60b06f',1,'MQTTSession']]],
-  ['cleansessionflag',['cleanSessionFlag',['../interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa',1,'MQTTSession']]],
-  ['clientid',['clientId',['../interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a',1,'MQTTSession']]],
-  ['connecthandler',['connectHandler',['../interface_m_q_t_t_session.html#a9c836110637be354f6acb52d328035e7',1,'MQTTSession']]],
-  ['connectionhandler',['connectionHandler',['../interface_m_q_t_t_session.html#a96b070cb597ed0857fbf289579c10a58',1,'MQTTSession']]],
-  ['connectmessage',['connectMessage',['../interface_m_q_t_t_session.html#a44f63ba3383e0e5c5bed5e051cad9d2f',1,'MQTTSession']]]
+  ['allowinvalidcertificates',['allowInvalidCertificates',['../interface_m_q_t_t_s_s_l_security_policy.html#a42fe688d550833a1f903be92b72cf384',1,'MQTTSSLSecurityPolicy']]],
+  ['allowuntrustedcertificates',['allowUntrustedCertificates',['../interface_m_q_t_t_websocket_transport.html#a4df39d1f59fd822446ed0630164475ae',1,'MQTTWebsocketTransport']]]
 ];

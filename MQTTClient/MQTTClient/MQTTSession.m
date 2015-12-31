@@ -9,13 +9,21 @@
 #import "MQTTSession.h"
 #import "MQTTDecoder.h"
 #import "MQTTMessage.h"
+#import "MQTTCoreDataPersistence.h"
 
+#ifdef LUMBERJACK
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @interface MQTTSession() <MQTTDecoderDelegate, MQTTTransportDelegate>
@@ -51,11 +59,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 
 @implementation MQTTSession
 
-- (instancetype)init
-{
+- (instancetype)init {
     DDLogVerbose(@"[MQTTSession] init");
+    self = [super init];
     self.txMsgId = 1;
-    self.persistence = [[MQTTPersistence alloc] init];
+    self.persistence = [[MQTTCoreDataPersistence alloc] init];
     self.subscribeHandlers = [[NSMutableDictionary alloc] init];
     self.unsubscribeHandlers = [[NSMutableDictionary alloc] init];
     self.publishHandlers = [[NSMutableDictionary alloc] init];
@@ -75,7 +83,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     self.runLoopMode = nil;
     
     self.status = MQTTSessionStatusCreated;
-
+    
     return self;
 }
 
@@ -163,7 +171,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     } else {
         [self.subscribeHandlers removeObjectForKey:@(mid)];
     }
-    (void)[self ENCODE:[MQTTMessage subscribeMessageWithMessageId:mid
+    (void)[self encode:[MQTTMessage subscribeMessageWithMessageId:mid
                                                            topics:topics]];
     
     return mid;
@@ -189,7 +197,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     } else {
         [self.unsubscribeHandlers removeObjectForKey:@(mid)];
     }
-    (void)[self ENCODE:[MQTTMessage unsubscribeMessageWithMessageId:mid
+    (void)[self encode:[MQTTMessage unsubscribeMessageWithMessageId:mid
                                                              topics:topics]];
     return mid;
 }
@@ -227,7 +235,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                                 retainFlag:retainFlag
                                                    dupFlag:FALSE];
     if (qos) {
-        MQTTFlow *flow;
+        id<MQTTFlow> flow;
         if ([self.persistence windowSize:self.clientId] <= self.persistence.maxWindowSize &&
             self.status == MQTTSessionStatusConnected) {
             flow = [self.persistence storeMessageForClientId:self.clientId
@@ -247,7 +255,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                                          qos:qos
                                                        msgId:msgId
                                                 incomingFlag:NO
-                                                 commandType:0
+                                                 commandType:MQTT_None
                                                     deadline:[NSDate date]];
         }
         if (!flow) {
@@ -266,12 +274,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
             } else {
                 [self.publishHandlers removeObjectForKey:@(msgId)];
             }
-
+            
             if ([flow.commandType intValue] == MQTTPublish) {
                 DDLogVerbose(@"[MQTTSession] PUBLISH %d", msgId);
-                if (![self ENCODE:msg]) {
+                if (![self encode:msg]) {
                     DDLogInfo(@"[MQTTSession] queueing message %d after unsuccessfull attempt", msgId);
-                    flow.commandType = 0;
+                    flow.commandType = [NSNumber numberWithUnsignedInt:MQTT_None];
                     flow.deadline = [NSDate date];
                     [self.persistence sync];
                 }
@@ -281,7 +289,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
         }
     } else {
         NSError *error = nil;
-        if (![self ENCODE:msg]) {
+        if (![self encode:msg]) {
             error = [NSError errorWithDomain:@"MQTT"
                                         code:-5
                                     userInfo:@{NSLocalizedDescriptionKey : @"Encoder not ready"}];
@@ -306,7 +314,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     if (self.status == MQTTSessionStatusConnected) {
         DDLogVerbose(@"[MQTTSession] disconnecting");
         self.status = MQTTSessionStatusDisconnecting;
-        (void)[self ENCODE:[MQTTMessage disconnectMessage]];
+        (void)[self encode:[MQTTMessage disconnectMessage]];
     } else {
         [self closeInternal];
     }
@@ -330,7 +338,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
         [self.transport close];
         self.transport.delegate = nil;
     }
-
+    
     if(self.decoder){
         [self.decoder close];
         self.decoder.delegate = nil;
@@ -378,7 +386,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 - (void)keepAlive:(NSTimer *)timer
 {
     DDLogVerbose(@"[MQTTSession] keepAlive %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
-    (void)[self ENCODE:[MQTTMessage pingreqMessage]];
+    (void)[self encode:[MQTTMessage pingreqMessage]];
 }
 
 - (void)checkDup:(NSTimer *)timer
@@ -393,18 +401,18 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     if (self.status != MQTTSessionStatusConnected) {
         return;
     }
-
+    
     NSArray *flows = [self.persistence allFlowsforClientId:self.clientId
                                               incomingFlag:NO];
     windowSize = 0;
     message = nil;
     
-    for (MQTTFlow *flow in flows) {
-        if ([flow.commandType intValue] != 0) {
+    for (id<MQTTFlow> flow in flows) {
+        if ([flow.commandType intValue] != MQTT_None) {
             windowSize++;
         }
     }
-    for (MQTTFlow *flow in flows) {
+    for (id<MQTTFlow> flow in flows) {
         DDLogVerbose(@"[MQTTSession] %@ flow %@ %@ %@", self.clientId, flow.deadline, flow.commandType, flow.messageId);
         if ([flow.deadline compare:[NSDate date]] == NSOrderedAscending) {
             switch ([flow.commandType intValue]) {
@@ -417,7 +425,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                                                 msgId:[flow.messageId intValue]
                                                            retainFlag:[flow.retainedFlag boolValue]
                                                               dupFlag:NO];
-                        if ([self ENCODE:message]) {
+                        if ([self encode:message]) {
                             flow.commandType = @(MQTTPublish);
                             flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
                             [self.persistence sync];
@@ -433,7 +441,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                                             msgId:[flow.messageId intValue]
                                                        retainFlag:[flow.retainedFlag boolValue]
                                                           dupFlag:YES];
-                    if ([self ENCODE:message]) {
+                    if ([self encode:message]) {
                         flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
                         [self.persistence sync];
                     }
@@ -441,7 +449,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                 case MQTTPubrel:
                     DDLogInfo(@"[MQTTSession] resend PUBREL %@", flow.messageId);
                     message = [MQTTMessage pubrelMessageWithMessageId:[flow.messageId intValue]];
-                    if ([self ENCODE:message]) {
+                    if ([self encode:message]) {
                         flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
                         [self.persistence sync];
                     }
@@ -490,10 +498,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                               code:-7
                                           userInfo:@{NSLocalizedDescriptionKey : @"MQTT illegal message received"}];
         [self protocolError:error];
-
+        
         return;
     }
-
+    
     @synchronized(sender) {
         if ([self.delegate respondsToSelector:@selector(received:type:qos:retained:duped:mid:data:)]) {
             [self.delegate received:self
@@ -523,7 +531,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                             NSError *error = [NSError errorWithDomain:@"MQTT"
                                                                  code:-2
                                                              userInfo:@{NSLocalizedDescriptionKey : @"MQTT protocol CONNACK expected"}];
-
+                            
                             [self protocolError:error];
                             MQTTConnectHandler connectHandler = self.connectHandler;
                             if (connectHandler) {
@@ -569,7 +577,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                     self.connectHandler = nil;
                                     [self onConnect:connectHandler error:nil];
                                 }
-
+                                
                             } else {
                                 NSString *errorDescription;
                                 switch (bytes[1]) {
@@ -652,6 +660,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                 }
                 break;
             default:
+                DDLogError(@"[MQTTSession] other state");
                 break;
         }
     }
@@ -721,7 +730,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                     self.messageHandler(data, topic);
                 }
                 if (processed) {
-                    (void)[self ENCODE:[MQTTMessage pubackMessageWithMessageId:msgId]];
+                    (void)[self encode:[MQTTMessage pubackMessageWithMessageId:msgId]];
                 }
                 return;
             } else {
@@ -738,7 +747,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                 } else {
                     [self.persistence sync];
                     [self tell];
-                    (void)[self ENCODE:[MQTTMessage pubrecMessageWithMessageId:msgId]];
+                    (void)[self encode:[MQTTMessage pubrecMessageWithMessageId:msgId]];
                 }
             }
         }
@@ -751,9 +760,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
         UInt8 const *bytes = [[msg data] bytes];
         UInt16 messageId = (256 * bytes[0] + bytes[1]);
         msg.mid = messageId;
-        MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
-                                              incomingFlag:NO
-                                                 messageId:messageId];
+        id<MQTTFlow> flow = [self.persistence flowforClientId:self.clientId
+                                                 incomingFlag:NO
+                                                    messageId:messageId];
         if (flow) {
             if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelAtLeastOnce) {
                 [self.persistence deleteFlow:flow];
@@ -815,9 +824,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 
 - (void)handlePubrec:(MQTTMessage *)message {
     MQTTMessage *pubrelmessage = [MQTTMessage pubrelMessageWithMessageId:message.mid];
-    MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
-                                          incomingFlag:NO
-                                             messageId:message.mid];
+    id<MQTTFlow> flow = [self.persistence flowforClientId:self.clientId
+                                             incomingFlag:NO
+                                                messageId:message.mid];
     if (flow) {
         if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelExactlyOnce) {
             flow.commandType = @(MQTTPubrel);
@@ -827,13 +836,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
             [self.persistence sync];
         }
     }
-    (void)[self ENCODE:pubrelmessage];
+    (void)[self encode:pubrelmessage];
 }
 
 - (void)handlePubrel:(MQTTMessage *)message {
-    MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
-                                          incomingFlag:YES
-                                             messageId:message.mid];
+    id<MQTTFlow> flow = [self.persistence flowforClientId:self.clientId
+                                             incomingFlag:YES
+                                                messageId:message.mid];
     if (flow) {
         BOOL processed = true;
         if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
@@ -861,15 +870,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
             [self.persistence deleteFlow:flow];
             [self.persistence sync];
             [self tell];
-            (void)[self ENCODE:[MQTTMessage pubcompMessageWithMessageId:message.mid]];
+            (void)[self encode:[MQTTMessage pubcompMessageWithMessageId:message.mid]];
         }
     }
 }
 
 - (void)handlePubcomp:(MQTTMessage *)message {
-    MQTTFlow *flow = [self.persistence flowforClientId:self.clientId
-                                          incomingFlag:NO
-                                             messageId:message.mid];
+    id<MQTTFlow> flow = [self.persistence flowforClientId:self.clientId
+                                             incomingFlag:NO
+                                                messageId:message.mid];
     if (flow && [flow.commandType intValue] == MQTTPubrel) {
         [self.persistence deleteFlow:flow];
         [self.persistence sync];
@@ -1040,7 +1049,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 
 #pragma mark - MQTTTransport interface
 
-- (void)CONNECT {
+- (void)connect {
     DDLogVerbose(@"[MQTTSession] connecting");
     if (self.cleanSessionFlag) {
         [self.persistence deleteAllFlowsForClientId:self.clientId];
@@ -1060,14 +1069,20 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     [self.transport open];
 }
 
-- (void)DISCONNECT {
+- (void)connectWithConnectHandler:(MQTTConnectHandler)connectHandler {
+    DDLogVerbose(@"[MQTTSession] connectWithConnectHandler:%p", connectHandler);
+    self.connectHandler = connectHandler;
+    [self connect];
+}
+
+- (void)disconnect {
     DDLogVerbose(@"[MQTTSession] sending DISCONNECT");
     self.status = MQTTSessionStatusDisconnecting;
     
-    (void)[self ENCODE:[MQTTMessage disconnectMessage]];
+    (void)[self encode:[MQTTMessage disconnectMessage]];
 }
 
-- (BOOL)ENCODE:(MQTTMessage *)message {
+- (BOOL)encode:(MQTTMessage *)message {
     if (message) {
         NSData *wireFormat = message.wireFormat;
         if (wireFormat) {
@@ -1097,25 +1112,25 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #pragma mark - MQTTTransport delegate
 - (void)mqttTransport:(id<MQTTTransport>)mqttTransport didReceiveMessage:(NSData *)message {
     DDLogVerbose(@"[MQTTSession] mqttTransport didReceiveMessage");
-
+    
     [self.decoder decodeMessage:message];
     
 }
 
 - (void)mqttTransportDidClose:(id<MQTTTransport>)mqttTransport {
     DDLogVerbose(@"[MQTTSession] mqttTransport mqttTransportDidClose");
-
+    
     [self error:MQTTSessionEventConnectionClosedByBroker error:nil];
-
+    
 }
 
 - (void)mqttTransportDidOpen:(id<MQTTTransport>)mqttTransport {
     DDLogVerbose(@"[MQTTSession] mqttTransportDidOpen");
-
+    
     DDLogVerbose(@"[MQTTSession] sending CONNECT");
-
+    
     if (!self.connectMessage) {
-        (void)[self ENCODE:[MQTTMessage connectMessageWithClientId:self.clientId
+        (void)[self encode:[MQTTMessage connectMessageWithClientId:self.clientId
                                                           userName:self.userName
                                                           password:self.password
                                                          keepAlive:self.keepAliveInterval
@@ -1127,13 +1142,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                                         willRetain:self.willRetainFlag
                                                      protocolLevel:self.protocolLevel]];
     } else {
-        (void)[self ENCODE:self.connectMessage];
+        (void)[self encode:self.connectMessage];
     }
 }
 
 - (void)mqttTransport:(id<MQTTTransport>)mqttTransport didFailWithError:(NSError *)error {
     DDLogWarn(@"[MQTTSession] mqttTransport didFailWithError %@", error);
-
+    
     [self connectionError:error];
 }
 @end

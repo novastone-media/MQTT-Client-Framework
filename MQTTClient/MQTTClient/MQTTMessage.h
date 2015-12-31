@@ -21,6 +21,7 @@
 
 @interface MQTTMessage : NSObject
 typedef NS_ENUM(UInt8, MQTTCommandType) {
+    MQTT_None = 0,
     MQTTConnect = 1,
     MQTTConnack = 2,
     MQTTPublish = 3,

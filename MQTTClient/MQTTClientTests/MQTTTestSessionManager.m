@@ -7,17 +7,17 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <CocoaLumberjack/Cocoalumberjack.h>
 
 #import "MQTTSessionManager.h"
 #import "MQTTCFSocketTransport.h"
 #import "MQTTTestHelpers.h"
 
-@interface MQTTTestSessionManager : XCTestCase <MQTTSessionManagerDelegate>
-@property (nonatomic) int received;
-@property (nonatomic) int sent;
-@property (nonatomic) BOOL timeout;
+@interface MQTTTestSessionManager : MQTTTestHelpers <MQTTSessionManagerDelegate>
 @property (nonatomic) int step;
+@property (nonatomic) int sent;
+@property (nonatomic) int received;
+@property (nonatomic) int processed;
+
 @end
 
 @implementation MQTTTestSessionManager
@@ -26,7 +26,7 @@
     [super setUp];
     
     if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelInfo];
     if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
         [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
 }
@@ -44,15 +44,14 @@
 }
 
 - (void)testMQTTSessionManager:(BOOL)clean {
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogInfo(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
         
         self.step = -1;
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:[parameters[@"timeout"] intValue]
                                                           target:self
-                                                        selector:@selector(timeout:)
+                                                        selector:@selector(stepper:)
                                                         userInfo:nil
                                                          repeats:true];
         
@@ -64,7 +63,7 @@
                   forKeyPath:@"effectiveSubscriptions"
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
-        manager.subscriptions = [@{@"#": @(0)} mutableCopy];
+        manager.subscriptions = [@{TOPIC: @(0)} mutableCopy];
         [manager connectTo:parameters[@"host"]
                       port:[parameters[@"port"] intValue]
                        tls:[parameters[@"tls"] boolValue]
@@ -78,56 +77,61 @@
                    willMsg:nil
                    willQos:MQTTQosLevelAtMostOnce
             willRetainFlag:FALSE
-              withClientId:@"MQTTSessionManager"
+              withClientId:nil
             securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
               certificates:[MQTTTestHelpers clientCerts:parameters]];
+        
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
-            NSLog(@"waiting for connect %d", manager.state);
+            DDLogInfo(@"[testMQTTSessionManager] waiting for connect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
+        [manager sendData:[[NSData alloc] init] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:true];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
 
         while (self.step <= 0) {
-            NSLog(@"received %d on #", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
+            DDLogInfo(@"[testMQTTSessionManager] received %lu/%lu on TOPIC", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             self.sent++;
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-        XCTAssertEqual(self.received, self.sent);
         
-        manager.subscriptions = [@{@"#": @(0),@"$SYS/#": @(0)} mutableCopy];
+        manager.subscriptions = [@{TOPIC: @(0),@"$SYS/#": @(0)} mutableCopy];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
 
         while (self.step == 1) {
-            NSLog(@"received %d on # or $SYS/#", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
+            DDLogInfo(@"[testMQTTSessionManager] received %lu/%lu on TOPIC or $SYS/#", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             self.sent++;
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-        XCTAssertEqual(self.received, self.sent);
         
         manager.subscriptions = [@{@"$SYS/#": @(0)} mutableCopy];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
 
         while (self.step <= 2) {
-            NSLog(@"received %d on $SYS/#", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
+            DDLogInfo(@"[testMQTTSessionManager] received %lu/%lu on $SYS/#", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-        XCTAssertEqual(self.received, self.sent);
         
         manager.subscriptions = [@{} mutableCopy];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
 
         while (self.step <= 3) {
-            NSLog(@"received %d on nothing", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
+            DDLogInfo(@"[testMQTTSessionManager] received %lu/%lu on nothing", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-        XCTAssertEqual(self.received, self.sent);
         
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
         [manager disconnect];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
 
         while (self.step <= 4) {
-            NSLog(@"received %d after disconnect", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelAtMostOnce retain:FALSE];
+            DDLogInfo(@"[testMQTTSessionManager] received %lu/%lu after disconnect", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         XCTAssertEqual(self.received, self.sent);
@@ -137,14 +141,14 @@
 }
 
 - (void)testMQTTSessionManagerPersistent {
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogInfo(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
         
         self.step = -1;
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:[parameters[@"timeout"] intValue]
                                                           target:self
-                                                        selector:@selector(timeout:)
+                                                        selector:@selector(stepper:)
                                                         userInfo:nil
                                                          repeats:true];
         
@@ -159,7 +163,7 @@
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
         
-        manager.subscriptions = [@{@"#": @(0)} mutableCopy];
+        manager.subscriptions = [@{TOPIC: @(0)} mutableCopy];
         [manager connectTo:parameters[@"host"]
                       port:[parameters[@"port"] intValue]
                        tls:[parameters[@"tls"] boolValue]
@@ -173,56 +177,59 @@
                    willMsg:nil
                    willQos:MQTTQosLevelAtMostOnce
             willRetainFlag:FALSE
-              withClientId:@"MQTTSessionManager"
+              withClientId:nil
             securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
               certificates:[MQTTTestHelpers clientCerts:parameters]];
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
-            NSLog(@"waiting for connect %d", manager.state);
+            DDLogInfo(@"[testMQTTSessionManagerPersistent] waiting for connect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
-        
+        [manager sendData:[[NSData alloc] init] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:true];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
         while (self.step <= 0) {
-            NSLog(@"received %d on #", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            DDLogInfo(@"received %lu/%lu on TOPIC", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             self.sent++;
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
-        XCTAssertEqual(self.received, self.sent);
         
-        manager.subscriptions = [@{@"#": @(0),@"a": @(1),@"b": @(2),@"$SYS/#": @(0)} mutableCopy];
-        
+        manager.subscriptions = [@{TOPIC: @(0),@"a": @(1),@"b": @(2),@"$SYS/#": @(0)} mutableCopy];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
         while (self.step == 1) {
-            NSLog(@"received %d on # or $SYS/#", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            DDLogInfo(@"[testMQTTSessionManagerPersistent] received %lu/%lu on TOPIC or $SYS/#", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             self.sent++;
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
-        XCTAssertEqual(self.received, self.sent);
         
         manager.subscriptions = [@{@"$SYS/#": @(0)} mutableCopy];
-        
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
         while (self.step <= 2) {
-            NSLog(@"received %d on $SYS/#", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            DDLogInfo(@"[testMQTTSessionManagerPersistent] received %lu/%lu on $SYS/#", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
-        XCTAssertEqual(self.received, self.sent);
         
         manager.subscriptions = [@{} mutableCopy];
-        
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
         while (self.step <= 3) {
-            NSLog(@"received %d on nothing", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            DDLogInfo(@"[testMQTTSessionManagerPersistent] received %lu/%lu on nothing", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
-        XCTAssertEqual(self.received, self.sent);
-        
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
         [manager disconnect];
-        
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
         while (self.step <= 4) {
-            NSLog(@"received %d after disconnect", self.received);
-            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            DDLogInfo(@"[testMQTTSessionManagerPersistent] received %lu/%lu after disconnect", (unsigned long)self.received, (unsigned long)self.sent);
+            [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelAtMostOnce retain:FALSE];
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
         XCTAssertEqual(self.received, self.sent);
@@ -242,15 +249,15 @@
                  context:nil];
     
     // allow 5 sec for connect
-    self.timeout = false;
+    self.timedout = false;
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5
                                                       target:self
-                                                    selector:@selector(timeout:)
+                                                    selector:@selector(timedout:)
                                                     userInfo:nil
                                                      repeats:false];
     
     
-    manager.subscriptions = @{@"#": [NSNumber numberWithInt:MQTTQosLevelExactlyOnce]};
+    manager.subscriptions = @{TOPIC: [NSNumber numberWithInt:MQTTQosLevelExactlyOnce]};
     [manager connectTo:@"localhost"
                   port:1883
                    tls:false
@@ -264,42 +271,43 @@
                willMsg:nil
                willQos:MQTTQosLevelAtMostOnce
         willRetainFlag:FALSE
-          withClientId:@"MQTTSessionManager"
+          withClientId:nil
         securityPolicy:nil
           certificates:nil];
     
-    while (!self.timeout && manager.state != MQTTSessionManagerStateConnected) {
-        NSLog(@"waiting for connect %d", manager.state);
+    while (!self.timedout && manager.state != MQTTSessionManagerStateConnected) {
+        DDLogInfo(@"waiting for connect %d", manager.state);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     if (timer.valid) [timer invalidate];
     
     // allow 5 sec for sending and receiving
-    self.timeout = false;
+    self.timedout = false;
     timer = [NSTimer scheduledTimerWithTimeInterval:5
                                              target:self
-                                           selector:@selector(timeout:)
+                                           selector:@selector(timedout:)
                                            userInfo:nil
                                             repeats:false];
     
     
-    while (!self.timeout) {
-        [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:@"MQTTSessionManager" qos:MQTTQosLevelExactlyOnce retain:FALSE];
+    while (!self.timedout) {
+        [manager sendData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:FALSE];
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     if (timer.valid) [timer invalidate];
+    [manager sendData:[[NSData alloc] init] topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:true];
     
     // allow 3 sec for disconnect
-    self.timeout = false;
+    self.timedout = false;
     timer = [NSTimer scheduledTimerWithTimeInterval:3
                                              target:self
-                                           selector:@selector(timeout:)
+                                           selector:@selector(timedout:)
                                            userInfo:nil
                                             repeats:false];
     
     [manager disconnect];
-    while (!self.timeout && manager.state != MQTTSessionStatusClosed) {
-        NSLog(@"waiting for disconnect %d", manager.state);
+    while (!self.timedout && manager.state != MQTTSessionStatusClosed) {
+        DDLogInfo(@"waiting for disconnect %d", manager.state);
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     if (timer.valid) [timer invalidate];
@@ -310,25 +318,34 @@
 
 
 - (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained {
-    NSLog(@"handleMessage t:%@", topic);
-    if ([topic isEqualToString:@"MQTTSessionManager"]) {
-        self.received++;
+    DDLogInfo(@"[MQTTSessionManager] handleMessage (%lu) t:%@ r%d", data.length, topic, retained);
+    if ([topic isEqualToString:TOPIC]) {
+        if (!retained && data.length) {
+                self.received++;
+            } else {
+                self.received = 0;
+            }
     }
 }
 
 - (void)messageDelivered:(UInt16)msgID {
-    NSLog(@"messageDelivered %d", msgID);
+    DDLogVerbose(@"[MQTTSessionManager] messageDelivered %d", msgID);
 }
 
-- (void)timeout:(NSTimer *)timer {
-    NSLog(@"timeout s:%d", self.step);
+- (void)timedout:(NSTimer *)timer {
+    DDLogVerbose(@"[MQTTSessionManager] timedout");
+    self.timedout = true;
+}
+
+- (void)stepper:(NSTimer *)timer {
+    DDLogVerbose(@"[MQTTSessionManager] stepper s:%d", self.step);
     self.step++;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:@"effectiveSubscriptions"]) {
         MQTTSessionManager *manager = (MQTTSessionManager *)object;
-        NSLog(@"effectiveSubscriptions changed: %@", manager.effectiveSubscriptions);
+        DDLogInfo(@"[MQTTSessionManager] effectiveSubscriptions changed: %@", manager.effectiveSubscriptions);
     }
 }
 

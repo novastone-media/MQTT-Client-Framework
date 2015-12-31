@@ -21,9 +21,11 @@ an Objective-C native MQTT Framework http://mqtt.org
 
 ### Howto
 
-Add MQTTClient.framework from the dist directory to your IOS project,
-use the dynamic library created in the MQTTFramework target,
-or use the CocoaPod MQTTClient
+Use the CocoaPod MQTTClient! 
+
+Or use the dynamic library created in the MQTTFramework target.
+
+Or include the source from here.
 
 [Documentation](MQTTClient/dist/documentation/html/index.html)
 
@@ -36,7 +38,7 @@ Create a new client and connect to a broker:
 \@interface MyDelegate : ... MQTTSessionDelegate>
 ...
 
-MQTTSession *session = [[MQTTSession alloc]initWithClientId:@"client_id"]
+MQTTSession *session = [[MQTTSession alloc] init];
 
 // Set delegate appropriately to receive various events
 // Set MQTTSessionDelegate // See MQTTSession.h for information on various handlers
@@ -44,21 +46,35 @@ MQTTSession *session = [[MQTTSession alloc]initWithClientId:@"client_id"]
 
 [session setDelegate:self];
 
-[session connectAndWaitToHost:@"host" port:1883 usingSSL:NO];
+session.host = @"localhost";
+session.port = 1883;
+
+[session connectAndWaitTimeout:30];  //this is part of the synchronous API
 
 ```
 
 Subscribe to a topic:
 
 ```objective-c
-[session subscribeToTopic:topic atLevel:MQTTQosLevelAtLeastOnce];
+[session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
+    if (error) {
+        NSLog(@"Subscription failed %@", error.localizedDescription);
+    } else {
+        NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
+    }
+ }]; // this is part of the block API
+
 ```
 
 Add the following to receive messages for the subscribed topics
 ```objective-c
- - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
-{
-
+ - (void)newMessage:(MQTTSession *)session
+	data:(NSData *)data
+	onTopic:(NSString *)topic
+	qos:(MQTTQosLevel)qos
+	retained:(BOOL)retained
+	mid:(unsigned int)mid {
+	// this is one of the delegate callbacks
 }
 ```
 
@@ -66,14 +82,10 @@ Publish a message to a topic:
 
 ```objective-c
 [session publishAndWaitData:data
-	                onTopic:@"topic"
-	                 retain:NO
-				        qos:MQTTQosLevelAtLeastOnce]
+                    onTopic:@"topic"
+                     retain:NO
+	                qos:MQTTQosLevelAtLeastOnce]; // this is part of the asynchronous API
 ```
-
-#### Framework
-
-Framework build using instructions and scripts by Jeff Verkoeyen https://github.com/jverkoey/iOS-Framework
 
 #### docs
 

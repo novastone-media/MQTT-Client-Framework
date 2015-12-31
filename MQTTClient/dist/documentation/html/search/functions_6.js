@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['newmessage_3adata_3aontopic_3aqos_3aretained_3amid_3a',['newMessage:data:onTopic:qos:retained:mid:',['../protocol_m_q_t_t_session_delegate-p.html#a85ecb50aa7dfb9865ec6acfd1192b92c',1,'MQTTSessionDelegate-p']]],
-  ['newmessagewithfeedback_3adata_3aontopic_3aqos_3aretained_3amid_3a',['newMessageWithFeedback:data:onTopic:qos:retained:mid:',['../protocol_m_q_t_t_session_delegate-p.html#a5e103157ac155294481ebca786bfb5fd',1,'MQTTSessionDelegate-p']]]
+  ['handleevent_3aevent_3aerror_3a',['handleEvent:event:error:',['../protocol_m_q_t_t_session_delegate-p.html#a168b8ff4bd95ffbfe61a8b10236860f8',1,'MQTTSessionDelegate-p']]],
+  ['handlemessage_3aontopic_3aretained_3a',['handleMessage:onTopic:retained:',['../protocol_m_q_t_t_session_manager_delegate-p.html#aa607c1d6a9a1b2a9ea9a707706c393bb',1,'MQTTSessionManagerDelegate-p']]]
 ];

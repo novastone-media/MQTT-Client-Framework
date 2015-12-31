@@ -7,18 +7,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <CocoaLumberjack/Cocoalumberjack.h>
 
 #import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
 
-@interface MQTTACLTests : XCTestCase <MQTTSessionDelegate>
-@property (strong, nonatomic) MQTTSession *session;
-@property (nonatomic) int event;
-@property (strong, nonatomic) NSError *error;
-@property (nonatomic) BOOL timeout;
-@property (nonatomic) int type;
-
+@interface MQTTACLTests : MQTTTestHelpers
 @end
 
 @implementation MQTTACLTests
@@ -45,25 +38,10 @@
  * If the Password Flag is set to 1, a password MUST be present in the payload.
  */
 - (void)test_connect_user_pwd_MQTT_3_1_2_19_MQTT_3_1_2_21 {
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:parameters[@"user"]
-                                                    password:parameters[@"pass"]
-                                                   keepAlive:60
-                                                cleanSession:YES
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:[parameters[@"protocollevel"] intValue]
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes
-                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
-        self.session.persistence.persistent = PERSISTENT;
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        self.session = [MQTTTestHelpers session:parameters];
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
@@ -77,25 +55,12 @@
  * If the Password Flag is set to 0, a password MUST NOT be present in the payload.
  */
 - (void)test_connect_user_no_pwd_MQTT_3_1_2_19_MQTT_3_1_2_20 {
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:@"user w/o password"
-                                                    password:nil
-                                                   keepAlive:60
-                                                cleanSession:YES
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:[parameters[@"protocollevel"] intValue]
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes
-                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
-        self.session.persistence.persistent = PERSISTENT;
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.userName = @"user w/o password";
+        self.session.password = nil;
 
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -110,25 +75,12 @@
  * If the Password Flag is set to 0, a password MUST NOT be present in the payload.
  */
 - (void)test_connect_no_user_no_pwd_MQTT_3_1_2_18_MQTT_3_1_2_20 {
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
-                                                   keepAlive:60
-                                                cleanSession:YES
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:[parameters[@"protocollevel"] intValue]
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes
-                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
-        self.session.persistence.persistent = PERSISTENT;
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.userName = nil;
+        self.session.password = nil;
 
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -142,25 +94,12 @@
  */
 
 - (void)test_connect_no_user_but_pwd_MQTT_3_1_2_22 {
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:@"password w/o user"
-                                                   keepAlive:60
-                                                cleanSession:YES
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                               protocolLevel:[parameters[@"protocollevel"] intValue]
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes
-                                              securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-                                                certificates:[MQTTTestHelpers clientCerts:parameters]];
-        self.session.persistence.persistent = PERSISTENT;
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.userName = nil;
+        self.session.password = @"password w/o user";
 
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"Not Rejected %ld %@", (long)self.event, self.error);
@@ -168,50 +107,20 @@
     }
 }
  
-
-- (void)received:(MQTTSession *)session type:(MQTTCommandType)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
-    //NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
-    self.type = type;
-}
-
-- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
-    //NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
-}
-
-- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
-    //NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
-    self.event = eventCode;
-    self.error = error;
-}
-
-- (void)ackTimeout:(NSNumber *)timeout {
-    //NSLog(@"ackTimeout: %f", [timeout doubleValue]);
-    self.timeout = TRUE;
-}
-
 - (void)connect:(MQTTSession *)session parameters:(NSDictionary *)parameters{
     session.delegate = self;
     self.event = -1;
-    self.timeout = FALSE;
+    self.timedout = FALSE;
 
-    /* NSLog(@"connecting to:%@ port:%d tls:%d",
-     parameters[@"host"],
-     [parameters[@"port"] intValue],
-     [parameters[@"tls"] boolValue],
-     self.);
-     */
+    [self.session connect];
 
-    [session connectToHost:parameters[@"host"]
-                      port:[parameters[@"port"] intValue]
-                  usingSSL:[parameters[@"tls"] boolValue]];
-
-    [self performSelector:@selector(ackTimeout:)
-               withObject:parameters[@"timeout"]
+    [self performSelector:@selector(timedout:)
+               withObject:nil
                afterDelay:[parameters[@"timeout"] intValue]];
 
 
-    while (!self.timeout && self.event == -1) {
-        //NSLog(@"waiting for connection");
+    while (!self.timedout && self.event == -1) {
+        DDLogVerbose(@"waiting for connection");
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
 }
@@ -219,19 +128,19 @@
 - (void)shutdown:(NSDictionary *)parameters {
     self.event = -1;
 
-    self.timeout = FALSE;
-    [self performSelector:@selector(ackTimeout:)
-               withObject:parameters[@"timeout"]
+    self.timedout = FALSE;
+    [self performSelector:@selector(timedout:)
+               withObject:nil
                afterDelay:[parameters[@"timeout"] intValue]];
 
     [self.session close];
 
-    while (self.event == -1 && !self.timeout) {
-        //NSLog(@"waiting for disconnect");
+    while (self.event == -1 && !self.timedout) {
+        DDLogVerbose(@"waiting for disconnect");
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
 
-    XCTAssert(!self.timeout, @"timeout");
+    XCTAssert(!self.timedout, @"timeout");
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
     self.session.delegate = nil;

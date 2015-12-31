@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['received_3atype_3aqos_3aretained_3aduped_3amid_3adata_3a',['received:type:qos:retained:duped:mid:data:',['../protocol_m_q_t_t_session_delegate-p.html#ae506789580b1b461901e7846407b9657',1,'MQTTSessionDelegate-p']]],
-  ['runloop',['runLoop',['../interface_m_q_t_t_session.html#a49e106f38faead00b6d9d53a77a50472',1,'MQTTSession']]],
-  ['runloopmode',['runLoopMode',['../interface_m_q_t_t_session.html#a3ab2f0926aa51b0dc7969c66bae215e4',1,'MQTTSession']]]
+  ['newmessage_3adata_3aontopic_3aqos_3aretained_3amid_3a',['newMessage:data:onTopic:qos:retained:mid:',['../protocol_m_q_t_t_session_delegate-p.html#a85ecb50aa7dfb9865ec6acfd1192b92c',1,'MQTTSessionDelegate-p']]],
+  ['newmessagewithfeedback_3adata_3aontopic_3aqos_3aretained_3amid_3a',['newMessageWithFeedback:data:onTopic:qos:retained:mid:',['../protocol_m_q_t_t_session_delegate-p.html#a5e103157ac155294481ebca786bfb5fd',1,'MQTTSessionDelegate-p']]]
 ];

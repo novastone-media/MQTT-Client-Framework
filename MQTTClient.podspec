@@ -16,10 +16,30 @@ Pod::Spec.new do |mqttc|
 	mqttc.ios.deployment_target = "6.1"
 	mqttc.osx.deployment_target = "10.10"
 	mqttc.tvos.deployment_target = "9.0"
-	mqttc.default_subspec = 'Core'
+	mqttc.default_subspec = 'Classic'
+	mqttc.compiler_flags = '-DLUMBERJACK'
+
+	mqttc.subspec 'Classic' do |classic|
+		classic.dependency 'MQTTClient/Core'
+		classic.dependency 'MQTTClient/SSLSecurityPolicy'
+		classic.dependency 'MQTTClient/CoreData'
+	end
 
 	mqttc.subspec 'Core' do |core|
-		core.source_files = "MQTTClient/MQTTClient", "MQTTClient/MQTTClient/*/*.{h,m}"
+		core.source_files =	"MQTTClient/MQTTClient",
+					"MQTTClient/MQTTClient/*.{h,m}",
+					"MQTTClient/MQTTClient/MQTTInMemoryPersistence/*.{h,m}"
+		core.dependency 'CocoaLumberjack'
+	end
+
+	mqttc.subspec 'CoreData' do |coredata|
+		coredata.source_files = "MQTTClient/MQTTClient/MQTTCoreDataPersistence/*.{h,m}"
+		coredata.dependency 'MQTTClient/Core'
+	end
+
+	mqttc.subspec 'SSLSecurityPolicy' do |secpol|
+		secpol.source_files = "MQTTClient/MQTTClient/MQTTSSLSecurityPolicyTransport/*.{h,m}"
+		secpol.dependency 'MQTTClient/Core'
 	end
 
 	mqttc.subspec 'Websocket' do |ws|
@@ -28,10 +48,5 @@ Pod::Spec.new do |mqttc|
 		ws.dependency 'MQTTClient/Core'
 		ws.requires_arc = true
 		ws.libraries = "icucore"
-	end
-
-	mqttc.subspec 'SSLSecurityPolicy' do |ssl|
-		ssl.source_files = "MQTTClient/MQTTClient/MQTTSSLSecurityPolicyTransport/*.{h,m}"
-		ssl.dependency 'MQTTClient/Core'
 	end
 end

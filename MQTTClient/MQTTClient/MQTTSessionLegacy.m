@@ -31,15 +31,39 @@
 #import "MQTTCFSocketTransport.h"
 #import "MQTTSSLSecurityPolicyTransport.h"
 
+#ifdef LUMBERJACK
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
+#endif
 
 @implementation MQTTSession(Legacy)
+
+- (void)setCertificates:(NSArray *)certificates {
+    if (self.transport) {
+        if ([self.transport respondsToSelector:@selector(setCertificates:)]) {
+            [self.transport performSelector:@selector(setCertificates:) withObject:certificates];
+        }
+    }
+}
+
+- (NSArray *)certificates {
+    if (self.transport) {
+        if ([self.transport respondsToSelector:@selector(certificates)]) {
+            return [self.transport performSelector:@selector(certificates)];
+        }
+    }
+    return nil;
+}
 
 - (MQTTSession *)initWithClientId:(NSString *)clientId
                          userName:(NSString *)userName
@@ -117,7 +141,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                           forMode:(NSString *)runLoopMode
                    securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
                      certificates:(NSArray *)certificates {
-    DDLogVerbose(@"MQTTSessionLegacy initWithClientId:%@ ", clientId);
+    DDLogVerbose(@"[MQTTSessionLegacy] initWithClientId:%@ ", clientId);
 
     self = [self init];
     self.clientId = clientId;
@@ -342,8 +366,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
              usingSSL:(BOOL)usingSSL
        connectHandler:(MQTTConnectHandler)connectHandler {
     DDLogVerbose(@"MQTTSessionLegacy connectToHost:%@ port:%d usingSSL:%d connectHandler:%p",
-                 host, port, usingSSL, connectHandler);
-    self.connectHandler = connectHandler;
+                 host, (unsigned int)port, usingSSL, connectHandler);
     
     if (self.securityPolicy) {
         MQTTSSLSecurityPolicyTransport *transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
@@ -351,6 +374,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
         transport.port = port;
         transport.tls = usingSSL;
         transport.securityPolicy = self.securityPolicy;
+        transport.certificates = self.certificates;
         self.transport = transport;
         
     } else {
@@ -361,7 +385,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
         self.transport = transport;
     }
     
-    [self CONNECT];
+    [self connectWithConnectHandler:connectHandler];
 }
 
 

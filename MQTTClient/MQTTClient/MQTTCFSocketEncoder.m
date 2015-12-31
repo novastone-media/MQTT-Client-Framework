@@ -7,12 +7,19 @@
 
 #import "MQTTCFSocketEncoder.h"
 
+#ifdef LUMBERJACK
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @interface MQTTCFSocketEncoder()
@@ -46,6 +53,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     [self.stream setDelegate:nil];
 }
 
+- (void)setState:(MQTTCFSocketEncoderState)state {
+    DDLogVerbose(@"[MQTTCFSocketEncoder] setState %ld/%ld", (long)_state, (long)state);
+    _state = state;
+}
+
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
     
     if (eventCode & NSStreamEventOpenCompleted) {
@@ -56,7 +68,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
         DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventHasBytesAvailable");
     }
     
-    if (eventCode &  NSStreamEventHasSpaceAvailable) {
+    if (eventCode & NSStreamEventHasSpaceAvailable) {
         DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventHasSpaceAvailable");
         if (self.state == MQTTCFSocketEncoderStateInitializing) {
             self.state = MQTTCFSocketEncoderStateReady;

@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['handleevent_3aevent_3aerror_3a',['handleEvent:event:error:',['../protocol_m_q_t_t_session_delegate-p.html#a168b8ff4bd95ffbfe61a8b10236860f8',1,'MQTTSessionDelegate-p']]],
-  ['handlemessage_3aontopic_3aretained_3a',['handleMessage:onTopic:retained:',['../protocol_m_q_t_t_session_manager_delegate-p.html#aa607c1d6a9a1b2a9ea9a707706c393bb',1,'MQTTSessionManagerDelegate-p']]]
+  ['defaultpolicy',['defaultPolicy',['../interface_m_q_t_t_s_s_l_security_policy.html#abf1594bd6fedb9222d1b4b72b972c59a',1,'MQTTSSLSecurityPolicy']]],
+  ['deleteallflowsforclientid_3a',['deleteAllFlowsForClientId:',['../protocol_m_q_t_t_persistence-p.html#a2c880d902ade2b17078545cef8d212e7',1,'MQTTPersistence-p']]],
+  ['deleteflow_3a',['deleteFlow:',['../protocol_m_q_t_t_persistence-p.html#a415cc2c67ea2e73d7942973a2186d083',1,'MQTTPersistence-p']]],
+  ['disconnect',['disconnect',['../interface_m_q_t_t_session.html#aef2d0980b561184800908e95dd3a9fc7',1,'MQTTSession::disconnect()'],['../interface_m_q_t_t_session_manager.html#a71161804d040ca10e164578d7e7eb855',1,'MQTTSessionManager::disconnect()']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['keepaliveinterval',['keepAliveInterval',['../interface_m_q_t_t_session.html#aa63e148680fef0724b66218d53caba6d',1,'MQTTSession']]]
+  ['effectivesubscriptions',['effectiveSubscriptions',['../interface_m_q_t_t_session_manager.html#a93848b47c7ea903993531a50368d15f5',1,'MQTTSessionManager']]]
 ];

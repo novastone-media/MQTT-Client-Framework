@@ -19,6 +19,22 @@
 
 /** connects to the specified MQTT server synchronously
  
+ @param timeout defines the maximum time to wait. Defaults to 0 for no timeout.
+ 
+ @return true if the connection was established
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ 
+ [session connectAndWaitTimeout:30];
+ @endcode
+ 
+ */
+
+/** connects to the specified MQTT server synchronously
+ 
  @param host see connectAndWaitToHost:port:usingSSL:timeout: for details
  @param port see connectAndWaitToHost:port:usingSSL:timeout: for details
  @param usingSSL see connectAndWaitToHost:port:usingSSL:timeout: for details
@@ -30,9 +46,11 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitToHost:@"192.168.0.1" port:1883 usingSSL:NO];
  @endcode
  
+ @deprecated as not all connection parameters are supported, use connectAndWaitTimeout
+
  */
 - (BOOL)connectAndWaitToHost:(NSString *)host
                         port:(UInt32)port
@@ -52,9 +70,10 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitToHost:@"192.168.0.1" port:1883 usingSSL:NO];
  @endcode
- 
+ @deprecated as not all connection parameters are supported, use connectAndWaitTimeout
+
  */
 
 - (BOOL)connectAndWaitToHost:(NSString *)host
@@ -76,9 +95,9 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
- [session subscribeToTopic:@"example/#" atLevel:2];
+ [session subscribeAndWaitToTopic:@"example/#" atLevel:2];
  
  @endcode
  
@@ -101,9 +120,9 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
- [session subscribeToTopic:@"example/#" atLevel:2 timeout:10];
+ [session subscribeAndWaitToTopic:@"example/#" atLevel:2 timeout:10];
  
  @endcode
  
@@ -126,9 +145,9 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
- [session subscribeToTopics:@{
+ [session subscribeAndWaitToTopics:@{
  @"example/#": @(0),
  @"example/status": @(2),
  @"other/#": @(1)
@@ -151,9 +170,9 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
- [session subscribeToTopics:@{
+ [session subscribeAndWaitToTopics:@{
  @"example/#": @(0),
  @"example/status": @(2),
  @"other/#": @(1)
@@ -177,9 +196,11 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
+
+ ...
  
- [session unsubscribeTopic:@"example/#"];
+ [session unsubscribeAndWaitTopic:@"example/#"];
  
  @endcode
  */
@@ -197,9 +218,11 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
- [session unsubscribeTopic:@"example/#" timeout:10];
+ ...
+ 
+ [session unsubscribeAndWaitTopic:@"example/#" timeout:10];
  
  @endcode
  */
@@ -218,9 +241,11 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
- [session unsubscribeTopics:@[
+ ...
+ 
+ [session unsubscribeAndWaitTopics:@[
  @"example/#",
  @"example/status",
  @"other/#"
@@ -243,9 +268,11 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
- [session unsubscribeTopics:@[
+ ...
+ 
+ [session unsubscribeAndWaitTopics:@[
  @"example/#",
  @"example/status",
  @"other/#"
@@ -272,7 +299,7 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
  [session publishAndWaitData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
  topic:@"example/data"
@@ -301,7 +328,7 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
  [session publishAndWaitData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
  topic:@"example/data"
@@ -325,7 +352,7 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
  ...
  
@@ -346,7 +373,7 @@
  
  MQTTSession *session = [[MQTTSession alloc] init];
  
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ [session connectAndWaitTimeout:30];
  
  ...
  

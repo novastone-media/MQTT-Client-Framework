@@ -7,17 +7,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <CocoaLumberjack/Cocoalumberjack.h>
 
 #import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
 
-@interface MQTTClientOnlyTests : XCTestCase <MQTTSessionDelegate>
-@property (strong, nonatomic) MQTTSession *session;
-@property (nonatomic) NSInteger event;
-@property (strong, nonatomic) NSError *error;
-@property (nonatomic) BOOL timeout;
-@property (nonatomic) int type;
+@interface MQTTClientOnlyTests : MQTTTestHelpers
 @end
 
 @implementation MQTTClientOnlyTests
@@ -40,76 +34,43 @@
 }
 
 - (void)test_connect_host_not_found {
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSMutableDictionary *parameters = [self.brokers[broker] mutableCopy];
         
-        if (![parameters[@"websocket"] boolValue]) {
-            
-            self.session = [[MQTTSession alloc] init];
-            self.session.persistence.persistent = PERSISTENT;
-            self.session.delegate = self;
-            self.event = -1;
-            [self.session connectToHost:@"abc" port:[parameters[@"port"] intValue] usingSSL:[parameters[@"tls"] boolValue]];
-            while (self.event == -1) {
-                [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-            }
-            XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-            XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-            XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
+        [parameters setObject:@"abc" forKey:@"host"];
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.delegate = self;
+        self.event = -1;
+        [self.session connect];
+        while (self.event == -1) {
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
+        XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+        XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
+        XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
     }
 }
 
 
 - (void)test_connect_1889 {
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSMutableDictionary *parameters = [self.brokers[broker] mutableCopy];
         
-        if (![parameters[@"websocket"] boolValue]) {
-            
-            self.session = [[MQTTSession alloc] init];
-            self.session.persistence.persistent = PERSISTENT;
-            self.session.delegate = self;
-            self.event = -1;
-            [self.session connectToHost:parameters[@"host"] port:1889 usingSSL:[parameters[@"tls"] boolValue]];
-            while (self.event == -1) {
-                [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-            }
-            XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-            XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-            XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolErrorr %@", self.error);
+        [parameters setObject:@1889 forKey:@"port"];
+
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.delegate = self;
+        self.event = -1;
+        [self.session connect];
+        while (self.event == -1) {
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
+        XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+        XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
+        XCTAssertNotEqual(self.event, (NSInteger)MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolErrorr %@", self.error);
     }
 }
-
-- (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
-{
-    //NSLog(@"received:%d qos:%d retained:%d duped:%d mid:%d data:%@", type, qos, retained, duped, mid, data);
-
-    self.type = type;
-}
-
-- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
-{
-    //NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
-}
-
-- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
-{
-    //NSLog(@"handleEvent:%ld error:%@", (long)eventCode, error);
-    self.event = eventCode;
-    self.error = error;
-}
-
-- (void)ackTimeout:(NSNumber *)timeout
-{
-    //NSLog(@"ackTimeout: %f", [timeout doubleValue]);
-    self.timeout = TRUE;
-}
-
-
-
 
 @end

@@ -25,20 +25,23 @@
 
 @interface MQTTSession(Create)
 
-/** alternative initializer
- @param clientId see initWithClientId for description.
- @param userName see initWithClientId for description.
- @param password see initWithClientId for description.
- @param keepAliveInterval see initWithClientId for description.
- @param cleanSessionFlag see initWithClientId for description.
- @param willFlag see initWithClientId for description.
- @param willTopic see initWithClientId for description.
- @param willMsg see initWithClientId for description.
- @param willQoS see initWithClientId for description.
- @param willRetainFlag see initWithClientId for description.
- @param protocolLevel see initWithClientId for description.
- @param runLoop see initWithClientId for description.
- @param runLoopMode see initWithClientId for description.
+/** certificates an NSArray holding client certificates or nil */
+@property (strong, nonatomic) NSArray *certificates;
+
+/** convenience initializer
+ @param clientId see clientId for description.
+ @param userName see username for description.
+ @param password see password for description.
+ @param keepAliveInterval see keepAliveInterval for description.
+ @param cleanSessionFlag see cleanSessionFlag for description.
+ @param willFlag see willFlag for description.
+ @param willTopic see willTopic for description.
+ @param willMsg see willMsg for description.
+ @param willQoS see willQos for description.
+ @param willRetainFlag see willRetainFlg for description.
+ @param protocolLevel see protocolLevel for description.
+ @param runLoop see runLoop for description.
+ @param runLoopMode see runLoopMode for description.
  @return the initialised MQTTSession object
  @exception NSInternalInconsistencyException if the parameters are invalid
  */
@@ -343,6 +346,7 @@
  }];
  @endcode
  
+ @deprecated as not all connection parameters are supported, use connect
  */
 
 - (void)connectToHost:(NSString *)host
@@ -357,6 +361,7 @@
  @param usingSSL see connectToHost for description
  
  @return see connectToHost for description
+ @deprecated as not all connection parameters are supported, use connect
  
  */
 - (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
@@ -364,15 +369,18 @@
 
 /** for mqttio-OBJC backward compatibility
  @param ip see connectToHost for description
- @param port see connectoToHost for description
+ @param port see connectToHost for description
+ @deprecated as not all connection parameters are supported, use connect
  */
 - (void)connectToHost:(NSString*)ip port:(UInt32)port;
 
 /** for mqttio-OBJC backward compatibility
  @param ip see connectToHost for description
- @param port see connectoToHost for description
+ @param port see connectToHost for description
  @param connHandler event handler block
  @param messHandler message handler block
+ @deprecated as not all connection parameters are supported, use connect
+
  */
 - (void)connectToHost:(NSString*)ip
                  port:(UInt32)port
@@ -381,7 +389,7 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 
 /** for mqttio-OBJC backward compatibility
  @param ip see connectToHost for description
- @param port see connectoToHost for description
+ @param port see connectToHost for description
  @param usingSSL indicator to use TLS
  @param connHandler event handler block
  @param messHandler message handler block

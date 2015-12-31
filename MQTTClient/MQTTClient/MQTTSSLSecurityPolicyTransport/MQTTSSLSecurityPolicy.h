@@ -60,6 +60,27 @@ typedef NS_ENUM(NSUInteger, MQTTSSLPinningMode) {
 
 /**
 `MQTTSSLSecurityPolicy` evaluates server trust against pinned X.509 certificates and public keys over secure connections.
+ 
+If your app using security model which require pinning SSL certificates to helps prevent man-in-the-middle attacks
+and other vulnerabilities. you need to set securityPolicy to properly value(see MQTTSSLSecurityPolicy.h for more detail).
+
+NOTE: about self-signed server certificates:
+if your server using Self-signed certificates to establish SSL/TLS connection, you need to set property:
+MQTTSSLSecurityPolicy.allowInvalidCertificates=YES.
+
+If SSL is enabled, by default it only evaluate server's certificates using CA infrastructure, and for most case, this type of check is enough.
+However, if your app using security model which require pinning SSL certificates to helps prevent man-in-the-middle attacks
+and other vulnerabilities. you may need to set securityPolicy to properly value(see MQTTSSLSecurityPolicy.h for more detail).
+
+NOTE: about self-signed server certificates:
+In CA infrastructure, you may establish a SSL/TLS connection with server which using self-signed certificates
+by install the certificates into OS keychain(either programmatically or manually). however, this method has some disadvantages:
+1. every socket you app created will trust certificates you added.
+2. if user choice to remove certificates from keychain, you app need to handling certificates re-adding.
+
+If you only want to verify the cert for the socket you are creating and for no other sockets in your app, you need to use
+MQTTSSLSecurityPolicy.
+And if you use self-signed server certificates, your need to set property: MQTTSSLSecurityPolicy.allowInvalidCertificates=YES
 
 Adding pinned SSL certificates to your app helps prevent man-in-the-middle attacks and other vulnerabilities.
 Applications dealing with sensitive customer data or financial information are strongly encouraged to route all communication

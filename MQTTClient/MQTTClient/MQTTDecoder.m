@@ -7,12 +7,19 @@
 
 #import "MQTTDecoder.h"
 
+#ifdef LUMBERJACK
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @interface MQTTDecoder()
@@ -38,7 +45,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 - (void)openStream:(NSInputStream*)stream {
     [self.streams addObject:stream];
     [stream setDelegate:self];
-    DDLogVerbose(@"[MQTTDecoder] #streams=%lu", self.streams.count);
+    DDLogVerbose(@"[MQTTDecoder] #streams=%lu", (unsigned long)self.streams.count);
     if (self.streams.count == 1) {
         [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
         [stream open];
@@ -97,7 +104,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
             } else if (n == 0) {
                 break;
             }
-            DDLogVerbose(@"[MQTTDecoder] digit=0x%02x 0x%02x %d %d", digit, digit & 0x7f, self.length, self.lengthMultiplier);
+            DDLogVerbose(@"[MQTTDecoder] digit=0x%02x 0x%02x %d %d", digit, digit & 0x7f, (unsigned int)self.length, (unsigned int)self.lengthMultiplier);
             [self.dataBuffer appendBytes:&digit length:1];
             self.offset++;
             self.length += ((digit & 0x7f) * self.lengthMultiplier);
@@ -107,7 +114,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                 self.lengthMultiplier *= 128;
             }
         }
-        DDLogVerbose(@"[MQTTDecoder] remainingLength=%d", self.length);
+        DDLogVerbose(@"[MQTTDecoder] remainingLength=%d", (unsigned int)self.length);
 
         if (self.state == MQTTDecoderStateDecodingData) {
             if (self.length > 0) {

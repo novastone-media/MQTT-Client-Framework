@@ -14,6 +14,160 @@
           <Path>annotated.html</Path>
           <Subnodes>
            <Node>
+            <Name>MQTTCFSocketTransport</Name>
+            <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>certificates</Name>
+              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+              <Anchor>a6e71885e479e6bc28e00f6657fe77205</Anchor>
+             </Node>
+             <Node>
+              <Name>host</Name>
+              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+              <Anchor>ae30997b61a8be6b11bf3bb33cf751995</Anchor>
+             </Node>
+             <Node>
+              <Name>port</Name>
+              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+              <Anchor>a2b8899b8e97c85b4d9757705aa6ba968</Anchor>
+             </Node>
+             <Node>
+              <Name>tls</Name>
+              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+              <Anchor>ac0c5a60636d7561abf1d20caddf6ea96</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>MQTTCoreDataFlow</Name>
+            <Path>interface_m_q_t_t_core_data_flow.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTCoreDataPersistence</Name>
+            <Path>interface_m_q_t_t_core_data_persistence.html</Path>
+           </Node>
+           <Node>
+            <Name>&lt;MQTTFlow&gt;</Name>
+            <Path>protocol_m_q_t_t_flow-p.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>clientId</Name>
+              <Path>protocol_m_q_t_t_flow-p.html</Path>
+              <Anchor>adcecd8d7fb46a9ee206eee3aa55317ab</Anchor>
+             </Node>
+             <Node>
+              <Name>commandType</Name>
+              <Path>protocol_m_q_t_t_flow-p.html</Path>
+              <Anchor>a08a38c51f8220a7af42fc2e3d2eb9969</Anchor>
+             </Node>
+             <Node>
+              <Name>data</Name>
+              <Path>protocol_m_q_t_t_flow-p.html</Path>
+              <Anchor>a50900cbdfdf270e47fccaa9fee560e25</Anchor>
+             </Node>
+             <Node>
+              <Name>deadline</Name>
+              <Path>protocol_m_q_t_t_flow-p.html</Path>
+              <Anchor>af5c0d997c85856cfdad2eab9e425b01a</Anchor>
+             </Node>
+             <Node>
+              <Name>incomingFlag</Name>
+              <Path>protocol_m_q_t_t_flow-p.html</Path>
+              <Anchor>a020ab7c2407db69e70f6d649ec1b7908</Anchor>
+             </Node>
+             <Node>
+              <Name>messageId</Name>
+              <Path>protocol_m_q_t_t_flow-p.html</Path>
+              <Anchor>aebfe27d14d007dbbe4c0f707fb39dc00</Anchor>
+             </Node>
+             <Node>
+              <Name>qosLevel</Name>
+              <Path>protocol_m_q_t_t_flow-p.html</Path>
+              <Anchor>aec73f69c40a179fa9419a45af1967e6b</Anchor>
+             </Node>
+             <Node>
+              <Name>retainedFlag</Name>
+              <Path>protocol_m_q_t_t_flow-p.html</Path>
+              <Anchor>a923204eafe7a147c22f9cccd0e1e757f</Anchor>
+             </Node>
+             <Node>
+              <Name>topic</Name>
+              <Path>protocol_m_q_t_t_flow-p.html</Path>
+              <Anchor>ad218ad5cb39f49c477ab92b1e6d408dc</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>MQTTInMemoryFlow</Name>
+            <Path>interface_m_q_t_t_in_memory_flow.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTInMemoryPersistence</Name>
+            <Path>interface_m_q_t_t_in_memory_persistence.html</Path>
+           </Node>
+           <Node>
+            <Name>&lt;MQTTPersistence&gt;</Name>
+            <Path>protocol_m_q_t_t_persistence-p.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>allFlowsforClientId:incomingFlag:</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>abc43bd29d5edbd9d42ef3a8f8f73287d</Anchor>
+             </Node>
+             <Node>
+              <Name>deleteAllFlowsForClientId:</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>a2c880d902ade2b17078545cef8d212e7</Anchor>
+             </Node>
+             <Node>
+              <Name>deleteFlow:</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>a415cc2c67ea2e73d7942973a2186d083</Anchor>
+             </Node>
+             <Node>
+              <Name>flowforClientId:incomingFlag:messageId:</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>a2223834cf720c51f53fe25921aff4fe4</Anchor>
+             </Node>
+             <Node>
+              <Name>storeMessageForClientId:topic:data:retainFlag:qos:msgId:incomingFlag:commandType:deadline:</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>a3d0c50e06a2b54f40fb5356c5309454a</Anchor>
+             </Node>
+             <Node>
+              <Name>sync</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>afd0744d75cb430bfa2c430e14c3a65e8</Anchor>
+             </Node>
+             <Node>
+              <Name>windowSize:</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>a8521b079578db32e593d841ce2941fc0</Anchor>
+             </Node>
+             <Node>
+              <Name>maxMessages</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>a25da1e10303f72b9f5c0acded51780d2</Anchor>
+             </Node>
+             <Node>
+              <Name>maxSize</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>a9803a6b662157637e28949766186c3d5</Anchor>
+             </Node>
+             <Node>
+              <Name>maxWindowSize</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>a7566c5b7fff68c034ffd836c32d1b822</Anchor>
+             </Node>
+             <Node>
+              <Name>persistent</Name>
+              <Path>protocol_m_q_t_t_persistence-p.html</Path>
+              <Anchor>abe825bce839eb0d41e4b7428893ad8b8</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
             <Name>MQTTSession</Name>
             <Path>interface_m_q_t_t_session.html</Path>
             <Subnodes>
@@ -28,14 +182,19 @@
               <Anchor>a5a617d3cee077dd60f48a340d4b34d99</Anchor>
              </Node>
              <Node>
-              <Name>CONNECT</Name>
+              <Name>connect</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a6e8795caaa8f2ff1c76dcd660543d666</Anchor>
+              <Anchor>ad443eb80793d71150a825513303405b5</Anchor>
              </Node>
              <Node>
-              <Name>DISCONNECT</Name>
+              <Name>connectWithConnectHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>ab2313f01f8e8a292be14647146f24bb5</Anchor>
+              <Anchor>af2fb37adbbf9eeb28cea7dab43297fd7</Anchor>
+             </Node>
+             <Node>
+              <Name>disconnect</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>aef2d0980b561184800908e95dd3a9fc7</Anchor>
              </Node>
              <Node>
               <Name>init</Name>
@@ -93,11 +252,6 @@
               <Anchor>a101c813012ca11ff6c144db5a2c46c76</Anchor>
              </Node>
              <Node>
-              <Name>certificates</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a8093f2231e12c54af5eb1791cc60b06f</Anchor>
-             </Node>
-             <Node>
               <Name>cleanSessionFlag</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a8efd9a5bcf99786f2c78d4bc957fa4aa</Anchor>
@@ -145,7 +299,7 @@
              <Node>
               <Name>persistence</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a0d2bf00e77c5f95fb0158f0ab729d1e9</Anchor>
+              <Anchor>ae97bbef7489e0eb1f3bbbc93b02b6f41</Anchor>
              </Node>
              <Node>
               <Name>protocolLevel</Name>
@@ -397,6 +551,146 @@
              </Node>
             </Subnodes>
            </Node>
+           <Node>
+            <Name>MQTTSSLSecurityPolicy</Name>
+            <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>evaluateServerTrust:forDomain:</Name>
+              <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
+              <Anchor>ab964313603e8eb003494778e71a80bb2</Anchor>
+             </Node>
+             <Node>
+              <Name>allowInvalidCertificates</Name>
+              <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
+              <Anchor>a42fe688d550833a1f903be92b72cf384</Anchor>
+             </Node>
+             <Node>
+              <Name>pinnedCertificates</Name>
+              <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
+              <Anchor>a83bc83437d250926466effce0a949371</Anchor>
+             </Node>
+             <Node>
+              <Name>SSLPinningMode</Name>
+              <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
+              <Anchor>aca548d3c82c982c275e6c68d92648d89</Anchor>
+             </Node>
+             <Node>
+              <Name>validatesCertificateChain</Name>
+              <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
+              <Anchor>ad54371d7cfb587c908173d032df33dbb</Anchor>
+             </Node>
+             <Node>
+              <Name>validatesDomainName</Name>
+              <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
+              <Anchor>a905b5b1a0d5498ed11d36b9ca60514fc</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>MQTTSSLSecurityPolicyTransport</Name>
+            <Path>interface_m_q_t_t_s_s_l_security_policy_transport.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>securityPolicy</Name>
+              <Path>interface_m_q_t_t_s_s_l_security_policy_transport.html</Path>
+              <Anchor>aad852e4a64b0134fd25c077733a6cd55</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>&lt;MQTTTransport&gt;</Name>
+            <Path>protocol_m_q_t_t_transport-p.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>close</Name>
+              <Path>protocol_m_q_t_t_transport-p.html</Path>
+              <Anchor>aa293cdc8dc58de1d7e80c1a2c3ce6062</Anchor>
+             </Node>
+             <Node>
+              <Name>open</Name>
+              <Path>protocol_m_q_t_t_transport-p.html</Path>
+              <Anchor>a4f1224183fde2aaef640a3f2ab7afe61</Anchor>
+             </Node>
+             <Node>
+              <Name>send:</Name>
+              <Path>protocol_m_q_t_t_transport-p.html</Path>
+              <Anchor>ae4e6c781ff7ce72ac45f516402f774da</Anchor>
+             </Node>
+             <Node>
+              <Name>delegate</Name>
+              <Path>protocol_m_q_t_t_transport-p.html</Path>
+              <Anchor>a731cebd9439acdd3b766615ecb8222f3</Anchor>
+             </Node>
+             <Node>
+              <Name>state</Name>
+              <Path>protocol_m_q_t_t_transport-p.html</Path>
+              <Anchor>a9b5d6563956b03a4f613a3b276ebffe4</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>&lt;MQTTTransportDelegate&gt;</Name>
+            <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>mqttTransport:didFailWithError:</Name>
+              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
+              <Anchor>aafc48442e23cf641f32c0f894203bedd</Anchor>
+             </Node>
+             <Node>
+              <Name>mqttTransport:didReceiveMessage:</Name>
+              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
+              <Anchor>a9395babf3625db76a24fb69fec35bd50</Anchor>
+             </Node>
+             <Node>
+              <Name>mqttTransportDidClose:</Name>
+              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
+              <Anchor>a4684c6afb6c16d18204cfdb9f2d66adc</Anchor>
+             </Node>
+             <Node>
+              <Name>mqttTransportDidOpen:</Name>
+              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
+              <Anchor>a6799d36db6386507592938012ac553f3</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>MQTTWebsocketTransport</Name>
+            <Path>interface_m_q_t_t_websocket_transport.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>allowUntrustedCertificates</Name>
+              <Path>interface_m_q_t_t_websocket_transport.html</Path>
+              <Anchor>a4df39d1f59fd822446ed0630164475ae</Anchor>
+             </Node>
+             <Node>
+              <Name>host</Name>
+              <Path>interface_m_q_t_t_websocket_transport.html</Path>
+              <Anchor>a1e4c2c9fa31f833f46379dc57ca9536d</Anchor>
+             </Node>
+             <Node>
+              <Name>path</Name>
+              <Path>interface_m_q_t_t_websocket_transport.html</Path>
+              <Anchor>a9261bfd30cf1e8fa50de06f56f3c9c1b</Anchor>
+             </Node>
+             <Node>
+              <Name>pinnedCertificates</Name>
+              <Path>interface_m_q_t_t_websocket_transport.html</Path>
+              <Anchor>aaafe7397cd1c3e41240cd9752bcb446b</Anchor>
+             </Node>
+             <Node>
+              <Name>port</Name>
+              <Path>interface_m_q_t_t_websocket_transport.html</Path>
+              <Anchor>a7a1139bbbe91d41a44b7b529dde39633</Anchor>
+             </Node>
+             <Node>
+              <Name>tls</Name>
+              <Path>interface_m_q_t_t_websocket_transport.html</Path>
+              <Anchor>a028dce824b120b670e0759c994066ce0</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
           </Subnodes>
          </Node>
          <Node>
@@ -408,13 +702,111 @@
           <Path>hierarchy.html</Path>
           <Subnodes>
            <Node>
-            <Name>&lt;NSObject&gt;</Name>
+            <Name>&lt;MQTTCFSocketDecoderDelegate&gt;</Name>
             <Path></Path>
             <Subnodes>
+             <Node>
+              <Name>MQTTCFSocketTransport</Name>
+              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>MQTTSSLSecurityPolicyTransport</Name>
+                <Path>interface_m_q_t_t_s_s_l_security_policy_transport.html</Path>
+               </Node>
+              </Subnodes>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>&lt;MQTTCFSocketEncoderDelegate&gt;</Name>
+            <Path></Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTCFSocketTransport</Name>
+              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>&lt;MQTTFlow&gt;</Name>
+            <Path>protocol_m_q_t_t_flow-p.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTCoreDataFlow</Name>
+              <Path>interface_m_q_t_t_core_data_flow.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTInMemoryFlow</Name>
+              <Path>interface_m_q_t_t_in_memory_flow.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>&lt;MQTTPersistence&gt;</Name>
+            <Path>protocol_m_q_t_t_persistence-p.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTCoreDataPersistence</Name>
+              <Path>interface_m_q_t_t_core_data_persistence.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTInMemoryPersistence</Name>
+              <Path>interface_m_q_t_t_in_memory_persistence.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>NSManagedObject</Name>
+            <Path></Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTCoreDataFlow</Name>
+              <Path>interface_m_q_t_t_core_data_flow.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>NSObject</Name>
+            <Path></Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTCFSocketTransport</Name>
+              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTCoreDataPersistence</Name>
+              <Path>interface_m_q_t_t_core_data_persistence.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTInMemoryFlow</Name>
+              <Path>interface_m_q_t_t_in_memory_flow.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTInMemoryPersistence</Name>
+              <Path>interface_m_q_t_t_in_memory_persistence.html</Path>
+             </Node>
              <Node>
               <Name>MQTTSession</Name>
               <Path>interface_m_q_t_t_session.html</Path>
              </Node>
+             <Node>
+              <Name>MQTTSessionManager</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTSSLSecurityPolicy</Name>
+              <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTWebsocketTransport</Name>
+              <Path>interface_m_q_t_t_websocket_transport.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>&lt;NSObject&gt;</Name>
+            <Path></Path>
+            <Subnodes>
              <Node>
               <Name>&lt;MQTTSessionDelegate&gt;</Name>
               <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
@@ -426,12 +818,36 @@
               </Subnodes>
              </Node>
              <Node>
-              <Name>MQTTSessionManager</Name>
-              <Path>interface_m_q_t_t_session_manager.html</Path>
-             </Node>
-             <Node>
               <Name>&lt;MQTTSessionManagerDelegate&gt;</Name>
               <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
+             </Node>
+             <Node>
+              <Name>&lt;MQTTTransport&gt;</Name>
+              <Path>protocol_m_q_t_t_transport-p.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>MQTTCFSocketTransport</Name>
+                <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+               </Node>
+               <Node>
+                <Name>MQTTWebsocketTransport</Name>
+                <Path>interface_m_q_t_t_websocket_transport.html</Path>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>&lt;MQTTTransportDelegate&gt;</Name>
+              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>&lt;SRWebSocketDelegate&gt;</Name>
+            <Path></Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTWebsocketTransport</Name>
+              <Path>interface_m_q_t_t_websocket_transport.html</Path>
              </Node>
             </Subnodes>
            </Node>
@@ -466,12 +882,68 @@
           <Path>files.html</Path>
           <Subnodes>
            <Node>
+            <Name>MQTTCoreDataPersistence</Name>
+            <Path>dir_244a5e883383ae5cdc3f845a0659de72.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTCoreDataPersistence.h</Name>
+              <Path>_m_q_t_t_core_data_persistence_8h_source.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>MQTTInMemoryPersistence</Name>
+            <Path>dir_5e92f56bd4bc3df0fcc8ebaf5a8f833c.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTInMemoryPersistence.h</Name>
+              <Path>_m_q_t_t_in_memory_persistence_8h_source.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>MQTTSSLSecurityPolicyTransport</Name>
+            <Path>dir_423c73355645902195ec63e01674a4df.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTSSLSecurityPolicy.h</Name>
+              <Path>_m_q_t_t_s_s_l_security_policy_8h_source.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTSSLSecurityPolicyTransport.h</Name>
+              <Path>_m_q_t_t_s_s_l_security_policy_transport_8h_source.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>MQTTWebsocketTransport</Name>
+            <Path>dir_fb6e9762d7e0408b6ad98066048f64b6.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTWebsocketTransport.h</Name>
+              <Path>_m_q_t_t_websocket_transport_8h_source.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>MQTTCFSocketTransport.h</Name>
+            <Path>_m_q_t_t_c_f_socket_transport_8h_source.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTPersistence.h</Name>
+            <Path>_m_q_t_t_persistence_8h_source.html</Path>
+           </Node>
+           <Node>
             <Name>MQTTSession.h</Name>
             <Path>_m_q_t_t_session_8h_source.html</Path>
            </Node>
            <Node>
             <Name>MQTTSessionManager.h</Name>
             <Path>_m_q_t_t_session_manager_8h_source.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTTransport.h</Name>
+            <Path>_m_q_t_t_transport_8h_source.html</Path>
            </Node>
           </Subnodes>
          </Node>

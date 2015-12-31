@@ -7,13 +7,21 @@
 //
 
 #import "MQTTSessionManager.h"
+#import "MQTTCoreDataPersistence.h"
 
+#ifdef LUMBERJACK
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @interface MQTTSessionManager()
@@ -64,13 +72,17 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #define BACKGROUND_DISCONNECT_AFTER 8.0
 
 @implementation MQTTSessionManager
-- (id)init
-{
+- (id)init {
     self = [super init];
 
     self.state = MQTTSessionManagerStateStarting;
     self.internalSubscriptions = [[NSMutableDictionary alloc] init];
     self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
+
+    self.persistent = MQTT_PERSISTENT;
+    self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
+    self.maxSize = MQTT_MAX_SIZE;
+    self.maxMessages = MQTT_MAX_MESSAGES;
 
 #if TARGET_OS_IPHONE == 1
     self.backgroundTask = UIBackgroundTaskInvalid;
@@ -108,13 +120,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 }
 
 #if TARGET_OS_IPHONE == 1
-- (void)appWillResignActive
-{
+- (void)appWillResignActive {
     [self disconnect];
 }
 
-- (void)appDidEnterBackground
-{
+- (void)appDidEnterBackground {
     self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         if (self.backgroundTask) {
             [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
@@ -123,8 +133,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     }];
 }
 
-- (void)appDidBecomeActive
-{
+- (void)appDidBecomeActive {
     [self connectToLast];
 }
 #endif
@@ -141,8 +150,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
              will:(NSData *)will
           willQos:(MQTTQosLevel)willQos
    willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId
-{
+     withClientId:(NSString *)clientId {
   [self connectTo:host
                port:port
                 tls:tls
@@ -172,8 +180,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
           willMsg:(NSData *)willMsg
           willQos:(MQTTQosLevel)willQos
    willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId
-{
+     withClientId:(NSString *)clientId {
     [self connectTo:host
                port:port
                 tls:tls
@@ -207,8 +214,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-     certificates:(NSArray *)certificates
-{
+     certificates:(NSArray *)certificates {
     DDLogVerbose(@"MQTTSessionManager connectTo:%@", host);
     BOOL shouldReconnect = self.session != nil;
     if (!self.session ||
@@ -260,21 +266,25 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                               securityPolicy:securityPolicy
                                                 certificates:certificates];
         
-        self.session.persistence.persistent = self.persistent;
-        self.session.persistence.maxWindowSize = self.maxWindowSize;
-        self.session.persistence.maxSize = self.maxSize;
-        self.session.persistence.maxMessages = self.maxMessages;
+        MQTTCoreDataPersistence *persistence = [[MQTTCoreDataPersistence alloc] init];
+        
+        persistence.persistent = self.persistent;
+        persistence.maxWindowSize = self.maxWindowSize;
+        persistence.maxSize = self.maxSize;
+        persistence.maxMessages = self.maxMessages;
+        
+        self.session.persistence = persistence;
         
         self.session.delegate = self;
         self.reconnectTime = RECONNECT_TIMER;
         self.reconnectFlag = FALSE;
     }
     if(shouldReconnect){
-        NSLog(@"[MQTTSessionManager] reconnecting");
+        DDLogVerbose(@"[MQTTSessionManager] reconnecting");
         [self disconnect];
         [self reconnect];
     }else{
-        NSLog(@"[MQTTSessionManager] connecting");
+        DDLogVerbose(@"[MQTTSessionManager] connecting");
         [self connectToInternal];
     }
 }
@@ -315,7 +325,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                    @(MQTTSessionEventProtocolError): @"protocoll error",
                                    @(MQTTSessionEventConnectionClosedByBroker): @"connection closed by broker"
                                    };
-    NSLog(@"[MQTTSessionManager] eventCode: %@ (%ld) %@", events[@(eventCode)], (long)eventCode, error);
+    DDLogVerbose(@"[MQTTSessionManager] eventCode: %@ (%ld) %@", events[@(eventCode)], (long)eventCode, error);
 #endif
     [self.reconnectTimer invalidate];
     switch (eventCode) {

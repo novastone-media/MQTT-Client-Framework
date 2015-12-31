@@ -383,7 +383,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="paramkey">securityPolicy:</td>
           <td></td>
-          <td class="paramtype">(MQTTSSLSecurityPolicy *)&#160;</td>
+          <td class="paramtype">(<a class="el" href="interface_m_q_t_t_s_s_l_security_policy.html">MQTTSSLSecurityPolicy</a> *)&#160;</td>
           <td class="paramname"><em>securityPolicy</em></td>
         </tr>
         <tr>
@@ -600,7 +600,7 @@ Properties</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>initWithPersistence sets the MQTTPersistence properties other than default </p><dl class="params"><dt>Parameters</dt><dd>
+<p>initWithPersistence sets the <a class="el" href="protocol_m_q_t_t_persistence-p.html">MQTTPersistence</a> properties other than default </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">persistent</td><td>YES or NO (default) to establish file or in memory persistence. </td></tr>
     <tr><td class="paramname">maxWindowSize</td><td>(a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are stored and transmitted later. </td></tr>
@@ -722,7 +722,7 @@ Properties</h2></td></tr>
 <div class="line">    context:(<span class="keywordtype">void</span> *)context {</div>
 <div class="line">    <span class="keywordflow">if</span> ([keyPath isEqualToString:<span class="stringliteral">@&quot;effectiveSubscriptions&quot;</span>]) {</div>
 <div class="line">        <a class="code" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> *manager = (<a class="code" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> *)<span class="keywordtype">object</span>;</div>
-<div class="line">        NSLog(<span class="stringliteral">@&quot;effectiveSubscriptions changed: %@&quot;</span>, manager.<a class="code" href="interface_m_q_t_t_session_manager.html#a93848b47c7ea903993531a50368d15f5">effectiveSubscriptions</a>);</div>
+<div class="line">        DDLogVerbose(<span class="stringliteral">@&quot;effectiveSubscriptions changed: %@&quot;</span>, manager.<a class="code" href="interface_m_q_t_t_session_manager.html#a93848b47c7ea903993531a50368d15f5">effectiveSubscriptions</a>);</div>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -797,7 +797,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 8 2015 22:19:22 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 31 2015 12:58:43 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

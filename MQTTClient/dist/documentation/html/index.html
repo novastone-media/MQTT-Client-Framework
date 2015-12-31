@@ -97,14 +97,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>aws</li>
 </ul>
 <h3>Howto</h3>
-<p>Add MQTTClient.framework from the dist directory to your IOS project, use the dynamic library created in the MQTTFramework target, or use the CocoaPod MQTTClient</p>
+<p>Use the CocoaPod MQTTClient!</p>
+<p>Or use the dynamic library created in the MQTTFramework target.</p>
+<p>Or include the source from here.</p>
 <p><a href="MQTTClient/dist/documentation/html/index.html">Documentation</a></p>
 <h3>Usage</h3>
 <p>Create a new client and connect to a broker:</p>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;\@interface MyDelegate : ... MQTTSessionDelegate&gt;</div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;...</div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;MQTTSession *session = [[MQTTSession alloc]initWithClientId:@&quot;client_id&quot;]</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;MQTTSession *session = [[MQTTSession alloc] init];</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;// Set delegate appropriately to receive various events</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;// Set MQTTSessionDelegate // See MQTTSession.h for information on various handlers</div>
@@ -124,9 +126,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;                    onTopic:@&quot;topic&quot;</div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;                     retain:NO</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;                        qos:MQTTQosLevelAtLeastOnce]</div>
-</div><!-- fragment --><h4>Framework</h4>
-<p>Framework build using instructions and scripts by Jeff Verkoeyen <a href="https://github.com/jverkoey/iOS-Framework">https://github.com/jverkoey/iOS-Framework</a></p>
-<h4>docs</h4>
+</div><!-- fragment --><h4>docs</h4>
 <p>Documentation generated with doxygen <a href="http://doxygen.org">http://doxygen.org</a></p>
 <h4>Comparison MQTT Clients for iOS (incomplete)</h4>
 <table class="doxtable">
@@ -140,7 +140,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 8 2015 22:19:22 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 31 2015 12:58:43 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

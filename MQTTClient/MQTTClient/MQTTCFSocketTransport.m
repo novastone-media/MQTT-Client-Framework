@@ -8,12 +8,19 @@
 
 #import "MQTTCFSocketTransport.h"
 
+#ifdef LUMBERJACK
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @interface MQTTCFSocketTransport()
@@ -103,11 +110,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     }
 }
 
-- (BOOL)send:(NSData *)data {
+- (BOOL)send:(nonnull NSData *)data {
     return [self.encoder send:data];
 }
 
-- (void)decoder:(MQTTCFSocketDecoder *)sender didReceiveMessage:(NSData *)data {
+- (void)decoder:(MQTTCFSocketDecoder *)sender didReceiveMessage:(nonnull NSData *)data {
     [self.delegate mqttTransport:self didReceiveMessage:data];
 }
 

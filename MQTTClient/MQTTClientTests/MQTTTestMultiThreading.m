@@ -7,7 +7,6 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <CocoaLumberjack/Cocoalumberjack.h>
 
 #import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
@@ -25,34 +24,16 @@
 {
     self.parameters = parameters;
 
-    self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:parameters[@"user"]
-                                                password:parameters[@"pass"]
-                                               keepAlive:60
-                                            cleanSession:YES
-                                                    will:NO
-                                               willTopic:nil
-                                                 willMsg:nil
-                                                 willQoS:0
-                                          willRetainFlag:NO
-                                           protocolLevel:[parameters[@"protocollevel"] intValue]
-                                                 runLoop:[NSRunLoop currentRunLoop]
-                                                 forMode:NSRunLoopCommonModes
-                                          securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-                                            certificates:[MQTTTestHelpers clientCerts:parameters]];
+    self.session = [MQTTTestHelpers session:parameters];
 
     self.session.delegate = self;
-    self.session.persistence.persistent = PERSISTENT;
     return self;
 }
 
 - (BOOL)runSync {
-    NSLog(@"%@ connecting", self.session.clientId);
+    DDLogVerbose(@"%@ connecting", self.session.clientId);
     
-    if ([self.session connectAndWaitToHost:self.parameters[@"host"]
-                                      port:[self.parameters[@"port"] intValue]
-                                  usingSSL:[self.parameters[@"tls"] boolValue]
-                                   timeout:10]) {
+    if ([self.session connectAndWaitTimeout:10]) {
         
         [self.session subscribeAndWaitToTopic:@"#" atLevel:MQTTQosLevelAtLeastOnce timeout:10];
         
@@ -72,10 +53,8 @@
 - (void)start
 {
     self.event = -1;
-    [self.session connectToHost:self.parameters[@"host"]
-                           port:[self.parameters[@"port"] intValue]
-                       usingSSL:[self.parameters[@"tls"] boolValue]];
-    NSLog(@"%@ connecting", self.session.clientId);
+    [self.session connect];
+    DDLogVerbose(@"%@ connecting", self.session.clientId);
 
 
 }
@@ -116,19 +95,19 @@
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
 {
-    //NSLog(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
+    //DDLogVerbose(@"newMessage:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    //NSLog(@"handleEvent:%ld error:%@", eventCode, error);
+    //DDLogVerbose(@"handleEvent:%ld error:%@", eventCode, error);
     self.event = eventCode;
     self.error = error;
 }
 
 @end
 
-@interface MQTTTestMultiThreading : XCTestCase <MQTTSessionDelegate>
+@interface MQTTTestMultiThreading : MQTTTestHelpers
 
 @end
 
@@ -150,29 +129,26 @@
     [super tearDown];
 }
 
-- (void)testAsync
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
+- (void)testAsync {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
         [self runAsync:parameters];
     }
 }
 
-- (void)testSync
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
+- (void)testSync {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
         [self runSync:parameters];
     }
 }
 
-- (void)testMultiConnect
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
+- (void)testMultiConnect {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
         NSMutableArray *connections = [[NSMutableArray alloc] initWithCapacity:MULTI];
 
         for (int i = 0; i < MULTI; i++) {
@@ -218,11 +194,10 @@
     }
 }
 
-- (void)testAsyncThreads
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
+- (void)testAsyncThreads {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
 
         NSMutableArray *threads = [[NSMutableArray alloc] initWithCapacity:MULTI];
 
@@ -243,11 +218,10 @@
     }
 }
 
-- (void)testSyncThreads
-{
-    for (NSString *broker in BROKERLIST) {
-        NSLog(@"testing broker %@", broker);
-        NSDictionary *parameters = BROKERS[broker];
+- (void)testSyncThreads {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
 
         NSMutableArray *threads = [[NSMutableArray alloc] initWithCapacity:MULTI];
 
@@ -268,14 +242,13 @@
     }
 }
 
-- (void)runAsync:(NSDictionary *)parameters
-{
+- (void)runAsync:(NSDictionary *)parameters {
     OneTest *test = [[OneTest alloc] init];
     [test setup:parameters];
     [test start];
 
     while (test.event == -1) {
-        //NSLog(@"waiting for connection");
+        //DDLogVerbose(@"waiting for connection");
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
 
@@ -286,21 +259,21 @@
         [test sub];
 
         while (test.event == -1) {
-            //NSLog(@"%@ waiting for suback", test.session.clientId);
+            //DDLogVerbose(@"%@ waiting for suback", test.session.clientId);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
 
         [test pub];
 
         while (test.event == -1) {
-            //NSLog(@"%@ waiting for puback", test.session.clientId);
+            //DDLogVerbose(@"%@ waiting for puback", test.session.clientId);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
 
         [test close];
         
         while (test.event == -1) {
-            //NSLog(@"%@ waiting for close", test.session.clientId);
+            //DDLogVerbose(@"%@ waiting for close", test.session.clientId);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
     }
@@ -308,8 +281,7 @@
     [test stop];
 }
 
-- (void)runSync:(NSDictionary *)parameters
-{
+- (void)runSync:(NSDictionary *)parameters {
     OneTest *test = [[OneTest alloc] init];
     [test setup:parameters];
     

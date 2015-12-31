@@ -19,12 +19,19 @@
 
 #import "MQTTMessage.h"
 
+#ifdef LUMBERJACK
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @implementation MQTTMessage
@@ -152,7 +159,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                                  msgId:(UInt16)msgId
                             retainFlag:(BOOL)retain
                                dupFlag:(BOOL)dup {
-    NSMutableData* data = [NSMutableData data];
+    NSMutableData *data = [[NSMutableData alloc] init];
     [data appendMQTTString:topic];
     if (msgId) [data appendUInt16BigEndian:msgId];
     [data appendData:payload];
@@ -297,7 +304,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
         UInt8 type = (header >> 4) & 0x0f;
         UInt8 dupFlag = (header >> 3) & 0x01;
         UInt8 qos = (header >> 1) & 0x03;
-        UInt8 retainFlag = 0x01;
+        UInt8 retainFlag = header & 0x01;
         UInt32 remainingLength = 0;
         UInt32 multiplier = 1;
         UInt8 offset = 1;

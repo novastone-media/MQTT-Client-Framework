@@ -10,9 +10,11 @@
 #import "MQTTSSLSecurityPolicy.h"
 #import "MQTTCFSocketTransport.h"
 
+/** MQTTSSLSecurityPolicyTransport
+ * implements an extension of the MQTTCFSocketTransport by replacing the OS's certificate chain evaluation
+ */
 @interface MQTTSSLSecurityPolicyTransport : MQTTCFSocketTransport
 
-// ssl security policy
 /**
  * The security policy used to evaluate server trust for secure connections.
  *

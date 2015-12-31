@@ -7,13 +7,21 @@
 
 #import "MQTTSSLSecurityPolicyEncoder.h"
 
+#ifdef LUMBERJACK
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
+#endif
+
 
 @interface MQTTSSLSecurityPolicyEncoder()
 @property (nonatomic) BOOL securityPolicyApplied;
@@ -51,7 +59,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
     
-    if (eventCode &  NSStreamEventHasSpaceAvailable) {
+    if (eventCode & NSStreamEventHasSpaceAvailable) {
         DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventHasSpaceAvailable");
         if(![self applySSLSecurityPolicy:sender withEvent:eventCode]){
             self.state = MQTTCFSocketEncoderStateError;

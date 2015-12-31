@@ -29,7 +29,7 @@
 @class MQTTSSLSecurityPolicy;
 
 /** Session delegate gives your application control over the MQTTSession
- @note handleEvent and newMessage are required interfaces, the rest is optional
+ @note all callback methods are optional
  */
 
 @protocol MQTTSessionDelegate <NSObject>
@@ -237,6 +237,7 @@ typedef void (^MQTTUnsubscribeHandler)(NSError *error);
 typedef void (^MQTTPublishHandler)(NSError *error);
 
 /** Session implements the MQTT protocol for your application
+ *
  */
 
 @interface MQTTSession : NSObject
@@ -269,7 +270,6 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  @endcode
  
  */
-
 @property (weak, nonatomic) id<MQTTSessionDelegate> delegate;
 
 /** Control MQTT persistence by setting the properties of persistence before connecting to an MQTT broker.
@@ -287,7 +287,7 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  
     Messages are deleted after they have been acknowledged.
 */
-@property (strong, nonatomic) MQTTPersistence *persistence;
+@property (strong, nonatomic) id<MQTTPersistence> persistence;
 
 /** block called once when connection is established
  */
@@ -310,72 +310,123 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 @property (nonatomic, readonly) BOOL sessionPresent;
 
 /** see initWithClientId for description
+ * @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
+
  */
 @property (strong, nonatomic) NSString *clientId;
-/** see initWithClientId for description
- */
+
+/** see userName an NSString object containing the user's name (or ID) for authentication. May be nil. */
 @property (strong, nonatomic) NSString *userName;
-/** see initWithClientId for description
- */
+
+/** see password an NSString object containing the user's password. If userName is nil, password must be nil as well.*/
 @property (strong, nonatomic) NSString *password;
-/** see initWithClientId for description
+
+/** see keepAliveInterval The Keep Alive is a time interval measured in seconds.
+ * The MQTTClient ensures that the interval between Control Packets being sent does not exceed
+ * the Keep Alive value. In the  absence of sending any other Control Packets, the Client sends a PINGREQ Packet.
  */
 @property (nonatomic) UInt16 keepAliveInterval;
-/** see initWithClientId for description
- */
+
+/** leanSessionFlag specifies if the server should discard previous session information. */
 @property (nonatomic) BOOL cleanSessionFlag;
-/** see initWithClientId for description
+
+/** willFlag If the Will Flag is set to YES this indicates that
+ * a Will Message MUST be published by the Server when the Server detects
+ * that the Client is disconnected for any reason other than the Client flowing a DISCONNECT Packet.
  */
 @property (nonatomic) BOOL willFlag;
-/** see initWithClientId for description
- */
+
+/** willTopic If the Will Flag is set to YES, the Will Topic is a string, nil otherwise. */
 @property (strong, nonatomic) NSString *willTopic;
-/** see initWithClientId for description
- */
+
+/** willMsg If the Will Flag is set to YES the Will Message must be specified, nil otherwise. */
 @property (strong, nonatomic) NSData *willMsg;
-/** see initWithClientId for description
+
+/** willQoS specifies the QoS level to be used when publishing the Will Message.
+ * If the Will Flag is set to NO, then the Will QoS MUST be set to 0.
+ * If the Will Flag is set to YES, the Will QoS MUST be a valid MQTTQosLevel.
  */
 @property (nonatomic) MQTTQosLevel willQoS;
-/** see initWithClientId for description
+
+/** willRetainFlag indicates if the server should publish the Will Messages with retainFlag.
+ * If the Will Flag is set to NO, then the Will Retain Flag MUST be set to NO .
+ * If the Will Flag is set to YES: If Will Retain is set to NO, the Serve
+ * MUST publish the Will Message as a non-retained publication [MQTT-3.1.2-14].
+ * If Will Retain is set to YES, the Server MUST publish the Will Message as a retained publication [MQTT-3.1.2-15].
  */
 @property (nonatomic) BOOL willRetainFlag;
-/** see initWithClientId for description
- */
+
+/** protocolLevel specifies the protocol to be used */
 @property (nonatomic) MQTTProtocolVersion protocolLevel;
-/** see initWithClientId for description
- */
+
+/** runLoop The runLoop where the streams are scheduled. If nil, defaults to [NSRunLoop currentRunLoop]. */
 @property (strong, nonatomic) NSRunLoop *runLoop;
-/** see initWithClientId for description
- */
+
+/** runLoopMode The runLoopMode where the streams are scheduled. If nil, defaults to NSRunLoopCommonModes. */
 @property (strong, nonatomic) NSString *runLoopMode;
 
 
-// ssl security policy
-/**
-* The security policy used to evaluate server trust for secure connections.
-*
-* if your app using security model which require pinning SSL certificates to helps prevent man-in-the-middle attacks
-* and other vulnerabilities. you need to set securityPolicy to properly value(see MQTTSSLSecurityPolicy.h for more detail).
-*
-* NOTE: about self-signed server certificates:
-* if your server using Self-signed certificates to establish SSL/TLS connection, you need to set property:
-* MQTTSSLSecurityPolicy.allowInvalidCertificates=YES.
-*/
+/** The security policy used to evaluate server trust for secure connections.
+ * (see MQTTSSLSecurityPolicy.h for more detail).
+ */
 @property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
-
-/** see initWithClientId for description
-*/
-@property (strong, nonatomic) NSArray *certificates;
 
 /** for mqttio-OBJC backward compatibility
  the connect message used is stored here
  */
 @property (strong, nonatomic) MQTTMessage *connectMessage;
 
+/** the transport provider for MQTTClient
+ *
+ * assign an in instanc of a class implementing the MQTTTransport protocol e.g.
+ * MQTTCFSocketTransport before connecting.
+ */
 @property (strong, nonatomic) id <MQTTTransport> transport;
 
-- (void)CONNECT;
-- (void)DISCONNECT;
+/** connect to the given host through the given transport with the given
+ *  MQTT session parameters asynchronously
+ *
+ *  @exception NSInternalInconsistencyException if the parameters are invalid
+ *
+ */
+
+- (void)connect;
+
+/** connects to the specified MQTT server
+ 
+ @param connectHandler identifies a block which is executed on successfull or unsuccessfull connect. Might be nil
+ error is nil in the case of a successful connect
+ sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
+ 
+ @return nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and
+ - watch for events
+ - watch for connect or connectionRefused messages
+ - watch for error messages
+ or use the connectHandler block
+ 
+ @code
+ #import "MQTTClient.h"
+ 
+ MQTTSession *session = [[MQTTSession alloc] init];
+ ...
+ [session connectWithConnectHandler:^(NSError *error, BOOL sessionPresent) {
+ if (error) {
+ NSLog(@"Error Connect %@", error.localizedDescription);
+ } else {
+ NSLog(@"Connected sessionPresent:%d", sessionPresent);
+ }
+ }];
+ @endcode
+ 
+ */
+
+- (void)connectWithConnectHandler:(MQTTConnectHandler)connectHandler;
+
+
+/** disconnect gracefully
+ *
+ */
+- (void)disconnect;
 
 /** initialises the MQTT session with default values
  @return the initialised MQTTSession object
@@ -401,8 +452,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session connect];
  ...
  [session subscribeToTopic:@"example/#" atLevel:2];
  
@@ -430,8 +481,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session connect];
  ...
  [session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
     if (error) {
@@ -460,8 +511,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session connect];
  
  [session subscribeToTopics:@{
  @"example/#": @(0),
@@ -491,8 +542,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session connect];
  
  [session subscribeToTopics:@{
     @"example/#": @(0),
@@ -525,8 +576,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session connect];
  
  [session unsubscribeTopic:@"example/#"];
  
@@ -563,8 +614,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session connect];
  
  [session unsubscribeTopics:@[
  @"example/#",
@@ -608,8 +659,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session connect];
  
  [session publishData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
  topic:@"example/data"
@@ -643,13 +694,21 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session connect];
  
  [session publishData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
  topic:@"example/data"
  retain:YES
- qos:1];
+ qos:1
+ publishHandler:^(NSError *error){
+ if (error) {
+ DDLogVerbose(@"error: %@ %@", error.localizedDescription, payload);
+ } else {
+ DDLogVerbose(@"delivered:%@", payload);
+ delivered++;
+ }
+ }];
  @endcode
  
  */
@@ -666,8 +725,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  #import "MQTTClient.h"
  
  MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO];
+ ...
+ [session connect];
  
  ...
  

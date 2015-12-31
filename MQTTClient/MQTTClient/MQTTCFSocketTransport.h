@@ -10,12 +10,29 @@
 #import "MQTTCFSocketDecoder.h"
 #import "MQTTCFSocketEncoder.h"
 
+/** MQTTCFSocketTransport
+ * implements an MQTTTransport on top of CFNetwork
+ */
 @interface MQTTCFSocketTransport : NSObject <MQTTTransport, MQTTCFSocketDecoderDelegate, MQTTCFSocketEncoderDelegate>
+
+/** host an NSString containing the hostName or IP address of the host to connect to
+ * defaults to @"localhost"
+ */
 @property (strong, nonatomic) NSString *host;
+
+/** port an unsigned 16 bit integer containing the IP port number to connect to 
+ * defaults to 1883
+ */
 @property (nonatomic) UInt16 port;
+
+/** tls a boolean indicating whether the transport should be using security 
+ * defaults to NO
+ */
 @property (nonatomic) BOOL tls;
 
-/** see initWithClientId for description
+/** certificates An identity certificate used to reply to a server requiring client certificates according
+ * to the description given for SSLSetCertificate(). You may build the certificates array yourself or use the
+ * sundry method clientCertFromP12.
  */
 @property (strong, nonatomic) NSArray *certificates;
 
@@ -31,22 +48,11 @@
  NSArray *myCerts = [MQTTCFSocketTransport clientCertsFromP12:path passphrase:@"passphrase"];
  if (myCerts) {
  
- self.session = [[MQTTSession alloc] initWithClientId:nil
- userName:nil
- password:nil
- keepAlive:60
- cleanSession:YES
- will:NO
- willTopic:nil
- willMsg:nil
- willQoS:0
- willRetainFlag:NO
- protocolLevel:4
- runLoop:[NSRunLoop currentRunLoop]
- forMode:NSRunLoopCommonModes
- securityPolicy:nil
- certificates:myCerts];
- [self.session connectToHost:@"localhost" port:8884 usingSSL:YES];
+ self.session = [[MQTTSession alloc] init];
+ ...
+ self.session.certificates = myCerts;
+ 
+ [self.session connect];
  ...
  }
  

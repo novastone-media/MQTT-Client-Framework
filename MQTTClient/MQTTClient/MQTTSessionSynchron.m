@@ -16,12 +16,19 @@
 #import "MQTTSessionLegacy.h"
 #import "MQTTSessionSynchron.h"
 
+#ifdef LUMBERJACK
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @interface MQTTSession()
@@ -38,11 +45,35 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 
 @implementation MQTTSession(Synchron)
 
+/** Synchron connect
+ *
+ */
+- (BOOL)connectAndWaitTimeout:(NSTimeInterval)timeout {
+    NSDate *started = [NSDate date];
+    self.synchronConnect = TRUE;
+    
+    [self connect];
+    
+    while (self.synchronConnect && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
+        DDLogVerbose(@"[MQTTSessionSynchron] waiting for connect");
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
+    }
+    
+    DDLogVerbose(@"[MQTTSessionSynchron] end connect");
+    
+    return (self.status == MQTTSessionStatusConnected);
+}
 
-- (BOOL)connectAndWaitToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL {
+/**
+ * @deprecated
+ */
+ - (BOOL)connectAndWaitToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL {
     return [self connectAndWaitToHost:host port:port usingSSL:usingSSL timeout:0];
 }
 
+/**
+ * @deprecated
+ */
 - (BOOL)connectAndWaitToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL timeout:(NSTimeInterval)timeout {
     NSDate *started = [NSDate date];
     self.synchronConnect = TRUE;
@@ -174,12 +205,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
         self.synchronPub = TRUE;
     }
     
-    UInt16 mid = [self publishData:data onTopic:topic retain:retainFlag qos:qos];
+    UInt16 mid = self.synchronPubMid = [self publishData:data onTopic:topic retain:retainFlag qos:qos];
     if (qos == MQTTQosLevelAtMostOnce) {
         return TRUE;
-    } else {
-        self.synchronPubMid = mid;
-        
+    } else {        
         while (self.synchronPub && (timeout == 0 || [started timeIntervalSince1970] + timeout > [[NSDate date] timeIntervalSince1970])) {
             DDLogVerbose(@"[MQTTSessionSynchron] waiting for mid %d", mid);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];

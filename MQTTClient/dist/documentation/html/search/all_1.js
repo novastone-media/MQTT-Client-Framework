@@ -1,20 +1,5 @@
 var searchData=
 [
-  ['certificates',['certificates',['../interface_m_q_t_t_session.html#a8093f2231e12c54af5eb1791cc60b06f',1,'MQTTSession']]],
-  ['cleansessionflag',['cleanSessionFlag',['../interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa',1,'MQTTSession']]],
-  ['clientid',['clientId',['../interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a',1,'MQTTSession']]],
-  ['close',['close',['../interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440',1,'MQTTSession']]],
-  ['closewithdisconnecthandler_3a',['closeWithDisconnectHandler:',['../interface_m_q_t_t_session.html#a5a617d3cee077dd60f48a340d4b34d99',1,'MQTTSession']]],
-  ['connected_3a',['connected:',['../protocol_m_q_t_t_session_delegate-p.html#a663f6af2141773ba925ddf4ca44a5b66',1,'MQTTSessionDelegate-p']]],
-  ['connected_3asessionpresent_3a',['connected:sessionPresent:',['../protocol_m_q_t_t_session_delegate-p.html#a443d92270a3c1a1cd0330f1be1e66952',1,'MQTTSessionDelegate-p']]],
-  ['connecthandler',['connectHandler',['../interface_m_q_t_t_session.html#a9c836110637be354f6acb52d328035e7',1,'MQTTSession']]],
-  ['connectionclosed_3a',['connectionClosed:',['../protocol_m_q_t_t_session_delegate-p.html#a6ee6176897e9dc28236c562aece2a375',1,'MQTTSessionDelegate-p']]],
-  ['connectionerror_3aerror_3a',['connectionError:error:',['../protocol_m_q_t_t_session_delegate-p.html#a8895314112168286947d78a102185ab2',1,'MQTTSessionDelegate-p']]],
-  ['connectionhandler',['connectionHandler',['../interface_m_q_t_t_session.html#a96b070cb597ed0857fbf289579c10a58',1,'MQTTSession']]],
-  ['connectionrefused_3aerror_3a',['connectionRefused:error:',['../protocol_m_q_t_t_session_delegate-p.html#a179c4f9104394b3843a20862d50fd813',1,'MQTTSessionDelegate-p']]],
-  ['connectmessage',['connectMessage',['../interface_m_q_t_t_session.html#a44f63ba3383e0e5c5bed5e051cad9d2f',1,'MQTTSession']]],
-  ['connectto_3aport_3atls_3akeepalive_3aclean_3aauth_3auser_3apass_3awill_3awilltopic_3awillmsg_3awillqos_3awillretainflag_3awithclientid_3a',['connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:',['../interface_m_q_t_t_session_manager.html#af50a6c56e8d19ef1e739cccb9e11722a',1,'MQTTSessionManager']]],
-  ['connectto_3aport_3atls_3akeepalive_3aclean_3aauth_3auser_3apass_3awill_3awilltopic_3awillmsg_3awillqos_3awillretainflag_3awithclientid_3asecuritypolicy_3acertificates_3a',['connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:securityPolicy:certificates:',['../interface_m_q_t_t_session_manager.html#a58a397cb2851b3bb5c3cf2a49c109204',1,'MQTTSessionManager']]],
-  ['connectto_3aport_3atls_3akeepalive_3aclean_3aauth_3auser_3apass_3awilltopic_3awill_3awillqos_3awillretainflag_3awithclientid_3a',['connectTo:port:tls:keepalive:clean:auth:user:pass:willTopic:will:willQos:willRetainFlag:withClientId:',['../interface_m_q_t_t_session_manager.html#af0b3aa800e54438a160b1c1b78b27898',1,'MQTTSessionManager']]],
-  ['connecttolast',['connectToLast',['../interface_m_q_t_t_session_manager.html#a6bd1e45c0504df0b0d2599f86f84f884',1,'MQTTSessionManager']]]
+  ['buffered_3aflowingin_3aflowingout_3a',['buffered:flowingIn:flowingOut:',['../protocol_m_q_t_t_session_delegate-p.html#a66d6b40de38077ee28d05048eec4e3f9',1,'MQTTSessionDelegate-p']]],
+  ['buffered_3aqueued_3aflowingin_3aflowingout_3a',['buffered:queued:flowingIn:flowingOut:',['../protocol_m_q_t_t_session_delegate-p.html#a8d9602d0b89fa2c3a0009150e57edc87',1,'MQTTSessionDelegate-p']]]
 ];

@@ -29,7 +29,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     self = [super init];
     self.state = MQTTTransportCreated;
     self.host = @"localhost";
-    self.port = 1883;
+    self.port = 80;
+    self.path = @"/mqtt";
     self.tls = false;
     self.allowUntrustedCertificates = false;
     self.pinnedCertificates = nil;
@@ -42,7 +43,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 
     NSString *protocol = (self.tls) ? @"wss" : @"ws";
     NSString *portString = (self.port == 0) ? @"" : [NSString stringWithFormat:@":%d",(unsigned int)self.port];
-    NSString *path = @"/mqtt";
+    NSString *path = self.path;
     NSArray <NSString *> *protocols = @[@"mqtt"];
     NSString *urlString = [NSString stringWithFormat:@"%@://%@%@%@",
                            protocol,
@@ -61,7 +62,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     [self.websocket open];
 }
 
-- (BOOL)send:(NSData *)data {
+- (BOOL)send:(nonnull NSData *)data {
     DDLogVerbose(@"[MQTTWebsocketTransport] send(%ld):%@", (unsigned long)data.length,
                  [data subdataWithRange:NSMakeRange(0, MIN(256, data.length))]);
     if (self.websocket.readyState == SR_OPEN) {
@@ -83,7 +84,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     if ([message isKindOfClass:[NSData class]]) {
         data = (NSData *)message;
     }
-    DDLogVerbose(@"[MQTTWebsocketTransport] didReceiveMessage(%ld)", data ? data.length : -1);
+    DDLogVerbose(@"[MQTTWebsocketTransport] didReceiveMessage(%ld)", (unsigned long)(data ? data.length : -1));
 
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(mqttTransport:didReceiveMessage:)]) {
