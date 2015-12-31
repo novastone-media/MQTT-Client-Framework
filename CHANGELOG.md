@@ -1,6 +1,11 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.6.1
+> Release date 2015-12-31
+
+[FIX] CocoaPods packaging
+
 ## MQTT-Client-Framework 0.6.0
 > Release date 2015-12-31
 

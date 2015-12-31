@@ -39,6 +39,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -463,7 +464,15 @@ Properties</h2></td></tr>
 <div class="line">[session publishData:[<span class="stringliteral">@&quot;Sample Data&quot;</span> dataUsingEncoding:NSUTF8StringEncoding]</div>
 <div class="line">topic:<span class="stringliteral">@&quot;example/data&quot;</span></div>
 <div class="line">retain:YES</div>
-<div class="line">qos:1];</div>
+<div class="line">qos:1</div>
+<div class="line">publishHandler:^(NSError *error){</div>
+<div class="line"><span class="keywordflow">if</span> (error) {</div>
+<div class="line">DDLogVerbose(<span class="stringliteral">@&quot;error: %@ %@&quot;</span>, error.localizedDescription, payload);</div>
+<div class="line">} <span class="keywordflow">else</span> {</div>
+<div class="line">DDLogVerbose(<span class="stringliteral">@&quot;delivered:%@&quot;</span>, payload);</div>
+<div class="line">delivered++;</div>
+<div class="line">}</div>
+<div class="line">}];</div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -1318,7 +1327,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 31 2015 12:58:43 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 31 2015 17:20:37 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

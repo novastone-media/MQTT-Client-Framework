@@ -6,6 +6,10 @@
       <Path>index.html</Path>
       <Subnodes>
        <Node>
+        <Name>MQTT-Client-Framework iOS/OSX/tvOS Release Notes</Name>
+        <Path>md___users_ckrey__m_q_t_t-_client-_framework__c_h_a_n_g_e_l_o_g.html</Path>
+       </Node>
+       <Node>
         <Name>Classes</Name>
         <Path>annotated.html</Path>
         <Subnodes>
@@ -882,40 +886,6 @@
           <Path>files.html</Path>
           <Subnodes>
            <Node>
-            <Name>MQTTCoreDataPersistence</Name>
-            <Path>dir_244a5e883383ae5cdc3f845a0659de72.html</Path>
-            <Subnodes>
-             <Node>
-              <Name>MQTTCoreDataPersistence.h</Name>
-              <Path>_m_q_t_t_core_data_persistence_8h_source.html</Path>
-             </Node>
-            </Subnodes>
-           </Node>
-           <Node>
-            <Name>MQTTInMemoryPersistence</Name>
-            <Path>dir_5e92f56bd4bc3df0fcc8ebaf5a8f833c.html</Path>
-            <Subnodes>
-             <Node>
-              <Name>MQTTInMemoryPersistence.h</Name>
-              <Path>_m_q_t_t_in_memory_persistence_8h_source.html</Path>
-             </Node>
-            </Subnodes>
-           </Node>
-           <Node>
-            <Name>MQTTSSLSecurityPolicyTransport</Name>
-            <Path>dir_423c73355645902195ec63e01674a4df.html</Path>
-            <Subnodes>
-             <Node>
-              <Name>MQTTSSLSecurityPolicy.h</Name>
-              <Path>_m_q_t_t_s_s_l_security_policy_8h_source.html</Path>
-             </Node>
-             <Node>
-              <Name>MQTTSSLSecurityPolicyTransport.h</Name>
-              <Path>_m_q_t_t_s_s_l_security_policy_transport_8h_source.html</Path>
-             </Node>
-            </Subnodes>
-           </Node>
-           <Node>
             <Name>MQTTWebsocketTransport</Name>
             <Path>dir_fb6e9762d7e0408b6ad98066048f64b6.html</Path>
             <Subnodes>
@@ -930,6 +900,14 @@
             <Path>_m_q_t_t_c_f_socket_transport_8h_source.html</Path>
            </Node>
            <Node>
+            <Name>MQTTCoreDataPersistence.h</Name>
+            <Path>_m_q_t_t_core_data_persistence_8h_source.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTInMemoryPersistence.h</Name>
+            <Path>_m_q_t_t_in_memory_persistence_8h_source.html</Path>
+           </Node>
+           <Node>
             <Name>MQTTPersistence.h</Name>
             <Path>_m_q_t_t_persistence_8h_source.html</Path>
            </Node>
@@ -940,6 +918,14 @@
            <Node>
             <Name>MQTTSessionManager.h</Name>
             <Path>_m_q_t_t_session_manager_8h_source.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTSSLSecurityPolicy.h</Name>
+            <Path>_m_q_t_t_s_s_l_security_policy_8h_source.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTSSLSecurityPolicyTransport.h</Name>
+            <Path>_m_q_t_t_s_s_l_security_policy_transport_8h_source.html</Path>
            </Node>
            <Node>
             <Name>MQTTTransport.h</Name>

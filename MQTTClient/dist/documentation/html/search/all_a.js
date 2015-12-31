@@ -3,6 +3,7 @@ var searchData=
   ['maxmessages',['maxMessages',['../protocol_m_q_t_t_persistence-p.html#a25da1e10303f72b9f5c0acded51780d2',1,'MQTTPersistence-p']]],
   ['maxsize',['maxSize',['../protocol_m_q_t_t_persistence-p.html#a9803a6b662157637e28949766186c3d5',1,'MQTTPersistence-p']]],
   ['maxwindowsize',['maxWindowSize',['../protocol_m_q_t_t_persistence-p.html#a7566c5b7fff68c034ffd836c32d1b822',1,'MQTTPersistence-p']]],
+  ['mqtt_2dclient_2dframework_20ios_2fosx_2ftvos_20release_20notes',['MQTT-Client-Framework iOS/OSX/tvOS Release Notes',['../md___users_ckrey__m_q_t_t-_client-_framework__c_h_a_n_g_e_l_o_g.html',1,'']]],
   ['messagedelivered_3a',['messageDelivered:',['../protocol_m_q_t_t_session_manager_delegate-p.html#ae58c6a8f7ac61d31c85a9ea311fbd57d',1,'MQTTSessionManagerDelegate-p']]],
   ['messagedelivered_3amsgid_3a',['messageDelivered:msgID:',['../protocol_m_q_t_t_session_delegate-p.html#a9937e5c9917389b2fde60b1e3a2d390c',1,'MQTTSessionDelegate-p']]],
   ['messagehandler',['messageHandler',['../interface_m_q_t_t_session.html#a0af8d5512fae0ed59e572e9566ac9940',1,'MQTTSession']]],

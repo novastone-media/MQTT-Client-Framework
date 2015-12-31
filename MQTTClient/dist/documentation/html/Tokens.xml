@@ -2,6 +2,13 @@
 <Tokens version="1.0">
   <Token>
     <TokenIdentifier>
+      <Name>md__Users_ckrey_MQTT-Client-Framework_CHANGELOG</Name>
+      <APILanguage>markdown</APILanguage>
+    </TokenIdentifier>
+    <Path>md___users_ckrey__m_q_t_t-_client-_framework__c_h_a_n_g_e_l_o_g.html</Path>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>MQTTCFSocketTransport</Name>
       <APILanguage>c</APILanguage>
       <Type>cl</Type>

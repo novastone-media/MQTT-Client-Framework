@@ -755,16 +755,17 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ../../README.md \
+			 ../../CHANGELOG.md \
 			 MQTTSession.h \
 			 MQTTSessionManager.h \
 			 MQTTTransport.h \
 			 MQTTCFSocketTransport.h \
-			 MQTTSSLSecurityPolicyTransport/MQTTSSLSecurityPolicy.h \
-			 MQTTSSLSecurityPolicyTransport/MQTTSSLSecurityPolicyTransport.h \
+			 MQTTSSLSecurityPolicy.h \
+			 MQTTSSLSecurityPolicyTransport.h \
 			 MQTTWebsocketTransport/MQTTWebsocketTransport.h \
 			 MQTTPersistence.h \
-			 MQTTInMemoryPersistence/MQTTInMemoryPersistence.h \
-			 MQTTCoreDataPersistence/MQTTCoreDataPersistence.h
+			 MQTTInMemoryPersistence.h \
+			 MQTTCoreDataPersistence.h
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

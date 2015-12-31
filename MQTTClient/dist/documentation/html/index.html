@@ -39,6 +39,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -114,18 +115,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;[session setDelegate:self];</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;[session connectAndWaitToHost:@&quot;host&quot; port:1883 usingSSL:NO];</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;session.host = @&quot;localhost&quot;;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;session.port = 1883;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;[session connectAndWaitTimeout:30];  //this is part of the synchronous API</div>
 </div><!-- fragment --><p>Subscribe to a topic:</p>
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;[session subscribeToTopic:topic atLevel:MQTTQosLevelAtLeastOnce];</div>
-</div><!-- fragment --><p>Add the following to receive messages for the subscribed topics </p><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid</div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;{</div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;[session subscribeToTopic:@&quot;example/#&quot; atLevel:2 subscribeHandler:^(NSError *error, NSArray&lt;NSNumber *&gt; *gQoss){</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;    if (error) {</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;        NSLog(@&quot;Subscription failed %@&quot;, error.localizedDescription);</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;    } else {</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;        NSLog(@&quot;Subscription sucessfull! Granted Qos: %@&quot;, gQoss);</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    }</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; }]; // this is part of the block API</div>
+</div><!-- fragment --><p>Add the following to receive messages for the subscribed topics </p><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; - (void)newMessage:(MQTTSession *)session</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;    data:(NSData *)data</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;    onTopic:(NSString *)topic</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;    qos:(MQTTQosLevel)qos</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;    retained:(BOOL)retained</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    mid:(unsigned int)mid {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    // this is one of the delegate callbacks</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;}</div>
 </div><!-- fragment --><p>Publish a message to a topic:</p>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;[session publishAndWaitData:data</div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;                    onTopic:@&quot;topic&quot;</div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;                     retain:NO</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;                        qos:MQTTQosLevelAtLeastOnce]</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;                    qos:MQTTQosLevelAtLeastOnce]; // this is part of the asynchronous API</div>
 </div><!-- fragment --><h4>docs</h4>
 <p>Documentation generated with doxygen <a href="http://doxygen.org">http://doxygen.org</a></p>
 <h4>Comparison MQTT Clients for iOS (incomplete)</h4>
@@ -140,7 +154,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 31 2015 12:58:43 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 31 2015 17:20:37 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>
