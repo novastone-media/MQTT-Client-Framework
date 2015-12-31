@@ -1,9 +1,4 @@
 var searchData=
 [
-  ['ignorereceived_3atype_3aqos_3aretained_3aduped_3amid_3adata_3a',['ignoreReceived:type:qos:retained:duped:mid:data:',['../protocol_m_q_t_t_session_delegate-p.html#a83b477a650b00526b0a39599ddd6fd12',1,'MQTTSessionDelegate-p']]],
-  ['init',['init',['../interface_m_q_t_t_session.html#aee55d52a9b6395f1a0d73b672900629c',1,'MQTTSession']]],
-  ['initwithclientid_3ausername_3apassword_3akeepalive_3acleansession_3awill_3awilltopic_3awillmsg_3awillqos_3awillretainflag_3aprotocollevel_3arunloop_3aformode_3a',['initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:',['../interface_m_q_t_t_session.html#a5d4657d074b0dd745de2a8bded6b0308',1,'MQTTSession']]],
-  ['initwithclientid_3ausername_3apassword_3akeepalive_3acleansession_3awill_3awilltopic_3awillmsg_3awillqos_3awillretainflag_3aprotocollevel_3arunloop_3aformode_3asecuritypolicy_3a',['initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:',['../interface_m_q_t_t_session.html#accf20d5a5b630ff96b84ab88f92468fe',1,'MQTTSession']]],
-  ['initwithclientid_3ausername_3apassword_3akeepalive_3acleansession_3awill_3awilltopic_3awillmsg_3awillqos_3awillretainflag_3aprotocollevel_3arunloop_3aformode_3asecuritypolicy_3acertificates_3a',['initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:certificates:',['../interface_m_q_t_t_session.html#a8a4605e8dc395b784f686f5d96401ee8',1,'MQTTSession']]],
-  ['initwithpersistence_3amaxwindowsize_3amaxmessages_3amaxsize_3a',['initWithPersistence:maxWindowSize:maxMessages:maxSize:',['../interface_m_q_t_t_session_manager.html#a99bcb6e9ae06072f890947a4f53d7dd2',1,'MQTTSessionManager']]]
+  ['flowforclientid_3aincomingflag_3amessageid_3a',['flowforClientId:incomingFlag:messageId:',['../protocol_m_q_t_t_persistence-p.html#a2223834cf720c51f53fe25921aff4fe4',1,'MQTTPersistence-p']]]
 ];

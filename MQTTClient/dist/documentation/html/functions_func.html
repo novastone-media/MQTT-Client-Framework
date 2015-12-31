@@ -76,17 +76,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow4" class="tabs3">
     <ul class="tablist">
+      <li><a href="#index_a"><span>a</span></a></li>
       <li><a href="#index_b"><span>b</span></a></li>
       <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_d"><span>d</span></a></li>
+      <li><a href="#index_e"><span>e</span></a></li>
+      <li><a href="#index_f"><span>f</span></a></li>
       <li><a href="#index_h"><span>h</span></a></li>
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_m"><span>m</span></a></li>
       <li><a href="#index_n"><span>n</span></a></li>
+      <li><a href="#index_o"><span>o</span></a></li>
       <li><a href="#index_p"><span>p</span></a></li>
       <li><a href="#index_r"><span>r</span></a></li>
       <li><a href="#index_s"><span>s</span></a></li>
-      <li class="current"><a href="#index_u"><span>u</span></a></li>
+      <li><a href="#index_u"><span>u</span></a></li>
+      <li class="current"><a href="#index_w"><span>w</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -107,6 +112,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 &#160;
 
+<h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
+<li>allFlowsforClientId:incomingFlag:
+: <a class="el" href="protocol_m_q_t_t_persistence-p.html#abc43bd29d5edbd9d42ef3a8f8f73287d">&lt;MQTTPersistence&gt;</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_b"></a>- b -</h3><ul>
 <li>buffered:flowingIn:flowingOut:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a66d6b40de38077ee28d05048eec4e3f9">&lt;MQTTSessionDelegate&gt;</a>
@@ -119,13 +131,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
 <li>clientCertsFromP12:passphrase:
-: <a class="el" href="interface_m_q_t_t_session.html#a77824ce439d089ae8811acc2ed119824">MQTTSession</a>
+: <a class="el" href="interface_m_q_t_t_c_f_socket_transport.html#ac2d55963ffb5624ca3f72342d4363014">MQTTCFSocketTransport</a>
 </li>
 <li>close
 : <a class="el" href="interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440">MQTTSession</a>
+, <a class="el" href="protocol_m_q_t_t_transport-p.html#aa293cdc8dc58de1d7e80c1a2c3ce6062">&lt;MQTTTransport&gt;</a>
 </li>
 <li>closeWithDisconnectHandler:
 : <a class="el" href="interface_m_q_t_t_session.html#a5a617d3cee077dd60f48a340d4b34d99">MQTTSession</a>
+</li>
+<li>connect
+: <a class="el" href="interface_m_q_t_t_session.html#ad443eb80793d71150a825513303405b5">MQTTSession</a>
 </li>
 <li>connected:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a663f6af2141773ba925ddf4ca44a5b66">&lt;MQTTSessionDelegate&gt;</a>
@@ -151,21 +167,42 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>connectTo:port:tls:keepalive:clean:auth:user:pass:willTopic:will:willQos:willRetainFlag:withClientId:
 : <a class="el" href="interface_m_q_t_t_session_manager.html#af0b3aa800e54438a160b1c1b78b27898">MQTTSessionManager</a>
 </li>
-<li>connectToHost:port:usingSSL:
-: <a class="el" href="interface_m_q_t_t_session.html#a97c0fc3b9a06d8c5eefa3012591feb82">MQTTSession</a>
-</li>
-<li>connectToHost:port:usingSSL:connectHandler:
-: <a class="el" href="interface_m_q_t_t_session.html#ae9b26d3af576b9b8bc0efcf6ac3a98d4">MQTTSession</a>
-</li>
 <li>connectToLast
 : <a class="el" href="interface_m_q_t_t_session_manager.html#a6bd1e45c0504df0b0d2599f86f84f884">MQTTSessionManager</a>
+</li>
+<li>connectWithConnectHandler:
+: <a class="el" href="interface_m_q_t_t_session.html#af2fb37adbbf9eeb28cea7dab43297fd7">MQTTSession</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
+<li>defaultPolicy
+: <a class="el" href="interface_m_q_t_t_s_s_l_security_policy.html#abf1594bd6fedb9222d1b4b72b972c59a">MQTTSSLSecurityPolicy</a>
+</li>
+<li>deleteAllFlowsForClientId:
+: <a class="el" href="protocol_m_q_t_t_persistence-p.html#a2c880d902ade2b17078545cef8d212e7">&lt;MQTTPersistence&gt;</a>
+</li>
+<li>deleteFlow:
+: <a class="el" href="protocol_m_q_t_t_persistence-p.html#a415cc2c67ea2e73d7942973a2186d083">&lt;MQTTPersistence&gt;</a>
+</li>
 <li>disconnect
-: <a class="el" href="interface_m_q_t_t_session_manager.html#a71161804d040ca10e164578d7e7eb855">MQTTSessionManager</a>
+: <a class="el" href="interface_m_q_t_t_session.html#aef2d0980b561184800908e95dd3a9fc7">MQTTSession</a>
+, <a class="el" href="interface_m_q_t_t_session_manager.html#a71161804d040ca10e164578d7e7eb855">MQTTSessionManager</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_e"></a>- e -</h3><ul>
+<li>evaluateServerTrust:forDomain:
+: <a class="el" href="interface_m_q_t_t_s_s_l_security_policy.html#ab964313603e8eb003494778e71a80bb2">MQTTSSLSecurityPolicy</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_f"></a>- f -</h3><ul>
+<li>flowforClientId:incomingFlag:messageId:
+: <a class="el" href="protocol_m_q_t_t_persistence-p.html#a2223834cf720c51f53fe25921aff4fe4">&lt;MQTTPersistence&gt;</a>
 </li>
 </ul>
 
@@ -182,19 +219,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <h3><a class="anchor" id="index_i"></a>- i -</h3><ul>
 <li>ignoreReceived:type:qos:retained:duped:mid:data:
-: <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a83b477a650b00526b0a39599ddd6fd12">&lt;MQTTSessionDelegate&gt;</a>
+: <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a267adcc60c332f2ec4eb0326a3f7e8d1">&lt;MQTTSessionDelegate&gt;</a>
 </li>
 <li>init
 : <a class="el" href="interface_m_q_t_t_session.html#aee55d52a9b6395f1a0d73b672900629c">MQTTSession</a>
-</li>
-<li>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:
-: <a class="el" href="interface_m_q_t_t_session.html#a5d4657d074b0dd745de2a8bded6b0308">MQTTSession</a>
-</li>
-<li>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:
-: <a class="el" href="interface_m_q_t_t_session.html#accf20d5a5b630ff96b84ab88f92468fe">MQTTSession</a>
-</li>
-<li>initWithClientId:userName:password:keepAlive:cleanSession:will:willTopic:willMsg:willQoS:willRetainFlag:protocolLevel:runLoop:forMode:securityPolicy:certificates:
-: <a class="el" href="interface_m_q_t_t_session.html#a8a4605e8dc395b784f686f5d96401ee8">MQTTSession</a>
 </li>
 <li>initWithPersistence:maxWindowSize:maxMessages:maxSize:
 : <a class="el" href="interface_m_q_t_t_session_manager.html#a99bcb6e9ae06072f890947a4f53d7dd2">MQTTSessionManager</a>
@@ -209,6 +237,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>messageDelivered:msgID:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a9937e5c9917389b2fde60b1e3a2d390c">&lt;MQTTSessionDelegate&gt;</a>
 </li>
+<li>mqttTransport:didFailWithError:
+: <a class="el" href="protocol_m_q_t_t_transport_delegate-p.html#aafc48442e23cf641f32c0f894203bedd">&lt;MQTTTransportDelegate&gt;</a>
+</li>
+<li>mqttTransport:didReceiveMessage:
+: <a class="el" href="protocol_m_q_t_t_transport_delegate-p.html#a9395babf3625db76a24fb69fec35bd50">&lt;MQTTTransportDelegate&gt;</a>
+</li>
+<li>mqttTransportDidClose:
+: <a class="el" href="protocol_m_q_t_t_transport_delegate-p.html#a4684c6afb6c16d18204cfdb9f2d66adc">&lt;MQTTTransportDelegate&gt;</a>
+</li>
+<li>mqttTransportDidOpen:
+: <a class="el" href="protocol_m_q_t_t_transport_delegate-p.html#a6799d36db6386507592938012ac553f3">&lt;MQTTTransportDelegate&gt;</a>
+</li>
 </ul>
 
 
@@ -222,7 +262,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </ul>
 
 
+<h3><a class="anchor" id="index_o"></a>- o -</h3><ul>
+<li>open
+: <a class="el" href="protocol_m_q_t_t_transport-p.html#a4f1224183fde2aaef640a3f2ab7afe61">&lt;MQTTTransport&gt;</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_p"></a>- p -</h3><ul>
+<li>policyWithPinningMode:
+: <a class="el" href="interface_m_q_t_t_s_s_l_security_policy.html#a7d009f8f895d9305e5025bf37fda636d">MQTTSSLSecurityPolicy</a>
+</li>
 <li>protocolError:error:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a6ed1b59122ad0e0557b8bcf5de89f7ca">&lt;MQTTSessionDelegate&gt;</a>
 </li>
@@ -237,23 +287,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
 <li>received:type:qos:retained:duped:mid:data:
-: <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#aefaae4e610a97984e2135bbd902081ca">&lt;MQTTSessionDelegate&gt;</a>
+: <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#ae506789580b1b461901e7846407b9657">&lt;MQTTSessionDelegate&gt;</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
+<li>send:
+: <a class="el" href="protocol_m_q_t_t_transport-p.html#ae4e6c781ff7ce72ac45f516402f774da">&lt;MQTTTransport&gt;</a>
+</li>
 <li>sendData:topic:qos:retain:
 : <a class="el" href="interface_m_q_t_t_session_manager.html#a9593770a0aac359c57aee9260b2280a8">MQTTSessionManager</a>
 </li>
 <li>sending:type:qos:retained:duped:mid:data:
-: <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a8c16339f900bfe2aa98a2aabdca44484">&lt;MQTTSessionDelegate&gt;</a>
+: <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#acb908b938b9b9af60c3da23feed5850b">&lt;MQTTSessionDelegate&gt;</a>
 </li>
 <li>session:handleEvent:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a469397d413d288d61b98112f643d0f9c">&lt;MQTTSessionDelegate&gt;</a>
 </li>
 <li>session:newMessage:onTopic:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#a7c379d26811e242b52a05d09cf60d804">&lt;MQTTSessionDelegate&gt;</a>
+</li>
+<li>storeMessageForClientId:topic:data:retainFlag:qos:msgId:incomingFlag:commandType:deadline:
+: <a class="el" href="protocol_m_q_t_t_persistence-p.html#a3d0c50e06a2b54f40fb5356c5309454a">&lt;MQTTPersistence&gt;</a>
 </li>
 <li>subAckReceived:msgID:grantedQoss:
 : <a class="el" href="protocol_m_q_t_t_session_delegate-p.html#ab3a87b0ee36a0c9910e855fb6253a745">&lt;MQTTSessionDelegate&gt;</a>
@@ -269,6 +325,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>subscribeToTopics:subscribeHandler:
 : <a class="el" href="interface_m_q_t_t_session.html#aa4068492603a9fb752814af4d02cc7e2">MQTTSession</a>
+</li>
+<li>sync
+: <a class="el" href="protocol_m_q_t_t_persistence-p.html#afd0744d75cb430bfa2c430e14c3a65e8">&lt;MQTTPersistence&gt;</a>
 </li>
 </ul>
 
@@ -290,10 +349,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="interface_m_q_t_t_session.html#a101c813012ca11ff6c144db5a2c46c76">MQTTSession</a>
 </li>
 </ul>
+
+
+<h3><a class="anchor" id="index_w"></a>- w -</h3><ul>
+<li>windowSize:
+: <a class="el" href="protocol_m_q_t_t_persistence-p.html#a8521b079578db32e593d841ce2941fc0">&lt;MQTTPersistence&gt;</a>
+</li>
+</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 2 2015 10:24:38 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 31 2015 12:58:43 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

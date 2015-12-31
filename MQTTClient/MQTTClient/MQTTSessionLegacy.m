@@ -28,14 +28,140 @@
 
 #import "MQTTSession.h"
 #import "MQTTSessionLegacy.h"
+#import "MQTTCFSocketTransport.h"
+#import "MQTTSSLSecurityPolicyTransport.h"
 
+#ifdef LUMBERJACK
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-#define DEBUGSESS FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
-#define DEBUGSESS FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @implementation MQTTSession(Legacy)
+
+- (void)setCertificates:(NSArray *)certificates {
+    if (self.transport) {
+        if ([self.transport respondsToSelector:@selector(setCertificates:)]) {
+            [self.transport performSelector:@selector(setCertificates:) withObject:certificates];
+        }
+    }
+}
+
+- (NSArray *)certificates {
+    if (self.transport) {
+        if ([self.transport respondsToSelector:@selector(certificates)]) {
+            return [self.transport performSelector:@selector(certificates)];
+        }
+    }
+    return nil;
+}
+
+- (MQTTSession *)initWithClientId:(NSString *)clientId
+                         userName:(NSString *)userName
+                         password:(NSString *)password
+                        keepAlive:(UInt16)keepAliveInterval
+                     cleanSession:(BOOL)cleanSessionFlag
+                             will:(BOOL)willFlag
+                        willTopic:(NSString *)willTopic
+                          willMsg:(NSData *)willMsg
+                          willQoS:(MQTTQosLevel)willQoS
+                   willRetainFlag:(BOOL)willRetainFlag
+                    protocolLevel:(UInt8)protocolLevel
+                          runLoop:(NSRunLoop *)runLoop
+                          forMode:(NSString *)runLoopMode {
+    return [self initWithClientId:clientId
+                         userName:userName
+                         password:password
+                        keepAlive:keepAliveInterval
+                     cleanSession:cleanSessionFlag
+                             will:willFlag
+                        willTopic:willTopic
+                          willMsg:willMsg
+                          willQoS:willQoS
+                   willRetainFlag:willRetainFlag
+                    protocolLevel:protocolLevel
+                          runLoop:runLoop
+                          forMode:runLoopMode
+                   securityPolicy:nil];
+}
+
+- (MQTTSession *)initWithClientId:(NSString *)clientId
+                         userName:(NSString *)userName
+                         password:(NSString *)password
+                        keepAlive:(UInt16)keepAliveInterval
+                     cleanSession:(BOOL)cleanSessionFlag
+                             will:(BOOL)willFlag
+                        willTopic:(NSString *)willTopic
+                          willMsg:(NSData *)willMsg
+                          willQoS:(MQTTQosLevel)willQoS
+                   willRetainFlag:(BOOL)willRetainFlag
+                    protocolLevel:(UInt8)protocolLevel
+                          runLoop:(NSRunLoop *)runLoop
+                          forMode:(NSString *)runLoopMode
+                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy {
+    return [self initWithClientId:clientId
+                         userName:userName
+                         password:password
+                        keepAlive:keepAliveInterval
+                     cleanSession:cleanSessionFlag
+                             will:willFlag
+                        willTopic:willTopic
+                          willMsg:willMsg
+                          willQoS:willQoS
+                   willRetainFlag:willRetainFlag
+                    protocolLevel:protocolLevel
+                          runLoop:runLoop
+                          forMode:runLoopMode
+                   securityPolicy:securityPolicy
+                     certificates:nil];
+    
+}
+
+- (MQTTSession *)initWithClientId:(NSString *)clientId
+                         userName:(NSString *)userName
+                         password:(NSString *)password
+                        keepAlive:(UInt16)keepAliveInterval
+                     cleanSession:(BOOL)cleanSessionFlag
+                             will:(BOOL)willFlag
+                        willTopic:(NSString *)willTopic
+                          willMsg:(NSData *)willMsg
+                          willQoS:(MQTTQosLevel)willQoS
+                   willRetainFlag:(BOOL)willRetainFlag
+                    protocolLevel:(UInt8)protocolLevel
+                          runLoop:(NSRunLoop *)runLoop
+                          forMode:(NSString *)runLoopMode
+                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
+                     certificates:(NSArray *)certificates {
+    DDLogVerbose(@"[MQTTSessionLegacy] initWithClientId:%@ ", clientId);
+
+    self = [self init];
+    self.clientId = clientId;
+    self.userName = userName;
+    self.password = password;
+    self.keepAliveInterval = keepAliveInterval;
+    self.cleanSessionFlag = cleanSessionFlag;
+    self.willFlag = willFlag;
+    self.willTopic = willTopic;
+    self.willMsg = willMsg;
+    self.willQoS = willQoS;
+    self.willRetainFlag = willRetainFlag;
+    self.protocolLevel = protocolLevel;
+    self.runLoop = runLoop;
+    self.runLoopMode = runLoopMode;
+    self.securityPolicy = securityPolicy;
+    self.certificates = certificates;
+    
+    return self;
+}
 
 - (id)initWithClientId:(NSString*)theClientId {
     
@@ -230,6 +356,38 @@
                           runLoop:theRunLoop
                           forMode:theRunLoopMode];
 }
+
+- (void)connectToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL {
+    [self connectToHost:host port:port usingSSL:usingSSL connectHandler:nil];
+}
+
+- (void)connectToHost:(NSString *)host
+                 port:(UInt32)port
+             usingSSL:(BOOL)usingSSL
+       connectHandler:(MQTTConnectHandler)connectHandler {
+    DDLogVerbose(@"MQTTSessionLegacy connectToHost:%@ port:%d usingSSL:%d connectHandler:%p",
+                 host, (unsigned int)port, usingSSL, connectHandler);
+    
+    if (self.securityPolicy) {
+        MQTTSSLSecurityPolicyTransport *transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
+        transport.host = host;
+        transport.port = port;
+        transport.tls = usingSSL;
+        transport.securityPolicy = self.securityPolicy;
+        transport.certificates = self.certificates;
+        self.transport = transport;
+        
+    } else {
+        MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
+        transport.host = host;
+        transport.port = port;
+        transport.tls = usingSSL;
+        self.transport = transport;
+    }
+    
+    [self connectWithConnectHandler:connectHandler];
+}
+
 
 - (void)connectToHost:(NSString*)ip port:(UInt32)port {
     [self connectToHost:ip port:port usingSSL:NO];

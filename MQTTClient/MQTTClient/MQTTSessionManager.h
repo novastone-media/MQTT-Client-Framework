@@ -11,6 +11,7 @@
 #import <UIKit/UIKit.h>
 #endif
 #import "MQTTSession.h"
+#import "MQTTSessionLegacy.h"
 #import "MQTTSSLSecurityPolicy.h"
 
 /** delegate gives your application access to received messages
@@ -72,7 +73,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  
         [manager addObserver:self
             forKeyPath:@"effectiveSubscriptions"
-            options:NSKeyValueObservingOptionInitial || NSKeyValueObservingOptionNew
+            options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
             context:nil];
             manager.subscriptions = [@{@"#": @(0)} mutableCopy];
             [manager connectTo: ...
@@ -86,7 +87,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
         context:(void *)context {
         if ([keyPath isEqualToString:@"effectiveSubscriptions"]) {
             MQTTSessionManager *manager = (MQTTSessionManager *)object;
-            NSLog(@"effectiveSubscriptions changed: %@", manager.effectiveSubscriptions);
+            DDLogVerbose(@"effectiveSubscriptions changed: %@", manager.effectiveSubscriptions);
         }
     }
  *  @endcode

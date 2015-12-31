@@ -6,9 +6,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "MQTTSSLSecurityPolicy.h"
 
-@interface MQTTSSLSecurityPolicyTests : XCTestCase
+#import "MQTTSSLSecurityPolicy.h"
+#import "MQTTTestHelpers.h"
+
+@interface MQTTSSLSecurityPolicyTests : MQTTTestHelpers
 @end
 
 static SecTrustRef UTTrustChainForCertsInDirectory(NSString *directoryPath) {
@@ -31,13 +33,6 @@ static SecTrustRef UTTrustChainForCertsInDirectory(NSString *directoryPath) {
 static SecTrustRef UTHTTPBinOrgServerTrust() {
     NSString *bundlePath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] resourcePath];
     NSString *serverCertDirectoryPath = [bundlePath stringByAppendingPathComponent:@"HTTPBinOrgServerTrustChain"];
-
-    return UTTrustChainForCertsInDirectory(serverCertDirectoryPath);
-}
-
-static SecTrustRef UTADNNetServerTrust() {
-    NSString *bundlePath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] resourcePath];
-    NSString *serverCertDirectoryPath = [bundlePath stringByAppendingPathComponent:@"ADNNetServerTrustChain"];
 
     return UTTrustChainForCertsInDirectory(serverCertDirectoryPath);
 }
@@ -127,11 +122,14 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
+        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
@@ -337,28 +335,6 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     CFRelease(trust);
 }
 
-- (void)testPublicKeyPinningForHTTPBinOrgFailsWhenPinnedAgainstADNServerTrust {
-    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
-    SecCertificateRef certificate = UTHTTPBinOrgCertificate();
-    [policy setPinnedCertificates:@[(__bridge_transfer NSData *)SecCertificateCopyData(certificate)]];
-    [policy setValidatesCertificateChain:NO];
-
-    SecTrustRef trust = UTADNNetServerTrust();
-    XCTAssert([policy evaluateServerTrust:trust forDomain:@"httpbin.org"] == NO, @"HTTPBin.org Public Key Pinning Should have failed against ADN");
-    CFRelease(trust);
-}
-
-- (void)testCertificatePinningForHTTPBinOrgFailsWhenPinnedAgainstADNServerTrust {
-    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-    SecCertificateRef certificate = UTHTTPBinOrgCertificate();
-    [policy setPinnedCertificates:@[(__bridge_transfer NSData *)SecCertificateCopyData(certificate)]];
-    [policy setValidatesCertificateChain:NO];
-
-    SecTrustRef trust = UTADNNetServerTrust();
-    XCTAssert([policy evaluateServerTrust:trust forDomain:@"httpbin.org"] == NO, @"HTTPBin.org Certificate Pinning Should have failed against ADN");
-    CFRelease(trust);
-}
-
 - (void)testDefaultPolicyContainsHTTPBinOrgCertificate {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy defaultPolicy];
     SecCertificateRef cert = UTHTTPBinOrgCertificate();
@@ -450,35 +426,68 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     CFRelease(certificate);
 }
 
-- (void)testDefaultPolicySetToCertificateChain {
-    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-    SecTrustRef trust = UTADNNetServerTrust();
-    XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"Pinning with Default Certficiate Chain Failed");
-    CFRelease(trust);
-}
 
-- (void)testDefaultPolicySetToLeafCertificate {
-    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-    [policy setValidatesCertificateChain:NO];
-    SecTrustRef trust = UTADNNetServerTrust();
-    XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"Pinning with Default Leaf Certficiate Failed");
-    CFRelease(trust);
-}
-
-- (void)testDefaultPolicySetToPublicKeyChain {
-    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
-    SecTrustRef trust = UTADNNetServerTrust();
-    XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"Pinning with Default Public Key Chain Failed");
-    CFRelease(trust);
-}
-
-- (void)testDefaultPolicySetToLeafPublicKey {
-    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
-    [policy setValidatesCertificateChain:NO];
-    SecTrustRef trust = UTADNNetServerTrust();
-    XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"Pinning with Default Leaf Public Key Failed");
-    CFRelease(trust);
-}
+// ADN example cert expired
+//
+// 
+// static SecTrustRef UTADNNetServerTrust() {
+// NSString *bundlePath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] resourcePath];
+// NSString *serverCertDirectoryPath = [bundlePath stringByAppendingPathComponent:@"ADNNetServerTrustChain"];
+// 
+// return UTTrustChainForCertsInDirectory(serverCertDirectoryPath);
+// }
+// 
+// - (void)testPublicKeyPinningForHTTPBinOrgFailsWhenPinnedAgainstADNServerTrust {
+// MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
+// SecCertificateRef certificate = UTHTTPBinOrgCertificate();
+// [policy setPinnedCertificates:@[(__bridge_transfer NSData *)SecCertificateCopyData(certificate)]];
+// [policy setValidatesCertificateChain:NO];
+// 
+// SecTrustRef trust = UTADNNetServerTrust();
+// XCTAssert([policy evaluateServerTrust:trust forDomain:@"httpbin.org"] == NO, @"HTTPBin.org Public Key Pinning Should have failed against ADN");
+// CFRelease(trust);
+// }
+// 
+// - (void)testCertificatePinningForHTTPBinOrgFailsWhenPinnedAgainstADNServerTrust {
+// MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+// SecCertificateRef certificate = UTHTTPBinOrgCertificate();
+// [policy setPinnedCertificates:@[(__bridge_transfer NSData *)SecCertificateCopyData(certificate)]];
+// [policy setValidatesCertificateChain:NO];
+// 
+// SecTrustRef trust = UTADNNetServerTrust();
+// XCTAssert([policy evaluateServerTrust:trust forDomain:@"httpbin.org"] == NO, @"HTTPBin.org Certificate Pinning Should have failed against ADN");
+// CFRelease(trust);
+// }
+// 
+//- (void)testDefaultPolicySetToCertificateChain {
+//    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+//    SecTrustRef trust = UTADNNetServerTrust();
+//    XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"Pinning with Default Certficiate Chain Failed");
+//    CFRelease(trust);
+//}
+//
+//- (void)testDefaultPolicySetToLeafCertificate {
+//    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+//    [policy setValidatesCertificateChain:NO];
+//    SecTrustRef trust = UTADNNetServerTrust();
+//    XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"Pinning with Default Leaf Certficiate Failed");
+//    CFRelease(trust);
+//}
+//
+//- (void)testDefaultPolicySetToPublicKeyChain {
+//    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
+//    SecTrustRef trust = UTADNNetServerTrust();
+//    XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"Pinning with Default Public Key Chain Failed");
+//    CFRelease(trust);
+//}
+//
+//- (void)testDefaultPolicySetToLeafPublicKey {
+//    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
+//    [policy setValidatesCertificateChain:NO];
+//    SecTrustRef trust = UTADNNetServerTrust();
+//    XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"Pinning with Default Leaf Public Key Failed");
+//    CFRelease(trust);
+//}
 
 - (void)testDefaultPolicySetToCertificateChainFailsWithMissingChain {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];

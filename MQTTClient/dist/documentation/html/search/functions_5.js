@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['messagedelivered_3a',['messageDelivered:',['../protocol_m_q_t_t_session_manager_delegate-p.html#ae58c6a8f7ac61d31c85a9ea311fbd57d',1,'MQTTSessionManagerDelegate-p']]],
-  ['messagedelivered_3amsgid_3a',['messageDelivered:msgID:',['../protocol_m_q_t_t_session_delegate-p.html#a9937e5c9917389b2fde60b1e3a2d390c',1,'MQTTSessionDelegate-p']]]
+  ['flowforclientid_3aincomingflag_3amessageid_3a',['flowforClientId:incomingFlag:messageId:',['../protocol_m_q_t_t_persistence-p.html#a2223834cf720c51f53fe25921aff4fe4',1,'MQTTPersistence-p']]]
 ];

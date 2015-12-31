@@ -7,26 +7,21 @@
 // based on
 //
 // Copyright (c) 2011, 2013, 2lemetry LLC
-// 
+//
 // All rights reserved. This program and the accompanying materials
 // are made available under the terms of the Eclipse Public License v1.0
 // which accompanies this distribution, and is available at
 // http://www.eclipse.org/legal/epl-v10.html
-// 
+//
 // Contributors:
 //    Kyle Roche - initial API and implementation and/or initial documentation
-// 
+//
 
 #import <Foundation/Foundation.h>
 
 @interface MQTTMessage : NSObject
-@property (nonatomic)    UInt8    type;
-@property (nonatomic)    UInt8    qos;
-@property (nonatomic)    BOOL     retainFlag;
-@property (nonatomic)    BOOL     dupFlag;
-@property (nonatomic)    UInt16   mid;
-
 typedef NS_ENUM(UInt8, MQTTCommandType) {
+    MQTT_None = 0,
     MQTTConnect = 1,
     MQTTConnack = 2,
     MQTTPublish = 3,
@@ -48,9 +43,24 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
  */
 typedef NS_ENUM(UInt8, MQTTQosLevel) {
     MQTTQosLevelAtMostOnce = 0,
-    MQTTQosLevelAtLeastOnce,
-    MQTTQosLevelExactlyOnce
+    MQTTQosLevelAtLeastOnce = 1,
+    MQTTQosLevelExactlyOnce = 2
 };
+
+/**
+ Enumeration of MQTT protocol version
+ */
+typedef NS_ENUM(UInt8, MQTTProtocolVersion) {
+    MQTTProtocolVersion31 = 3,
+    MQTTProtocolVersion311 = 4
+};
+
+@property (nonatomic) MQTTCommandType type;
+@property (nonatomic) MQTTQosLevel qos;
+@property (nonatomic) BOOL retainFlag;
+@property (nonatomic) BOOL dupFlag;
+@property (nonatomic) UInt16 mid;
+@property (strong, nonatomic) NSData * data;
 
 /**
  Enumeration of MQTT Connect return codes
@@ -65,47 +75,52 @@ typedef NS_ENUM(NSUInteger, MQTTConnectReturnCode) {
     MQTTConnectRefusedNotAuthorized
 };
 
+// factory methods
++ (MQTTMessage *)connectMessageWithClientId:(NSString*)clientId
+                                   userName:(NSString*)userName
+                                   password:(NSString*)password
+                                  keepAlive:(NSInteger)keeplive
+                               cleanSession:(BOOL)cleanSessionFlag
+                                       will:(BOOL)will
+                                  willTopic:(NSString*)willTopic
+                                    willMsg:(NSData*)willData
+                                    willQoS:(MQTTQosLevel)willQoS
+                                 willRetain:(BOOL)willRetainFlag
+                              protocolLevel:(UInt8)protocolLevel;
+
++ (MQTTMessage *)pingreqMessage;
++ (MQTTMessage *)disconnectMessage;
++ (MQTTMessage *)subscribeMessageWithMessageId:(UInt16)msgId
+                                        topics:(NSDictionary *)topics;
++ (MQTTMessage *)unsubscribeMessageWithMessageId:(UInt16)msgId
+                                          topics:(NSArray *)topics;
++ (MQTTMessage *)publishMessageWithData:(NSData*)payload
+                                onTopic:(NSString*)topic
+                                    qos:(MQTTQosLevel)qosLevel
+                                  msgId:(UInt16)msgId
+                             retainFlag:(BOOL)retain
+                                dupFlag:(BOOL)dup;
++ (MQTTMessage *)pubackMessageWithMessageId:(UInt16)msgId;
++ (MQTTMessage *)pubrecMessageWithMessageId:(UInt16)msgId;
++ (MQTTMessage *)pubrelMessageWithMessageId:(UInt16)msgId;
++ (MQTTMessage *)pubcompMessageWithMessageId:(UInt16)msgId;
++ (MQTTMessage *)messageFromData:(NSData *)data;
+
 // instance methods
-+ (id)connectMessageWithClientId:(NSString*)clientId
-                        userName:(NSString*)userName
-                        password:(NSString*)password
-                       keepAlive:(NSInteger)keeplive
-                    cleanSession:(BOOL)cleanSessionFlag
-                            will:(BOOL)will
-                       willTopic:(NSString*)willTopic
-                         willMsg:(NSData*)willData
-                         willQoS:(MQTTQosLevel)willQoS
-                      willRetain:(BOOL)willRetainFlag
-                   protocolLevel:(UInt8)protocolLevel;
+- (instancetype)initWithType:(MQTTCommandType)type;
+- (instancetype)initWithType:(MQTTCommandType)type
+                        data:(NSData *)data;
+- (instancetype)initWithType:(MQTTCommandType)type
+                         qos:(MQTTQosLevel)qos
+                        data:(NSData *)data;
+- (instancetype)initWithType:(MQTTCommandType)type
+                         qos:(MQTTQosLevel)qos
+                  retainFlag:(BOOL)retainFlag
+                     dupFlag:(BOOL)dupFlag
+                        data:(NSData *)data;
 
-+ (id)pingreqMessage;
-+ (id)disconnectMessage;
-+ (id)subscribeMessageWithMessageId:(UInt16)msgId
-                             topics:(NSDictionary *)topics;
-+ (id)unsubscribeMessageWithMessageId:(UInt16)msgId
-                                topics:(NSArray *)topics;
-+ (id)publishMessageWithData:(NSData*)payload
-                     onTopic:(NSString*)topic
-                         qos:(MQTTQosLevel)qosLevel
-                       msgId:(UInt16)msgId
-                  retainFlag:(BOOL)retain
-                     dupFlag:(BOOL)dup;
-+ (id)pubackMessageWithMessageId:(UInt16)msgId;
-+ (id)pubrecMessageWithMessageId:(UInt16)msgId;
-+ (id)pubrelMessageWithMessageId:(UInt16)msgId;
-+ (id)pubcompMessageWithMessageId:(UInt16)msgId;
+- (NSData *)wireFormat;
 
-- (id)initWithType:(UInt8)aType;
-- (id)initWithType:(UInt8)aType data:(NSData*)aData;
-- (id)initWithType:(UInt8)aType
-               qos:(MQTTQosLevel)aQos
-              data:(NSData*)aData;
-- (id)initWithType:(UInt8)aType
-               qos:(MQTTQosLevel)aQos
-        retainFlag:(BOOL)aRetainFlag
-           dupFlag:(BOOL)aDupFlag
-              data:(NSData*)aData;
-@property (strong,nonatomic) NSData * data;
 
 @end
 

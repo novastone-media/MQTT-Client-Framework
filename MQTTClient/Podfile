@@ -1,0 +1,36 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+	target 'MQTTClientTests' do
+		platform :ios, '6.1'
+		pod 'CocoaLumberjack'
+		pod 'MQTTClient', :path => '~/MQTT-Client-Framework'
+		pod 'MQTTClient/CoreData', :path => '~/MQTT-Client-Framework'
+		pod 'MQTTClient/Websocket', :path => '~/MQTT-Client-Framework'
+	end
+
+	target 'MQTTClientTV' do
+		platform :tvos, '9.0'
+		pod 'CocoaLumberjack'
+	end
+
+	target 'MQTTClientTVTests' do
+		platform :tvos, '9.0'
+		pod 'CocoaLumberjack'
+		pod 'MQTTClient', :path => '~/MQTT-Client-Framework'
+		pod 'MQTTClient/CoreData', :path => '~/MQTT-Client-Framework'
+	end
+
+	target 'MQTTClientOSX' do
+		platform :osx, '10.10'
+		pod 'CocoaLumberjack'
+		pod 'SocketRocket'
+	end
+
+	target 'MQTTClientOSXTests' do
+		platform :osx, '10.10'
+		pod 'CocoaLumberjack'
+		pod 'MQTTClient', :path => '~/MQTT-Client-Framework'
+		pod 'MQTTClient/CoreData', :path => '~/MQTT-Client-Framework'
+		pod 'MQTTClient/Websocket', :path => '~/MQTT-Client-Framework'
+	end
+

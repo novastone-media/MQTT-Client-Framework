@@ -1,6 +1,23 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.6.0
+> Release date 2015-12-31
+
+[NEW] refactor / cleanup test packages
+[NEW] abstraction protocol for persistence closes #74
+[NEW] removed .framework in favor of static Xcode library
+[FIX] check status of websocket connection before sending
+[NEW] unit tested websockets
+[NEW] websocket transport closes #62
+[NEW] refactor transport layer
+[NEW] Split MQTTSession.h/m for better handling closes #80
+[NEW] add timeout to ...AndWait methods closes #70
+
+[known bugs]
+Websockets not for MQTTSessionmanager (yet)
+
+
 ## MQTT-Client-Framework 0.5.3
 >Release date: 2015-12-02
 

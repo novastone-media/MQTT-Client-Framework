@@ -4,206 +4,176 @@
 //
 // Copyright (c) 2013-2015, Christoph Krey
 //
-// based on
-//
-// Copyright (c) 2011, 2013, 2lemetry LLC
-// 
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the Eclipse Public License v1.0
-// which accompanies this distribution, and is available at
-// http://www.eclipse.org/legal/epl-v10.html
-// 
-// Contributors:
-//    Kyle Roche - initial API and implementation and/or initial documentation
-// 
 
 #import "MQTTDecoder.h"
 
+#ifdef LUMBERJACK
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-#define DEBUGDEC FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
-#define DEBUGDEC FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @interface MQTTDecoder()
-@property BOOL securityPolicyAlreadyApplied;
-@property(strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
-@property(strong, nonatomic) NSString *securityDomain;
-- (BOOL)applySSLSecurityPolicy:(NSStream *)readStream withEvent:(NSStreamEvent)eventCode;
+@property (nonatomic) NSMutableArray<NSInputStream *> *streams;
 @end
 
 @implementation MQTTDecoder
 
-- (id)initWithStream:(NSInputStream *)stream
-             runLoop:(NSRunLoop *)runLoop
-         runLoopMode:(NSString *)mode {
-    return [self initWithStream:stream
-                       runLoop:runLoop
-                   runLoopMode:mode
-                securityPolicy:nil
-                securityDomain:nil];
-}
-
-- (id)initWithStream:(NSInputStream *)stream
-             runLoop:(NSRunLoop *)runLoop
-         runLoopMode:(NSString *)mode
-      securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-      securityDomain:(NSString *)securityDomain
-{
-    self.status = MQTTDecoderStatusInitializing;
-    self.stream = stream;
-    [self.stream setDelegate:self];
-    self.runLoop = runLoop;
-    self.runLoopMode = mode;
-    self.securityPolicy = securityPolicy;
-    self.securityDomain = securityDomain;
-    self.securityPolicyAlreadyApplied = NO;
+- (instancetype)init {
+    self = [super init];
+    self.state = MQTTDecoderStateInitializing;
+    self.runLoop = [NSRunLoop currentRunLoop];
+    self.runLoopMode = NSRunLoopCommonModes;
+    self.streams = [NSMutableArray arrayWithCapacity:5];
     return self;
 }
 
+- (void)decodeMessage:(NSData *)data {
+    NSInputStream *stream = [NSInputStream inputStreamWithData:data];
+    [self openStream:stream];
+}
+
+- (void)openStream:(NSInputStream*)stream {
+    [self.streams addObject:stream];
+    [stream setDelegate:self];
+    DDLogVerbose(@"[MQTTDecoder] #streams=%lu", (unsigned long)self.streams.count);
+    if (self.streams.count == 1) {
+        [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
+        [stream open];
+    }
+}
+
 - (void)open {
-    [self.stream setDelegate:self];
-    [self.stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
-    [self.stream open];
+    self.state = MQTTDecoderStateDecodingHeader;
 }
 
 - (void)close {
-    [self.stream close];
-    [self.stream removeFromRunLoop:self.runLoop forMode:self.runLoopMode];
-    [self.stream setDelegate:nil];
-}
-
-- (BOOL)applySSLSecurityPolicy:(NSStream *)readStream withEvent:(NSStreamEvent)eventCode{
-    if(!self.securityPolicy){
-        return YES;
+    if (self.streams) {
+        for (NSInputStream *stream in self.streams) {
+            [stream close];
+            [stream removeFromRunLoop:self.runLoop forMode:self.runLoopMode];
+            [stream setDelegate:nil];
+        }
+        [self.streams removeAllObjects];
     }
-
-    // apply the policy only once.
-    if(self.securityPolicyAlreadyApplied){
-        return YES;
-    }
-
-    SecTrustRef serverTrust = (__bridge SecTrustRef) [readStream propertyForKey: (__bridge NSString *)kCFStreamPropertySSLPeerTrust];
-    if(!serverTrust){
-        return NO;
-    }
-
-    BOOL isValid = [self.securityPolicy evaluateServerTrust:serverTrust forDomain:self.securityDomain];
-    self.securityPolicyAlreadyApplied = isValid;
-    return isValid;
 }
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
-    if (DEBUGDEC) NSLog(@"%@ handleEvent 0x%02lx", self, (long)eventCode);
-    if(self.stream == nil) {
-        if (DEBUGDEC) NSLog(@"%@ self.stream == nil", self);
-        return;
+    NSInputStream *stream = (NSInputStream *)sender;
+    
+    if (eventCode & NSStreamEventOpenCompleted) {
+        DDLogVerbose(@"[MQTTDecoder] NSStreamEventOpenCompleted");
     }
-    assert(sender == self.stream);
-    switch (eventCode) {
-        case NSStreamEventOpenCompleted:
-            self.status = MQTTDecoderStatusDecodingHeader;
-            break;
-        case NSStreamEventHasBytesAvailable:
-            // apply security before process any data
-            if(![self applySSLSecurityPolicy:sender withEvent:eventCode]){
-                self.status = MQTTDecoderStatusConnectionError;
-                NSError * sslError = [NSError errorWithDomain:@"MQTT"
-                                                         code:errSSLXCertChainInvalid
-                                                     userInfo:@{NSLocalizedDescriptionKey : @"Unable to apply security policy, the SSL connection is insecure!"}];
-                [self.delegate decoder:self handleEvent:MQTTDecoderEventProtocolError error:sslError];
+    
+    if (eventCode & NSStreamEventHasBytesAvailable) {
+        DDLogVerbose(@"[MQTTDecoder] NSStreamEventHasBytesAvailable");
+        
+        if (self.state == MQTTDecoderStateDecodingHeader) {
+            UInt8 buffer;
+            NSInteger n = [stream read:&buffer maxLength:1];
+            if (n == -1) {
+                self.state = MQTTDecoderStateConnectionError;
+                [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:stream.streamError];
+            } else if (n == 1) {
+                self.length = 0;
+                self.lengthMultiplier = 1;
+                self.state = MQTTDecoderStateDecodingLength;
+                self.dataBuffer = [[NSMutableData alloc] init];
+                [self.dataBuffer appendBytes:&buffer length:1];
+                self.offset = 1;
+                DDLogVerbose(@"[MQTTDecoder] fixedHeader=0x%02x", buffer);
             }
-
-            if (self.status == MQTTDecoderStatusDecodingHeader) {
-                UInt8 buffer;
-                NSInteger n = [self.stream read:&buffer maxLength:1];
-                self.header = buffer;
-                if (n == -1) {
-                    self.status = MQTTDecoderStatusConnectionError;
-                    [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:self.stream.streamError];
-                } else if (n == 1) {
-                    self.length = 0;
-                    self.lengthMultiplier = 1;
-                    self.status = MQTTDecoderStatusDecodingLength;
-                }
-            }
-            while (self.status == MQTTDecoderStatusDecodingLength) {
-                // TODO: check max packet length(prevent evil server response)
-                UInt8 digit;
-                NSInteger n = [self.stream read:&digit maxLength:1];
-                if (n == -1) {
-                    self.status = MQTTDecoderStatusConnectionError;
-                    [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:self.stream.streamError];
-                    break;
-                } else if (n == 0) {
-                    break;
-                }
-                self.length += (digit & 0x7f) * self.lengthMultiplier;
-                if ((digit & 0x80) == 0x00) {
-                    self.dataBuffer = [NSMutableData dataWithCapacity:self.length];
-                    self.status = MQTTDecoderStatusDecodingData;
-                } else {
-                    self.lengthMultiplier *= 128;
-                }
-            }
-            if (self.status == MQTTDecoderStatusDecodingData) {
-                if (self.length > 0) {
-                    NSInteger n, toRead;
-                    UInt8 buffer[768];
-                    toRead = self.length - [self.dataBuffer length];
-                    if (toRead > sizeof buffer) {
-                        toRead = sizeof buffer;
-                    }
-                    n = [self.stream read:buffer maxLength:toRead];
-                    if (n == -1) {
-                        self.status = MQTTDecoderStatusConnectionError;
-                        [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:self.stream.streamError];
-                    } else {
-                        [self.dataBuffer appendBytes:buffer length:n];
-                    }
-                }
-                if ([self.dataBuffer length] == self.length) {
-                    MQTTMessage* msg;
-                    UInt8 type, qos;
-                    BOOL isDuplicate, retainFlag;
-                    type = (self.header >> 4) & 0x0f;
-                    isDuplicate = NO;
-                    if ((self.header & 0x08) == 0x08) {
-                        isDuplicate = YES;
-                    }
-                    // XXX qos > 2
-                    qos = (self.header >> 1) & 0x03;
-                    retainFlag = NO;
-                    if ((self.header & 0x01) == 0x01) {
-                        retainFlag = YES;
-                    }
-                    msg = [[MQTTMessage alloc] initWithType:type
-                                                        qos:qos
-                                                 retainFlag:retainFlag
-                                                    dupFlag:isDuplicate
-                                                       data:self.dataBuffer];
-                    if (DEBUGDEC) NSLog(@"%@ received (%lu)=%@...", self, (unsigned long)self.dataBuffer.length,
-                          [self.dataBuffer subdataWithRange:NSMakeRange(0, MIN(16, self.dataBuffer.length))]);
-                    [self.delegate decoder:self newMessage:msg];
-                    self.dataBuffer = NULL;
-                    self.status = MQTTDecoderStatusDecodingHeader;
-                }
-            }
-            break;
-        case NSStreamEventEndEncountered:
-            self.status = MQTTDecoderStatusConnectionClosed;
-            [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionClosed error:nil];
-            break;
-        case NSStreamEventErrorOccurred:
-        {
-            self.status = MQTTDecoderStatusConnectionError;
-            NSError *error = [self.stream streamError];
-            [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:error];
-            break;
         }
-        default:
-            if (DEBUGDEC) NSLog(@"%@ unhandled event code 0x%02lx", self, (long)eventCode);
-            break;
+        while (self.state == MQTTDecoderStateDecodingLength) {
+            // TODO: check max packet length(prevent evil server response)
+            UInt8 digit;
+            NSInteger n = [stream read:&digit maxLength:1];
+            if (n == -1) {
+                self.state = MQTTDecoderStateConnectionError;
+                [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:stream.streamError];
+                break;
+            } else if (n == 0) {
+                break;
+            }
+            DDLogVerbose(@"[MQTTDecoder] digit=0x%02x 0x%02x %d %d", digit, digit & 0x7f, (unsigned int)self.length, (unsigned int)self.lengthMultiplier);
+            [self.dataBuffer appendBytes:&digit length:1];
+            self.offset++;
+            self.length += ((digit & 0x7f) * self.lengthMultiplier);
+            if ((digit & 0x80) == 0x00) {
+                self.state = MQTTDecoderStateDecodingData;
+            } else {
+                self.lengthMultiplier *= 128;
+            }
+        }
+        DDLogVerbose(@"[MQTTDecoder] remainingLength=%d", (unsigned int)self.length);
+
+        if (self.state == MQTTDecoderStateDecodingData) {
+            if (self.length > 0) {
+                NSInteger n, toRead;
+                UInt8 buffer[768];
+                toRead = self.length + self.offset - self.dataBuffer.length;
+                if (toRead > sizeof buffer) {
+                    toRead = sizeof buffer;
+                }
+                n = [stream read:buffer maxLength:toRead];
+                if (n == -1) {
+                    self.state = MQTTDecoderStateConnectionError;
+                    [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:stream.streamError];
+                } else {
+                    DDLogVerbose(@"[MQTTDecoder] read %ld %ld", (long)toRead, (long)n);
+                    [self.dataBuffer appendBytes:buffer length:n];
+                }
+            }
+            if (self.dataBuffer.length == self.length + self.offset) {
+                DDLogVerbose(@"[MQTTDecoder] received (%lu)=%@...", (unsigned long)self.dataBuffer.length,
+                                    [self.dataBuffer subdataWithRange:NSMakeRange(0, MIN(256, self.dataBuffer.length))]);
+                [self.delegate decoder:self didReceiveMessage:self.dataBuffer];
+                self.dataBuffer = NULL;
+                self.state = MQTTDecoderStateDecodingHeader;
+            }
+        }
+    }
+    
+    if (eventCode & NSStreamEventHasSpaceAvailable) {
+        DDLogVerbose(@"[MQTTDecoder] NSStreamEventHasSpaceAvailable");
+    }
+    
+    if (eventCode & NSStreamEventEndEncountered) {
+        DDLogVerbose(@"[MQTTDecoder] NSStreamEventEndEncountered");
+        
+        if (self.streams) {
+            [self.streams removeObject:stream];
+            if (self.streams.count) {
+                NSInputStream *stream = [self.streams objectAtIndex:0];
+                [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
+                [stream open];
+            }
+        }
+    }
+    
+    if (eventCode & NSStreamEventErrorOccurred) {
+        DDLogVerbose(@"[MQTTDecoder] NSStreamEventErrorOccurred");
+        
+        self.state = MQTTDecoderStateConnectionError;
+        NSError *error = [stream streamError];
+        if (self.streams) {
+            [self.streams removeObject:stream];
+            if (self.streams.count) {
+                NSInputStream *stream = [self.streams objectAtIndex:0];
+                [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
+                [stream open];
+            }
+        }
+        [self.delegate decoder:self handleEvent:MQTTDecoderEventConnectionError error:error];
     }
 }
 

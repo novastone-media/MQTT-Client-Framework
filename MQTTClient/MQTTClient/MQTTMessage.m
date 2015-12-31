@@ -7,44 +7,52 @@
 // based on
 //
 // Copyright (c) 2011, 2013, 2lemetry LLC
-// 
+//
 // All rights reserved. This program and the accompanying materials
 // are made available under the terms of the Eclipse Public License v1.0
 // which accompanies this distribution, and is available at
 // http://www.eclipse.org/legal/epl-v10.html
-// 
+//
 // Contributors:
 //    Kyle Roche - initial API and implementation and/or initial documentation
-// 
+//
 
 #import "MQTTMessage.h"
 
+#ifdef LUMBERJACK
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-#define DEBUGMSG FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #else
-#define DEBUGMSG FALSE
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+#else
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
 #endif
 
 @implementation MQTTMessage
 
-+ (id)connectMessageWithClientId:(NSString*)clientId
-                        userName:(NSString*)userName
-                        password:(NSString*)password
-                       keepAlive:(NSInteger)keepAlive
-                    cleanSession:(BOOL)cleanSessionFlag
-                            will:(BOOL)will
-                       willTopic:(NSString*)willTopic
-                         willMsg:(NSData*)willMsg
-                         willQoS:(MQTTQosLevel)willQoS
-                      willRetain:(BOOL)willRetainFlag
-                   protocolLevel:(UInt8)protocolLevel
-{
++ (MQTTMessage *)connectMessageWithClientId:(NSString *)clientId
+                                  userName:(NSString *)userName
+                                  password:(NSString *)password
+                                 keepAlive:(NSInteger)keepAlive
+                              cleanSession:(BOOL)cleanSessionFlag
+                                      will:(BOOL)will
+                                 willTopic:(NSString *)willTopic
+                                   willMsg:(NSData *)willMsg
+                                   willQoS:(MQTTQosLevel)willQoS
+                                willRetain:(BOOL)willRetainFlag
+                             protocolLevel:(UInt8)protocolLevel {
     /*
      * setup flags w/o basic plausibility checks
      *
      */
     UInt8 flags = 0x00;
-
+    
     if (cleanSessionFlag) {
         flags |= 0x02;
     }
@@ -61,7 +69,7 @@
     }
     
     flags |= ((willQoS & 0x03) << 3);
-
+    
     if (willRetainFlag) {
         flags |= 0x20;
     }
@@ -102,25 +110,22 @@
     if (password) {
         [data appendMQTTString:password];
     }
-
+    
     MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTConnect
                                                     data:data];
     return msg;
 }
 
-+ (id)pingreqMessage
-{
++ (MQTTMessage *)pingreqMessage {
     return [[MQTTMessage alloc] initWithType:MQTTPingreq];
 }
 
-+ (id)disconnectMessage
-{
++ (MQTTMessage *)disconnectMessage {
     return [[MQTTMessage alloc] initWithType:MQTTDisconnect];
 }
 
-+ (id)subscribeMessageWithMessageId:(UInt16)msgId
-                              topics:(NSDictionary *)topics
-{
++ (MQTTMessage *)subscribeMessageWithMessageId:(UInt16)msgId
+                                       topics:(NSDictionary *)topics {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     for (NSString *topic in topics.allKeys) {
@@ -134,9 +139,8 @@
     return msg;
 }
 
-+ (id)unsubscribeMessageWithMessageId:(UInt16)msgId
-                                topics:(NSArray *)topics
-{
++ (MQTTMessage *)unsubscribeMessageWithMessageId:(UInt16)msgId
+                                         topics:(NSArray *)topics {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     for (NSString *topic in topics) {
@@ -149,14 +153,13 @@
     return msg;
 }
 
-+ (id)publishMessageWithData:(NSData*)payload
-                     onTopic:(NSString*)topic
-                         qos:(MQTTQosLevel)qosLevel
-                       msgId:(UInt16)msgId
-                  retainFlag:(BOOL)retain
-                     dupFlag:(BOOL)dup
-{
-    NSMutableData* data = [NSMutableData data];
++ (MQTTMessage *)publishMessageWithData:(NSData *)payload
+                               onTopic:(NSString *)topic
+                                   qos:(MQTTQosLevel)qosLevel
+                                 msgId:(UInt16)msgId
+                            retainFlag:(BOOL)retain
+                               dupFlag:(BOOL)dup {
+    NSMutableData *data = [[NSMutableData alloc] init];
     [data appendMQTTString:topic];
     if (msgId) [data appendUInt16BigEndian:msgId];
     [data appendData:payload];
@@ -169,8 +172,7 @@
     return msg;
 }
 
-+ (id)pubackMessageWithMessageId:(UInt16)msgId
-{
++ (MQTTMessage *)pubackMessageWithMessageId:(UInt16)msgId {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPuback
@@ -179,8 +181,7 @@
     return msg;
 }
 
-+ (id)pubrecMessageWithMessageId:(UInt16)msgId
-{
++ (MQTTMessage *)pubrecMessageWithMessageId:(UInt16)msgId {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPubrec
@@ -189,8 +190,7 @@
     return msg;
 }
 
-+ (id)pubrelMessageWithMessageId:(UInt16)msgId
-{
++ (MQTTMessage *)pubrelMessageWithMessageId:(UInt16)msgId {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPubrel
@@ -200,8 +200,7 @@
     return msg;
 }
 
-+ (id)pubcompMessageWithMessageId:(UInt16)msgId
-{
++ (MQTTMessage *)pubcompMessageWithMessageId:(UInt16)msgId {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPubcomp
@@ -210,38 +209,228 @@
     return msg;
 }
 
-- (id)initWithType:(UInt8)aType {
-    _type = aType;
-    _data = nil;
+- (instancetype)init {
+    self = [super init];
+    self.type = 0;
+    self.qos = MQTTQosLevelAtMostOnce;
+    self.retainFlag = false;
+    self.mid = 0;
+    self.data = nil;
     return self;
 }
 
-- (id)initWithType:(UInt8)aType data:(NSData*)aData {
-    _type = aType;
-    self.data = aData;
+- (instancetype)initWithType:(MQTTCommandType)type {
+    self = [self init];
+    self.type = type;
     return self;
 }
 
-- (id)initWithType:(UInt8)aType
-               qos:(MQTTQosLevel)aQos
-              data:(NSData*)aData {
-    _type = aType;
-    _qos = aQos;
-    _data = aData;
+- (instancetype)initWithType:(MQTTCommandType)type
+                        data:(NSData *)data {
+    self = [self init];
+    self.type = type;
+    self.data = data;
     return self;
 }
 
-- (id)initWithType:(UInt8)aType
-               qos:(MQTTQosLevel)aQos
-        retainFlag:(BOOL)aRetainFlag
-           dupFlag:(BOOL)aDupFlag
-              data:(NSData*)aData {
-    _type = aType;
-    _qos = aQos;
-    _retainFlag = aRetainFlag;
-    _dupFlag = aDupFlag;
-    _data = aData;
+- (instancetype)initWithType:(MQTTCommandType)type
+                         qos:(MQTTQosLevel)qos
+                        data:(NSData *)data {
+    self = [self init];
+    self.type = type;
+    self.qos = qos;
+    self.data = data;
     return self;
+}
+
+- (instancetype)initWithType:(MQTTCommandType)type
+                         qos:(MQTTQosLevel)qos
+                  retainFlag:(BOOL)retainFlag
+                     dupFlag:(BOOL)dupFlag
+                        data:(NSData *)data {
+    self = [self init];
+    self.type = type;
+    self.qos = qos;
+    self.retainFlag = retainFlag;
+    self.dupFlag = dupFlag;
+    self.data = data;
+    return self;
+}
+
+- (NSData *)wireFormat {
+    NSMutableData *buffer = [[NSMutableData alloc] init];
+    
+    // encode fixed header
+    UInt8 header;
+    header = (self.type & 0x0f) << 4;
+    if (self.dupFlag) {
+        header |= 0x08;
+    }
+    header |= (self.qos & 0x03) << 1;
+    if (self.retainFlag) {
+        header |= 0x01;
+    }
+    [buffer appendBytes:&header length:1];
+    
+    // encode remaining length
+    NSInteger length = self.data.length;
+    do {
+        UInt8 digit = length % 128;
+        length /= 128;
+        if (length > 0) {
+            digit |= 0x80;
+        }
+        [buffer appendBytes:&digit length:1];
+    }
+    while (length > 0);
+    
+    // encode message data
+    if (self.data != NULL) {
+        [buffer appendData:self.data];
+    }
+    
+    DDLogVerbose(@"[MQTTMessage] wireFormat(%lu)=%@...",
+              (unsigned long)buffer.length,
+              [buffer subdataWithRange:NSMakeRange(0, MIN(256, buffer.length))]);
+    
+    return buffer;
+}
+
++ (MQTTMessage *)messageFromData:(NSData *)data {
+    MQTTMessage *message = nil;
+    if (data.length >= 2) {
+        UInt8 header;
+        [data getBytes:&header length:sizeof(header)];
+        UInt8 type = (header >> 4) & 0x0f;
+        UInt8 dupFlag = (header >> 3) & 0x01;
+        UInt8 qos = (header >> 1) & 0x03;
+        UInt8 retainFlag = header & 0x01;
+        UInt32 remainingLength = 0;
+        UInt32 multiplier = 1;
+        UInt8 offset = 1;
+        UInt8 digit;
+        do {
+            if (data.length < offset) {
+                DDLogWarn(@"[MQTTMessage] message data incomplete remaining length");
+                offset = -1;
+                break;
+            }
+            [data getBytes:&digit range:NSMakeRange(offset, 1)];
+            offset++;
+            remainingLength += (digit & 0x7f) * multiplier;
+            multiplier *= 128;
+            if (multiplier > 128*128*128) {
+                DDLogWarn(@"[MQTTMessage] message data too long remaining length");
+                multiplier = -1;
+                break;
+            }
+        } while ((digit & 0x80) != 0);
+        
+        if (type >= MQTTConnect &&
+            type <= MQTTDisconnect) {
+            if (offset > 0 &&
+                multiplier > 0 &&
+                data.length == remainingLength + offset) {
+                if ((type == MQTTPublish && (qos >= MQTTQosLevelAtMostOnce && qos <= MQTTQosLevelExactlyOnce)) ||
+                    (type == MQTTConnect && qos == 0) ||
+                    (type == MQTTConnack && qos == 0) ||
+                    (type == MQTTPuback && qos == 0) ||
+                    (type == MQTTPubrec && qos == 0) ||
+                    (type == MQTTPubrel && qos == 1) ||
+                    (type == MQTTPubcomp && qos == 0) ||
+                    (type == MQTTSubscribe && qos == 1) ||
+                    (type == MQTTSuback && qos == 0) ||
+                    (type == MQTTUnsubscribe && qos == 1) ||
+                    (type == MQTTUnsuback && qos == 0) ||
+                    (type == MQTTPingreq && qos == 0) ||
+                    (type == MQTTPingresp && qos == 0) ||
+                    (type == MQTTDisconnect && qos == 0)) {
+                    message = [[MQTTMessage alloc] init];
+                    message.type = type;
+                    message.dupFlag = dupFlag == 1;
+                    message.retainFlag = retainFlag == 1;
+                    message.qos = qos;
+                    message.data = [data subdataWithRange:NSMakeRange(offset, remainingLength)];
+                    if ((type == MQTTPublish && (qos == MQTTQosLevelAtLeastOnce || qos == MQTTQosLevelExactlyOnce)) ||
+                        type == MQTTPuback ||
+                        type == MQTTPubrec ||
+                        type == MQTTPubrel ||
+                        type == MQTTPubcomp ||
+                        type == MQTTSubscribe ||
+                        type == MQTTSuback ||
+                        type == MQTTUnsubscribe ||
+                        type == MQTTUnsuback) {
+                        if (message.data.length >= 2) {
+                            [message.data getBytes:&digit range:NSMakeRange(0, 1)];
+                            message.mid = digit * 256;
+                            [message.data getBytes:&digit range:NSMakeRange(1, 1)];
+                            message.mid += digit;
+                        } else {
+                            DDLogWarn(@"[MQTTMessage] missing packet identifier");
+                            message = nil;
+                        }
+                    }
+                    if (type == MQTTPuback ||
+                        type == MQTTPubrec ||
+                        type == MQTTPubrel ||
+                        type == MQTTPubcomp ||
+                        type == MQTTUnsuback ) {
+                        if (message.data.length > 2) {
+                            DDLogWarn(@"[MQTTMessage] unexpected payload after packet identifier");
+                            message = nil;
+                        }
+                    }
+                    if (type == MQTTPingreq ||
+                        type == MQTTPingresp ||
+                        type == MQTTDisconnect) {
+                        if (message.data.length > 2) {
+                            DDLogWarn(@"[MQTTMessage] unexpected payload");
+                            message = nil;
+                        }
+                    }
+                    if (type == MQTTConnect) {
+                        if (message.data.length < 3) {
+                            DDLogWarn(@"[MQTTMessage] mising connect variable header");
+                            message = nil;
+                        }
+                    }
+                    if (type == MQTTConnack) {
+                        if (message.data.length != 2) {
+                            DDLogWarn(@"[MQTTMessage] mising connack variable header");
+                            message = nil;
+                        }
+                    }
+                    if (type == MQTTSubscribe) {
+                        if (message.data.length < 3) {
+                            DDLogWarn(@"[MQTTMessage] mising subscribe variable header");
+                            message = nil;
+                        }
+                    }
+                    if (type == MQTTSuback) {
+                        if (message.data.length != 3) {
+                            DDLogWarn(@"[MQTTMessage] mising suback variable header");
+                            message = nil;
+                        }
+                    }
+                    if (type == MQTTUnsubscribe) {
+                        if (message.data.length != 3) {
+                            DDLogWarn(@"[MQTTMessage] mising unsubscribe variable header");
+                            message = nil;
+                        }
+                    }
+                } else {
+                    DDLogWarn(@"[MQTTMessage] illegal header flags");
+                }
+            } else {
+                DDLogWarn(@"[MQTTMessage] remaining data wrong length");
+            }
+        } else {
+            DDLogWarn(@"[MQTTMessage] illegal message type");
+        }
+    } else {
+        DDLogWarn(@"[MQTTMessage] message data length < 2");
+    }
+    return message;
 }
 
 @end
@@ -262,24 +451,24 @@
 - (void)appendMQTTString:(NSString *)string
 {
     if (string) {
-//        UInt8 buf[2];
-//        if (DEBUGMSG) NSLog(@"String=%@", string);
-//        const char* utf8String = [string UTF8String];
-//        if (DEBUGMSG) NSLog(@"UTF8=%s", utf8String);
-//
-//        size_t strLen = strlen(utf8String);
-//        buf[0] = strLen / 256;
-//        buf[1] = strLen % 256;
-//        [self appendBytes:buf length:2];
-//        [self appendBytes:utf8String length:strLen];
+        //        UInt8 buf[2];
+        //        if (DEBUGMSG) NSLog(@"String=%@", string);
+        //        const char* utf8String = [string UTF8String];
+        //        if (DEBUGMSG) NSLog(@"UTF8=%s", utf8String);
+        //
+        //        size_t strLen = strlen(utf8String);
+        //        buf[0] = strLen / 256;
+        //        buf[1] = strLen % 256;
+        //        [self appendBytes:buf length:2];
+        //        [self appendBytes:utf8String length:strLen];
         
-// This updated code allows for all kind or UTF characters including 0x0000
+        // This updated code allows for all kind or UTF characters including 0x0000
         NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
         UInt8 buf[2];
         UInt16 len = data.length;
         buf[0] = len / 256;
         buf[1] = len % 256;
-
+        
         [self appendBytes:buf length:2];
         [self appendData:data];
     }
