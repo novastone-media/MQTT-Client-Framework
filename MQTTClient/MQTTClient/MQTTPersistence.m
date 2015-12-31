@@ -27,12 +27,6 @@
 #define DEBUGPERSIST FALSE
 #endif
 
-#define PERSISTENT NO
-#define MAX_SIZE 64*1024*1024
-#define MAX_WINDOW_SIZE 16
-#define MAX_MESSAGES 1024
-
-
 @interface MQTTPersistence()
 //@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @end
@@ -48,10 +42,10 @@ static unsigned long long fileSystemFreeSize;
 
 - (MQTTPersistence *)init {
     self = [super init];
-    self.persistent = PERSISTENT;
-    self.maxSize = MAX_SIZE;
-    self.maxMessages = MAX_MESSAGES;
-    self.maxWindowSize = MAX_WINDOW_SIZE;
+    self.persistent = MQTT_PERSISTENT;
+    self.maxSize = MQTT_MAX_SIZE;
+    self.maxMessages = MQTT_MAX_MESSAGES;
+    self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
     if (!lock) {
         lock = [[NSRecursiveLock alloc] init];
     }

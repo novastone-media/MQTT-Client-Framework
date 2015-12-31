@@ -10,6 +10,11 @@
 #import <CoreData/CoreData.h>
 #import "MQTTMessage.h"
 
+static BOOL const MQTT_PERSISTENT = NO;
+static NSInteger const MQTT_MAX_SIZE = 64 * 1024 * 1024;
+static NSInteger const MQTT_MAX_WINDOW_SIZE = 16;
+static NSInteger const MQTT_MAX_MESSAGES = 1024;
+
 @interface MQTTFlow : NSManagedObject
 @property (strong, nonatomic) NSString *clientId;
 @property (strong, nonatomic) NSNumber *incomingFlag;

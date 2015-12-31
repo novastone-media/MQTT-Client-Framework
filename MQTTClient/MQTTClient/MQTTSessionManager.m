@@ -63,6 +63,12 @@
     self.state = MQTTSessionManagerStateStarting;
     self.internalSubscriptions = [[NSMutableDictionary alloc] init];
     self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
+    
+    //Use the default value 
+    self.persistent = MQTT_PERSISTENT;
+    self.maxSize = MQTT_MAX_SIZE;
+    self.maxMessages = MQTT_MAX_MESSAGES;
+    self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
 
 #if TARGET_OS_IPHONE == 1
     self.backgroundTask = UIBackgroundTaskInvalid;
