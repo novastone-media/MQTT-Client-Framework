@@ -78,6 +78,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     self.state = MQTTSessionManagerStateStarting;
     self.internalSubscriptions = [[NSMutableDictionary alloc] init];
     self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
+    
+    //Use the default value 
+    self.persistent = MQTT_PERSISTENT;
+    self.maxSize = MQTT_MAX_SIZE;
+    self.maxMessages = MQTT_MAX_MESSAGES;
+    self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
 
     self.persistent = MQTT_PERSISTENT;
     self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;

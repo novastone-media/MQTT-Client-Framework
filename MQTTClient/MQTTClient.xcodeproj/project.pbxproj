@@ -334,8 +334,6 @@
 		8425D71A1BBE8EF9005AD733 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTTestSessionManager.m; sourceTree = "<group>"; };
 		8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTTestBlocks.m; sourceTree = "<group>"; };
-		8439D57C1C2EAE5E00C24F4D /* MQTTClient_iOS_static.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MQTTClient_iOS_static.h; sourceTree = "<group>"; };
-		8439D57E1C2EAE5E00C24F4D /* MQTTClient_iOS_static.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTClient_iOS_static.m; sourceTree = "<group>"; };
 		8442BEE81A97B15100D00E55 /* SwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTests.swift; sourceTree = "<group>"; };
 		844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTACLTests.m; sourceTree = "<group>"; };
 		84517CF21C182F06006FE09B /* MQTTTestHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTTestHelpers.h; sourceTree = "<group>"; };
@@ -575,15 +573,6 @@
 			path = MQTTClientTVTests;
 			sourceTree = "<group>";
 		};
-		8439D57B1C2EAE5E00C24F4D /* MQTTClient-iOS-static */ = {
-			isa = PBXGroup;
-			children = (
-				8439D57C1C2EAE5E00C24F4D /* MQTTClient_iOS_static.h */,
-				8439D57E1C2EAE5E00C24F4D /* MQTTClient_iOS_static.m */,
-			);
-			path = "MQTTClient-iOS-static";
-			sourceTree = "<group>";
-		};
 		8459226A1C17519F00CCE27E /* SSLSecurityPolicyTransport */ = {
 			isa = PBXGroup;
 			children = (
@@ -609,7 +598,6 @@
 				840716151BBEEF9C00FBB3CB /* MQTTClientOSX */,
 				840716331BBEF13A00FBB3CB /* MQTTClientOSXTests */,
 				DE9EF5C61C0628B1009EF667 /* MQTTFramework */,
-				8439D57B1C2EAE5E00C24F4D /* MQTTClient-iOS-static */,
 				8461912C1883E56800101409 /* Frameworks */,
 				8461912B1883E56800101409 /* Products */,
 				C68FB15078050E672FED917E /* Pods */,
