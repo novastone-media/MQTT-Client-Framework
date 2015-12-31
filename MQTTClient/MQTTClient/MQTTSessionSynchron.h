@@ -32,6 +32,8 @@
  @endcode
  
  */
+- (BOOL)connectAndWaitTimeout:(NSTimeInterval)timeout;
+
 
 /** connects to the specified MQTT server synchronously
  
