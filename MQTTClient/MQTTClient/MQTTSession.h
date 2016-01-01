@@ -7,7 +7,7 @@
  Using MQTT in your Objective-C application
  
  @author Christoph Krey krey.christoph@gmail.com
- @copyright Copyright (c) 2013-2015, Christoph Krey 
+ @copyright Copyright © 2013-2016, Christoph Krey 
  
  based on Copyright (c) 2011, 2013, 2lemetry LLC
     All rights reserved. This program and the accompanying materials

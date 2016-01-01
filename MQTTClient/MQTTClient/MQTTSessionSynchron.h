@@ -7,7 +7,7 @@
  Synchronous API
  
  @author Christoph Krey krey.christoph@gmail.com
- @copyright Copyright (c) 2013-2015, Christoph Krey 
+ @copyright Copyright © 2013-2016, Christoph Krey 
 
  */
 
