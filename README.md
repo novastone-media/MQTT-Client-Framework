@@ -38,18 +38,16 @@ Create a new client and connect to a broker:
 \@interface MyDelegate : ... MQTTSessionDelegate>
 ...
 
-MQTTSession *session = [[MQTTSession alloc] init];
+        MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
+        transport.host = @"localhost";
+        transport.port = 1883;
 
-// Set delegate appropriately to receive various events
-// Set MQTTSessionDelegate // See MQTTSession.h for information on various handlers
-// you can subscribe to.
+        session = [[MQTTSession alloc] init];
+        session.transport = transport;
+        
+	session.delegate=self;
 
-[session setDelegate:self];
-
-session.host = @"localhost";
-session.port = 1883;
-
-[session connectAndWaitTimeout:30];  //this is part of the synchronous API
+	[session connectAndWaitTimeout:30];  //this is part of the synchronous API
 
 ```
 
