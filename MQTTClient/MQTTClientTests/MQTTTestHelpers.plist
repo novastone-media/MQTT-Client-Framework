@@ -5,11 +5,11 @@
 	<key>brokerList</key>
 	<array>
 		<string>#local</string>
-		<string>#mosquitto</string>
-		<string>#mosquittoWS</string>
+		<string>mosquitto</string>
+		<string>mosquittoWS</string>
 		<string>#mosquittoTLS</string>
 		<string>#mosquittoTLSClientCert</string>
-		<string>mosquittoWSS</string>
+		<string>#mosquittoWSS</string>
 	</array>
 	<key>brokers</key>
 	<dict>
@@ -28,20 +28,22 @@
 		</dict>
 		<key>local</key>
 		<dict>
+			<key>New item</key>
+			<string></string>
 			<key>host</key>
-			<string>mqtt.ckrey.de</string>
+			<string>localhost</string>
 			<key>timeout</key>
 			<integer>10</integer>
 			<key>port</key>
-			<real>9894</real>
+			<integer>1883</integer>
 			<key>tls</key>
-			<true/>
+			<false/>
 			<key>protocollevel</key>
 			<integer>4</integer>
 			<key>websocket</key>
-			<true/>
+			<false/>
 			<key>allowUntrustedCertificates</key>
-			<true/>
+			<false/>
 		</dict>
 		<key>mosquittoWS</key>
 		<dict>

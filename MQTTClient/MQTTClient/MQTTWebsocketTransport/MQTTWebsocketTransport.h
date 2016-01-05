@@ -13,7 +13,7 @@
 /** MQTTCFSocketTransport
  * implements an MQTTTransport on top of Websockets (SocketRocket)
  */
-@interface MQTTWebsocketTransport : NSObject <MQTTTransport, SRWebSocketDelegate>
+@interface MQTTWebsocketTransport : MQTTTransport <MQTTTransport, SRWebSocketDelegate>
 
 /** host an NSString containing the hostName or IP address of the host to connect to
  * defaults to @"localhost"
@@ -44,5 +44,6 @@
  * defaults to nil
  */
 @property (strong, nonatomic) NSArray *pinnedCertificates;
+
 
 @end

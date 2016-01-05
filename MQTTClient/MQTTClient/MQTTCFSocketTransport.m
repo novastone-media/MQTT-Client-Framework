@@ -31,10 +31,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 @implementation MQTTCFSocketTransport
 @synthesize state;
 @synthesize delegate;
+@synthesize runLoop;
+@synthesize runLoopMode;
 
 - (instancetype)init {
     self = [super init];
-    self.state = MQTTTransportCreated;
     self.host = @"localhost";
     self.port = 1883;
     self.tls = false;
@@ -82,11 +83,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     if(!connectError){
         self.encoder = [[MQTTCFSocketEncoder alloc] init];
         self.encoder.stream = CFBridgingRelease(writeStream);
+        self.encoder.runLoop = self.runLoop;
+        self.encoder.runLoopMode = self.runLoopMode;
         self.encoder.delegate = self;
         [self.encoder open];
         
         self.decoder = [[MQTTCFSocketDecoder alloc] init];
         self.decoder.stream =  CFBridgingRelease(readStream);
+        self.decoder.runLoop = self.runLoop;
+        self.decoder.runLoopMode = self.runLoopMode;
         self.decoder.delegate = self;
         [self.decoder open];
         

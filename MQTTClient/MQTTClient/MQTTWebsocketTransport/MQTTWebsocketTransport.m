@@ -24,10 +24,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 @implementation MQTTWebsocketTransport
 @synthesize state;
 @synthesize delegate;
+@synthesize runLoop;
+@synthesize runLoopMode;
 
 - (instancetype)init {
     self = [super init];
-    self.state = MQTTTransportCreated;
     self.host = @"localhost";
     self.port = 80;
     self.path = @"/mqtt";

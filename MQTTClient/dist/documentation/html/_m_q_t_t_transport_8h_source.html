@@ -90,14 +90,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  MQTTClient</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//  Created by Christoph Krey on 06.12.15.</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Copyright © 2015 Christoph Krey. All rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Copyright © 2015-2016 Christoph Krey. All rights reserved.</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#import &lt;Foundation/Foundation.h&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">@protocol </span><a class="code" href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate</a>;</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport-p.html">   16</a></span>&#160;<span class="keyword">@protocol </span><a class="code" href="protocol_m_q_t_t_transport-p.html">MQTTTransport</a> &lt;NSObject&gt;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport-p.html">   16</a></span>&#160;<span class="keyword">@protocol </span><a class="code" href="interface_m_q_t_t_transport.html">MQTTTransport</a> &lt;NSObject&gt;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; <span class="keyword">typedef</span> NS_ENUM(NSInteger, MQTTTransportState) {</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;     </div>
@@ -110,43 +110,54 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;     MQTTTransportClosing,</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;     </div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;     MQTTTransportClosed</div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport-p.html#a731cebd9439acdd3b766615ecb8222f3">   37</a></span>&#160; };</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport-p.html#a0c6263164dbe55f83ff125e158a71aaa">   37</a></span>&#160; };</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">@property</span> (strong, nonatomic) _Nullable id&lt;MQTTTransportDelegate&gt; <a class="code" href="protocol_m_q_t_t_transport-p.html#a731cebd9439acdd3b766615ecb8222f3">delegate</a>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport-p.html#a9b5d6563956b03a4f613a3b276ebffe4">   45</a></span>&#160;<span class="keyword">@property</span> (nonatomic) MQTTTransportState <a class="code" href="protocol_m_q_t_t_transport-p.html#a9b5d6563956b03a4f613a3b276ebffe4">state</a>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;- (void)<a class="code" href="protocol_m_q_t_t_transport-p.html#a4f1224183fde2aaef640a3f2ab7afe61">open</a>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;- (BOOL)send:(nonnull NSData *)data;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSRunLoop * _Nonnull <a class="code" href="protocol_m_q_t_t_transport-p.html#a0c6263164dbe55f83ff125e158a71aaa">runLoop</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport-p.html#a5bf8de65dd7e0e279fe5d3749c85134b">   43</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString * _Nonnull <a class="code" href="protocol_m_q_t_t_transport-p.html#a5bf8de65dd7e0e279fe5d3749c85134b">runLoopMode</a>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport-p.html#a731cebd9439acdd3b766615ecb8222f3">   48</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) _Nullable id&lt;MQTTTransportDelegate&gt; <a class="code" href="protocol_m_q_t_t_transport-p.html#a731cebd9439acdd3b766615ecb8222f3">delegate</a>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport-p.html#a9b5d6563956b03a4f613a3b276ebffe4">   51</a></span>&#160;<span class="keyword">@property</span> (nonatomic) MQTTTransportState <a class="code" href="protocol_m_q_t_t_transport-p.html#a9b5d6563956b03a4f613a3b276ebffe4">state</a>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;- (void)<a class="code" href="protocol_m_q_t_t_transport-p.html#a4f1224183fde2aaef640a3f2ab7afe61">open</a>;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;- (void)<a class="code" href="protocol_m_q_t_t_transport-p.html#aa293cdc8dc58de1d7e80c1a2c3ce6062">close</a>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keyword">@end</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport_delegate-p.html">   66</a></span>&#160;<span class="keyword">@protocol </span><a class="code" href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate</a> &lt;NSObject&gt;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; - (void)mqttTransport:(nonnull <span class="keywordtype">id</span>&lt;<a class="code" href="protocol_m_q_t_t_transport-p.html">MQTTTransport</a>&gt;)mqttTransport didReceiveMessage:(nonnull NSData *)message;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;- (BOOL)send:(nonnull NSData *)data;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;- (void)<a class="code" href="protocol_m_q_t_t_transport-p.html#aa293cdc8dc58de1d7e80c1a2c3ce6062">close</a>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">@end</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="protocol_m_q_t_t_transport_delegate-p.html">   72</a></span>&#160;<span class="keyword">@protocol </span><a class="code" href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate</a> &lt;NSObject&gt;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">@optional</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;- (void)mqttTransportDidOpen:(_Nonnull <span class="keywordtype">id</span>&lt;<a class="code" href="protocol_m_q_t_t_transport-p.html">MQTTTransport</a>&gt;)mqttTransport;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;- (void)mqttTransport:(_Nonnull <span class="keywordtype">id</span>&lt;<a class="code" href="protocol_m_q_t_t_transport-p.html">MQTTTransport</a>&gt;)mqttTransport didFailWithError:(nullable NSError *)error;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; - (void)mqttTransport:(nonnull <span class="keywordtype">id</span>&lt;<a class="code" href="interface_m_q_t_t_transport.html">MQTTTransport</a>&gt;)mqttTransport didReceiveMessage:(nonnull NSData *)message;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keyword">@optional</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;- (void)mqttTransportDidOpen:(_Nonnull <span class="keywordtype">id</span>&lt;<a class="code" href="interface_m_q_t_t_transport.html">MQTTTransport</a>&gt;)mqttTransport;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;- (void)mqttTransportDidClose:(_Nonnull <span class="keywordtype">id</span>&lt;<a class="code" href="protocol_m_q_t_t_transport-p.html">MQTTTransport</a>&gt;)mqttTransport;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">@end</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;- (void)mqttTransport:(_Nonnull <span class="keywordtype">id</span>&lt;<a class="code" href="interface_m_q_t_t_transport.html">MQTTTransport</a>&gt;)mqttTransport didFailWithError:(nullable NSError *)error;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;- (void)mqttTransportDidClose:(_Nonnull <span class="keywordtype">id</span>&lt;<a class="code" href="interface_m_q_t_t_transport.html">MQTTTransport</a>&gt;)mqttTransport;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">@end</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_transport.html">  100</a></span>&#160;<span class="keyword">@interface </span><a class="code" href="interface_m_q_t_t_transport.html">MQTTTransport</a> : NSObject &lt;<a class="code" href="protocol_m_q_t_t_transport-p.html">MQTTTransport</a>&gt;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keyword">@end</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
 <div class="ttc" id="protocol_m_q_t_t_transport-p_html_a4f1224183fde2aaef640a3f2ab7afe61"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html#a4f1224183fde2aaef640a3f2ab7afe61">-[MQTTTransport-p open]</a></div><div class="ttdeci">void open()</div></div>
-<div class="ttc" id="protocol_m_q_t_t_transport_delegate-p_html"><div class="ttname"><a href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate-p</a></div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:66</div></div>
+<div class="ttc" id="protocol_m_q_t_t_transport_delegate-p_html"><div class="ttname"><a href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate-p</a></div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:72</div></div>
+<div class="ttc" id="protocol_m_q_t_t_transport-p_html_a5bf8de65dd7e0e279fe5d3749c85134b"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html#a5bf8de65dd7e0e279fe5d3749c85134b">MQTTTransport-p::runLoopMode</a></div><div class="ttdeci">NSString *_Nonnull runLoopMode</div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:43</div></div>
 <div class="ttc" id="protocol_m_q_t_t_transport-p_html"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html">MQTTTransport-p</a></div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:16</div></div>
 <div class="ttc" id="protocol_m_q_t_t_transport-p_html_aa293cdc8dc58de1d7e80c1a2c3ce6062"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html#aa293cdc8dc58de1d7e80c1a2c3ce6062">-[MQTTTransport-p close]</a></div><div class="ttdeci">void close()</div></div>
-<div class="ttc" id="protocol_m_q_t_t_transport-p_html_a731cebd9439acdd3b766615ecb8222f3"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html#a731cebd9439acdd3b766615ecb8222f3">MQTTTransport-p::delegate</a></div><div class="ttdeci">_Nullable id&lt; MQTTTransportDelegate &gt; delegate</div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:37</div></div>
-<div class="ttc" id="protocol_m_q_t_t_transport-p_html_a9b5d6563956b03a4f613a3b276ebffe4"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html#a9b5d6563956b03a4f613a3b276ebffe4">MQTTTransport-p::state</a></div><div class="ttdeci">MQTTTransportState state</div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:45</div></div>
+<div class="ttc" id="interface_m_q_t_t_transport_html"><div class="ttname"><a href="interface_m_q_t_t_transport.html">MQTTTransport</a></div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:100</div></div>
+<div class="ttc" id="protocol_m_q_t_t_transport-p_html_a0c6263164dbe55f83ff125e158a71aaa"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html#a0c6263164dbe55f83ff125e158a71aaa">MQTTTransport-p::runLoop</a></div><div class="ttdeci">NSRunLoop *_Nonnull runLoop</div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:37</div></div>
+<div class="ttc" id="protocol_m_q_t_t_transport-p_html_a731cebd9439acdd3b766615ecb8222f3"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html#a731cebd9439acdd3b766615ecb8222f3">MQTTTransport-p::delegate</a></div><div class="ttdeci">_Nullable id&lt; MQTTTransportDelegate &gt; delegate</div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:48</div></div>
+<div class="ttc" id="protocol_m_q_t_t_transport-p_html_a9b5d6563956b03a4f613a3b276ebffe4"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html#a9b5d6563956b03a4f613a3b276ebffe4">MQTTTransport-p::state</a></div><div class="ttdeci">MQTTTransportState state</div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:51</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 31 2015 17:20:37 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 5 2016 21:51:44 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

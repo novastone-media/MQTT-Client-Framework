@@ -378,7 +378,7 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 
 /** the transport provider for MQTTClient
  *
- * assign an in instanc of a class implementing the MQTTTransport protocol e.g.
+ * assign an in instance of a class implementing the MQTTTransport protocol e.g.
  * MQTTCFSocketTransport before connecting.
  */
 @property (strong, nonatomic) id <MQTTTransport> transport;

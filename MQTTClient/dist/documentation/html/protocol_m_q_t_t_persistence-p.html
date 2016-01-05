@@ -109,7 +109,7 @@ Inheritance diagram for &lt;MQTTPersistence&gt;:</div>
 Instance Methods</h2></td></tr>
 <tr class="memitem:a8521b079578db32e593d841ce2941fc0"><td class="memItemLeft" align="right" valign="top">(NSUInteger)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_persistence-p.html#a8521b079578db32e593d841ce2941fc0">windowSize:</a></td></tr>
 <tr class="separator:a8521b079578db32e593d841ce2941fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d0c50e06a2b54f40fb5356c5309454a"><td class="memItemLeft" align="right" valign="top">(id&lt; <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> &gt;)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_persistence-p.html#a3d0c50e06a2b54f40fb5356c5309454a">storeMessageForClientId:topic:data:retainFlag:qos:msgId:incomingFlag:commandType:deadline:</a></td></tr>
+<tr class="memitem:a3d0c50e06a2b54f40fb5356c5309454a"><td class="memItemLeft" align="right" valign="top">(id&lt; <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> &gt;)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_persistence-p.html#a3d0c50e06a2b54f40fb5356c5309454a">storeMessageForClientId:topic:data:retainFlag:qos:msgId:incomingFlag:commandType:deadline:</a></td></tr>
 <tr class="separator:a3d0c50e06a2b54f40fb5356c5309454a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a415cc2c67ea2e73d7942973a2186d083"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_persistence-p.html#a415cc2c67ea2e73d7942973a2186d083">deleteFlow:</a></td></tr>
 <tr class="separator:a415cc2c67ea2e73d7942973a2186d083"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,7 +117,7 @@ Instance Methods</h2></td></tr>
 <tr class="separator:a2c880d902ade2b17078545cef8d212e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc43bd29d5edbd9d42ef3a8f8f73287d"><td class="memItemLeft" align="right" valign="top">(NSArray *)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_persistence-p.html#abc43bd29d5edbd9d42ef3a8f8f73287d">allFlowsforClientId:incomingFlag:</a></td></tr>
 <tr class="separator:abc43bd29d5edbd9d42ef3a8f8f73287d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2223834cf720c51f53fe25921aff4fe4"><td class="memItemLeft" align="right" valign="top">(id&lt; <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> &gt;)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_persistence-p.html#a2223834cf720c51f53fe25921aff4fe4">flowforClientId:incomingFlag:messageId:</a></td></tr>
+<tr class="memitem:a2223834cf720c51f53fe25921aff4fe4"><td class="memItemLeft" align="right" valign="top">(id&lt; <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> &gt;)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_persistence-p.html#a2223834cf720c51f53fe25921aff4fe4">flowforClientId:incomingFlag:messageId:</a></td></tr>
 <tr class="separator:a2223834cf720c51f53fe25921aff4fe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd0744d75cb430bfa2c430e14c3a65e8"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_persistence-p.html#afd0744d75cb430bfa2c430e14c3a65e8">sync</a></td></tr>
 <tr class="separator:afd0744d75cb430bfa2c430e14c3a65e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,14 +159,14 @@ Properties</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Retrieves all <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> elements of a clientId and direction </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Retrieves all <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> elements of a clientId and direction </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">clientId</td><td></td></tr>
     <tr><td class="paramname">incomingFlag</td><td></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>an NSArray of the retrieved <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> elements </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>an NSArray of the retrieved <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> elements </dd></dl>
 
 </div>
 </div>
@@ -183,7 +183,7 @@ Properties</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Deletes all <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> elements of a clientId </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Deletes all <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> elements of a clientId </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">clientId</td><td></td></tr>
   </table>
@@ -199,13 +199,13 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">- (void) deleteFlow: </td>
           <td></td>
-          <td class="paramtype">(id&lt; <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> &gt;)&#160;</td>
+          <td class="paramtype">(id&lt; <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> &gt;)&#160;</td>
           <td class="paramname"><em>flow</em></td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Deletes an <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> element </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Deletes an <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> element </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">flow</td><td></td></tr>
   </table>
@@ -219,7 +219,7 @@ Properties</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">- (id&lt;<a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a>&gt;) flowforClientId: </td>
+          <td class="memname">- (id&lt;<a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a>&gt;) flowforClientId: </td>
           <td></td>
           <td class="paramtype">(NSString *)&#160;</td>
           <td class="paramname"><em>clientId</em></td>
@@ -243,7 +243,7 @@ Properties</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Retrieves an <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> element </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Retrieves an <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> element </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">clientId</td><td></td></tr>
     <tr><td class="paramname">incomingFlag</td><td></td></tr>
@@ -251,7 +251,7 @@ Properties</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the retrieved <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> element or nil if the elememt was not found </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the retrieved <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> element or nil if the elememt was not found </dd></dl>
 
 </div>
 </div>
@@ -260,7 +260,7 @@ Properties</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">- (id&lt;<a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a>&gt;) storeMessageForClientId: </td>
+          <td class="memname">- (id&lt;<a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a>&gt;) storeMessageForClientId: </td>
           <td></td>
           <td class="paramtype">(NSString *)&#160;</td>
           <td class="paramname"><em>clientId</em></td>
@@ -334,7 +334,7 @@ Properties</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the created <a class="el" href="protocol_m_q_t_t_flow-p.html">MQTTFlow</a> element or nil if the maxWindowSize has been exceeded </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the created <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> element or nil if the maxWindowSize has been exceeded </dd></dl>
 
 </div>
 </div>
@@ -468,7 +468,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 31 2015 17:20:37 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 5 2016 21:51:44 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

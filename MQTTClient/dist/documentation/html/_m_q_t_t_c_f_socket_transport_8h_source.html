@@ -90,14 +90,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//  MQTTClient</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//  Created by Christoph Krey on 06.12.15.</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Copyright © 2015 Christoph Krey. All rights reserved.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//  Copyright © 2015-2016 Christoph Krey. All rights reserved.</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#import &quot;MQTTTransport.h&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#import &quot;MQTTCFSocketDecoder.h&quot;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#import &quot;MQTTCFSocketEncoder.h&quot;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_c_f_socket_transport.html">   16</a></span>&#160;<span class="keyword">@interface </span><a class="code" href="interface_m_q_t_t_c_f_socket_transport.html">MQTTCFSocketTransport</a> : NSObject &lt;<a class="code" href="protocol_m_q_t_t_transport-p.html">MQTTTransport</a>, MQTTCFSocketDecoderDelegate, MQTTCFSocketEncoderDelegate&gt;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_c_f_socket_transport.html">   16</a></span>&#160;<span class="keyword">@interface </span><a class="code" href="interface_m_q_t_t_c_f_socket_transport.html">MQTTCFSocketTransport</a> : <a class="code" href="interface_m_q_t_t_transport.html">MQTTTransport</a> &lt;<a class="code" href="protocol_m_q_t_t_transport-p.html">MQTTTransport</a>, MQTTCFSocketDecoderDelegate, MQTTCFSocketEncoderDelegate&gt;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
 <div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_c_f_socket_transport.html#ae30997b61a8be6b11bf3bb33cf751995">   21</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSString *<a class="code" href="interface_m_q_t_t_c_f_socket_transport.html#ae30997b61a8be6b11bf3bb33cf751995">host</a>;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
@@ -114,12 +114,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="protocol_m_q_t_t_transport-p_html"><div class="ttname"><a href="protocol_m_q_t_t_transport-p.html">MQTTTransport-p</a></div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:16</div></div>
 <div class="ttc" id="interface_m_q_t_t_c_f_socket_transport_html_ac0c5a60636d7561abf1d20caddf6ea96"><div class="ttname"><a href="interface_m_q_t_t_c_f_socket_transport.html#ac0c5a60636d7561abf1d20caddf6ea96">MQTTCFSocketTransport::tls</a></div><div class="ttdeci">BOOL tls</div><div class="ttdef"><b>Definition:</b> MQTTCFSocketTransport.h:31</div></div>
 <div class="ttc" id="interface_m_q_t_t_c_f_socket_transport_html_a2b8899b8e97c85b4d9757705aa6ba968"><div class="ttname"><a href="interface_m_q_t_t_c_f_socket_transport.html#a2b8899b8e97c85b4d9757705aa6ba968">MQTTCFSocketTransport::port</a></div><div class="ttdeci">UInt16 port</div><div class="ttdef"><b>Definition:</b> MQTTCFSocketTransport.h:26</div></div>
+<div class="ttc" id="interface_m_q_t_t_transport_html"><div class="ttname"><a href="interface_m_q_t_t_transport.html">MQTTTransport</a></div><div class="ttdef"><b>Definition:</b> MQTTTransport.h:100</div></div>
 <div class="ttc" id="interface_m_q_t_t_c_f_socket_transport_html_ae30997b61a8be6b11bf3bb33cf751995"><div class="ttname"><a href="interface_m_q_t_t_c_f_socket_transport.html#ae30997b61a8be6b11bf3bb33cf751995">MQTTCFSocketTransport::host</a></div><div class="ttdeci">NSString * host</div><div class="ttdef"><b>Definition:</b> MQTTCFSocketTransport.h:21</div></div>
 <div class="ttc" id="interface_m_q_t_t_c_f_socket_transport_html_a6e71885e479e6bc28e00f6657fe77205"><div class="ttname"><a href="interface_m_q_t_t_c_f_socket_transport.html#a6e71885e479e6bc28e00f6657fe77205">MQTTCFSocketTransport::certificates</a></div><div class="ttdeci">NSArray * certificates</div><div class="ttdef"><b>Definition:</b> MQTTCFSocketTransport.h:37</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 31 2015 17:20:37 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 5 2016 21:51:44 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

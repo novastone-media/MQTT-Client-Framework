@@ -44,12 +44,12 @@
             </Subnodes>
            </Node>
            <Node>
-            <Name>MQTTCoreDataFlow</Name>
-            <Path>interface_m_q_t_t_core_data_flow.html</Path>
-           </Node>
-           <Node>
             <Name>MQTTCoreDataPersistence</Name>
             <Path>interface_m_q_t_t_core_data_persistence.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTFlow</Name>
+            <Path>interface_m_q_t_t_flow.html</Path>
            </Node>
            <Node>
             <Name>&lt;MQTTFlow&gt;</Name>
@@ -603,6 +603,10 @@
             </Subnodes>
            </Node>
            <Node>
+            <Name>MQTTTransport</Name>
+            <Path>interface_m_q_t_t_transport.html</Path>
+           </Node>
+           <Node>
             <Name>&lt;MQTTTransport&gt;</Name>
             <Path>protocol_m_q_t_t_transport-p.html</Path>
             <Subnodes>
@@ -625,6 +629,16 @@
               <Name>delegate</Name>
               <Path>protocol_m_q_t_t_transport-p.html</Path>
               <Anchor>a731cebd9439acdd3b766615ecb8222f3</Anchor>
+             </Node>
+             <Node>
+              <Name>runLoop</Name>
+              <Path>protocol_m_q_t_t_transport-p.html</Path>
+              <Anchor>a0c6263164dbe55f83ff125e158a71aaa</Anchor>
+             </Node>
+             <Node>
+              <Name>runLoopMode</Name>
+              <Path>protocol_m_q_t_t_transport-p.html</Path>
+              <Anchor>a5bf8de65dd7e0e279fe5d3749c85134b</Anchor>
              </Node>
              <Node>
               <Name>state</Name>
@@ -736,8 +750,8 @@
             <Path>protocol_m_q_t_t_flow-p.html</Path>
             <Subnodes>
              <Node>
-              <Name>MQTTCoreDataFlow</Name>
-              <Path>interface_m_q_t_t_core_data_flow.html</Path>
+              <Name>MQTTFlow</Name>
+              <Path>interface_m_q_t_t_flow.html</Path>
              </Node>
              <Node>
               <Name>MQTTInMemoryFlow</Name>
@@ -764,8 +778,8 @@
             <Path></Path>
             <Subnodes>
              <Node>
-              <Name>MQTTCoreDataFlow</Name>
-              <Path>interface_m_q_t_t_core_data_flow.html</Path>
+              <Name>MQTTFlow</Name>
+              <Path>interface_m_q_t_t_flow.html</Path>
              </Node>
             </Subnodes>
            </Node>
@@ -773,10 +787,6 @@
             <Name>NSObject</Name>
             <Path></Path>
             <Subnodes>
-             <Node>
-              <Name>MQTTCFSocketTransport</Name>
-              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
-             </Node>
              <Node>
               <Name>MQTTCoreDataPersistence</Name>
               <Path>interface_m_q_t_t_core_data_persistence.html</Path>
@@ -802,8 +812,18 @@
               <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
              </Node>
              <Node>
-              <Name>MQTTWebsocketTransport</Name>
-              <Path>interface_m_q_t_t_websocket_transport.html</Path>
+              <Name>MQTTTransport</Name>
+              <Path>interface_m_q_t_t_transport.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>MQTTCFSocketTransport</Name>
+                <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+               </Node>
+               <Node>
+                <Name>MQTTWebsocketTransport</Name>
+                <Path>interface_m_q_t_t_websocket_transport.html</Path>
+               </Node>
+              </Subnodes>
              </Node>
             </Subnodes>
            </Node>
@@ -832,6 +852,10 @@
                <Node>
                 <Name>MQTTCFSocketTransport</Name>
                 <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+               </Node>
+               <Node>
+                <Name>MQTTTransport</Name>
+                <Path>interface_m_q_t_t_transport.html</Path>
                </Node>
                <Node>
                 <Name>MQTTWebsocketTransport</Name>

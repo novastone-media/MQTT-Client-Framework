@@ -3,7 +3,7 @@
 //  MQTTClient
 //
 //  Created by Christoph Krey on 14.01.14.
-//  Copyright (c) 2014 Christoph Krey. All rights reserved.
+//  Copyright © 2014-2016 Christoph Krey. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
@@ -685,7 +685,7 @@
 
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     self.timedout = FALSE;
-    self.timeoutValue = [parameters[@"timedout"] doubleValue];
+    self.timeoutValue = [parameters[@"timeout"] doubleValue];
     [self performSelector:@selector(timedout:)
                withObject:nil
                afterDelay:self.timeoutValue];

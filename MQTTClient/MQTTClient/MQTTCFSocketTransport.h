@@ -13,7 +13,7 @@
 /** MQTTCFSocketTransport
  * implements an MQTTTransport on top of CFNetwork
  */
-@interface MQTTCFSocketTransport : NSObject <MQTTTransport, MQTTCFSocketDecoderDelegate, MQTTCFSocketEncoderDelegate>
+@interface MQTTCFSocketTransport : MQTTTransport <MQTTTransport, MQTTCFSocketDecoderDelegate, MQTTCFSocketEncoderDelegate>
 
 /** host an NSString containing the hostName or IP address of the host to connect to
  * defaults to @"localhost"

@@ -52,7 +52,7 @@ static unsigned long long fileSystemFreeSize;
     NSUInteger windowSize = 0;
     NSArray *flows = [self allFlowsforClientId:clientId
                                   incomingFlag:NO];
-    for (MQTTCoreDataFlow *flow in flows) {
+    for (MQTTFlow *flow in flows) {
         if ([flow.commandType unsignedIntegerValue] != MQTT_None) {
             windowSize++;
         }
@@ -60,7 +60,7 @@ static unsigned long long fileSystemFreeSize;
     return windowSize;
 }
 
-- (MQTTCoreDataFlow *)storeMessageForClientId:(NSString *)clientId
+- (MQTTFlow *)storeMessageForClientId:(NSString *)clientId
                                         topic:(NSString *)topic
                                          data:(NSData *)data
                                    retainFlag:(BOOL)retainFlag
@@ -71,7 +71,7 @@ static unsigned long long fileSystemFreeSize;
                                      deadline:(NSDate *)deadline {
     if (([self allFlowsforClientId:clientId incomingFlag:incomingFlag].count <= self.maxMessages) &&
         (fileSize <= self.maxSize)) {
-        MQTTCoreDataFlow *flow = (MQTTCoreDataFlow *)[self createFlowforClientId:clientId
+        MQTTFlow *flow = (MQTTFlow *)[self createFlowforClientId:clientId
                                                                     incomingFlag:incomingFlag
                                                                        messageId:msgId];
         flow.topic = topic;
@@ -86,7 +86,7 @@ static unsigned long long fileSystemFreeSize;
     }
 }
 
-- (void)deleteFlow:(MQTTCoreDataFlow *)flow {
+- (void)deleteFlow:(MQTTFlow *)flow {
     [self.managedObjectContext performBlockAndWait:^{
         [self.managedObjectContext deleteObject:flow];
         [self sync];
@@ -95,10 +95,10 @@ static unsigned long long fileSystemFreeSize;
 
 - (void)deleteAllFlowsForClientId:(NSString *)clientId {
     [self.managedObjectContext performBlockAndWait:^{
-        for (MQTTCoreDataFlow *flow in [self allFlowsforClientId:clientId incomingFlag:TRUE]) {
+        for (MQTTFlow *flow in [self allFlowsforClientId:clientId incomingFlag:TRUE]) {
             [self.managedObjectContext deleteObject:flow];
         }
-        for (MQTTCoreDataFlow *flow in [self allFlowsforClientId:clientId incomingFlag:FALSE]) {
+        for (MQTTFlow *flow in [self allFlowsforClientId:clientId incomingFlag:FALSE]) {
             [self.managedObjectContext deleteObject:flow];
         }
         [self sync];
@@ -151,10 +151,10 @@ static unsigned long long fileSystemFreeSize;
     return flows;
 }
 
-- (MQTTCoreDataFlow *)flowforClientId:(NSString *)clientId
+- (MQTTFlow *)flowforClientId:(NSString *)clientId
                          incomingFlag:(BOOL)incomingFlag
                             messageId:(UInt16)messageId {
-    __block MQTTCoreDataFlow *flow = nil;
+    __block MQTTFlow *flow = nil;
     
     [self.managedObjectContext performBlockAndWait:^{
         
@@ -181,10 +181,10 @@ static unsigned long long fileSystemFreeSize;
     return flow;
 }
 
-- (MQTTCoreDataFlow *)createFlowforClientId:(NSString *)clientId
+- (MQTTFlow *)createFlowforClientId:(NSString *)clientId
                                incomingFlag:(BOOL)incomingFlag
                                   messageId:(UInt16)messageId {
-    __block MQTTCoreDataFlow *flow = (MQTTCoreDataFlow *)[self flowforClientId:clientId
+    __block MQTTFlow *flow = (MQTTFlow *)[self flowforClientId:clientId
                                                                   incomingFlag:incomingFlag
                                                                      messageId:messageId];
     if (!flow) {

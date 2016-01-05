@@ -3,7 +3,7 @@
 //  MQTTClientTests
 //
 //  Created by Christoph Krey on 13.01.14.
-//  Copyright (c) 2014 Christoph Krey. All rights reserved.
+//  Copyright © 2014-2016 Christoph Krey. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
@@ -30,49 +30,12 @@
         [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
     if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
         [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-
+    
 }
 
 - (void)tearDown
 {
     [super tearDown];
-}
-
-/*
- * |#define                |MAC      |IOS      |IOS SIMULATOR  |TV       |TV SIMULATOR |WATCH   |WATCH SIMULATOR |
- * |-----------------------|---------|---------|---------------|---------|-------------|--------|----------------|
- * |TARGET_OS_MAC          |    1    |    1    |       1       |    1    |      1      |        |                |
- * |TARGET_OS_WIN32        |    0    |    0    |       0       |    0    |      0      |        |                |
- * |TARGET_OS_UNIX         |    0    |    0    |       0       |    0    |      0      |        |                |
- * |TARGET_OS_IPHONE       |    0    |    1    |       1       |    1    |      1      |        |                |
- * |TARGET_OS_IOS          |    0    |    1    |       1       |    0    |      0      |        |                |
- * |TARGET_OS_WATCH        |    0    |    0    |       0       |    0    |      0      |        |                |
- * |TARGET_OS_TV           |    0    |    0    |       0       |    1    |      1      |        |                |
- * |TARGET_OS_SIMULATOR    |    0    |    0    |       1       |    0    |      1      |        |                |
- * |TARGET_OS_EMBEDDED     |    0    |    1    |       0       |    1    |      0      |        |                |
- *
- * define TARGET_IPHONE_SIMULATOR         TARGET_OS_SIMULATOR deprecated
- * define TARGET_OS_NANO                  TARGET_OS_WATCH deprecated
- *
- * all #defines in TargetConditionals.h
- */
-
-- (void)test_preprocessor {
-#if TARGET_OS_MAC == 1
-    DDLogVerbose(@"TARGET_OS_MAC==1");
-#endif
-#if TARGET_OS_MAC == 0
-    DDLogVerbose(@"TARGET_OS_MAC==0");
-#endif
-    DDLogVerbose(@"TARGET_OS_MAC %d", TARGET_OS_MAC);
-    DDLogVerbose(@"TARGET_OS_WIN32 %d", TARGET_OS_WIN32);
-    DDLogVerbose(@"TARGET_OS_UNIX %d", TARGET_OS_UNIX);
-    DDLogVerbose(@"TARGET_OS_IPHONE %d", TARGET_OS_IPHONE);
-    DDLogVerbose(@"TARGET_OS_IOS %d", TARGET_OS_IOS);
-    DDLogVerbose(@"TARGET_OS_WATCH %d", TARGET_OS_WATCH);
-    DDLogVerbose(@"TARGET_OS_TV %d", TARGET_OS_TV);
-    DDLogVerbose(@"TARGET_OS_SIMULATOR %d", TARGET_OS_SIMULATOR);
-    DDLogVerbose(@"TARGET_OS_EMBEDDED %d", TARGET_OS_EMBEDDED);
 }
 
 - (void)test_init {
@@ -106,10 +69,47 @@
     }
 }
 
+- (void)test_legacy {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        
+        self.session = [[MQTTSession alloc] initWithClientId:nil
+                                                    userName:nil
+                                                    password:nil
+                                                   keepAlive:60
+                                                cleanSession:TRUE
+                                                     runLoop:nil
+                                                     forMode:nil];
+        self.session.delegate = self;
+        [self shutdown:parameters];
+    }
+}
+
+
+- (void)test_example {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        
+        MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
+        transport.host = parameters[@"host"];
+        transport.port = [parameters[@"port"] unsignedIntValue];
+
+        self.session = [[MQTTSession alloc] init];
+        self.session.transport = transport;
+        
+        self.session.delegate = self;
+        [self.session connectAndWaitTimeout:30];
+        [self shutdown:parameters];
+    }
+}
+
+
 /*
  * [MQTT-3.1.3-8]
  * If the Client supplies a zero-byte ClientId with CleanSession set to 0, the Server MUST
- * respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and 
+ * respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and
  * then close the Network Connection.
  * [MQTT-3.1.3-9]
  * If the Server rejects the ClientId it MUST respond to the CONNECT Packet with a
@@ -170,10 +170,10 @@
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
-
+        
         MQTTSession *subscribingSession = [MQTTTestHelpers session:parameters];
         subscribingSession.clientId = @"MQTTClient-sub";
-
+        
         if (![subscribingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
             XCTFail(@"no connection for sub to %@", broker);
         }
@@ -264,7 +264,7 @@
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willQoS = MQTTQosLevelExactlyOnce;
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
@@ -314,7 +314,7 @@
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willMsg = [@"test_connect_will_unflagged_but_willMsg" dataUsingEncoding:NSUTF8StringEncoding];
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
@@ -363,7 +363,7 @@
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willTopic = @"MQTTClient";
         self.session.willMsg = [@"test_connect_will_unflagged_but_willMsg_and_willTopic" dataUsingEncoding:NSUTF8StringEncoding];
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
@@ -386,7 +386,7 @@
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willFlag = TRUE;
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
@@ -410,7 +410,7 @@
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willFlag = TRUE;
         self.session.willMsg = [[NSData alloc] init];
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker,
@@ -454,22 +454,22 @@
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
-
+        
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"MQTTClient";
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
-
-
+        
+        
         MQTTSession *sameSession = [MQTTTestHelpers session:parameters];
         sameSession.clientId = @"MQTTClient";
-
+        
         if (![sameSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
             XCTFail(@"no connection for same Session to %@", broker);
         }
-
+        
         [self shutdown:parameters];
         [sameSession closeAndWait];
     }
@@ -478,7 +478,7 @@
 /*
  * [MQTT-3.1.3-1]
  * These fields, if present, MUST appear in the order Client Identifier, Will Topic, Will Message, User Name, Password.
-*/
+ */
 - (void)test_connect_all_fields_MQTT_3_1_3_1 {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
@@ -489,11 +489,11 @@
         self.session.willFlag = TRUE;
         self.session.willTopic = @"MQTTClient/will-qos0";
         self.session.willMsg = [@"will-qos0" dataUsingEncoding:NSUTF8StringEncoding];
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
-
+        
         self.ungraceful = TRUE;
         [self shutdown:parameters];
     }
@@ -512,11 +512,11 @@
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = [parameters[@"protocollevel"] intValue] == MQTTProtocolVersion31 ? MQTTProtocolVersion311 : MQTTProtocolVersion31;
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
-
+        
         [self shutdown:parameters];
     }
 }
@@ -533,10 +533,10 @@
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
-
+        
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = 5;
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         
@@ -556,7 +556,7 @@
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
-
+        
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = 0;
         
@@ -575,7 +575,7 @@
 
 /*
  * [MQTT-3.1.0-1]
- * After a Network Connection is established by a Client to a Server, the first Packet sent from the 
+ * After a Network Connection is established by a Client to a Server, the first Packet sent from the
  * Client to the Server MUST be a CONNECT Packet.
  */
 - (void)test_first_packet_MQTT_3_1_0_1 {
@@ -593,13 +593,13 @@
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
-
+        
         self.event = -1;
         self.type = 0xff;
         [self performSelector:@selector(timedout:)
                    withObject:nil
                    afterDelay:[parameters[@"timeout"] intValue]];
-
+        
         while (!self.timedout && self.event == -1 && self.type == 0xff) {
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
@@ -661,7 +661,7 @@
     /*
      '[MQTT-4.3.2-2]',
      '[MQTT-4.3.2-3]',
-
+     
      */
 }
 
@@ -681,7 +681,7 @@
         
         [self.session subscribeTopic:TOPIC];
         [self.session publishData:[@"Data" dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC];
-
+        
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
         XCTAssert(self.error.code == 0x01, @"error = %@", self.error);
@@ -697,7 +697,7 @@
         NSDictionary *parameters = self.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
@@ -730,38 +730,38 @@
         NSDictionary *parameters = self.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
-
+        
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-
+        
         self.processed = 0;
         self.received = 0;
-
+        
         self.processingSimulationTimer = [NSTimer scheduledTimerWithTimeInterval:PROCESSING_INTERVAL
                                                                           target:self
                                                                         selector:@selector(processingSimulation:)
                                                                         userInfo:nil
                                                                          repeats:true];
         [self.session subscribeToTopic:TOPIC atLevel:MQTTQosLevelAtMostOnce];
-
+        
         for (int i = 0; i < PROCESSING_NUMBER; i++) {
             NSString *payload = [NSString stringWithFormat:@"Data %d", i];
             [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:MQTTQosLevelAtMostOnce];
         }
-
+        
         self.timedout = FALSE;
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         [self performSelector:@selector(timedout:)
                    withObject:nil
                    afterDelay:PROCESSING_TIMEOUT];
-
+        
         while ((self.processed != self.received || self.received == 0) && !self.timedout) {
             DDLogVerbose(@"[test_throttling_incoming_q0] waiting for processing %lu/%lu/%d",
                          (unsigned long)self.processed, (unsigned long)self.received, PROCESSING_NUMBER);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-
+        
         XCTAssert(!self.timedout, @"timeout");
         [self.processingSimulationTimer invalidate];
         
@@ -777,40 +777,40 @@
         self.session = [MQTTTestHelpers session:parameters];
         
         [self connect:parameters];
-
+        
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-
+        
         self.processed = 0;
         self.received = 0;
-
+        
         self.processingSimulationTimer = [NSTimer scheduledTimerWithTimeInterval:PROCESSING_INTERVAL
                                                                           target:self
                                                                         selector:@selector(processingSimulation:)
                                                                         userInfo:nil
                                                                          repeats:true];
         [self.session subscribeToTopic:TOPIC atLevel:MQTTQosLevelAtLeastOnce];
-
+        
         for (int i = 0; i < PROCESSING_NUMBER; i++) {
             NSString *payload = [NSString stringWithFormat:@"Data %d", i];
             [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:MQTTQosLevelAtLeastOnce];
         }
-
+        
         self.timedout = FALSE;
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         [self performSelector:@selector(timedout:)
                    withObject:nil
                    afterDelay:PROCESSING_TIMEOUT];
-
+        
         while ((self.processed != self.received || self.received != PROCESSING_NUMBER) && !self.timedout) {
             DDLogVerbose(@"[test_throttling_incoming_q1] waiting for processing %lu/%lu/%d",
                          (unsigned long)self.processed, (unsigned long)self.received, PROCESSING_NUMBER);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-
+        
         XCTAssert(!self.timedout, @"timeout");
         [self.processingSimulationTimer invalidate];
-
+        
         [self shutdown:parameters];
     }
 }
@@ -825,37 +825,37 @@
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-
+        
         self.processed = 0;
         self.received = 0;
-
+        
         self.processingSimulationTimer = [NSTimer scheduledTimerWithTimeInterval:PROCESSING_INTERVAL
                                                                           target:self
                                                                         selector:@selector(processingSimulation:)
                                                                         userInfo:nil
                                                                          repeats:true];
         [self.session subscribeToTopic:TOPIC atLevel:MQTTQosLevelExactlyOnce];
-
+        
         for (int i = 0; i < PROCESSING_NUMBER; i++) {
             NSString *payload = [NSString stringWithFormat:@"Data %d", i];
             [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:MQTTQosLevelExactlyOnce];
         }
-
+        
         self.timedout = FALSE;
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         [self performSelector:@selector(timedout:)
                    withObject:nil
                    afterDelay:PROCESSING_TIMEOUT];
-
+        
         while ((self.processed != self.received || self.received != PROCESSING_NUMBER) && !self.timedout) {
             DDLogVerbose(@"[test_throttling_incoming_q2] waiting for processing %lu/%lu/%d",
                          (unsigned long)self.processed, (unsigned long)self.received, PROCESSING_NUMBER);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-
+        
         XCTAssert(!self.timedout, @"timeout");
         [self.processingSimulationTimer invalidate];
-
+        
         [self shutdown:parameters];
     }
 }
@@ -873,52 +873,52 @@
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
-
+        
         DDLogVerbose(@"Cleaning topic");
-    
+        
         MQTTSession *sendingSession = [MQTTTestHelpers session:parameters];
         sendingSession.clientId = @"MQTTClient-pub";
         if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
             XCTFail(@"no connection for pub to %@", broker);
         }
         [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos];
-
+        
         DDLogVerbose(@"Clearing old subs");
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"MQTTClient-sub";
         [self connect:parameters];
         [self shutdown:parameters];
-
+        
         DDLogVerbose(@"Subscribing to topic");
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"MQTTClient-sub";
         self.session.cleanSessionFlag = FALSE;
-
+        
         [self connect:parameters];
         [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos];
         [self shutdown:parameters];
-
+        
         for (int i = 1; i < BULK; i++) {
             DDLogVerbose(@"publishing to topic %d", i);
             NSString *payload = [NSString stringWithFormat:@"payload %d", i];
             [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos];
         }
         [sendingSession closeAndWait];
-
+        
         DDLogVerbose(@"receiving from topic");
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"MQTTClient-sub";
         self.session.cleanSessionFlag = FALSE;
-
+        
         [self connect:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
-
+        
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         self.timedout = FALSE;
         [self performSelector:@selector(timedout:)
                    withObject:nil
                    afterDelay:[parameters[@"timeout"] intValue]];
-
+        
         while (!self.timedout) {
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
@@ -931,41 +931,41 @@
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
-
+        
         DDLogVerbose(@"Cleaning topic");
         MQTTSession *sendingSession = [MQTTTestHelpers session:parameters];
         sendingSession.clientId = @"MQTTClient-pub";
-
+        
         if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
             XCTFail(@"no connection for pub to %@", broker);
         }
         [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos];
-
+        
         DDLogVerbose(@"Clearing old subs");
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"MQTTClient-sub";
         [self connect:parameters];
         [self shutdown:parameters];
-
+        
         DDLogVerbose(@"Subscribing to topic");
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"MQTTClient-sub";
         [self connect:parameters];
         [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos];
-
+        
         for (int i = 1; i < BULK; i++) {
             DDLogVerbose(@"publishing to topic %d", i);
             NSString *payload = [NSString stringWithFormat:@"payload %d", i];
             [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos];
         }
         [sendingSession closeAndWait];
-
+        
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         self.timedout = FALSE;
         [self performSelector:@selector(timedout:)
                    withObject:nil
                    afterDelay:[parameters[@"timeout"] intValue]];
-
+        
         while (!self.timedout) {
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
@@ -1007,23 +1007,23 @@
 - (void)shutdown:(NSDictionary *)parameters {
     if (!self.ungraceful) {
         self.event = -1;
-
+        
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         self.timedout = FALSE;
         [self performSelector:@selector(timedout:)
                    withObject:nil
                    afterDelay:[parameters[@"timeout"] intValue]];
-
+        
         [self.session close];
-
+        
         while (self.event == -1 && !self.timedout) {
             DDLogVerbose(@"waiting for disconnect");
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-
+        
         XCTAssert(!self.timedout, @"timeout");
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
-
+        
         self.session.delegate = nil;
         self.session = nil;
     }

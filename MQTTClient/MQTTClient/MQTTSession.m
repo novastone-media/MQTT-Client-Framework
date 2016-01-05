@@ -79,8 +79,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     self.willQoS = MQTTQosLevelAtMostOnce;
     self.willRetainFlag = false;
     self.protocolLevel = MQTTProtocolVersion311;
-    self.runLoop = nil;
-    self.runLoopMode = nil;
+    self.runLoop = [NSRunLoop currentRunLoop];
+    self.runLoopMode = NSRunLoopCommonModes;
     
     self.status = MQTTSessionStatusCreated;
     
@@ -1062,6 +1062,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     self.status = MQTTSessionStatusConnecting;
     
     self.decoder = [[MQTTDecoder alloc] init];
+    self.decoder.runLoop = self.runLoop;
+    self.decoder.runLoopMode = self.runLoopMode;
     self.decoder.delegate = self;
     [self.decoder open];
     

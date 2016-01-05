@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.6.2
+> Release date 2016-01-05
+
+[FIX] MQTTDecoder runLoop no longer configurable closes #87
+[FIX] other smaller bugs
+
 ## MQTT-Client-Framework 0.6.1
 > Release date 2015-12-31
 

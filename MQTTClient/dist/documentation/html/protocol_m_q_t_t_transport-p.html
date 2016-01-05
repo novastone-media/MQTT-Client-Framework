@@ -101,8 +101,12 @@ Inheritance diagram for &lt;MQTTTransport&gt;:</div>
   <img src="protocol_m_q_t_t_transport-p.png" usemap="#&lt;MQTTTransport&gt;_map" alt=""/>
   <map id="&lt;MQTTTransport&gt;_map" name="&lt;MQTTTransport&gt;_map">
 <area href="interface_m_q_t_t_c_f_socket_transport.html" alt="MQTTCFSocketTransport" shape="rect" coords="0,112,206,136"/>
-<area href="interface_m_q_t_t_websocket_transport.html" alt="MQTTWebsocketTransport" shape="rect" coords="216,112,422,136"/>
+<area href="interface_m_q_t_t_transport.html" alt="MQTTTransport" shape="rect" coords="324,112,530,136"/>
+<area href="interface_m_q_t_t_websocket_transport.html" alt="MQTTWebsocketTransport" shape="rect" coords="540,112,746,136"/>
 <area href="interface_m_q_t_t_s_s_l_security_policy_transport.html" alt="MQTTSSLSecurityPolicyTransport" shape="rect" coords="0,168,206,192"/>
+<area href="interface_m_q_t_t_c_f_socket_transport.html" alt="MQTTCFSocketTransport" shape="rect" coords="216,168,422,192"/>
+<area href="interface_m_q_t_t_websocket_transport.html" alt="MQTTWebsocketTransport" shape="rect" coords="432,168,638,192"/>
+<area href="interface_m_q_t_t_s_s_l_security_policy_transport.html" alt="MQTTSSLSecurityPolicyTransport" shape="rect" coords="216,224,422,248"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -117,13 +121,17 @@ Instance Methods</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a0c6263164dbe55f83ff125e158a71aaa"><td class="memItemLeft" align="right" valign="top">NSRunLoop *_Nonnull&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_m_q_t_t_transport-p.html#a0c6263164dbe55f83ff125e158a71aaa">runLoop</a></td></tr>
+<tr class="separator:a0c6263164dbe55f83ff125e158a71aaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bf8de65dd7e0e279fe5d3749c85134b"><td class="memItemLeft" align="right" valign="top">NSString *_Nonnull&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_m_q_t_t_transport-p.html#a5bf8de65dd7e0e279fe5d3749c85134b">runLoopMode</a></td></tr>
+<tr class="separator:a5bf8de65dd7e0e279fe5d3749c85134b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a731cebd9439acdd3b766615ecb8222f3"><td class="memItemLeft" align="right" valign="top">_Nullable id&lt; <a class="el" href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_m_q_t_t_transport-p.html#a731cebd9439acdd3b766615ecb8222f3">delegate</a></td></tr>
 <tr class="separator:a731cebd9439acdd3b766615ecb8222f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b5d6563956b03a4f613a3b276ebffe4"><td class="memItemLeft" align="right" valign="top">MQTTTransportState&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_m_q_t_t_transport-p.html#a9b5d6563956b03a4f613a3b276ebffe4">state</a></td></tr>
 <tr class="separator:a9b5d6563956b03a4f613a3b276ebffe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="protocol_m_q_t_t_transport-p.html">MQTTTransport</a> is a protocol abstracting the underlying transport level for MQTTClient </p>
+<div class="textblock"><p><a class="el" href="interface_m_q_t_t_transport.html">MQTTTransport</a> is a protocol abstracting the underlying transport level for MQTTClient </p>
 </div><h2 class="groupheader">Method Documentation</h2>
 <a class="anchor" id="aa293cdc8dc58de1d7e80c1a2c3ce6062"></a>
 <div class="memitem">
@@ -198,7 +206,49 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p><a class="el" href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate</a> needs to be set to a class implelenting th <a class="el" href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate</a> protocol to receive delegate messages. </p>
+<p><a class="el" href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate</a> needs to be set to a class implementing th <a class="el" href="protocol_m_q_t_t_transport_delegate-p.html">MQTTTransportDelegate</a> protocol to receive delegate messages. </p>
+
+</div>
+</div>
+<a class="anchor" id="a0c6263164dbe55f83ff125e158a71aaa"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (NSRunLoop* _Nonnull) runLoop</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>runLoop The runLoop where the streams are scheduled. If nil, defaults to [NSRunLoop currentRunLoop]. </p>
+
+</div>
+</div>
+<a class="anchor" id="a5bf8de65dd7e0e279fe5d3749c85134b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (NSString* _Nonnull) runLoopMode</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>runLoopMode The runLoopMode where the streams are scheduled. If nil, defaults to NSRunLoopCommonModes. </p>
 
 </div>
 </div>
@@ -229,7 +279,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 31 2015 17:20:37 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 5 2016 21:51:45 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>
