@@ -161,6 +161,14 @@
     }
 }
 
+- (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained {
+    DDLogVerbose(@"[MQTTTestHelpers] handleMessage r%d %@:%@",
+                 retained, topic, data);
+    if (topic && [topic hasPrefix:@"$"]) {
+        self.SYSreceived = true;
+    }
+}
+
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
     DDLogVerbose(@"[MQTTTestHelpers] handleEvent:%ld error:%@", (long)eventCode, error);
     self.event = eventCode;

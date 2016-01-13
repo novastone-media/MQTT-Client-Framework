@@ -6,7 +6,7 @@
 	<array>
 		<string>#local</string>
 		<string>mosquitto</string>
-		<string>mosquittoWS</string>
+		<string>#mosquittoWS</string>
 		<string>#mosquittoTLS</string>
 		<string>#mosquittoTLSClientCert</string>
 		<string>#mosquittoWSS</string>

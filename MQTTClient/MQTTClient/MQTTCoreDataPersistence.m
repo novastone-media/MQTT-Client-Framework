@@ -156,8 +156,10 @@ static unsigned long long fileSystemFreeSize;
                             messageId:(UInt16)messageId {
     __block MQTTFlow *flow = nil;
     
+    DDLogVerbose(@"flowforClientId requestingPerform");
     [self.managedObjectContext performBlockAndWait:^{
-        
+        DDLogVerbose(@"flowforClientId performing");
+
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:
                                   @"clientId = %@ and incomingFlag = %@ and messageId = %@",
@@ -175,9 +177,8 @@ static unsigned long long fileSystemFreeSize;
                 flow = [flows lastObject];
             }
         }
-        
     }];
-    
+    DDLogVerbose(@"flowforClientId performed");
     return flow;
 }
 

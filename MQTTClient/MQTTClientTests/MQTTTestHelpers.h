@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTClient.h"
+#import "MQTTSessionManager.h"
 #import "MQTTSSLSecurityPolicy.h"
 
 #define LOG_LEVEL_DEF ddLogLevel
@@ -25,7 +26,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #define BULK 100 // some test servers are limited in queue size
 #define ALOT 1000 // some test servers are limited in queue size
 
-@interface MQTTTestHelpers : XCTestCase <MQTTSessionDelegate>
+@interface MQTTTestHelpers : XCTestCase <MQTTSessionDelegate, MQTTSessionManagerDelegate>
 - (void)timedout:(id)object;
 
 + (MQTTSession *)session:(NSDictionary *)parameters;

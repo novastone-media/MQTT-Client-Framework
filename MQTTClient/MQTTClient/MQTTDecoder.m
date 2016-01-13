@@ -137,7 +137,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                 DDLogVerbose(@"[MQTTDecoder] received (%lu)=%@...", (unsigned long)self.dataBuffer.length,
                                     [self.dataBuffer subdataWithRange:NSMakeRange(0, MIN(256, self.dataBuffer.length))]);
                 [self.delegate decoder:self didReceiveMessage:self.dataBuffer];
-                self.dataBuffer = NULL;
+                self.dataBuffer = nil;
                 self.state = MQTTDecoderStateDecodingHeader;
             }
         }

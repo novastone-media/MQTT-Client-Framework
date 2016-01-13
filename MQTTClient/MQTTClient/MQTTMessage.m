@@ -285,7 +285,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     while (length > 0);
     
     // encode message data
-    if (self.data != NULL) {
+    if (self.data != nil) {
         [buffer appendData:self.data];
     }
     

@@ -58,6 +58,39 @@ class SwiftTests : MQTTTestHelpers {
         }
     }
     
+    func testSessionManager() {
+        for brokerName in brokers.allKeys {
+            var broker: NSDictionary;
+            broker = brokers.valueForKey(brokerName as! String) as! NSDictionary;
+            if (broker.valueForKey("websocket"))?.boolValue != true {
+                
+                let m = MQTTSessionManager()
+                m.delegate = self
+                
+                m.connectTo(broker.valueForKey("host") as! String,
+                    port: (broker.valueForKey("port")?.integerValue)!,
+                    tls:  (broker.valueForKey("tls")?.boolValue)!,
+                    keepalive: 60,
+                    clean: true,
+                    auth: false,
+                    user: nil,
+                    pass: nil,
+                    will: false,
+                    willTopic: nil,
+                    willMsg: nil,
+                    willQos: MQTTQosLevel.AtMostOnce,
+                    willRetainFlag: false,
+                    withClientId: nil)
+                
+                while (m.state != MQTTSessionManagerState.Connected) {
+                    print("waiting for connect %d", m.state);
+                    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
+                }
+
+            }
+        }
+    }
+    
     override func handleEvent(session: MQTTSession!, event eventCode: MQTTSessionEvent, error: NSError!) {
         switch eventCode {
         case .Connected:

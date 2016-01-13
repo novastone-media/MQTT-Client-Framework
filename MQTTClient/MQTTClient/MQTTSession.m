@@ -936,13 +936,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 }
 
 - (UInt16)nextMsgId {
+    DDLogVerbose(@"nextMsgId synchronizing");
     @synchronized(self) {
+        DDLogVerbose(@"nextMsgId synchronized");
         self.txMsgId++;
         while (self.txMsgId == 0 || [self.persistence flowforClientId:self.clientId
                                                          incomingFlag:NO
                                                             messageId:self.txMsgId] != nil) {
             self.txMsgId++;
         }
+        DDLogVerbose(@"nextMsgId synchronized done");
         return self.txMsgId;
     }
 }
