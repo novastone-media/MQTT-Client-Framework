@@ -351,7 +351,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                     message.retainFlag = retainFlag == 1;
                     message.qos = qos;
                     message.data = [data subdataWithRange:NSMakeRange(offset, remainingLength)];
-                    if ((type == MQTTPublish && (qos == MQTTQosLevelAtLeastOnce || qos == MQTTQosLevelExactlyOnce)) ||
+                    if ((type == MQTTPublish &&
+                         (qos == MQTTQosLevelAtLeastOnce ||
+                          qos == MQTTQosLevelExactlyOnce)
+                         ) ||
                         type == MQTTPuback ||
                         type == MQTTPubrec ||
                         type == MQTTPubrel ||
@@ -390,31 +393,31 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                     }
                     if (type == MQTTConnect) {
                         if (message.data.length < 3) {
-                            DDLogWarn(@"[MQTTMessage] mising connect variable header");
+                            DDLogWarn(@"[MQTTMessage] missing connect variable header");
                             message = nil;
                         }
                     }
                     if (type == MQTTConnack) {
                         if (message.data.length != 2) {
-                            DDLogWarn(@"[MQTTMessage] mising connack variable header");
+                            DDLogWarn(@"[MQTTMessage] missing connack variable header");
                             message = nil;
                         }
                     }
                     if (type == MQTTSubscribe) {
                         if (message.data.length < 3) {
-                            DDLogWarn(@"[MQTTMessage] mising subscribe variable header");
+                            DDLogWarn(@"[MQTTMessage] missing subscribe variable header");
                             message = nil;
                         }
                     }
                     if (type == MQTTSuback) {
                         if (message.data.length != 3) {
-                            DDLogWarn(@"[MQTTMessage] mising suback variable header");
+                            DDLogWarn(@"[MQTTMessage] missing suback variable header");
                             message = nil;
                         }
                     }
                     if (type == MQTTUnsubscribe) {
-                        if (message.data.length != 3) {
-                            DDLogWarn(@"[MQTTMessage] mising unsubscribe variable header");
+                        if (message.data.length < 3) {
+                            DDLogWarn(@"[MQTTMessage] missing unsubscribe variable header");
                             message = nil;
                         }
                     }
