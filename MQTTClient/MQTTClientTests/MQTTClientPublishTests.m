@@ -116,6 +116,30 @@
         [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
                                onTopic:stringWithD800
                                 retain:NO
+                               atLevel:MQTTQosLevelExactlyOnce];
+        [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-1.5.3-1]
+ * The character data in a UTF-8 encoded string MUST be well-formed UTF-8 as defined by the
+ * Unicode specification [Unicode] and restated in RFC 3629 [RFC3629]. In particular this data MUST NOT
+ * include encodings of code points between U+D800 and U+DFFF. If a Server or Client receives a Control
+ * Packet containing ill-formed UTF-8 it MUST close the Network Connection.
+ */
+- (void)testPublish_r0_q0_0x9c_MQTT_1_5_3_1 {
+    NSData *data = [NSData dataWithBytes:"MQTTClient/abc\x9c\x9dxyz" length:19];
+    NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+    DDLogVerbose(@"stringWithNull(%lu) %@", (unsigned long)stringWith9c.length, stringWith9c.description);
+    
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        [self connect:parameters];
+        [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                               onTopic:stringWith9c
+                                retain:TRUE
                                atLevel:MQTTQosLevelAtMostOnce];
         [self shutdown:parameters];
     }

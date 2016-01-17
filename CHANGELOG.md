@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.6.3
+> Release date 2016-01-17
+
+[FIX] Ignore incoming non-UTF8 topic string closes #94
+[FIX] Crash b/c input stream not closed in timeout situation closes #93
+
 ## MQTT-Client-Framework 0.6.2
 > Release date 2016-01-05
 

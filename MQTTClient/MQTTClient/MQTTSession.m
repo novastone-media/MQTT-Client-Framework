@@ -679,6 +679,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
     NSData *topicData = [data subdataWithRange:NSMakeRange(2, topicLength)];
     NSString *topic = [[NSString alloc] initWithData:topicData
                                             encoding:NSUTF8StringEncoding];
+    if (!topic) {
+        topic = [[NSString alloc] initWithData:topicData
+                                      encoding:NSISOLatin1StringEncoding];
+        DDLogError(@"non UTF8 topic %@", topic);
+    }
     NSRange range = NSMakeRange(2 + topicLength, [data length] - topicLength - 2);
     data = [data subdataWithRange:range];
     if ([msg qos] == 0) {

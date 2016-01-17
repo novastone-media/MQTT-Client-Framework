@@ -47,12 +47,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 }
 
 - (void)close {
-    if (self.state == MQTTCFSocketDecoderStateReady || self.state == MQTTCFSocketDecoderStateError) {
-        [self.stream close];
-        [self.stream removeFromRunLoop:self.runLoop forMode:self.runLoopMode];
-        [self.stream setDelegate:nil];
-        self.state = MQTTCFSocketDecoderStateInitializing;
-    }
+    [self.stream close];
+    [self.stream removeFromRunLoop:self.runLoop forMode:self.runLoopMode];
+    [self.stream setDelegate:nil];
 }
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
@@ -62,7 +59,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
         self.state = MQTTCFSocketDecoderStateReady;
         [self.delegate decoderDidOpen:self];
     }
-
+    
     if (eventCode &  NSStreamEventHasBytesAvailable) {
         DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventHasBytesAvailable");
         if (self.state == MQTTCFSocketDecoderStateInitializing) {
