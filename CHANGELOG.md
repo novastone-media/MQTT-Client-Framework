@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.6.4
+> Release date 2016-01-17
+
+[FIX] incorrect length checking for SUBACK #95
+[FIX] incorrect length checking  for UNSUBSCRIBE
+
 ## MQTT-Client-Framework 0.6.3
 > Release date 2016-01-17
 
