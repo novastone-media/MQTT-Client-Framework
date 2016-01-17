@@ -410,7 +410,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
                         }
                     }
                     if (type == MQTTSuback) {
-                        if (message.data.length != 3) {
+                        if (message.data.length < 3) {
                             DDLogWarn(@"[MQTTMessage] missing suback variable header");
                             message = nil;
                         }
