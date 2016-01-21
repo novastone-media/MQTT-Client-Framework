@@ -11,7 +11,7 @@
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif
@@ -100,7 +100,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 - (BOOL)send:(NSData *)data {
     @synchronized(self) {
         if (self.state != MQTTCFSocketEncoderStateReady) {
-            DDLogWarn(@"[MQTTCFSocketEncoder] not MQTTCFSocketEncoderStateReady");
+            DDLogInfo(@"[MQTTCFSocketEncoder] not MQTTCFSocketEncoderStateReady");
             return FALSE;
         }
         

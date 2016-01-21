@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.6.5
+> Release date 2016-01-21
+
+[FIX] turn off verbose logging by default closes #97
+[FIX] MQTTFramework.h includes all necessary files now #62
+
 ## MQTT-Client-Framework 0.6.4
 > Release date 2016-01-17
 

@@ -23,6 +23,16 @@ an Objective-C native MQTT Framework http://mqtt.org
 
 Use the CocoaPod MQTTClient! 
 
+Add this to your Podfile:
+```
+pod 'MQTTClient'
+```
+
+Additionally add this subspec if you want to use MQTT over Websockets:
+```
+pod 'MQTTClient/Websocket'
+```
+
 Or use the dynamic library created in the MQTTFramework target.
 
 Or include the source from here.

@@ -11,7 +11,7 @@
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #else
 static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #endif

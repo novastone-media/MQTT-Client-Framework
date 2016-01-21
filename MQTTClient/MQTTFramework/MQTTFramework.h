@@ -8,13 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-#import "MQTTSSLSecurityPolicy.h"
-#import "MQTTDecoder.h"
-#import "MQTTEncoder.h"
-#import "MQTTMessage.h"
 #import "MQTTSession.h"
-#import "MQTTPersistence.h"
-#import "MQTTSessionManager.h"
+#import "MQTTDecoder.h"
+#import "MQTTSessionLegacy.h"
+#import "MQTTSessionSynchron.h"
+#import "MQTTMessage.h"
+#import "MQTTTransport.h"
+#import "MQTTCFSocketTransport.h"
+#import "MQTTCoreDataPersistence.h"
+#import "MQTTSSLSecurityPolicyTransport.h"
+
 
 //! Project version number for MQTTFramework.
 FOUNDATION_EXPORT double MQTTFrameworkVersionNumber;
