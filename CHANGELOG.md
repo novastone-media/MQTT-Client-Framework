@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.6.6
+> Release date 2016-02-05
+
+[FIX] MQTTCoreDataPersistence is crashing closes #104 closes #105
+[FIX] CoreData: warning: Unable to load class named 'MQTTFlow' closes #102
+
 ## MQTT-Client-Framework 0.6.5
 > Release date 2016-01-21
 

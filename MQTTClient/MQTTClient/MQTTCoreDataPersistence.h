@@ -16,3 +16,6 @@
 
 @interface MQTTFlow : NSManagedObject <MQTTFlow>
 @end
+
+@interface MQTTCoreDataFlow : NSObject <MQTTFlow>
+@end
