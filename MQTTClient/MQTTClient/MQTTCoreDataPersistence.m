@@ -30,6 +30,19 @@ static NSPersistentStoreCoordinator *persistentStoreCoordinator;
 static unsigned long long fileSize;
 static unsigned long long fileSystemFreeSize;
 
+@implementation MQTTFlow
+@dynamic clientId;
+@dynamic incomingFlag;
+@dynamic retainedFlag;
+@dynamic commandType;
+@dynamic qosLevel;
+@dynamic messageId;
+@dynamic topic;
+@dynamic data;
+@dynamic deadline;
+
+@end
+
 @implementation MQTTCoreDataPersistence
 @synthesize persistent;
 @synthesize maxSize;
