@@ -29,6 +29,8 @@
 #import "MQTTSSLSecurityPolicy.h"
 #import <AssertMacros.h>
 
+#import "MQTTLog.h"
+
 static BOOL SSLSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
     return [(__bridge id) key1 isEqual:(__bridge id) key2];
 }

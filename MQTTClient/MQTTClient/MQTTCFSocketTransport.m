@@ -8,20 +8,7 @@
 
 #import "MQTTCFSocketTransport.h"
 
-#ifdef LUMBERJACK
-#define LOG_LEVEL_DEF ddLogLevel
-#import <CocoaLumberjack/CocoaLumberjack.h>
-#ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#else
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#endif
-#else
-#define DDLogVerbose NSLog
-#define DDLogWarn NSLog
-#define DDLogInfo NSLog
-#define DDLogError NSLog
-#endif
+#import "MQTTLog.h"
 
 @interface MQTTCFSocketTransport()
 @property (strong, nonatomic) MQTTCFSocketEncoder *encoder;

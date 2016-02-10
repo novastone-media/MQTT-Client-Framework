@@ -8,14 +8,7 @@
 
 #import "MQTTWebsocketTransport.h"
 
-#define LOG_LEVEL_DEF ddLogLevel
-#import <CocoaLumberjack/CocoaLumberjack.h>
-#ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#else
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#endif
-
+#import "../MQTTLog.h"
 
 @interface MQTTWebsocketTransport()
 @property (strong, nonatomic) SRWebSocket *websocket;

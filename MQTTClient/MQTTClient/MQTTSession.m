@@ -11,20 +11,9 @@
 #import "MQTTMessage.h"
 #import "MQTTCoreDataPersistence.h"
 
-#ifdef LUMBERJACK
-#define LOG_LEVEL_DEF ddLogLevel
-#import <CocoaLumberjack/CocoaLumberjack.h>
-#ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#else
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#endif
-#else
-#define DDLogVerbose NSLog
-#define DDLogWarn NSLog
-#define DDLogInfo NSLog
-#define DDLogError NSLog
-#endif
+//#define myLogLevel DDLogLevelVerbose
+
+#import "MQTTLog.h"
 
 @interface MQTTSession() <MQTTDecoderDelegate, MQTTTransportDelegate>
 
