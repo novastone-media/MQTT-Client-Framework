@@ -58,15 +58,6 @@
     }
 }
 
-- (NSArray *)certificates {
-    if (self.transport) {
-        if ([self.transport respondsToSelector:@selector(certificates)]) {
-            self.certificates = [self.transport performSelector:@selector(certificates) withObject:nil];
-        }
-    }
-    return self.certificates;
-}
-
 - (instancetype)init {
     DDLogVerbose(@"[MQTTSession] init");
     self = [super init];
