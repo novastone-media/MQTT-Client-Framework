@@ -383,12 +383,16 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 @property (strong, nonatomic) id <MQTTTransport> transport;
 
+/** certificates an NSArray holding client certificates or nil */
+@property (strong, nonatomic) NSArray *certificates;
+
 /** connect to the given host through the given transport with the given
  *  MQTT session parameters asynchronously
  *
  *  @exception NSInternalInconsistencyException if the parameters are invalid
  *
  */
+
 
 - (void)connect;
 

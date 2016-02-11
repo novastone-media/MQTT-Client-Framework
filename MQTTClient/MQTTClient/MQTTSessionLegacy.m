@@ -35,23 +35,6 @@
 
 @implementation MQTTSession(Legacy)
 
-- (void)setCertificates:(NSArray *)certificates {
-    if (self.transport) {
-        if ([self.transport respondsToSelector:@selector(setCertificates:)]) {
-            [self.transport performSelector:@selector(setCertificates:) withObject:certificates];
-        }
-    }
-}
-
-- (NSArray *)certificates {
-    if (self.transport) {
-        if ([self.transport respondsToSelector:@selector(certificates)]) {
-            return [self.transport performSelector:@selector(certificates)];
-        }
-    }
-    return nil;
-}
-
 - (MQTTSession *)initWithClientId:(NSString *)clientId
                          userName:(NSString *)userName
                          password:(NSString *)password

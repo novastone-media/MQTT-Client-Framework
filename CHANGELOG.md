@@ -1,6 +1,11 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.6.8
+> Release date 2016-02-11
+
+[FIX] Client-side certificate validations issues closes #96
+
 ## MQTT-Client-Framework 0.6.7
 > Release date 2016-02-10
 

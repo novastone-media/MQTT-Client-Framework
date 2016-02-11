@@ -47,6 +47,25 @@
 #define DUPLOOP 1.0
 
 @implementation MQTTSession
+@synthesize certificates;
+
+- (void)setCertificates:(NSArray *)newCertificates {
+    certificates = newCertificates;
+    if (self.transport) {
+        if ([self.transport respondsToSelector:@selector(setCertificates:)]) {
+            [self.transport performSelector:@selector(setCertificates:) withObject:certificates];
+        }
+    }
+}
+
+- (NSArray *)certificates {
+    if (self.transport) {
+        if ([self.transport respondsToSelector:@selector(certificates)]) {
+            self.certificates = [self.transport performSelector:@selector(certificates) withObject:nil];
+        }
+    }
+    return self.certificates;
+}
 
 - (instancetype)init {
     DDLogVerbose(@"[MQTTSession] init");

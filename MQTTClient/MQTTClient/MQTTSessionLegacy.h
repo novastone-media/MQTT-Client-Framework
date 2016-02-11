@@ -25,9 +25,6 @@
 
 @interface MQTTSession(Create)
 
-/** certificates an NSArray holding client certificates or nil */
-@property (strong, nonatomic) NSArray *certificates;
-
 /** convenience initializer
  @param clientId see clientId for description.
  @param userName see username for description.
