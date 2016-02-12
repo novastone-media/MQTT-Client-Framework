@@ -381,8 +381,7 @@
             break;
         }
         case MQTTSessionEventConnectionClosed:
-        case MQTTSessionEventConnectionClosedByBroker:
-            self.state = MQTTSessionManagerStateClosed;
+        {
 #if TARGET_OS_IPHONE == 1
             if (self.backgroundTask) {
                 [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
@@ -391,9 +390,11 @@
 #endif
             self.state = MQTTSessionManagerStateStarting;
             break;
+        }
         case MQTTSessionEventProtocolError:
         case MQTTSessionEventConnectionRefused:
         case MQTTSessionEventConnectionError:
+        case MQTTSessionEventConnectionClosedByBroker:
         {
             self.reconnectTimer = [NSTimer timerWithTimeInterval:self.reconnectTime
                                                           target:self
