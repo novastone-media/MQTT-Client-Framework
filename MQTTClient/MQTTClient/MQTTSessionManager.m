@@ -59,6 +59,15 @@
 #define BACKGROUND_DISCONNECT_AFTER 8.0
 
 @implementation MQTTSessionManager
+
+- (void)dealloc
+{
+  NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+  [defaultCenter removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+  [defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+  [defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
 - (id)init {
     self = [super init];
 
@@ -118,10 +127,12 @@
 }
 
 - (void)appDidEnterBackground {
+    __weak MQTTSessionManager *weakSelf = self;
     self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        if (self.backgroundTask) {
-            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-            self.backgroundTask = UIBackgroundTaskInvalid;
+        __strong MQTTSessionManager *strongSelf = weakSelf;
+        if (strongSelf.backgroundTask) {
+            [[UIApplication sharedApplication] endBackgroundTask:strongSelf.backgroundTask];
+            strongSelf.backgroundTask = UIBackgroundTaskInvalid;
         }
     }];
 }
