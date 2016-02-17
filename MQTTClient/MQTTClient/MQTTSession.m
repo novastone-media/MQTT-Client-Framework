@@ -1129,8 +1129,11 @@
 - (void)mqttTransportDidClose:(id<MQTTTransport>)mqttTransport {
     DDLogVerbose(@"[MQTTSession] mqttTransport mqttTransportDidClose");
     
-    [self error:MQTTSessionEventConnectionClosedByBroker error:nil];
-    
+    if (_status == MQTTSessionStatusDisconnecting) {
+        [self closeInternal];
+    } else {
+        [self error:MQTTSessionEventConnectionClosedByBroker error:nil];
+    }
 }
 
 - (void)mqttTransportDidOpen:(id<MQTTTransport>)mqttTransport {
