@@ -60,12 +60,15 @@
 
 @implementation MQTTSessionManager
 
-- (void)dealloc
-{
+- (void)dealloc {
+#if TARGET_OS_IPHONE == 1
+
   NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
   [defaultCenter removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
   [defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
   [defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+
+#endif
 }
 
 - (id)init {
