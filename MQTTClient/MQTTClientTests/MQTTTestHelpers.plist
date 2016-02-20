@@ -5,6 +5,7 @@
 	<key>brokerList</key>
 	<array>
 		<string>local</string>
+		<string>#aWsBroker</string>
 		<string>#mosquitto</string>
 		<string>#mosquittoWS</string>
 		<string>#mosquittoTLS</string>
@@ -59,6 +60,23 @@
 			<true/>
 			<key>protocollevel</key>
 			<integer>4</integer>
+		</dict>
+		<key>aWsBroker</key>
+		<dict>
+			<key>host</key>
+			<string>1.2.3.4</string>
+			<key>timeout</key>
+			<integer>10</integer>
+			<key>port</key>
+			<integer>443</integer>
+			<key>tls</key>
+			<true/>
+			<key>websocket</key>
+			<true/>
+			<key>protocollevel</key>
+			<integer>4</integer>
+			<key>path</key>
+			<string>/control/startpulse?pulseid=control&amp;uid=1234</string>
 		</dict>
 		<key>mosquittoTLS</key>
 		<dict>

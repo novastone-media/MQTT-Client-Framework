@@ -121,41 +121,41 @@
         __block BOOL closed = false;
         
         [self.session connectWithConnectHandler:^(NSError *error) {
-                         DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
-                         XCTAssertEqual(error, nil, @"Connect error %@", error.localizedDescription);
-                         if (!error) {
-                             __block UInt16 mid1 = [self.session subscribeToTopic:@"$SYS/#"
-                                                                          atLevel:2
-                                                                 subscribeHandler:^(NSError *error, NSArray *grantedQos) {
-                                                                     subs++;
-                                                                     if (!error) {
-                                                                         DDLogVerbose(@"%u Granted qoss:%@", mid1, grantedQos);
-                                                                     } else {
-                                                                         DDLogVerbose(@"%u Subscribe with error:%@", mid1, error.localizedDescription);
-                                                                     }
-                                                                 }];
-                             __block UInt16 mid2 = [self.session subscribeToTopic:TOPIC
-                                                                          atLevel:2
-                                                                 subscribeHandler:^(NSError *error, NSArray *grantedQos) {
-                                                                     subs++;
-                                                                     if (!error) {
-                                                                         DDLogVerbose(@"%u Granted qoss:%@", mid2, grantedQos);
-                                                                     } else {
-                                                                         DDLogVerbose(@"%u Subscribe with error:%@", mid2, error.localizedDescription);
-                                                                     }
-                                                                 }];
-                             __block UInt16 mid3 = [self.session subscribeToTopic:@"abc"
-                                                                          atLevel:2
-                                                                 subscribeHandler:^(NSError *error, NSArray *grantedQos) {
-                                                                     subs++;
-                                                                     if (!error) {
-                                                                         DDLogVerbose(@"%u Granted qoss:%@", mid3, grantedQos);
-                                                                     } else {
-                                                                         DDLogVerbose(@"%u Subscribe with error:%@", mid3, error.localizedDescription);
-                                                                     }
-                                                                 }];
-                         }
-                     }];
+            DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
+            XCTAssertEqual(error, nil, @"Connect error %@", error.localizedDescription);
+            if (!error) {
+                __block UInt16 mid1 = [self.session subscribeToTopic:@"$SYS/#"
+                                                             atLevel:2
+                                                    subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                                                        subs++;
+                                                        if (!error) {
+                                                            DDLogVerbose(@"%u Granted qoss:%@", mid1, grantedQos);
+                                                        } else {
+                                                            DDLogVerbose(@"%u Subscribe with error:%@", mid1, error.localizedDescription);
+                                                        }
+                                                    }];
+                __block UInt16 mid2 = [self.session subscribeToTopic:TOPIC
+                                                             atLevel:2
+                                                    subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                                                        subs++;
+                                                        if (!error) {
+                                                            DDLogVerbose(@"%u Granted qoss:%@", mid2, grantedQos);
+                                                        } else {
+                                                            DDLogVerbose(@"%u Subscribe with error:%@", mid2, error.localizedDescription);
+                                                        }
+                                                    }];
+                __block UInt16 mid3 = [self.session subscribeToTopic:@"abc"
+                                                             atLevel:2
+                                                    subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                                                        subs++;
+                                                        if (!error) {
+                                                            DDLogVerbose(@"%u Granted qoss:%@", mid3, grantedQos);
+                                                        } else {
+                                                            DDLogVerbose(@"%u Subscribe with error:%@", mid3, error.localizedDescription);
+                                                        }
+                                                    }];
+            }
+        }];
         
         while (subs < 3) {
             DDLogVerbose(@"waiting for 3 subs");
@@ -171,6 +171,44 @@
             DDLogVerbose(@"waiting for close");
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
+    }
+}
+
+- (void)testBlockQueued {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        
+        __block BOOL closed = false;
+
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.delegate = self;
+        self.session.cleanSessionFlag = FALSE;
+        self.session.clientId = @"subscriber";
+        
+        [self.session connectWithConnectHandler:^(NSError *error) {
+            DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
+            XCTAssertEqual(error, nil, @"Connect error %@", error.localizedDescription);
+            if (!error) {
+                __block UInt16 mid1 = [self.session subscribeToTopic:@"subscriber"
+                                                             atLevel:1
+                                                    subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                                                        if (!error) {
+                                                            DDLogVerbose(@"%u Granted qoss:%@", mid1, grantedQos);
+                                                        } else {
+                                                            DDLogVerbose(@"%u Subscribe with error:%@", mid1, error.localizedDescription);
+                                                        }
+
+                                                    }];
+            }
+        }];
+        
+        DDLogVerbose(@"waiting for sub");
+
+        [[NSRunLoop currentRunLoop] runUntilDate:[[NSDate date] dateByAddingTimeInterval:5.0]];
+        
+        DDLogVerbose(@"aborting");
+
     }
 }
 
@@ -196,6 +234,7 @@
                                                                     } else {
                                                                         DDLogVerbose(@"%d Subscribe with error:%@", mid, error.localizedDescription);
                                                                     }
+                                                                    
                                                                     [self.session closeWithDisconnectHandler:^(NSError *error){
                                                                         DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
                                                                         closed = true;
