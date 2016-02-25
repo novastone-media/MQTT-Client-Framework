@@ -383,12 +383,13 @@
 
 - (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
     if (self.clean || !self.reconnectFlag || !sessionPresent) {
-        if (self.subscriptions && [self.subscriptions count]) {
+        NSDictionary *subscriptions = [self.subscriptions copy];
+        if (subscriptions.count) {
             [self.effectiveSubscriptions removeAllObjects];
             self.effectiveSubscriptions = self.effectiveSubscriptions;
-            [self.session subscribeToTopics:self.subscriptions subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
+            [self.session subscribeToTopics:subscriptions subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
                 if (!error) {
-                    NSArray<NSString *> *allTopics = self.subscriptions.allKeys;
+                    NSArray<NSString *> *allTopics = subscriptions.allKeys;
                     for (int i = 0; i < allTopics.count; i++) {
                         NSString *topic = allTopics[i];
                         NSNumber *gQos = gQoss[i];
