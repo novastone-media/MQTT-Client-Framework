@@ -169,24 +169,22 @@ static unsigned long long fileSystemFreeSize;
 @implementation NSManagedObjectContext ( Recursive )
 
 - (void)recursiveSave {
-    [self performBlockAndWait:^{
-        if (self.hasChanges) {
-            DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
-                         (unsigned long)self.insertedObjects.count,
-                         (unsigned long)self.updatedObjects.count,
-                         (unsigned long)self.deletedObjects.count
-                         );
-            
-            NSError *error = nil;
-            if (![self save: &error]) {
-                DDLogError(@"[MQTTPersistence] sync error %@", error);
-            }
-            
-            if( nil != self.parentContext ){
-                [self.parentContext recursiveSave];
-            }
+    if (self.hasChanges) {
+        DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
+                     (unsigned long)self.insertedObjects.count,
+                     (unsigned long)self.updatedObjects.count,
+                     (unsigned long)self.deletedObjects.count
+                     );
+        
+        NSError *error = nil;
+        if (![self save: &error]) {
+            DDLogError(@"[MQTTPersistence] sync error %@", error);
         }
-    }];
+        
+        if( nil != self.parentContext ){
+            [self.parentContext recursiveSave];
+        }
+    }
 }
 @end
 
@@ -249,7 +247,7 @@ static unsigned long long fileSystemFreeSize;
 - (void)deleteFlow:(MQTTCoreDataFlow *)flow {
     [self.managedObjectContext performBlockAndWait:^{
         [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
-        [self sync];
+        [self syncInternal];
     }];
 }
 
@@ -261,15 +259,19 @@ static unsigned long long fileSystemFreeSize;
         for (MQTTCoreDataFlow *flow in [self allFlowsforClientId:clientId incomingFlag:FALSE]) {
             [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
         }
-        [self sync];
+        [self syncInternal];
     }];
 }
 
 - (void)sync {
-    [self.managedObjectContext recursiveSave];
     [self.managedObjectContext performBlockAndWait:^{
-        [self sizes];
+        [self syncInternal];
     }];
+}
+
+- (void)syncInternal {
+    [self.managedObjectContext recursiveSave];
+    [self sizes];
 }
 
 - (NSArray *)allFlowsforClientId:(NSString *)clientId
