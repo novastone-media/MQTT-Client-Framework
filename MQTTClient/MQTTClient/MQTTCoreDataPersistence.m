@@ -162,6 +162,34 @@ static unsigned long long fileSystemFreeSize;
 
 @end
 
+@interface NSManagedObjectContext ( Recursive )
+- (void)recursiveSave;
+@end
+
+@implementation NSManagedObjectContext ( Recursive )
+
+- (void)recursiveSave {
+    [self performBlockAndWait:^{
+        if (self.hasChanges) {
+            DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
+                         (unsigned long)self.insertedObjects.count,
+                         (unsigned long)self.updatedObjects.count,
+                         (unsigned long)self.deletedObjects.count
+                         );
+            
+            NSError *error = nil;
+            if (![self save: &error]) {
+                DDLogError(@"[MQTTPersistence] sync error %@", error);
+            }
+            
+            if( nil != self.parentContext ){
+                [self.parentContext recursiveSave];
+            }
+        }
+    }];
+}
+@end
+
 @implementation MQTTCoreDataPersistence
 @synthesize persistent;
 @synthesize maxSize;
@@ -238,27 +266,9 @@ static unsigned long long fileSystemFreeSize;
 }
 
 - (void)sync {
+    [self.managedObjectContext recursiveSave];
     [self.managedObjectContext performBlockAndWait:^{
-        if (self.managedObjectContext.hasChanges) {
-            DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
-                         (unsigned long)self.managedObjectContext.insertedObjects.count,
-                         (unsigned long)self.managedObjectContext.updatedObjects.count,
-                         (unsigned long)self.managedObjectContext.deletedObjects.count
-                         );
-            NSError *error = nil;
-            if (![self.managedObjectContext save:&error]) {
-                DDLogError(@"[MQTTPersistence] sync error %@", error);
-            }
-            if (self.managedObjectContext.hasChanges) {
-                DDLogError(@"[MQTTPersistence] sync not complete");
-            }
-            DDLogVerbose(@"[MQTTPersistence] postsync: i%lu u%lu d%lu",
-                         (unsigned long)self.managedObjectContext.insertedObjects.count,
-                         (unsigned long)self.managedObjectContext.updatedObjects.count,
-                         (unsigned long)self.managedObjectContext.deletedObjects.count
-                         );
-            [self sizes];
-        }
+        [self sizes];
     }];
 }
 
@@ -464,7 +474,8 @@ static unsigned long long fileSystemFreeSize;
         NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
                                   NSInferMappingModelAutomaticallyOption: @YES,
                                   NSSQLiteAnalyzeOption: @YES,
-                                  NSSQLiteManualVacuumOption: @YES};
+                                  NSSQLiteManualVacuumOption: @YES
+                                  };
         
         if (![persistentStoreCoordinator addPersistentStoreWithType:self.persistent ? NSSQLiteStoreType : NSInMemoryStoreType
                                                       configuration:nil

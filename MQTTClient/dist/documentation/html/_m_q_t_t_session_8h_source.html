@@ -231,41 +231,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;</div>
 <div class="line"><a name="l00384"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#ab3839efa8f1e67c2a1270a0bfa7362c1">  384</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) id &lt;MQTTTransport&gt; <a class="code" href="interface_m_q_t_t_session.html#ab3839efa8f1e67c2a1270a0bfa7362c1">transport</a>;</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#ad443eb80793d71150a825513303405b5">connect</a>;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;- (void)connectWithConnectHandler:(MQTTConnectHandler)connectHandler;</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#aef2d0980b561184800908e95dd3a9fc7">disconnect</a>;</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;- (<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)<a class="code" href="interface_m_q_t_t_session.html#aee55d52a9b6395f1a0d73b672900629c">init</a>;</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;- (UInt16)subscribeToTopics:(NSDictionary&lt;NSString *, NSNumber *&gt; *)topics;</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;</div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;- (UInt16)subscribeToTopics:(NSDictionary&lt;NSString *, NSNumber *&gt; *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;- (UInt16)unsubscribeTopic:(NSString *)topic;</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;</div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;- (UInt16)unsubscribeTopic:(NSString *)topic unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;</div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;- (UInt16)unsubscribeTopics:(NSArray&lt;NSString *&gt; *)topics;</div>
-<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;- (UInt16)unsubscribeTopics:(NSArray&lt;NSString *&gt; *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;</div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;</div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;</div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos publishHandler:(MQTTPublishHandler)publishHandler;</div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;- (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler;</div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;</div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440">close</a>;</div>
+<div class="line"><a name="l00387"></a><span class="lineno"><a class="line" href="interface_m_q_t_t_session.html#a8093f2231e12c54af5eb1791cc60b06f">  387</a></span>&#160;<span class="keyword">@property</span> (strong, nonatomic) NSArray *<a class="code" href="interface_m_q_t_t_session.html#a8093f2231e12c54af5eb1791cc60b06f">certificates</a>;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#ad443eb80793d71150a825513303405b5">connect</a>;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;- (void)connectWithConnectHandler:(MQTTConnectHandler)connectHandler;</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#aef2d0980b561184800908e95dd3a9fc7">disconnect</a>;</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;- (<a class="code" href="interface_m_q_t_t_session.html">MQTTSession</a> *)<a class="code" href="interface_m_q_t_t_session.html#aee55d52a9b6395f1a0d73b672900629c">init</a>;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;- (UInt16)subscribeToTopics:(NSDictionary&lt;NSString *, NSNumber *&gt; *)topics;</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;- (UInt16)subscribeToTopics:(NSDictionary&lt;NSString *, NSNumber *&gt; *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;- (UInt16)unsubscribeTopic:(NSString *)topic;</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;- (UInt16)unsubscribeTopic:(NSString *)topic unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;- (UInt16)unsubscribeTopics:(NSArray&lt;NSString *&gt; *)topics;</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;</div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;- (UInt16)unsubscribeTopics:(NSArray&lt;NSString *&gt; *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;</div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos publishHandler:(MQTTPublishHandler)publishHandler;</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;- (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler;</div>
 <div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;</div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;<span class="keyword">@end</span></div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;- (void)<a class="code" href="interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440">close</a>;</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;<span class="keyword">@end</span></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_adff1474fe186b8af3bb4cac1ccd4ff2d"><div class="ttname"><a href="interface_m_q_t_t_session.html#adff1474fe186b8af3bb4cac1ccd4ff2d">MQTTSession::status</a></div><div class="ttdeci">MQTTSessionStatus status</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:306</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_ad0712c44abf0f514feb9462779d3e2b8"><div class="ttname"><a href="interface_m_q_t_t_session.html#ad0712c44abf0f514feb9462779d3e2b8">MQTTSession::sessionPresent</a></div><div class="ttdeci">BOOL sessionPresent</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:310</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_a10be0166d86c90591c40b79923eba9ba"><div class="ttname"><a href="interface_m_q_t_t_session.html#a10be0166d86c90591c40b79923eba9ba">MQTTSession::willMsg</a></div><div class="ttdeci">NSData * willMsg</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:343</div></div>
@@ -276,6 +278,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="interface_m_q_t_t_session_html_ab3839efa8f1e67c2a1270a0bfa7362c1"><div class="ttname"><a href="interface_m_q_t_t_session.html#ab3839efa8f1e67c2a1270a0bfa7362c1">MQTTSession::transport</a></div><div class="ttdeci">id&lt; MQTTTransport &gt; transport</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:384</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html"><div class="ttname"><a href="interface_m_q_t_t_session.html">MQTTSession</a></div><div class="ttdef"><b>Definition:</b> MQTTSession.h:243</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_af9cee4ec8306915190b101441f673a71"><div class="ttname"><a href="interface_m_q_t_t_session.html#af9cee4ec8306915190b101441f673a71">MQTTSession::willQoS</a></div><div class="ttdeci">MQTTQosLevel willQoS</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:349</div></div>
+<div class="ttc" id="interface_m_q_t_t_session_html_a8093f2231e12c54af5eb1791cc60b06f"><div class="ttname"><a href="interface_m_q_t_t_session.html#a8093f2231e12c54af5eb1791cc60b06f">MQTTSession::certificates</a></div><div class="ttdeci">NSArray * certificates</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:387</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_aa426b344bb913f5f338cacb1844dfb6a"><div class="ttname"><a href="interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a">MQTTSession::clientId</a></div><div class="ttdeci">NSString * clientId</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:316</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_a1a8eb040c4fd693c218999bae64d1281"><div class="ttname"><a href="interface_m_q_t_t_session.html#a1a8eb040c4fd693c218999bae64d1281">MQTTSession::delegate</a></div><div class="ttdeci">id&lt; MQTTSessionDelegate &gt; delegate</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:273</div></div>
 <div class="ttc" id="interface_m_q_t_t_session_html_a8efd9a5bcf99786f2c78d4bc957fa4aa"><div class="ttname"><a href="interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa">MQTTSession::cleanSessionFlag</a></div><div class="ttdeci">BOOL cleanSessionFlag</div><div class="ttdef"><b>Definition:</b> MQTTSession.h:331</div></div>
@@ -299,7 +302,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 13 2016 22:45:17 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 2 2016 18:44:10 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

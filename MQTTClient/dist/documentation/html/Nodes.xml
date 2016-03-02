@@ -44,6 +44,10 @@
             </Subnodes>
            </Node>
            <Node>
+            <Name>MQTTCoreDataFlow</Name>
+            <Path>interface_m_q_t_t_core_data_flow.html</Path>
+           </Node>
+           <Node>
             <Name>MQTTCoreDataPersistence</Name>
             <Path>interface_m_q_t_t_core_data_persistence.html</Path>
            </Node>
@@ -254,6 +258,11 @@
               <Name>unsubscribeTopics:unsubscribeHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a101c813012ca11ff6c144db5a2c46c76</Anchor>
+             </Node>
+             <Node>
+              <Name>certificates</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a8093f2231e12c54af5eb1791cc60b06f</Anchor>
              </Node>
              <Node>
               <Name>cleanSessionFlag</Name>
@@ -750,6 +759,10 @@
             <Path>protocol_m_q_t_t_flow-p.html</Path>
             <Subnodes>
              <Node>
+              <Name>MQTTCoreDataFlow</Name>
+              <Path>interface_m_q_t_t_core_data_flow.html</Path>
+             </Node>
+             <Node>
               <Name>MQTTFlow</Name>
               <Path>interface_m_q_t_t_flow.html</Path>
              </Node>
@@ -787,6 +800,10 @@
             <Name>NSObject</Name>
             <Path></Path>
             <Subnodes>
+             <Node>
+              <Name>MQTTCoreDataFlow</Name>
+              <Path>interface_m_q_t_t_core_data_flow.html</Path>
+             </Node>
              <Node>
               <Name>MQTTCoreDataPersistence</Name>
               <Path>interface_m_q_t_t_core_data_persistence.html</Path>

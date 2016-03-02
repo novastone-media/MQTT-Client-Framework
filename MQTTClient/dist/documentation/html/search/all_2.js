@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['certificates',['certificates',['../interface_m_q_t_t_c_f_socket_transport.html#a6e71885e479e6bc28e00f6657fe77205',1,'MQTTCFSocketTransport']]],
+  ['certificates',['certificates',['../interface_m_q_t_t_session.html#a8093f2231e12c54af5eb1791cc60b06f',1,'MQTTSession::certificates()'],['../interface_m_q_t_t_c_f_socket_transport.html#a6e71885e479e6bc28e00f6657fe77205',1,'MQTTCFSocketTransport::certificates()']]],
   ['cleansessionflag',['cleanSessionFlag',['../interface_m_q_t_t_session.html#a8efd9a5bcf99786f2c78d4bc957fa4aa',1,'MQTTSession']]],
   ['clientcertsfromp12_3apassphrase_3a',['clientCertsFromP12:passphrase:',['../interface_m_q_t_t_c_f_socket_transport.html#ac2d55963ffb5624ca3f72342d4363014',1,'MQTTCFSocketTransport']]],
   ['clientid',['clientId',['../interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a',1,'MQTTSession::clientId()'],['../protocol_m_q_t_t_flow-p.html#adcecd8d7fb46a9ee206eee3aa55317ab',1,'MQTTFlow-p::clientId()']]],

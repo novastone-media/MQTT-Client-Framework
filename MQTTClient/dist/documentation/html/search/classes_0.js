@@ -1,6 +1,7 @@
 var searchData=
 [
   ['mqttcfsockettransport',['MQTTCFSocketTransport',['../interface_m_q_t_t_c_f_socket_transport.html',1,'']]],
+  ['mqttcoredataflow',['MQTTCoreDataFlow',['../interface_m_q_t_t_core_data_flow.html',1,'']]],
   ['mqttcoredatapersistence',['MQTTCoreDataPersistence',['../interface_m_q_t_t_core_data_persistence.html',1,'']]],
   ['mqttflow',['MQTTFlow',['../interface_m_q_t_t_flow.html',1,'']]],
   ['mqttflow_2dp',['MQTTFlow-p',['../protocol_m_q_t_t_flow-p.html',1,'']]],

@@ -5,6 +5,7 @@
 	<key>brokerList</key>
 	<array>
 		<string>local</string>
+		<string>#localWS</string>
 		<string>#aWsBroker</string>
 		<string>#mosquitto</string>
 		<string>#mosquittoWS</string>
@@ -29,8 +30,6 @@
 		</dict>
 		<key>local</key>
 		<dict>
-			<key>New item</key>
-			<string></string>
 			<key>host</key>
 			<string>localhost</string>
 			<key>timeout</key>
@@ -43,6 +42,23 @@
 			<integer>4</integer>
 			<key>websocket</key>
 			<false/>
+			<key>allowUntrustedCertificates</key>
+			<false/>
+		</dict>
+		<key>localWS</key>
+		<dict>
+			<key>host</key>
+			<string>localhost</string>
+			<key>timeout</key>
+			<integer>10</integer>
+			<key>port</key>
+			<integer>9001</integer>
+			<key>tls</key>
+			<false/>
+			<key>protocollevel</key>
+			<integer>4</integer>
+			<key>websocket</key>
+			<true/>
 			<key>allowUntrustedCertificates</key>
 			<false/>
 		</dict>

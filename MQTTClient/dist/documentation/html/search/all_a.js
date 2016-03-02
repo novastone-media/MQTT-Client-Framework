@@ -9,6 +9,7 @@ var searchData=
   ['messagehandler',['messageHandler',['../interface_m_q_t_t_session.html#a0af8d5512fae0ed59e572e9566ac9940',1,'MQTTSession']]],
   ['messageid',['messageId',['../protocol_m_q_t_t_flow-p.html#aebfe27d14d007dbbe4c0f707fb39dc00',1,'MQTTFlow-p']]],
   ['mqttcfsockettransport',['MQTTCFSocketTransport',['../interface_m_q_t_t_c_f_socket_transport.html',1,'']]],
+  ['mqttcoredataflow',['MQTTCoreDataFlow',['../interface_m_q_t_t_core_data_flow.html',1,'']]],
   ['mqttcoredatapersistence',['MQTTCoreDataPersistence',['../interface_m_q_t_t_core_data_persistence.html',1,'']]],
   ['mqttflow',['MQTTFlow',['../interface_m_q_t_t_flow.html',1,'']]],
   ['mqttflow_2dp',['MQTTFlow-p',['../protocol_m_q_t_t_flow-p.html',1,'']]],

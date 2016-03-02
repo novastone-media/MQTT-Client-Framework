@@ -179,8 +179,6 @@
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         
-        __block BOOL closed = false;
-
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
         self.session.cleanSessionFlag = FALSE;
