@@ -1,6 +1,11 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.7.2
+> Release date 2016-03-03
+
+[REVERT] Persistent store not saved to disk closes #117
+
 ## MQTT-Client-Framework 0.7.0/1
 > Release date 2016-03-02
 
