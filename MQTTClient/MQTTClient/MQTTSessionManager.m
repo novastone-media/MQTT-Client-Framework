@@ -49,8 +49,8 @@
 @property (nonatomic) NSUInteger maxSize;
 @property (nonatomic) NSUInteger maxMessages;
 
-@property (strong, nonatomic) NSMutableDictionary<NSString *, NSNumber *> *internalSubscriptions;
-@property (strong, nonatomic) NSMutableDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
+@property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *internalSubscriptions;
+@property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
 
 @end
 
@@ -383,18 +383,22 @@
 
 - (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
     if (self.clean || !self.reconnectFlag || !sessionPresent) {
-        NSDictionary *subscriptions = [self.subscriptions copy];
+        NSDictionary *subscriptions = [self.internalSubscriptions copy];
+        @synchronized(self.effectiveSubscriptions) {
+            self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
+        }
         if (subscriptions.count) {
-            [self.effectiveSubscriptions removeAllObjects];
-            self.effectiveSubscriptions = self.effectiveSubscriptions;
             [self.session subscribeToTopics:subscriptions subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
                 if (!error) {
                     NSArray<NSString *> *allTopics = subscriptions.allKeys;
                     for (int i = 0; i < allTopics.count; i++) {
                         NSString *topic = allTopics[i];
                         NSNumber *gQos = gQoss[i];
-                        [self.effectiveSubscriptions setObject:gQos forKey:topic];
-                        self.effectiveSubscriptions = self.effectiveSubscriptions;
+                        @synchronized(self.effectiveSubscriptions) {
+                            NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                            [newEffectiveSubscriptions setObject:gQos forKey:topic];
+                            self.effectiveSubscriptions = newEffectiveSubscriptions;
+                        }
                     }
                 }
             }];
@@ -448,34 +452,42 @@
 
 - (void)setSubscriptions:(NSDictionary<NSString *, NSNumber *> *)newSubscriptions
 {
-    if (self.state==MQTTSessionManagerStateConnected) {
-        for (NSString *topicFilter in self.effectiveSubscriptions) {
+    if (self.state == MQTTSessionManagerStateConnected) {
+        NSDictionary *currentSubscriptions = [self.effectiveSubscriptions copy];
+        
+        for (NSString *topicFilter in currentSubscriptions) {
             if (![newSubscriptions objectForKey:topicFilter]) {
                 [self.session unsubscribeTopic:topicFilter unsubscribeHandler:^(NSError *error) {
                     if (!error) {
-                        [self.effectiveSubscriptions removeObjectForKey:topicFilter];
-                        self.effectiveSubscriptions = self.effectiveSubscriptions;
+                        @synchronized(self.effectiveSubscriptions) {
+                            NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                            [newEffectiveSubscriptions removeObjectForKey:topicFilter];
+                            self.effectiveSubscriptions = newEffectiveSubscriptions;
+                        }
                     }
                 }];
             }
         }
         
         for (NSString *topicFilter in newSubscriptions) {
-            if (![self.effectiveSubscriptions objectForKey:topicFilter]) {
+            if (![currentSubscriptions objectForKey:topicFilter]) {
                 NSNumber *number = newSubscriptions[topicFilter];
                 MQTTQosLevel qos = [number unsignedIntValue];
                 [self.session subscribeToTopic:topicFilter atLevel:qos subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
                     if (!error) {
                         NSNumber *gQos = gQoss[0];
-                        [self.effectiveSubscriptions setObject:gQos forKey:topicFilter];
-                        self.effectiveSubscriptions = self.effectiveSubscriptions;
+                        @synchronized(self.effectiveSubscriptions) {
+                            NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                            [newEffectiveSubscriptions setObject:gQos forKey:topicFilter];
+                            self.effectiveSubscriptions = newEffectiveSubscriptions;
+                        }
                     }
                 }];
             }
         }
     }
-    _internalSubscriptions=[newSubscriptions mutableCopy];
-    DDLogVerbose(@"MQTTSessionManager internalSubscriptions: %@", _internalSubscriptions);
+    self.internalSubscriptions = newSubscriptions;
+    DDLogVerbose(@"MQTTSessionManager internalSubscriptions: %@", self.internalSubscriptions);
 }
 
 @end

@@ -92,7 +92,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
     }
  *  @endcode
  */
-@property (readonly, strong, nonatomic) NSMutableDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
+@property (readonly, strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
 
 /** SessionManager status
  */

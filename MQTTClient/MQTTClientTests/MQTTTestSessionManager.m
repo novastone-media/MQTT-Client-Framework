@@ -333,6 +333,323 @@
     }
 }
 
+- (void)testSessionManagerALotSubscriptions {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogInfo(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        if ([parameters[@"websocket"] boolValue]) {
+            continue;
+        }
+        
+        MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
+        manager.delegate = self;
+        
+        [manager addObserver:self
+                  forKeyPath:@"effectiveSubscriptions"
+                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                     context:nil];
+        
+        NSMutableDictionary *subscriptions = [@{TOPIC: @(0),
+                                                @"a0": @(1),
+                                                @"b0": @(2),
+                                                @"a1": @(1),
+                                                @"b1": @(2),
+                                                @"a2": @(1),
+                                                @"b2": @(2),
+                                                @"a3": @(1),
+                                                @"b3": @(2),
+                                                @"a4": @(1),
+                                                @"b4": @(2),
+                                                @"a5": @(1),
+                                                @"b5": @(2),
+                                                @"a6": @(1),
+                                                @"b6": @(2),
+                                                @"a7": @(1),
+                                                @"b7": @(2),
+                                                @"a8": @(1),
+                                                @"b8": @(2),
+                                                @"a9": @(1),
+                                                @"b9": @(2),
+                                                @"a0/x": @(1),
+                                                @"b0/x": @(2),
+                                                @"a1/x": @(1),
+                                                @"b1/x": @(2),
+                                                @"a2/x": @(1),
+                                                @"b2/x": @(2),
+                                                @"a3/x": @(1),
+                                                @"b3/x": @(2),
+                                                @"a4/x": @(1),
+                                                @"b4/x": @(2),
+                                                @"a5/x": @(1),
+                                                @"b5/x": @(2),
+                                                @"a6/x": @(1),
+                                                @"b6/x": @(2),
+                                                @"a7/x": @(1),
+                                                @"b7/x": @(2),
+                                                @"a8/x": @(1),
+                                                @"b8/x": @(2),
+                                                @"a9/x": @(1),
+                                                @"b9/x": @(2),
+                                                @"a0/x/y/z": @(1),
+                                                @"b0/x/y/z": @(2),
+                                                @"a1/x/y/z": @(1),
+                                                @"b1/x/y/z": @(2),
+                                                @"a2/x/y/z": @(1),
+                                                @"b2/x/y/z": @(2),
+                                                @"a3/x/y/z": @(1),
+                                                @"b3/x/y/z": @(2),
+                                                @"a4/x/y/z": @(1),
+                                                @"b4/x/y/z": @(2),
+                                                @"a5/x/y/z": @(1),
+                                                @"b5/x/y/z": @(2),
+                                                @"a6/x/y/z": @(1),
+                                                @"b6/x/y/z": @(2),
+                                                @"a7/x/y/z": @(1),
+                                                @"b7/x/y/z": @(2),
+                                                @"a8/x/y/z": @(1),
+                                                @"b8/x/y/z": @(2),
+                                                @"a9/x/y/z": @(1),
+                                                @"b9/x/y/z": @(2),
+                                                @"$SYS/#": @(0)
+                                                } mutableCopy];
+
+        manager.subscriptions = subscriptions;
+        
+        // allow 5 sec for connect
+        self.timedout = false;
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5
+                                                          target:self
+                                                        selector:@selector(timedout:)
+                                                        userInfo:nil
+                                                         repeats:false];
+        
+        
+        [manager connectTo:parameters[@"host"]
+                      port:[parameters[@"port"] intValue]
+                       tls:[parameters[@"tls"] boolValue]
+                 keepalive:60
+                     clean:TRUE
+                      auth:NO
+                      user:nil
+                      pass:nil
+                      will:NO
+                 willTopic:nil
+                   willMsg:nil
+                   willQos:MQTTQosLevelAtMostOnce
+            willRetainFlag:FALSE
+              withClientId:nil
+            securityPolicy:nil
+              certificates:nil];
+        
+        while (!self.timedout && manager.state != MQTTSessionManagerStateConnected) {
+            DDLogInfo(@"waiting for connect %d", manager.state);
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
+        }
+        if (timer.valid) [timer invalidate];
+        
+        manager.subscriptions = @{};
+        
+        // allow 5 sec for subscribing
+        self.timedout = false;
+        timer = [NSTimer scheduledTimerWithTimeInterval:5
+                                                 target:self
+                                               selector:@selector(timedout:)
+                                               userInfo:nil
+                                                repeats:false];
+        
+        
+        while (!self.timedout) {
+            [manager sendData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
+                        topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        if (timer.valid) [timer invalidate];
+        
+        manager.subscriptions = [@{TOPIC: @(0),
+                                   @"a0": @(1),
+                                   @"b0": @(2),
+                                   @"a1": @(1),
+                                   @"b1": @(2),
+                                   @"a2": @(1),
+                                   @"b2": @(2),
+                                   @"a3": @(1),
+                                   @"b3": @(2),
+                                   @"a4": @(1),
+                                   @"b4": @(2),
+                                   @"a5": @(1),
+                                   @"b5": @(2),
+                                   @"a6": @(1),
+                                   @"b6": @(2),
+                                   @"a7": @(1),
+                                   @"b7": @(2),
+                                   @"a8": @(1),
+                                   @"b8": @(2),
+                                   @"a9": @(1),
+                                   @"b9": @(2),
+                                   @"a0/x/y/z": @(1),
+                                   @"b0/x/y/z": @(2),
+                                   @"a1/x/y/z": @(1),
+                                   @"b1/x/y/z": @(2),
+                                   @"a2/x/y/z": @(1),
+                                   @"b2/x/y/z": @(2),
+                                   @"a3/x/y/z": @(1),
+                                   @"b3/x/y/z": @(2),
+                                   @"a4/x/y/z": @(1),
+                                   @"b4/x/y/z": @(2),
+                                   @"a5/x/y/z": @(1),
+                                   @"b5/x/y/z": @(2),
+                                   @"a6/x/y/z": @(1),
+                                   @"b6/x/y/z": @(2),
+                                   @"a7/x/y/z": @(1),
+                                   @"b7/x/y/z": @(2),
+                                   @"a8/x/y/z": @(1),
+                                   @"b8/x/y/z": @(2),
+                                   @"a9/x/y/z": @(1),
+                                   @"b9/x/y/z": @(2),
+                                   @"$SYS/#": @(0)
+                                   } mutableCopy];
+        
+        // allow 5 sec for subscribing
+        self.timedout = false;
+        timer = [NSTimer scheduledTimerWithTimeInterval:5
+                                                 target:self
+                                               selector:@selector(timedout:)
+                                               userInfo:nil
+                                                repeats:false];
+        
+        
+        while (!self.timedout) {
+            [manager sendData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
+                        topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        if (timer.valid) [timer invalidate];
+        
+        manager.subscriptions = [@{TOPIC: @(0),
+                                   @"a0": @(1),
+                                   @"b0": @(2),
+                                   @"a1": @(1),
+                                   @"b1": @(2),
+                                   @"a2": @(1),
+                                   @"b2": @(2),
+                                   @"a3": @(1),
+                                   @"b3": @(2),
+                                   @"a4": @(1),
+                                   @"b4": @(2),
+                                   @"a5": @(1),
+                                   @"b5": @(2),
+                                   @"a6": @(1),
+                                   @"b6": @(2),
+                                   @"a7": @(1),
+                                   @"b7": @(2),
+                                   @"a8": @(1),
+                                   @"b8": @(2),
+                                   @"a9": @(1),
+                                   @"b9": @(2),
+                                   @"a0/x": @(1),
+                                   @"b0/x": @(2),
+                                   @"a1/x": @(1),
+                                   @"b1/x": @(2),
+                                   @"a2/x": @(1),
+                                   @"b2/x": @(2),
+                                   @"a3/x": @(1),
+                                   @"b3/x": @(2),
+                                   @"a4/x": @(1),
+                                   @"b4/x": @(2),
+                                   @"a5/x": @(1),
+                                   @"b5/x": @(2),
+                                   @"a6/x": @(1),
+                                   @"b6/x": @(2),
+                                   @"a7/x": @(1),
+                                   @"b7/x": @(2),
+                                   @"a8/x": @(1),
+                                   @"b8/x": @(2),
+                                   @"a9/x": @(1),
+                                   @"b9/x": @(2),
+                                   @"$SYS/#": @(0)
+                                   } mutableCopy];
+        
+        // allow 5 sec for subscribing
+        self.timedout = false;
+        timer = [NSTimer scheduledTimerWithTimeInterval:5
+                                                 target:self
+                                               selector:@selector(timedout:)
+                                               userInfo:nil
+                                                repeats:false];
+        
+        
+        while (!self.timedout) {
+            [manager sendData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
+                        topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        if (timer.valid) [timer invalidate];
+        
+        
+        for (int i = 0; i < 30; i++) {
+            [subscriptions setObject:@1 forKey:[NSString stringWithFormat:@"abc/%d", i]];
+            manager.subscriptions = subscriptions;
+        }
+        
+        for (int i = 0; i < 30; i++) {
+            [subscriptions removeObjectForKey:[NSString stringWithFormat:@"abc/%d", i]];
+            manager.subscriptions = subscriptions;
+        }
+        
+        // allow 5 sec for subscribing
+        self.timedout = false;
+        timer = [NSTimer scheduledTimerWithTimeInterval:5
+                                                 target:self
+                                               selector:@selector(timedout:)
+                                               userInfo:nil
+                                                repeats:false];
+        
+        
+        while (!self.timedout) {
+            [manager sendData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
+                        topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        if (timer.valid) [timer invalidate];
+        
+        // allow 5 sec for sending and receiving
+        self.timedout = false;
+        timer = [NSTimer scheduledTimerWithTimeInterval:5
+                                                 target:self
+                                               selector:@selector(timedout:)
+                                               userInfo:nil
+                                                repeats:false];
+        
+        
+        while (!self.timedout) {
+            [manager sendData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
+                        topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:FALSE];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        if (timer.valid) [timer invalidate];
+        
+        [manager sendData:[[NSData alloc] init] topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:true];
+        
+        // allow 3 sec for disconnect
+        self.timedout = false;
+        timer = [NSTimer scheduledTimerWithTimeInterval:3
+                                                 target:self
+                                               selector:@selector(timedout:)
+                                               userInfo:nil
+                                                repeats:false];
+        
+        [manager disconnect];
+        while (!self.timedout && manager.state != MQTTSessionStatusClosed) {
+            DDLogInfo(@"waiting for disconnect %d", manager.state);
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
+        }
+        
+        if (timer.valid) [timer invalidate];
+        
+        [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
+    }
+}
+
 #pragma mark - helpers
 
 

@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.7.3
+> Release date 2016-03-15
+
+[FIX] Synchronous API timeout closes #121
+[FIX] Random crash subscribing to topics closes #113
+
 ## MQTT-Client-Framework 0.7.2
 > Release date 2016-03-03
 

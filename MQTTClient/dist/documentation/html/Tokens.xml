@@ -5,7 +5,7 @@
       <Name>md__Users_ckrey_MQTT-Client-Framework_CHANGELOG</Name>
       <APILanguage>markdown</APILanguage>
     </TokenIdentifier>
-    <Path>md___users_ckrey__m_q_t_t-_client-_framework__c_h_a_n_g_e_l_o_g.html</Path>
+    <Path>md__Users_ckrey_MQTT-Client-Framework_CHANGELOG.html</Path>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -1886,7 +1886,7 @@
       <Scope>MQTTSessionManager</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session_manager.html</Path>
-    <Anchor>a93848b47c7ea903993531a50368d15f5</Anchor>
+    <Anchor>a2c6507254d370d9f860b299608b37280</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>

@@ -94,10 +94,10 @@
     
     DDLogVerbose(@"[MQTTSessionSynchron] end subscribe");
     
-    if (self.synchronSubMid == mid) {
-        return TRUE;
-    } else {
+    if (self.synchronSub || self.synchronSubMid != mid) {
         return FALSE;
+    } else {
+        return TRUE;
     }
 }
 
@@ -118,10 +118,10 @@
     
     DDLogVerbose(@"[MQTTSessionSynchron] end subscribe");
     
-    if (self.synchronSubMid == mid) {
-        return TRUE;
-    } else {
+    if (self.synchronSub || self.synchronSubMid != mid) {
         return FALSE;
+    } else {
+        return TRUE;
     }
 }
 
@@ -143,10 +143,10 @@
     
     DDLogVerbose(@"[MQTTSessionSynchron] end unsubscribe");
     
-    if (self.synchronUnsubMid == mid) {
-        return TRUE;
-    } else {
+    if (self.synchronUnsub || self.synchronUnsubMid != mid) {
         return FALSE;
+    } else {
+        return TRUE;
     }
 }
 
@@ -167,10 +167,10 @@
     
     DDLogVerbose(@"[MQTTSessionSynchron] end unsubscribe");
     
-    if (self.synchronUnsubMid == mid) {
-        return TRUE;
-    } else {
+    if (self.synchronUnsub || self.synchronUnsubMid != mid) {
         return FALSE;
+    } else {
+        return TRUE;
     }
 }
 
@@ -203,10 +203,10 @@
         
         DDLogVerbose(@"[MQTTSessionSynchron] end publish");
         
-        if (self.synchronPubMid == mid) {
-            return TRUE;
-        } else {
+        if (self.synchronPub || self.synchronPubMid != mid) {
             return FALSE;
+        } else {
+            return TRUE;
         }
     }
 }
@@ -225,7 +225,6 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
     }
     DDLogVerbose(@"[MQTTSessionSynchron] end close");
-    
 }
 
 @end
