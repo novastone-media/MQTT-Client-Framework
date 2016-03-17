@@ -20,14 +20,17 @@ DEPENDENCIES:
   - CocoaLumberjack
   - MQTTClient (from `~/MQTT-Client-Framework`)
   - MQTTClient/Websocket (from `~/MQTT-Client-Framework`)
+  - SocketRocket (from `~/SocketRocket`)
 
 EXTERNAL SOURCES:
   MQTTClient:
     :path: ~/MQTT-Client-Framework
+  SocketRocket:
+    :path: ~/SocketRocket
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
   MQTTClient: 1c1bedf87249a317ee9324b93252867bbc443ec7
-  SocketRocket: ffe08119b00ef982f6c37052a4705a057c8494ad
+  SocketRocket: b415fc2ecaccea06d533d339efede22d39121065
 
 COCOAPODS: 0.39.0
