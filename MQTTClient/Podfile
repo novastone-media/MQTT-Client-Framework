@@ -11,16 +11,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 		platform :tvos, '9.0'
 		pod 'CocoaLumberjack'
 		pod 'MQTTClient', :path => '~/MQTT-Client-Framework'
-		#
-		# preliminary Websockets support
-		# comment the two following pod lines if you don't want to try it
-		#
 		pod 'MQTTClient/Websocket', :path => '~/MQTT-Client-Framework'
-		#
-		# this extra line is necessary as long the CocoaPods version of SocketRocket does not support tvOS
-		# cd; git clone https://github.com/square/SocketRocket.git
-		#
-		pod 'SocketRocket', :path => '~/SocketRocket'
 	end
 
 	target 'MQTTClientOSXTests' do
