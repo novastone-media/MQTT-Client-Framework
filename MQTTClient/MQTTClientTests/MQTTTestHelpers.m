@@ -10,9 +10,7 @@
 #import "MQTTCFSocketTransport.h"
 #import "MQTTInMemoryPersistence.h"
 #import "MQTTCoreDataPersistence.h"
-#if TARGET_OS_TV != 1
 #import "MQTTWebsocketTransport.h"
-#endif
 #import "MQTTSSLSecurityPolicy.h"
 
 @implementation MQTTTestHelpers
@@ -293,7 +291,6 @@
 + (id<MQTTTransport>)transport:(NSDictionary *)parameters {
     id<MQTTTransport> transport;
     
-#if TARGET_OS_TV != 1
     if ([parameters[@"websocket"] boolValue]) {
         MQTTWebsocketTransport *websocketTransport = [[MQTTWebsocketTransport alloc] init];
         websocketTransport.host = parameters[@"host"];
@@ -306,7 +303,6 @@
 
         transport = websocketTransport;
     } else {
-#endif
         MQTTSSLSecurityPolicy *securityPolicy = [MQTTTestHelpers securityPolicy:parameters];
         if (securityPolicy) {
             MQTTSSLSecurityPolicyTransport *sslSecPolTransport = [[MQTTSSLSecurityPolicyTransport alloc] init];
@@ -325,9 +321,7 @@
             cfSocketTransport.certificates = [MQTTTestHelpers clientCerts:parameters];
             transport = cfSocketTransport;
         }
-#if TARGET_OS_TV != 1
     }
-#endif
     return transport;
 }
 

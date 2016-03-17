@@ -5,7 +5,7 @@
 	<key>brokerList</key>
 	<array>
 		<string>local</string>
-		<string>#localWS</string>
+		<string>localWS</string>
 		<string>#aWsBroker</string>
 		<string>#mosquitto</string>
 		<string>#mosquittoWS</string>

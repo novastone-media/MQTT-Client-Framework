@@ -1,6 +1,11 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.7.4
+> Release date 2016-03-??
+
+[NEW] include Websockets for tvOS #123
+
 ## MQTT-Client-Framework 0.7.3
 > Release date 2016-03-15
 

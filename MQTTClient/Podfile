@@ -11,6 +11,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 		platform :tvos, '9.0'
 		pod 'CocoaLumberjack'
 		pod 'MQTTClient', :path => '~/MQTT-Client-Framework'
+		pod 'MQTTClient/Websocket', :path => '~/MQTT-Client-Framework'
 	end
 
 	target 'MQTTClientOSXTests' do
