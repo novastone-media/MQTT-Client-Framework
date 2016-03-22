@@ -18,12 +18,12 @@ PODS:
 
 DEPENDENCIES:
   - CocoaLumberjack
-  - MQTTClient (from `~/MQTT-Client-Framework`)
-  - MQTTClient/Websocket (from `~/MQTT-Client-Framework`)
+  - MQTTClient (from `..`)
+  - MQTTClient/Websocket (from `..`)
 
 EXTERNAL SOURCES:
   MQTTClient:
-    :path: ~/MQTT-Client-Framework
+    :path: ..
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
