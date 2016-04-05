@@ -38,8 +38,8 @@ class SwiftTests : MQTTTestHelpers {
                     NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
                 }
                 
-                session!.subscribeToTopic("#", atLevel: MQTTQosLevel.AtMostOnce)
-                
+                session!.subscribeToTopic("#", atLevel: .AtMostOnce)
+
                 while sessionConnected && !sessionError && !sessionSubAcked {
                     NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
                 }
@@ -47,7 +47,7 @@ class SwiftTests : MQTTTestHelpers {
                 session!.publishData("sent from Xcode 6.0 using Swift".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false),
                     onTopic: TOPIC,
                     retain: false,
-                    qos: MQTTQosLevel.AtMostOnce)
+                    qos: .AtMostOnce)
                 
                 while sessionConnected && !sessionError && !sessionReceived {
                     NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
@@ -78,11 +78,11 @@ class SwiftTests : MQTTTestHelpers {
                     will: false,
                     willTopic: nil,
                     willMsg: nil,
-                    willQos: MQTTQosLevel.AtMostOnce,
+                    willQos: .AtMostOnce,
                     willRetainFlag: false,
                     withClientId: nil)
                 
-                while (m.state != MQTTSessionManagerState.Connected) {
+                while (m.state != .Connected) {
                     print("waiting for connect %d", m.state);
                     NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
                 }
@@ -106,7 +106,7 @@ class SwiftTests : MQTTTestHelpers {
         print("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
         sessionReceived = true;
     }
-    
+
     override func subAckReceived(session: MQTTSession!, msgID: UInt16, grantedQoss qoss: [NSNumber]!) {
         sessionSubAcked = true;
     }

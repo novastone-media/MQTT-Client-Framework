@@ -89,10 +89,10 @@
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
-        [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
-                  onTopic:[NSString stringWithFormat:@"%@<%C>/%s", TOPIC, feff, __FUNCTION__]
-                   retain:NO
-                  atLevel:0];
+        [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                               onTopic:[NSString stringWithFormat:@"%@<%C>/%s", TOPIC, feff, __FUNCTION__]
+                                retain:NO
+                               atLevel:0];
         [self shutdown:parameters];
     }
 }
@@ -107,7 +107,7 @@
 - (void)testPublish_r0_q0_0xD800_MQTT_1_5_3_1 {
     DDLogVerbose(@"can't test [MQTT-1.5.3-1]");
     NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
-    DDLogVerbose(@"stringWithNull(%lu) %@", (unsigned long)stringWithD800.length, stringWithD800.description);
+    DDLogVerbose(@"stringWithD800(%lu) %@", (unsigned long)stringWithD800.length, stringWithD800.description);
     
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
@@ -131,7 +131,7 @@
 - (void)testPublish_r0_q0_0x9c_MQTT_1_5_3_1 {
     NSData *data = [NSData dataWithBytes:"MQTTClient/abc\x9c\x9dxyz" length:19];
     NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
-    DDLogVerbose(@"stringWithNull(%lu) %@", (unsigned long)stringWith9c.length, stringWith9c.description);
+    DDLogVerbose(@"stringWith9c(%lu) %@", (unsigned long)stringWith9c.length, stringWith9c.description);
     
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
@@ -354,6 +354,11 @@
     DDLogVerbose(@"Can't test[MQTT-3.3.2-1]");
 }
 
+/*
+ * [MQTT-3.3.2-2]
+ *
+ * The Topic Name in the PUBLISH Packet MUST NOT contain wildcard characters.
+ */
 - (void)testPublishWithPlus_MQTT_3_3_2_2 {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
@@ -371,6 +376,11 @@
     }
 }
 
+/*
+ * [MQTT-3.3.2-2]
+ *
+ * The Topic Name in the PUBLISH Packet MUST NOT contain wildcard characters.
+ */
 - (void)testPublishWithHash_MQTT_3_3_2_2 {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
@@ -387,6 +397,11 @@
     }
 }
 
+/*
+ * [MQTT-4.7.3-1]
+ *
+ * All Topic Names and Topic Filters MUST be at least one character long.
+ */
 - (void)testPublishEmptyTopic_MQTT_4_7_3_1 {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
@@ -489,8 +504,11 @@
     }
 }
 
-
-- (void)testPublish_q2_dup_MQTT_3_3_1_2 {
+/**
+[MQTT-3.3.1-1]
+The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- deliver a PUBLISH Packet.
+ */
+- (void)testPublish_q2_dup_MQTT_3_3_1_1 {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];

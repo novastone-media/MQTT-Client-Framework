@@ -18,6 +18,7 @@ an Objective-C native MQTT Framework http://mqtt.org
 * Apollo
 * CloudMQTT
 * aws
+* hbmqtt (MQTTv311 only, limitations)
 
 ### Howto
 

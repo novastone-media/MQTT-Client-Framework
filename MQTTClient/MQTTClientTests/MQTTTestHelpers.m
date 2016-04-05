@@ -180,8 +180,9 @@
           duped:(BOOL)duped
             mid:(UInt16)mid
            data:(NSData *)data {
-    DDLogVerbose(@"[MQTTTestHelpers] sending: %02X q%d r%d d%d m%d (%ld)",
-                 type, qos, retained, duped, mid, data.length);
+    DDLogVerbose(@"[MQTTTestHelpers] sending: %02X q%d r%d d%d m%d (%ld) %@",
+                 type, qos, retained, duped, mid, data.length,
+                 data.length < 64 ? data.description : [data subdataWithRange:NSMakeRange(0, 64)].description);
 }
 
 - (void)received:(MQTTSession *)session

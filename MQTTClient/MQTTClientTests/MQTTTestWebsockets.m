@@ -244,7 +244,7 @@
             
             [self.websocket open];
             
-            while (!self.websocket.readyState == SR_OPEN && !self.abort && !self.timedout) {
+            while (!(self.websocket.readyState == SR_OPEN) && !self.abort && !self.timedout) {
                 DDLogVerbose(@"waiting for open");
                 [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
             }

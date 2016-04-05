@@ -63,7 +63,7 @@
         self.session.password = nil;
 
         [self connect:self.session parameters:parameters];
-        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"Not Connected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
     }
 }

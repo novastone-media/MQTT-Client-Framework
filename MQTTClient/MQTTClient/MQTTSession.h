@@ -28,12 +28,6 @@
 @class MQTTSession;
 @class MQTTSSLSecurityPolicy;
 
-/** Session delegate gives your application control over the MQTTSession
- @note all callback methods are optional
- */
-
-@protocol MQTTSessionDelegate <NSObject>
-
 /**
  Enumeration of MQTTSession states
  */
@@ -57,6 +51,12 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
     MQTTSessionEventProtocolError,
     MQTTSessionEventConnectionClosedByBroker
 };
+
+/** Session delegate gives your application control over the MQTTSession
+ @note all callback methods are optional
+ */
+
+@protocol MQTTSessionDelegate <NSObject>
 
 @optional
 
