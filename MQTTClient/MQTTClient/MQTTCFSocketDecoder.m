@@ -33,6 +33,10 @@
     }
 }
 
+- (void)dealloc {
+    [self close];
+}
+
 - (void)close {
     [self.stream close];
     [self.stream removeFromRunLoop:self.runLoop forMode:self.runLoopMode];

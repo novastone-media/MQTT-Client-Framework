@@ -28,6 +28,10 @@
     return self;
 }
 
+- (void)dealloc {
+    [self close];
+}
+
 - (void)open {
     [self.stream setDelegate:self];
     [self.stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
