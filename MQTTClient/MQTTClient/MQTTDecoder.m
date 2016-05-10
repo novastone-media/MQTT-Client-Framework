@@ -24,6 +24,10 @@
     return self;
 }
 
+- (void)dealloc {
+    [self close];
+}
+
 - (void)decodeMessage:(NSData *)data {
     NSInputStream *stream = [NSInputStream inputStreamWithData:data];
     [self openStream:stream];
