@@ -68,6 +68,7 @@
     }
     
     if(!connectError){
+        self.encoder.delegate = nil;
         self.encoder = [[MQTTCFSocketEncoder alloc] init];
         self.encoder.stream = CFBridgingRelease(writeStream);
         self.encoder.runLoop = self.runLoop;
@@ -75,6 +76,7 @@
         self.encoder.delegate = self;
         [self.encoder open];
         
+        self.decoder.delegate = nil;
         self.decoder = [[MQTTCFSocketDecoder alloc] init];
         self.decoder.stream =  CFBridgingRelease(readStream);
         self.decoder.runLoop = self.runLoop;

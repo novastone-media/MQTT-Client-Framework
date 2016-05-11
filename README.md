@@ -1,5 +1,7 @@
-MQTT-Client-Framework
+MQTT-Client-Framework 
 =====================
+
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 an Objective-C native MQTT Framework http://mqtt.org
 
