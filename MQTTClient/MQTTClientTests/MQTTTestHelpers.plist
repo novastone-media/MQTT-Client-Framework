@@ -44,6 +44,10 @@
 			<false/>
 			<key>allowUntrustedCertificates</key>
 			<false/>
+			<key>CoreData</key>
+			<true/>
+			<key>persistent</key>
+			<true/>
 		</dict>
 		<key>localWS</key>
 		<dict>

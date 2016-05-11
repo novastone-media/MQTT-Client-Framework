@@ -63,6 +63,27 @@
     }
 }
 
+- (void)testPublish_r1_q0_zeroLengthPayload {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        [self connect:parameters];
+        [self testPublish:[[NSData alloc] init]
+                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                   retain:TRUE
+                  atLevel:0];
+        [self testPublish:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
+                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                   retain:TRUE
+                  atLevel:0];
+        [self testPublish:[[NSData alloc] init]
+                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                   retain:TRUE
+                  atLevel:0];
+        [self shutdown:parameters];
+    }
+}
+
 - (void)testPublish_r0_q0 {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);

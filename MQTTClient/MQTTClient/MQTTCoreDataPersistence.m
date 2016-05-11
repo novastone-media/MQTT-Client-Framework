@@ -162,28 +162,6 @@ static unsigned long long fileSystemFreeSize;
 
 @end
 
-// Attempt to fix #117
-//
-//@interface NSManagedObjectContext ( Recursive )
-//- (void)recursiveSave;
-//@end
-//
-//@implementation NSManagedObjectContext ( Recursive )
-//
-//- (void)recursiveSave {
-//    if (self.hasChanges) {
-//        NSError *error = nil;
-//        if (![self save: &error]) {
-//            DDLogError(@"[MQTTPersistence] sync error %@", error);
-//        }
-//        
-//        if (self.parentContext) {
-//            [self.parentContext recursiveSave];
-//        }
-//    }
-//}
-//@end
-//
 @implementation MQTTCoreDataPersistence
 @synthesize persistent;
 @synthesize maxSize;
@@ -260,28 +238,52 @@ static unsigned long long fileSystemFreeSize;
 }
 
 - (void)sync {
-    [self.managedObjectContext performBlockAndWait:^{
-        if (self.managedObjectContext.hasChanges) {
-            DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
-                         (unsigned long)self.managedObjectContext.insertedObjects.count,
-                         (unsigned long)self.managedObjectContext.updatedObjects.count,
-                         (unsigned long)self.managedObjectContext.deletedObjects.count
-                         );
-            NSError *error = nil;
-            if (![self.managedObjectContext save:&error]) {
-                DDLogError(@"[MQTTPersistence] sync error %@", error);
-            }
-            if (self.managedObjectContext.hasChanges) {
-                DDLogError(@"[MQTTPersistence] sync not complete");
-            }
-            DDLogVerbose(@"[MQTTPersistence] postsync: i%lu u%lu d%lu",
-                         (unsigned long)self.managedObjectContext.insertedObjects.count,
-                         (unsigned long)self.managedObjectContext.updatedObjects.count,
-                         (unsigned long)self.managedObjectContext.deletedObjects.count
-                         );
-            [self sizes];
+    if ([NSThread isMainThread]) {
+        [self internalSync];
+    } else {
+        [self.managedObjectContext performBlockAndWait:^{
+            [self internalSync];
+        }];
+    }
+    if ([NSThread isMainThread]) {
+        [self internalParentSync];
+    } else {
+        [self.managedObjectContext.parentContext performBlockAndWait:^{
+            [self internalParentSync];
+        }];
+    }
+}
+
+- (void)internalSync {
+    if (self.managedObjectContext.hasChanges) {
+        DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
+                     (unsigned long)self.managedObjectContext.insertedObjects.count,
+                     (unsigned long)self.managedObjectContext.updatedObjects.count,
+                     (unsigned long)self.managedObjectContext.deletedObjects.count
+                     );
+        NSError *error = nil;
+        if (![self.managedObjectContext save:&error]) {
+            DDLogError(@"[MQTTPersistence] sync error %@", error);
         }
-    }];
+        if (self.managedObjectContext.hasChanges) {
+            DDLogError(@"[MQTTPersistence] sync not complete");
+        }
+        DDLogVerbose(@"[MQTTPersistence] postsync: i%lu u%lu d%lu",
+                     (unsigned long)self.managedObjectContext.insertedObjects.count,
+                     (unsigned long)self.managedObjectContext.updatedObjects.count,
+                     (unsigned long)self.managedObjectContext.deletedObjects.count
+                     );
+        [self sizes];
+    }
+}
+
+- (void)internalParentSync {
+    if (self.managedObjectContext.parentContext && self.managedObjectContext.parentContext.hasChanges) {
+        NSError *error = nil;
+        if (![self.managedObjectContext.parentContext save:&error]) {
+            DDLogError(@"[MQTTPersistence] parentContext sync error %@", error);
+        }
+    }
 }
 
 - (NSArray *)allFlowsforClientId:(NSString *)clientId
