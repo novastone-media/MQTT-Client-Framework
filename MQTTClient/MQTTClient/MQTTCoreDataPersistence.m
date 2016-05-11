@@ -241,14 +241,14 @@ static unsigned long long fileSystemFreeSize;
     if ([NSThread isMainThread]) {
         [self internalSync];
     } else {
-        [self.managedObjectContext performBlockAndWait:^{
+        [self.managedObjectContext performBlock:^{
             [self internalSync];
         }];
     }
     if ([NSThread isMainThread]) {
         [self internalParentSync];
     } else {
-        [self.managedObjectContext.parentContext performBlockAndWait:^{
+        [self.managedObjectContext.parentContext performBlock:^{
             [self internalParentSync];
         }];
     }
