@@ -37,6 +37,7 @@
 @property (strong, nonatomic) NSString *clientId;
 @property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
 @property (strong, nonatomic) NSArray *certificates;
+@property (nonatomic) MQTTProtocolVersion protocolLevel;
 
 @property (strong, nonatomic) NSTimer *disconnectTimer;
 @property (strong, nonatomic) NSTimer *activityTimer;
@@ -222,6 +223,42 @@
      withClientId:(NSString *)clientId
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates {
+    [self connectTo:host
+               port:port
+                tls:tls
+          keepalive:keepalive
+              clean:clean
+               auth:auth
+               user:user
+               pass:pass
+               will:will
+          willTopic:willTopic
+            willMsg:willMsg
+            willQos:willQos
+     willRetainFlag:willRetainFlag
+       withClientId:clientId
+     securityPolicy:nil
+       certificates:nil
+      protocolLevel:MQTTProtocolVersion311]; // use this level as default, keeps it backwards compatible
+}
+
+- (void)connectTo:(NSString *)host
+             port:(NSInteger)port
+              tls:(BOOL)tls
+        keepalive:(NSInteger)keepalive
+            clean:(BOOL)clean
+             auth:(BOOL)auth
+             user:(NSString *)user
+             pass:(NSString *)pass
+             will:(BOOL)will
+        willTopic:(NSString *)willTopic
+          willMsg:(NSData *)willMsg
+          willQos:(MQTTQosLevel)willQos
+   willRetainFlag:(BOOL)willRetainFlag
+     withClientId:(NSString *)clientId
+   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
+     certificates:(NSArray *)certificates
+    protocolLevel:(MQTTProtocolVersion)protocolLevel {
     DDLogVerbose(@"MQTTSessionManager connectTo:%@", host);
     BOOL shouldReconnect = self.session != nil;
     if (!self.session ||
@@ -256,6 +293,7 @@
         self.clientId = clientId;
         self.securityPolicy = securityPolicy;
         self.certificates = certificates;
+        self.protocolLevel = protocolLevel;
 
         self.session = [[MQTTSession alloc] initWithClientId:clientId
                                                     userName:auth ? user : nil
@@ -267,21 +305,21 @@
                                                      willMsg:willMsg
                                                      willQoS:willQos
                                               willRetainFlag:willRetainFlag
-                                               protocolLevel:4
+                                               protocolLevel:protocolLevel
                                                      runLoop:[NSRunLoop currentRunLoop]
                                                      forMode:NSDefaultRunLoopMode
                                               securityPolicy:securityPolicy
                                                 certificates:certificates];
-        
+
         MQTTCoreDataPersistence *persistence = [[MQTTCoreDataPersistence alloc] init];
-        
+
         persistence.persistent = self.persistent;
         persistence.maxWindowSize = self.maxWindowSize;
         persistence.maxSize = self.maxSize;
         persistence.maxMessages = self.maxMessages;
-        
+
         self.session.persistence = persistence;
-        
+
         self.session.delegate = self;
         self.reconnectTime = RECONNECT_TIMER;
         self.reconnectFlag = FALSE;
