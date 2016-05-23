@@ -1,0 +1,377 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		84B65C6B1CF39DA50089B477 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B65C6A1CF39DA50089B477 /* AppDelegate.swift */; };
+		84B65C6D1CF39DA50089B477 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B65C6C1CF39DA50089B477 /* ViewController.swift */; };
+		84B65C701CF39DA50089B477 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84B65C6E1CF39DA50089B477 /* Main.storyboard */; };
+		84B65C721CF39DA50089B477 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84B65C711CF39DA50089B477 /* Assets.xcassets */; };
+		84B65C751CF39DA50089B477 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84B65C731CF39DA50089B477 /* LaunchScreen.storyboard */; };
+		84B65C7D1CF39E240089B477 /* MQTTSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B65C7C1CF39E240089B477 /* MQTTSwift.swift */; };
+		95ECD3F6857E94FFDFAD4B66 /* Pods_MQTTSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14CF6C457355F7BDBFBA98B /* Pods_MQTTSwift.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0887A182A21ED76531A9BFCE /* Pods-MQTTSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTSwift/Pods-MQTTSwift.release.xcconfig"; sourceTree = "<group>"; };
+		84B65C671CF39DA50089B477 /* MQTTSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MQTTSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		84B65C6A1CF39DA50089B477 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		84B65C6C1CF39DA50089B477 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		84B65C6F1CF39DA50089B477 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		84B65C711CF39DA50089B477 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		84B65C741CF39DA50089B477 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		84B65C761CF39DA50089B477 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84B65C7C1CF39E240089B477 /* MQTTSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MQTTSwift.swift; sourceTree = "<group>"; };
+		CB7967891DB93DF9E94CD2F8 /* Pods-MQTTSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTSwift/Pods-MQTTSwift.debug.xcconfig"; sourceTree = "<group>"; };
+		D14CF6C457355F7BDBFBA98B /* Pods_MQTTSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		84B65C641CF39DA50089B477 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95ECD3F6857E94FFDFAD4B66 /* Pods_MQTTSwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4A3C326FCB8B312427A2376C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D14CF6C457355F7BDBFBA98B /* Pods_MQTTSwift.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		84B65C5E1CF39DA50089B477 = {
+			isa = PBXGroup;
+			children = (
+				84B65C691CF39DA50089B477 /* MQTTSwift */,
+				84B65C681CF39DA50089B477 /* Products */,
+				E51FC76FD75427887B43C7BE /* Pods */,
+				4A3C326FCB8B312427A2376C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		84B65C681CF39DA50089B477 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				84B65C671CF39DA50089B477 /* MQTTSwift.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		84B65C691CF39DA50089B477 /* MQTTSwift */ = {
+			isa = PBXGroup;
+			children = (
+				84B65C6A1CF39DA50089B477 /* AppDelegate.swift */,
+				84B65C6C1CF39DA50089B477 /* ViewController.swift */,
+				84B65C7C1CF39E240089B477 /* MQTTSwift.swift */,
+				84B65C6E1CF39DA50089B477 /* Main.storyboard */,
+				84B65C711CF39DA50089B477 /* Assets.xcassets */,
+				84B65C731CF39DA50089B477 /* LaunchScreen.storyboard */,
+				84B65C761CF39DA50089B477 /* Info.plist */,
+			);
+			path = MQTTSwift;
+			sourceTree = "<group>";
+		};
+		E51FC76FD75427887B43C7BE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CB7967891DB93DF9E94CD2F8 /* Pods-MQTTSwift.debug.xcconfig */,
+				0887A182A21ED76531A9BFCE /* Pods-MQTTSwift.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		84B65C661CF39DA50089B477 /* MQTTSwift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84B65C791CF39DA50089B477 /* Build configuration list for PBXNativeTarget "MQTTSwift" */;
+			buildPhases = (
+				20400CA1FA398E0F3FA8BBCC /* 📦 Check Pods Manifest.lock */,
+				84B65C631CF39DA50089B477 /* Sources */,
+				84B65C641CF39DA50089B477 /* Frameworks */,
+				84B65C651CF39DA50089B477 /* Resources */,
+				40B1B7E41B9CF4E0394EECFB /* 📦 Embed Pods Frameworks */,
+				143EB7B30D5DEC077342771F /* 📦 Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MQTTSwift;
+			productName = MQTTSwift;
+			productReference = 84B65C671CF39DA50089B477 /* MQTTSwift.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		84B65C5F1CF39DA50089B477 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = OwnTracks;
+				TargetAttributes = {
+					84B65C661CF39DA50089B477 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 84B65C621CF39DA50089B477 /* Build configuration list for PBXProject "MQTTSwift" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 84B65C5E1CF39DA50089B477;
+			productRefGroup = 84B65C681CF39DA50089B477 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				84B65C661CF39DA50089B477 /* MQTTSwift */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		84B65C651CF39DA50089B477 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84B65C751CF39DA50089B477 /* LaunchScreen.storyboard in Resources */,
+				84B65C721CF39DA50089B477 /* Assets.xcassets in Resources */,
+				84B65C701CF39DA50089B477 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		143EB7B30D5DEC077342771F /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MQTTSwift/Pods-MQTTSwift-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		20400CA1FA398E0F3FA8BBCC /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		40B1B7E41B9CF4E0394EECFB /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MQTTSwift/Pods-MQTTSwift-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		84B65C631CF39DA50089B477 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84B65C7D1CF39E240089B477 /* MQTTSwift.swift in Sources */,
+				84B65C6D1CF39DA50089B477 /* ViewController.swift in Sources */,
+				84B65C6B1CF39DA50089B477 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		84B65C6E1CF39DA50089B477 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				84B65C6F1CF39DA50089B477 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		84B65C731CF39DA50089B477 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				84B65C741CF39DA50089B477 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		84B65C771CF39DA50089B477 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		84B65C781CF39DA50089B477 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		84B65C7A1CF39DA50089B477 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CB7967891DB93DF9E94CD2F8 /* Pods-MQTTSwift.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = MQTTSwift/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTSwift;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		84B65C7B1CF39DA50089B477 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0887A182A21ED76531A9BFCE /* Pods-MQTTSwift.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = MQTTSwift/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTSwift;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		84B65C621CF39DA50089B477 /* Build configuration list for PBXProject "MQTTSwift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84B65C771CF39DA50089B477 /* Debug */,
+				84B65C781CF39DA50089B477 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84B65C791CF39DA50089B477 /* Build configuration list for PBXNativeTarget "MQTTSwift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84B65C7A1CF39DA50089B477 /* Debug */,
+				84B65C7B1CF39DA50089B477 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 84B65C5F1CF39DA50089B477 /* Project object */;
+}

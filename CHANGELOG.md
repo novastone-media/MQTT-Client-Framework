@@ -1,6 +1,15 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.7.8
+> Release date 2016-05-23
+
+[FIX] Fix unread and unused variables pull reques #143
+[FIX] Call connect handler when connection is closed by broker without sending a CONNACK and consistent error reporting pull request #142
+[NEW] Adding method for MQTTSessionManager to include protocolLevel variable pull request #140
+[FIX] Fixes an issue where calling open twice on MQTTCFSocketTransport crashes pull request #131
+[NEW] Add Swift test project to check #119
+
 ## MQTT-Client-Framework 0.7.4
 > Release date 2016-03-17
 
