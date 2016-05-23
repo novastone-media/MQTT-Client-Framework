@@ -52,6 +52,30 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
     MQTTSessionEventConnectionClosedByBroker
 };
 
+/**
+ The error domain used for all errors created by MQTTSession
+ */
+extern NSString * const MQTTSessionErrorDomain;
+
+/**
+ The error codes used for all errors created by MQTTSession
+ */
+typedef NS_ENUM(NSInteger, MQTTSessionError) {
+    MQTTSessionErrorConnectionRefused = -8, // Sent if the server closes the connection without sending an appropriate error CONNACK
+    MQTTSessionErrorIllegalMessageReceived = -7,
+    MQTTSessionErrorDroppingOutgoingMessage = -6, // For some reason the value is the same as for MQTTSessionErrorNoResponse
+    MQTTSessionErrorNoResponse = -6, // For some reason the value is the same as for MQTTSessionErrorDroppingOutgoingMessage
+    MQTTSessionErrorEncoderNotReady = -5,
+    MQTTSessionErrorInvalidConnackReceived = -2, // Sent if the message received from server was an invalid connack message
+    MQTTSessionErrorNoConnackReceived = -1, // Sent if first message received from server was no connack message
+    MQTTSessionErrorConnackUnacceptableProtocolVersion = 1, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackIdentifierRejected = 2, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackServeUnavailable = 3, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackBadUsernameOrPassword = 4, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackNotAuthorized = 5, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackReserved = 6, // Should be value 6-255, as defined by MQTT Protocol
+};
+
 /** Session delegate gives your application control over the MQTTSession
  @note all callback methods are optional
  */
