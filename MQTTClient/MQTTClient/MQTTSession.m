@@ -696,7 +696,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     NSRange range = NSMakeRange(2 + topicLength, [data length] - topicLength - 2);
     data = [data subdataWithRange:range];
     if ([msg qos] == 0) {
-        BOOL processed = true;
         if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
             [self.delegate newMessage:self
                                  data:data
@@ -706,12 +705,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                   mid:0];
         }
         if ([self.delegate respondsToSelector:@selector(newMessageWithFeedback:data:onTopic:qos:retained:mid:)]) {
-            processed = [self.delegate newMessageWithFeedback:self
-                                                         data:data
-                                                      onTopic:topic
-                                                          qos:msg.qos
-                                                     retained:msg.retainFlag
-                                                          mid:0];
+            [self.delegate newMessageWithFeedback:self
+                                             data:data
+                                          onTopic:topic
+                                              qos:msg.qos
+                                         retained:msg.retainFlag
+                                              mid:0];
         }
         if (self.messageHandler) {
             self.messageHandler(data, topic);
