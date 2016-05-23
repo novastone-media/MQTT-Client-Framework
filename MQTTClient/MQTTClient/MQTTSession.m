@@ -941,6 +941,16 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if(self.connectionHandler){
         self.connectionHandler(eventCode);
     }
+
+    if(eventCode == MQTTSessionEventConnectionClosedByBroker && self.connectHandler) {
+        error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                    code:MQTTSessionErrorConnectionRefused
+                                userInfo:@{NSLocalizedDescriptionKey : @"Server has closed connection without connack."}];
+
+        MQTTConnectHandler connectHandler = self.connectHandler;
+        self.connectHandler = nil;
+        [self onConnect:connectHandler error:error];
+    }
     
     self.synchronPub = FALSE;
     self.synchronPubMid = 0;
