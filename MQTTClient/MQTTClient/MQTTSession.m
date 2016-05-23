@@ -15,6 +15,8 @@
 
 #import "MQTTLog.h"
 
+NSString * const MQTTSessionErrorDomain = @"MQTT";
+
 @interface MQTTSession() <MQTTDecoderDelegate, MQTTTransportDelegate>
 
 @property (nonatomic, readwrite) MQTTSessionStatus status;
@@ -259,8 +261,8 @@
         }
         if (!flow) {
             DDLogWarn(@"[MQTTSession] dropping outgoing message %d", msgId);
-            NSError *error = [NSError errorWithDomain:@"MQTT"
-                                                 code:-6
+            NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                                 code:MQTTSessionErrorDroppingOutgoingMessage
                                              userInfo:@{NSLocalizedDescriptionKey : @"Dropping outgoing Message"}];
             if (publishHandler) {
                 [self onPublish:publishHandler error:error];
@@ -289,8 +291,8 @@
     } else {
         NSError *error = nil;
         if (![self encode:msg]) {
-            error = [NSError errorWithDomain:@"MQTT"
-                                        code:-5
+            error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                        code:MQTTSessionErrorEncoderNotReady
                                     userInfo:@{NSLocalizedDescriptionKey : @"Encoder not ready"}];
         }
         if (publishHandler) {
@@ -351,8 +353,8 @@
         [self.delegate connectionClosed:self];
     }
     
-    NSError *error = [NSError errorWithDomain:@"MQTT"
-                                         code:-6
+    NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                         code:MQTTSessionErrorNoResponse
                                      userInfo:@{NSLocalizedDescriptionKey : @"No response"}];
     
     NSArray *allSubscribeHandlers = self.subscribeHandlers.allValues;
@@ -494,8 +496,8 @@
     MQTTMessage *message = [MQTTMessage messageFromData:data];
     if (!message) {
         DDLogError(@"[MQTTSession] MQTT illegal message received");
-        NSError * error = [NSError errorWithDomain:@"MQTT"
-                                              code:-7
+        NSError * error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                              code:MQTTSessionErrorIllegalMessageReceived
                                           userInfo:@{NSLocalizedDescriptionKey : @"MQTT illegal message received"}];
         [self protocolError:error];
         
@@ -528,8 +530,8 @@
                 switch (message.type) {
                     case MQTTConnack:
                         if (message.data.length != 2) {
-                            NSError *error = [NSError errorWithDomain:@"MQTT"
-                                                                 code:-2
+                            NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                                                 code:MQTTSessionErrorInvalidConnackReceived
                                                              userInfo:@{NSLocalizedDescriptionKey : @"MQTT protocol CONNACK expected"}];
                             
                             [self protocolError:error];
@@ -580,29 +582,36 @@
                                 
                             } else {
                                 NSString *errorDescription;
+                                NSInteger errorCode = 0;
                                 switch (bytes[1]) {
                                     case 1:
                                         errorDescription = @"MQTT CONNACK: unacceptable protocol version";
+                                        errorCode = MQTTSessionErrorConnackUnacceptableProtocolVersion;
                                         break;
                                     case 2:
                                         errorDescription = @"MQTT CONNACK: identifier rejected";
+                                        errorCode = MQTTSessionErrorConnackIdentifierRejected;
                                         break;
                                     case 3:
                                         errorDescription = @"MQTT CONNACK: server unavailable";
+                                        errorCode = MQTTSessionErrorConnackServeUnavailable;
                                         break;
                                     case 4:
                                         errorDescription = @"MQTT CONNACK: bad user name or password";
+                                        errorCode = MQTTSessionErrorConnackBadUsernameOrPassword;
                                         break;
                                     case 5:
                                         errorDescription = @"MQTT CONNACK: not authorized";
+                                        errorCode = MQTTSessionErrorConnackNotAuthorized;
                                         break;
                                     default:
                                         errorDescription = @"MQTT CONNACK: reserved for future use";
+                                        errorCode = MQTTSessionErrorConnackReserved;
                                         break;
                                 }
                                 
-                                NSError *error = [NSError errorWithDomain:@"MQTT"
-                                                                     code:bytes[1]
+                                NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                                                     code:errorCode
                                                                  userInfo:@{NSLocalizedDescriptionKey : errorDescription}];
                                 [self error:MQTTSessionEventConnectionRefused error:error];
                                 if ([self.delegate respondsToSelector:@selector(connectionRefused:error:)]) {
@@ -619,8 +628,8 @@
                         }
                         break;
                     default: {
-                        NSError * error = [NSError errorWithDomain:@"MQTT"
-                                                              code:-1
+                        NSError * error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                                              code:MQTTSessionErrorNoConnackReceived
                                                           userInfo:@{NSLocalizedDescriptionKey : @"MQTT protocol no CONNACK"}];
                         [self protocolError:error];
                         MQTTConnectHandler connectHandler = self.connectHandler;
