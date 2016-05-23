@@ -362,7 +362,7 @@
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
 #ifdef DEBUG
-    const NSDictionary *events = @{
+    __unused const NSDictionary *events = @{
                                    @(MQTTSessionEventConnected): @"connected",
                                    @(MQTTSessionEventConnectionRefused): @"connection refused",
                                    @(MQTTSessionEventConnectionClosed): @"connection closed",
