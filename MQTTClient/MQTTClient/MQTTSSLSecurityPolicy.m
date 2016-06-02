@@ -238,7 +238,14 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
         case MQTTSSLPinningModeCertificate: {
             NSMutableArray *pinnedCertificates = [NSMutableArray array];
             for (NSData *certificateData in self.pinnedCertificates) {
-                [pinnedCertificates addObject:(__bridge_transfer id)SecCertificateCreateWithData(NULL, (__bridge CFDataRef)certificateData)];
+                @try {
+                    [pinnedCertificates addObject:(__bridge_transfer id)SecCertificateCreateWithData(NULL, (__bridge CFDataRef)certificateData)];
+                } @catch (NSException *exception) {
+                    //fix issue #151, if the pinnedCertification is not a valid DER-encoded X.509 certificate, for example it is the PEM format, SecCertificateCreateWithData will return nil, and application will crash
+                    if ([exception.name isEqual:NSInvalidArgumentException]) {
+                        return NO;
+                    }
+                }
             }
             SecTrustSetAnchorCertificates(serverTrust, (__bridge CFArrayRef)pinnedCertificates);
 
