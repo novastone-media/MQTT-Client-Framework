@@ -34,19 +34,10 @@
 - (void)open {
     DDLogVerbose(@"[MQTTWebsocketTransport] open");
     self.state = MQTTTransportOpening;
-
-    NSString *protocol = (self.tls) ? @"wss" : @"ws";
-    NSString *portString = (self.port == 0) ? @"" : [NSString stringWithFormat:@":%d",(unsigned int)self.port];
-    NSString *path = self.path;
-    NSArray <NSString *> *protocols = @[@"mqtt"];
-    NSString *urlString = [NSString stringWithFormat:@"%@://%@%@%@",
-                           protocol,
-                           self.host,
-                           portString,
-                           path];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+    
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[self endpointURL]];
     urlRequest.SR_SSLPinnedCertificates = self.pinnedCertificates;
+    NSArray <NSString *> *protocols = @[@"mqtt"];
     
     self.websocket = [[SRWebSocket alloc] initWithURLRequest:urlRequest
                                                    protocols:protocols
@@ -54,6 +45,19 @@
     
     self.websocket.delegate = self;
     [self.websocket open];
+}
+
+- (NSURL*) endpointURL {
+    NSString *protocol = (self.tls) ? @"wss" : @"ws";
+    NSString *portString = (self.port == 0) ? @"" : [NSString stringWithFormat:@":%d",(unsigned int)self.port];
+    NSString *path = self.path;
+    NSString *urlString = [NSString stringWithFormat:@"%@://%@%@%@",
+                           protocol,
+                           self.host,
+                           portString,
+                           path];
+    NSURL *url = [NSURL URLWithString:urlString];
+    return url;
 }
 
 - (BOOL)send:(nonnull NSData *)data {
