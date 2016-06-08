@@ -47,18 +47,19 @@ Or include the source from here.
 Create a new client and connect to a broker:
 
 ```objective-c
+#import "MQTTClient.h"
 
-\@interface MyDelegate : ... MQTTSessionDelegate>
+@interface MyDelegate : ... MQTTSessionDelegate>
 ...
 
         MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
         transport.host = @"localhost";
         transport.port = 1883;
 
-        session = [[MQTTSession alloc] init];
+        MQTTSession *session = [[MQTTSession alloc] init];
         session.transport = transport;
         
-	session.delegate=self;
+	session.delegate = self;
 
 	[session connectAndWaitTimeout:30];  //this is part of the synchronous API
 
