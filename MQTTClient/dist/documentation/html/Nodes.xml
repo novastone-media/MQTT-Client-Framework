@@ -501,6 +501,11 @@
               <Anchor>a58a397cb2851b3bb5c3cf2a49c109204</Anchor>
              </Node>
              <Node>
+              <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:securityPolicy:certificates:protocolLevel:</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>a32e61b2ffb4f625be6b40cb41fdbfe5f</Anchor>
+             </Node>
+             <Node>
               <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:willTopic:will:willQos:willRetainFlag:withClientId:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
               <Anchor>af0b3aa800e54438a160b1c1b78b27898</Anchor>

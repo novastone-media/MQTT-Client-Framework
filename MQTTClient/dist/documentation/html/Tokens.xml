@@ -1585,6 +1585,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:securityPolicy:certificates:protocolLevel:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSessionManager</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session_manager.html</Path>
+    <Anchor>a32e61b2ffb4f625be6b40cb41fdbfe5f</Anchor>
+    <DeclaredIn>MQTTSessionManager.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:securityPolicy:certificates:</Name>
       <APILanguage>occ</APILanguage>
       <Type>instm</Type>

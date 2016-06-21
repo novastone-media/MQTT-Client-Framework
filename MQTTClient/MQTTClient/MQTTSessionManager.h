@@ -132,7 +132,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
  * @param securityPolicy A custom SSL security policy or nil.
  * @param certificates An NSArray of the pinned certificates to use or nil.
- * @param Protocol version of the connection.
+ * @param protocolLevel Protocol version of the connection.
  */
 
 - (void)connectTo:(NSString *)host

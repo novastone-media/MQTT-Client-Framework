@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.7.9
+> Release date 2016-06-21
+
+[FIX] Legacy connect method does not honor Client Certificates with default transport #160
+[FIX] CFNetwork SSLHandshake failed (-9807) #149
+
 ## MQTT-Client-Framework 0.7.8
 > Release date 2016-05-23
 

@@ -354,6 +354,7 @@
         transport.host = host;
         transport.port = port;
         transport.tls = usingSSL;
+        transport.certificates = self.certificates;
         transport.runLoop = self.runLoop;
         transport.runLoopMode = self.runLoopMode;
         self.transport = transport;

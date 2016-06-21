@@ -27,11 +27,13 @@ an Objective-C native MQTT Framework http://mqtt.org
 Use the CocoaPod MQTTClient! 
 
 Add this to your Podfile:
+
 ```
 pod 'MQTTClient'
 ```
 
 Additionally add this subspec if you want to use MQTT over Websockets:
+
 ```
 pod 'MQTTClient/Websocket'
 ```
@@ -49,7 +51,7 @@ Create a new client and connect to a broker:
 ```objective-c
 #import "MQTTClient.h"
 
-@interface MyDelegate : ... MQTTSessionDelegate>
+\@interface MyDelegate : ... <MQTTSessionDelegate>
 ...
 
         MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
