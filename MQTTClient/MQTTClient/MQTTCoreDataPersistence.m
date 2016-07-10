@@ -288,6 +288,10 @@ static unsigned long long fileSystemFreeSize;
         flow.qosLevel = [NSNumber numberWithUnsignedInteger:qos];
         flow.commandType = [NSNumber numberWithUnsignedInteger:commandType];
         flow.deadline = deadline;
+        
+        NSError *error;
+        [self.managedObjectContext save: &error];
+        
         return flow;
     } else {
         return nil;
