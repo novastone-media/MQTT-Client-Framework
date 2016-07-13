@@ -316,9 +316,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         DDLogVerbose(@"[MQTTSession] disconnecting");
         self.status = MQTTSessionStatusDisconnecting;
         (void)[self encode:[MQTTMessage disconnectMessage]];
-    } else {
-        [self closeInternal];
     }
+    [self closeInternal];
 }
 
 - (void)closeInternal
