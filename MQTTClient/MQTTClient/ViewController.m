@@ -41,7 +41,7 @@
 - (void)addOne:(NSTimer *)timer {
     self.label.text = [NSString stringWithFormat:@"addOne %ld", (unsigned long)self.sessions.count];
 
-    MQTTSession *session = [[MQTTSession alloc] initWithClientId:[NSString stringWithFormat:@"MQTTClient-%ld", self.sessions.count]
+    MQTTSession *session = [[MQTTSession alloc] initWithClientId:[NSString stringWithFormat:@"MQTTClient-%ld", (unsigned long)self.sessions.count]
                                                         userName:nil
                                                         password:nil
                                                        keepAlive:60
@@ -55,7 +55,7 @@
                                                          runLoop:nil
                                                          forMode:nil];
 
-    self.label.text = [NSString stringWithFormat:@"Created %@", [NSString stringWithFormat:@"MQTTClient-%ld", self.sessions.count]];
+    self.label.text = [NSString stringWithFormat:@"Created %@", [NSString stringWithFormat:@"MQTTClient-%ld", (unsigned long)self.sessions.count]];
     session.delegate = self;
     [self.sessions addObject:session];
     [session connectToHost:@"mqtt.localdomain" port:1883];

@@ -1,6 +1,13 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+
+## MQTT-Client-Framework 0.8.0
+> Release date 2016-08-08
+
+[FIX] Application extensions is not supported closes #188
+[FIX] Update MQTTCoreDataPersistence.m pull request  #174
+
 ## MQTT-Client-Framework 0.7.9
 > Release date 2016-06-21
 
