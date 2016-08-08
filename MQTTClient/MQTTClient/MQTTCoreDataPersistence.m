@@ -327,19 +327,23 @@ static unsigned long long fileSystemFreeSize;
 }
 
 - (void)sync {
-    if ([NSThread isMainThread]) {
-        [self internalSync];
-    } else {
-        [self.managedObjectContext performBlock:^{
+    //Lock multithread execution 
+    @synchronized (lock) {
+        if ([NSThread isMainThread]) {
             [self internalSync];
-        }];
-    }
-    if ([NSThread isMainThread]) {
-        [self internalParentSync];
-    } else {
-        [self.managedObjectContext.parentContext performBlock:^{
+        } else {
+            //Changed to block and wait because sometime it was executed before internal parent sync
+            [self.managedObjectContext performBlockAndWait:^{
+                [self internalSync];
+            }];
+        }
+        if ([NSThread isMainThread]) {
             [self internalParentSync];
-        }];
+        } else {
+            [self.managedObjectContext.parentContext performBlock:^{
+                [self internalParentSync];
+            }];
+        }
     }
 }
 
