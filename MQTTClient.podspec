@@ -32,6 +32,7 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTInMemoryPersistence.{h,m}",
 					"MQTTClient/MQTTClient/MQTTLog.h",
+					"MQTTClient/MQTTClient/MQTTClient.h",
 					"MQTTClient/MQTTClient/MQTTMessage.{h,m}",
 					"MQTTClient/MQTTClient/MQTTPersistence.h",
 					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicy.{h,m}",

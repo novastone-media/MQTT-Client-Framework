@@ -180,6 +180,8 @@
         [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
         
         self.session =  [MQTTTestHelpers session:parameters];
+        self.session.willFlag = TRUE;
+        self.session.willTopic = TOPIC;
         self.session.willMsg = [@"will-qos0-non-retained" dataUsingEncoding:NSUTF8StringEncoding];
         
         [self connect:parameters];
@@ -215,7 +217,9 @@
         [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
         
         self.session =  [MQTTTestHelpers session:parameters];
-        self.session.willMsg = [@"will-qos0-non-retained" dataUsingEncoding:NSUTF8StringEncoding];
+        self.session.willFlag = TRUE;
+        self.session.willTopic = TOPIC;
+        self.session.willMsg = [@"will-qos0-retained" dataUsingEncoding:NSUTF8StringEncoding];
         
         self.session.willRetainFlag = TRUE;
         
