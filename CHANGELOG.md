@@ -1,6 +1,10 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.8.1
+> Release date 2016-08-10
+
+[FIX] MQTTClient.h in podspec
 
 ## MQTT-Client-Framework 0.8.0
 > Release date 2016-08-08
