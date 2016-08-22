@@ -4,13 +4,12 @@
 <dict>
 	<key>brokerList</key>
 	<array>
-		<string>local</string>
+		<string>#local</string>
 		<string>#localWS</string>
 		<string>#aWsBroker</string>
-		<string>#mosquitto</string>
+		<string>mosquitto</string>
 		<string>#mosquittoWS</string>
-		<string>#mosquittoTLS</string>
-		<string>#mosquittoTLSClientCert</string>
+		<string>mosquittoTLS</string>
 		<string>#mosquittoWSS</string>
 	</array>
 	<key>brokers</key>
@@ -120,33 +119,6 @@
 			<true/>
 			<key>protocollevel</key>
 			<integer>4</integer>
-		</dict>
-		<key>mosquittoTLSClientCert</key>
-		<dict>
-			<key>host</key>
-			<string>test.mosquitto.org</string>
-			<key>timeout</key>
-			<integer>10</integer>
-			<key>port</key>
-			<integer>8884</integer>
-			<key>tls</key>
-			<true/>
-			<key>secpol</key>
-			<true/>
-			<key>allowUntrustedCertificates</key>
-			<true/>
-			<key>validatesCertificateChain</key>
-			<false/>
-			<key>validatesDomainName</key>
-			<false/>
-			<key>serverCER</key>
-			<string>mosquitto.org</string>
-			<key>protocollevel</key>
-			<integer>4</integer>
-			<key>clientp12</key>
-			<string>KreyChristoph</string>
-			<key>clientp12pass</key>
-			<string>abcde</string>
 		</dict>
 		<key>mosquittoWSS</key>
 		<dict>
