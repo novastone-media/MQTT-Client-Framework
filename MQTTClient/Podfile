@@ -1,11 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'MQTTClient' do
-	platform :ios, '9.0'
-	pod 'CocoaLumberjack'
-	pod 'MQTTClient/Min', :path => '..'
-end
-
 target 'MQTTClientTests' do
 	platform :ios, '6.1'
 	pod 'CocoaLumberjack'
