@@ -1,13 +1,13 @@
 Pod::Spec.new do |mqttc|
 	mqttc.name         = "MQTTClient"
-	mqttc.version      = "0.7.9"
+	mqttc.version      = "0.8.2"
 	mqttc.summary      = "iOS, OSX and tvOS native ObjectiveC MQTT Client Framework"
 	mqttc.homepage     = "https://github.com/ckrey/MQTT-Client-Framework"
 	mqttc.license      = { :type => "EPLv1", :file => "LICENSE" }
 	mqttc.author       = { "Christoph Krey" => "krey.christoph@gmail.com" }
 	mqttc.source       = {
 		:git => "https://github.com/ckrey/MQTT-Client-Framework.git",
-		:tag => "0.7.9",
+		:tag => "0.8.2",
 		:submodules => true
 	}
 
@@ -20,15 +20,41 @@ Pod::Spec.new do |mqttc|
 	mqttc.compiler_flags = '-DLUMBERJACK'
 
 	mqttc.subspec 'Core' do |core|
-		core.source_files =	"MQTTClient/MQTTClient",
-					"MQTTClient/MQTTClient/*.{h,m}"
-		core.dependency 'CocoaLumberjack'
+		core.dependency 'MQTTClient/Min'
+		core.dependency 'MQTTClient/Manager'
+	end
+
+	mqttc.subspec 'Min' do |min|
+		min.source_files =	"MQTTClient/MQTTClient/MQTTCFSocketDecoder.{h,m}",
+					"MQTTClient/MQTTClient/MQTTCFSocketEncoder.{h,m}",
+					"MQTTClient/MQTTClient/MQTTCFSocketTransport.{h,m}",
+					"MQTTClient/MQTTClient/MQTTCoreDataPersistence.{h,m}",
+					"MQTTClient/MQTTClient/MQTTDecoder.{h,m}",
+					"MQTTClient/MQTTClient/MQTTInMemoryPersistence.{h,m}",
+					"MQTTClient/MQTTClient/MQTTLog.h",
+					"MQTTClient/MQTTClient/MQTTClient.h",
+					"MQTTClient/MQTTClient/MQTTMessage.{h,m}",
+					"MQTTClient/MQTTClient/MQTTPersistence.h",
+					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicy.{h,m}",
+					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicyDecoder.{h,m}",
+					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicyEncoder.{h,m}",
+					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicyTransport.{h,m}",
+					"MQTTClient/MQTTClient/MQTTSession.{h,m}",
+					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
+					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
+					"MQTTClient/MQTTClient/MQTTTransport.{h,m}"
+		min.dependency 'CocoaLumberjack'
+	end
+
+	mqttc.subspec 'Manager' do |manager|
+		manager.source_files =	"MQTTClient/MQTTClient/MQTTSessionManager.{h,m}"
+		manager.dependency 'MQTTClient/Min'
 	end
 
 	mqttc.subspec 'Websocket' do |ws|
 		ws.source_files = "MQTTClient/MQTTClient/MQTTWebsocketTransport/*.{h,m}"
 		ws.dependency 'SocketRocket'
-		ws.dependency 'MQTTClient/Core'
+		ws.dependency 'MQTTClient/Min'
 		ws.requires_arc = true
 		ws.libraries = "icucore"
 	end
