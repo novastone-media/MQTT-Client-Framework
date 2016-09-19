@@ -43,7 +43,7 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
 					"MQTTClient/MQTTClient/MQTTTransport.{h,m}"
-		min.dependency 'CocoaLumberjack'
+		min.dependency 'CocoaLumberjack', '2.2.0'
 	end
 
 	mqttc.subspec 'Manager' do |manager|
