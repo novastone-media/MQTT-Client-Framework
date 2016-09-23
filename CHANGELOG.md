@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.8.3
+> Release date 2016-09-23
+
+[FIX] Cannot build after CocoaLumberjack new release #199
+[FIX] Xcode8 / Swift3 compatibility
+
 ## MQTT-Client-Framework 0.8.1
 > Release date 2016-08-10
 

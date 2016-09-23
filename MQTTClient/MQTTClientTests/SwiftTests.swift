@@ -13,7 +13,9 @@ class SwiftTests : MQTTTestHelpers {
     var sessionError = false;
     var sessionReceived = false;
     var sessionSubAcked = false;
-    
+    var broker: NSDictionary = NSDictionary();
+
+
     override func setUp() {
         super.setUp();
     }
@@ -23,34 +25,39 @@ class SwiftTests : MQTTTestHelpers {
     }
     
     func testSwiftSubscribe() {
+        print("testSwiftSubscribe \(brokers)")
+
         for brokerName in brokers.allKeys {
-            var broker: NSDictionary;
-            broker = brokers.valueForKey(brokerName as! String) as! NSDictionary;
-            if (broker.valueForKey("websocket"))?.boolValue != true {
+            print("testSwiftSubscribe \(brokerName)")
+
+            broker = brokers.value(forKey: brokerName as! String) as! NSDictionary;
+            print("testSwiftSubscribe \(broker)")
+
+            if ((broker.value(forKey: "websocket")) as AnyObject).boolValue != true {
                 
                 session = MQTTSession();
                 session!.delegate = self;
                 
-                session!.connectToHost(broker.valueForKey("host") as! String,
-                    port:(broker.valueForKey("port")?.unsignedIntValue)!,
-                    usingSSL: (broker.valueForKey("tls")?.boolValue)!);
+                session!.connect(toHost: broker.value(forKey: "host") as! String,
+                    port:((broker.value(forKey: "port") as AnyObject).uint32Value)!,
+                    usingSSL: ((broker.value(forKey: "tls") as AnyObject).boolValue)!);
                 while !sessionConnected && !sessionError {
-                    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
+                    RunLoop.current.run(until: Date(timeIntervalSinceNow: 1))
                 }
                 
-                session!.subscribeToTopic("#", atLevel: .AtMostOnce)
+                session!.subscribe(toTopic: "#", at: .atMostOnce)
 
                 while sessionConnected && !sessionError && !sessionSubAcked {
-                    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
+                    RunLoop.current.run(until: Date(timeIntervalSinceNow: 1))
                 }
                 
-                session!.publishData("sent from Xcode 6.0 using Swift".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false),
+                session!.publishData("sent from Xcode 8.0 using Swift".data(using: String.Encoding.utf8, allowLossyConversion: false),
                     onTopic: TOPIC,
                     retain: false,
-                    qos: .AtMostOnce)
+                    qos: .atMostOnce)
                 
                 while sessionConnected && !sessionError && !sessionReceived {
-                    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
+                    RunLoop.current.run(until: Date(timeIntervalSinceNow: 1))
                 }
                 
                 session!.close()
@@ -60,16 +67,15 @@ class SwiftTests : MQTTTestHelpers {
     
     func testSessionManager() {
         for brokerName in brokers.allKeys {
-            var broker: NSDictionary;
-            broker = brokers.valueForKey(brokerName as! String) as! NSDictionary;
-            if (broker.valueForKey("websocket"))?.boolValue != true {
+            broker = brokers.value(forKey: brokerName as! String) as! NSDictionary;
+            if ((broker.value(forKey: "websocket")) as AnyObject).boolValue != true {
                 
                 let m = MQTTSessionManager()
                 m.delegate = self
                 
-                m.connectTo(broker.valueForKey("host") as! String,
-                    port: (broker.valueForKey("port")?.integerValue)!,
-                    tls:  (broker.valueForKey("tls")?.boolValue)!,
+                m.connect(to: broker.value(forKey: "host") as! String,
+                    port: ((broker.value(forKey: "port") as AnyObject).integerValue)!,
+                    tls:  ((broker.value(forKey: "tls") as AnyObject).boolValue)!,
                     keepalive: 60,
                     clean: true,
                     auth: false,
@@ -78,36 +84,36 @@ class SwiftTests : MQTTTestHelpers {
                     will: false,
                     willTopic: nil,
                     willMsg: nil,
-                    willQos: .AtMostOnce,
+                    willQos: .atMostOnce,
                     willRetainFlag: false,
                     withClientId: nil)
                 
-                while (m.state != .Connected) {
+                while (m.state != .connected) {
                     print("waiting for connect %d", m.state);
-                    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1))
+                    RunLoop.current.run(until: Date(timeIntervalSinceNow: 1))
                 }
 
             }
         }
     }
-    
-    override func handleEvent(session: MQTTSession!, event eventCode: MQTTSessionEvent, error: NSError!) {
+
+    override func handleEvent(_ session: MQTTSession!, event eventCode: MQTTSessionEvent, error: Error!) {
         switch eventCode {
-        case .Connected:
+        case .connected:
             sessionConnected = true
-        case .ConnectionClosed:
+        case .connectionClosed:
             sessionConnected = false
         default:
             sessionError = true
         }
     }
-    
-    override func newMessage(session: MQTTSession!, data: NSData!, onTopic topic: String!, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
+
+    override func newMessage(_ session: MQTTSession!, data: Data!, onTopic topic: String!, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
         print("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
         sessionReceived = true;
     }
 
-    override func subAckReceived(session: MQTTSession!, msgID: UInt16, grantedQoss qoss: [NSNumber]!) {
+    override func subAckReceived(_ session: MQTTSession!, msgID: UInt16, grantedQoss qoss: [NSNumber]!) {
         sessionSubAcked = true;
     }
     

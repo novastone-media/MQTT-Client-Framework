@@ -11,7 +11,7 @@
        </Node>
        <Node>
         <Name>MQTT-Client-Framework iOS/OSX/tvOS Release Notes</Name>
-        <Path>md__Users_ckrey_MQTT-Client-Framework_CHANGELOG.html</Path>
+        <Path>md___users_ckrey__m_q_t_t-_client-_framework__c_h_a_n_g_e_l_o_g.html</Path>
        </Node>
        <Node>
         <Name>Classes</Name>
@@ -125,7 +125,7 @@
              <Node>
               <Name>allFlowsforClientId:incomingFlag:</Name>
               <Path>protocol_m_q_t_t_persistence-p.html</Path>
-              <Anchor>abc43bd29d5edbd9d42ef3a8f8f73287d</Anchor>
+              <Anchor>a513e62e567e187ce73fab26f53d2272a</Anchor>
              </Node>
              <Node>
               <Name>deleteAllFlowsForClientId:</Name>
@@ -140,12 +140,12 @@
              <Node>
               <Name>flowforClientId:incomingFlag:messageId:</Name>
               <Path>protocol_m_q_t_t_persistence-p.html</Path>
-              <Anchor>a2223834cf720c51f53fe25921aff4fe4</Anchor>
+              <Anchor>a2ca81852c486e32d888ef502b8dc47d5</Anchor>
              </Node>
              <Node>
               <Name>storeMessageForClientId:topic:data:retainFlag:qos:msgId:incomingFlag:commandType:deadline:</Name>
               <Path>protocol_m_q_t_t_persistence-p.html</Path>
-              <Anchor>a3d0c50e06a2b54f40fb5356c5309454a</Anchor>
+              <Anchor>ac4dcb1941bac80050f643fab3faf0fe4</Anchor>
              </Node>
              <Node>
               <Name>sync</Name>
@@ -216,22 +216,22 @@
              <Node>
               <Name>publishData:onTopic:retain:qos:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>af76085443daa0ceadf01acc828c91370</Anchor>
+              <Anchor>a7551772841b6bc2f46c0848d323fd0f7</Anchor>
              </Node>
              <Node>
               <Name>publishData:onTopic:retain:qos:publishHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a1a76bb9e8855104282648afa0505e625</Anchor>
+              <Anchor>a7cea798eb2e74c5885fa60dee04539f0</Anchor>
              </Node>
              <Node>
               <Name>subscribeToTopic:atLevel:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>ace91fa3ca0b5eb08a2a48706c840dab3</Anchor>
+              <Anchor>aafb7270fc99918effc0a39064ee5f91e</Anchor>
              </Node>
              <Node>
               <Name>subscribeToTopic:atLevel:subscribeHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a8deb1a3c1a12c4a3924c5ebc1e97f2db</Anchor>
+              <Anchor>adaefcb4ee5a31355846653eddffc494f</Anchor>
              </Node>
              <Node>
               <Name>subscribeToTopics:</Name>
@@ -241,7 +241,7 @@
              <Node>
               <Name>subscribeToTopics:subscribeHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>aa4068492603a9fb752814af4d02cc7e2</Anchor>
+              <Anchor>a26abfdc1d64491bff4825727042e3342</Anchor>
              </Node>
              <Node>
               <Name>unsubscribeTopic:</Name>
@@ -251,7 +251,7 @@
              <Node>
               <Name>unsubscribeTopic:unsubscribeHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a07b306c66528e9887798476bccab1344</Anchor>
+              <Anchor>a49e7dde1369377da92ae0f7fc2eb187f</Anchor>
              </Node>
              <Node>
               <Name>unsubscribeTopics:</Name>
@@ -261,7 +261,7 @@
              <Node>
               <Name>unsubscribeTopics:unsubscribeHandler:</Name>
               <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a101c813012ca11ff6c144db5a2c46c76</Anchor>
+              <Anchor>a1d566cac765cdcdb2563ffa45ef53bbe</Anchor>
              </Node>
              <Node>
               <Name>certificates</Name>
@@ -386,103 +386,103 @@
             </Subnodes>
            </Node>
            <Node>
-            <Name>&lt;MQTTSessionDelegate&gt;</Name>
-            <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
+            <Name>&lt;MQTTSessionDelegate &gt;</Name>
+            <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
             <Subnodes>
              <Node>
               <Name>buffered:flowingIn:flowingOut:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a66d6b40de38077ee28d05048eec4e3f9</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a1702bf3189050f5f3f593a72f36f6408</Anchor>
              </Node>
              <Node>
               <Name>buffered:queued:flowingIn:flowingOut:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a8d9602d0b89fa2c3a0009150e57edc87</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>acc3f5c247e8dec26d625ef08ad3d33e3</Anchor>
              </Node>
              <Node>
               <Name>connected:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a663f6af2141773ba925ddf4ca44a5b66</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a01fe0f17f1c6faca6c21227203e5fd55</Anchor>
              </Node>
              <Node>
               <Name>connected:sessionPresent:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a443d92270a3c1a1cd0330f1be1e66952</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>aee43b13ba6cecba98c5b604c8a83bbdd</Anchor>
              </Node>
              <Node>
               <Name>connectionClosed:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a6ee6176897e9dc28236c562aece2a375</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a6593d68033e6a0ceb424de60c357f035</Anchor>
              </Node>
              <Node>
               <Name>connectionError:error:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a8895314112168286947d78a102185ab2</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a2c72b0bfc17acb27ce12b9f7c4b879e8</Anchor>
              </Node>
              <Node>
               <Name>connectionRefused:error:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a179c4f9104394b3843a20862d50fd813</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a334a93246a59295ed3da062ef6c0a7fa</Anchor>
              </Node>
              <Node>
               <Name>handleEvent:event:error:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a168b8ff4bd95ffbfe61a8b10236860f8</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>adabd2fd2832f35d5e596b0307fe74fe3</Anchor>
              </Node>
              <Node>
               <Name>ignoreReceived:type:qos:retained:duped:mid:data:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a267adcc60c332f2ec4eb0326a3f7e8d1</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a83a727d0d2828817439834310c1eff1f</Anchor>
              </Node>
              <Node>
               <Name>messageDelivered:msgID:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a9937e5c9917389b2fde60b1e3a2d390c</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>ab96022535f3a7dce2234515ccf4259e3</Anchor>
              </Node>
              <Node>
               <Name>newMessage:data:onTopic:qos:retained:mid:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a85ecb50aa7dfb9865ec6acfd1192b92c</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a953cce622315d5f3072d91e52f6abf5c</Anchor>
              </Node>
              <Node>
               <Name>newMessageWithFeedback:data:onTopic:qos:retained:mid:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a5e103157ac155294481ebca786bfb5fd</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>aa96b47be7362179ca679ec1d14376ab7</Anchor>
              </Node>
              <Node>
               <Name>protocolError:error:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a6ed1b59122ad0e0557b8bcf5de89f7ca</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>aef7d9bfd2b53c2e188a0b88554093db9</Anchor>
              </Node>
              <Node>
               <Name>received:type:qos:retained:duped:mid:data:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>ae506789580b1b461901e7846407b9657</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a2e8ce3ec932c894249724e0d4191e94b</Anchor>
              </Node>
              <Node>
               <Name>sending:type:qos:retained:duped:mid:data:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>acb908b938b9b9af60c3da23feed5850b</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>ae91831aacee0d83bbba7ba8e407b46d9</Anchor>
              </Node>
              <Node>
               <Name>session:handleEvent:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a469397d413d288d61b98112f643d0f9c</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>aa308f351c7b824665fba1c6875789c1e</Anchor>
              </Node>
              <Node>
               <Name>session:newMessage:onTopic:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>a7c379d26811e242b52a05d09cf60d804</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>aacbda6f90a303f2f1a24cc364ba0f1d5</Anchor>
              </Node>
              <Node>
               <Name>subAckReceived:msgID:grantedQoss:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>ab3a87b0ee36a0c9910e855fb6253a745</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a23603651fef7f317958e947c95a6a726</Anchor>
              </Node>
              <Node>
               <Name>unsubAckReceived:msgID:</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Anchor>ae1afb843f54b60cb82ce093b62b57101</Anchor>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a9f740585b1691979cdb40003eb9554b0</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -493,22 +493,22 @@
              <Node>
               <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
-              <Anchor>af50a6c56e8d19ef1e739cccb9e11722a</Anchor>
+              <Anchor>a1c0903acd31887dfa1e1d16039aa53ec</Anchor>
              </Node>
              <Node>
               <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:securityPolicy:certificates:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
-              <Anchor>a58a397cb2851b3bb5c3cf2a49c109204</Anchor>
+              <Anchor>af3e7b52cf514bd47d5ec140dba16abf5</Anchor>
              </Node>
              <Node>
               <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:will:willTopic:willMsg:willQos:willRetainFlag:withClientId:securityPolicy:certificates:protocolLevel:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
-              <Anchor>a32e61b2ffb4f625be6b40cb41fdbfe5f</Anchor>
+              <Anchor>a81d38d54b7a1e1feea69ac4e80a7ff51</Anchor>
              </Node>
              <Node>
               <Name>connectTo:port:tls:keepalive:clean:auth:user:pass:willTopic:will:willQos:willRetainFlag:withClientId:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
-              <Anchor>af0b3aa800e54438a160b1c1b78b27898</Anchor>
+              <Anchor>a4ebc8a89857aeae6377861c8fea310d2</Anchor>
              </Node>
              <Node>
               <Name>connectToLast</Name>
@@ -523,12 +523,12 @@
              <Node>
               <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
-              <Anchor>a99bcb6e9ae06072f890947a4f53d7dd2</Anchor>
+              <Anchor>ae57cebdca6694242b821cf089fea458d</Anchor>
              </Node>
              <Node>
               <Name>sendData:topic:qos:retain:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
-              <Anchor>a9593770a0aac359c57aee9260b2280a8</Anchor>
+              <Anchor>a7755c32b246dcefc8ad6d50a51f2e616</Anchor>
              </Node>
              <Node>
               <Name>delegate</Name>
@@ -558,18 +558,18 @@
             </Subnodes>
            </Node>
            <Node>
-            <Name>&lt;MQTTSessionManagerDelegate&gt;</Name>
-            <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
+            <Name>&lt;MQTTSessionManagerDelegate &gt;</Name>
+            <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
             <Subnodes>
              <Node>
               <Name>handleMessage:onTopic:retained:</Name>
-              <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
-              <Anchor>aa607c1d6a9a1b2a9ea9a707706c393bb</Anchor>
+              <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
+              <Anchor>a227652079bb618b7b72daeb2bc4ff2ec</Anchor>
              </Node>
              <Node>
               <Name>messageDelivered:</Name>
-              <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
-              <Anchor>ae58c6a8f7ac61d31c85a9ea311fbd57d</Anchor>
+              <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
+              <Anchor>ac5c24515442786b7f4ee2b29a103fac4</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -580,7 +580,7 @@
              <Node>
               <Name>evaluateServerTrust:forDomain:</Name>
               <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
-              <Anchor>ab964313603e8eb003494778e71a80bb2</Anchor>
+              <Anchor>a1d6690010fc530144d98eaf31c9af7e4</Anchor>
              </Node>
              <Node>
               <Name>allowInvalidCertificates</Name>
@@ -625,69 +625,69 @@
             <Path>interface_m_q_t_t_transport.html</Path>
            </Node>
            <Node>
-            <Name>&lt;MQTTTransport&gt;</Name>
-            <Path>protocol_m_q_t_t_transport-p.html</Path>
+            <Name>&lt;MQTTTransport &gt;</Name>
+            <Path>protocol_m_q_t_t_transport_01-p.html</Path>
             <Subnodes>
              <Node>
               <Name>close</Name>
-              <Path>protocol_m_q_t_t_transport-p.html</Path>
-              <Anchor>aa293cdc8dc58de1d7e80c1a2c3ce6062</Anchor>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
+              <Anchor>a7a0c40f02204b591d3e47ee02d83c5e6</Anchor>
              </Node>
              <Node>
               <Name>open</Name>
-              <Path>protocol_m_q_t_t_transport-p.html</Path>
-              <Anchor>a4f1224183fde2aaef640a3f2ab7afe61</Anchor>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
+              <Anchor>a429a7bae51d2c25dcface523c2a75dae</Anchor>
              </Node>
              <Node>
               <Name>send:</Name>
-              <Path>protocol_m_q_t_t_transport-p.html</Path>
-              <Anchor>ae4e6c781ff7ce72ac45f516402f774da</Anchor>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
+              <Anchor>adfba8a25ec9ae9cbc65d908018118555</Anchor>
              </Node>
              <Node>
               <Name>delegate</Name>
-              <Path>protocol_m_q_t_t_transport-p.html</Path>
-              <Anchor>a731cebd9439acdd3b766615ecb8222f3</Anchor>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
+              <Anchor>a182ba6c4509d5b5e38ec0c783cd1b26d</Anchor>
              </Node>
              <Node>
               <Name>runLoop</Name>
-              <Path>protocol_m_q_t_t_transport-p.html</Path>
-              <Anchor>a0c6263164dbe55f83ff125e158a71aaa</Anchor>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
+              <Anchor>a7b97ce4c4dcc299bcf68909cd31eb3d9</Anchor>
              </Node>
              <Node>
               <Name>runLoopMode</Name>
-              <Path>protocol_m_q_t_t_transport-p.html</Path>
-              <Anchor>a5bf8de65dd7e0e279fe5d3749c85134b</Anchor>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
+              <Anchor>af671f3734cc589cfca98add6750ac45d</Anchor>
              </Node>
              <Node>
               <Name>state</Name>
-              <Path>protocol_m_q_t_t_transport-p.html</Path>
-              <Anchor>a9b5d6563956b03a4f613a3b276ebffe4</Anchor>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
+              <Anchor>a599b4d50a3951a9effaa08895b45f340</Anchor>
              </Node>
             </Subnodes>
            </Node>
            <Node>
-            <Name>&lt;MQTTTransportDelegate&gt;</Name>
-            <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
+            <Name>&lt;MQTTTransportDelegate &gt;</Name>
+            <Path>protocol_m_q_t_t_transport_delegate_01-p.html</Path>
             <Subnodes>
              <Node>
               <Name>mqttTransport:didFailWithError:</Name>
-              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
-              <Anchor>aafc48442e23cf641f32c0f894203bedd</Anchor>
+              <Path>protocol_m_q_t_t_transport_delegate_01-p.html</Path>
+              <Anchor>a8a3b230eddcaa652f4e132c7a970d0f1</Anchor>
              </Node>
              <Node>
               <Name>mqttTransport:didReceiveMessage:</Name>
-              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
-              <Anchor>a9395babf3625db76a24fb69fec35bd50</Anchor>
+              <Path>protocol_m_q_t_t_transport_delegate_01-p.html</Path>
+              <Anchor>a19668acdd5d230dd7080a22560ce06a1</Anchor>
              </Node>
              <Node>
               <Name>mqttTransportDidClose:</Name>
-              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
-              <Anchor>a4684c6afb6c16d18204cfdb9f2d66adc</Anchor>
+              <Path>protocol_m_q_t_t_transport_delegate_01-p.html</Path>
+              <Anchor>afa32c4b8636994afa1ad02c6453971ff</Anchor>
              </Node>
              <Node>
               <Name>mqttTransportDidOpen:</Name>
-              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
-              <Anchor>a6799d36db6386507592938012ac553f3</Anchor>
+              <Path>protocol_m_q_t_t_transport_delegate_01-p.html</Path>
+              <Anchor>a90420bb9f04760681e64a4a799fe432b</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -796,6 +796,44 @@
             </Subnodes>
            </Node>
            <Node>
+            <Name>&lt;MQTTSessionDelegate&gt;</Name>
+            <Path></Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTSessionManager</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>&lt;MQTTTransport&gt;</Name>
+            <Path></Path>
+            <Subnodes>
+             <Node>
+              <Name>MQTTCFSocketTransport</Name>
+              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTTransport</Name>
+              <Path>interface_m_q_t_t_transport.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>MQTTCFSocketTransport</Name>
+                <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+               </Node>
+               <Node>
+                <Name>MQTTWebsocketTransport</Name>
+                <Path>interface_m_q_t_t_websocket_transport.html</Path>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>MQTTWebsocketTransport</Name>
+              <Path>interface_m_q_t_t_websocket_transport.html</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
             <Name>NSManagedObject</Name>
             <Path></Path>
             <Subnodes>
@@ -806,7 +844,7 @@
             </Subnodes>
            </Node>
            <Node>
-            <Name>NSObject</Name>
+            <Name>&lt;NSObject&gt;</Name>
             <Path></Path>
             <Subnodes>
              <Node>
@@ -830,8 +868,16 @@
               <Path>interface_m_q_t_t_session.html</Path>
              </Node>
              <Node>
+              <Name>&lt;MQTTSessionDelegate &gt;</Name>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+             </Node>
+             <Node>
               <Name>MQTTSessionManager</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
+             </Node>
+             <Node>
+              <Name>&lt;MQTTSessionManagerDelegate &gt;</Name>
+              <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
              </Node>
              <Node>
               <Name>MQTTSSLSecurityPolicy</Name>
@@ -840,58 +886,14 @@
              <Node>
               <Name>MQTTTransport</Name>
               <Path>interface_m_q_t_t_transport.html</Path>
-              <Subnodes>
-               <Node>
-                <Name>MQTTCFSocketTransport</Name>
-                <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
-               </Node>
-               <Node>
-                <Name>MQTTWebsocketTransport</Name>
-                <Path>interface_m_q_t_t_websocket_transport.html</Path>
-               </Node>
-              </Subnodes>
-             </Node>
-            </Subnodes>
-           </Node>
-           <Node>
-            <Name>&lt;NSObject&gt;</Name>
-            <Path></Path>
-            <Subnodes>
-             <Node>
-              <Name>&lt;MQTTSessionDelegate&gt;</Name>
-              <Path>protocol_m_q_t_t_session_delegate-p.html</Path>
-              <Subnodes>
-               <Node>
-                <Name>MQTTSessionManager</Name>
-                <Path>interface_m_q_t_t_session_manager.html</Path>
-               </Node>
-              </Subnodes>
              </Node>
              <Node>
-              <Name>&lt;MQTTSessionManagerDelegate&gt;</Name>
-              <Path>protocol_m_q_t_t_session_manager_delegate-p.html</Path>
+              <Name>&lt;MQTTTransport &gt;</Name>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
              </Node>
              <Node>
-              <Name>&lt;MQTTTransport&gt;</Name>
-              <Path>protocol_m_q_t_t_transport-p.html</Path>
-              <Subnodes>
-               <Node>
-                <Name>MQTTCFSocketTransport</Name>
-                <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
-               </Node>
-               <Node>
-                <Name>MQTTTransport</Name>
-                <Path>interface_m_q_t_t_transport.html</Path>
-               </Node>
-               <Node>
-                <Name>MQTTWebsocketTransport</Name>
-                <Path>interface_m_q_t_t_websocket_transport.html</Path>
-               </Node>
-              </Subnodes>
-             </Node>
-             <Node>
-              <Name>&lt;MQTTTransportDelegate&gt;</Name>
-              <Path>protocol_m_q_t_t_transport_delegate-p.html</Path>
+              <Name>&lt;MQTTTransportDelegate &gt;</Name>
+              <Path>protocol_m_q_t_t_transport_delegate_01-p.html</Path>
              </Node>
             </Subnodes>
            </Node>

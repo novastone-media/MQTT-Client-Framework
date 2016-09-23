@@ -1,13 +1,13 @@
 Pod::Spec.new do |mqttc|
 	mqttc.name         = "MQTTClient"
-	mqttc.version      = "0.8.2"
+	mqttc.version      = "0.8.3"
 	mqttc.summary      = "iOS, OSX and tvOS native ObjectiveC MQTT Client Framework"
 	mqttc.homepage     = "https://github.com/ckrey/MQTT-Client-Framework"
 	mqttc.license      = { :type => "EPLv1", :file => "LICENSE" }
 	mqttc.author       = { "Christoph Krey" => "krey.christoph@gmail.com" }
 	mqttc.source       = {
 		:git => "https://github.com/ckrey/MQTT-Client-Framework.git",
-		:tag => "0.8.2",
+		:tag => "0.8.3",
 		:submodules => true
 	}
 
@@ -17,7 +17,6 @@ Pod::Spec.new do |mqttc|
 	mqttc.osx.deployment_target = "10.10"
 	mqttc.tvos.deployment_target = "9.0"
 	mqttc.default_subspec = 'Core'
-	mqttc.compiler_flags = '-DLUMBERJACK'
 
 	mqttc.subspec 'Core' do |core|
 		core.dependency 'MQTTClient/Min'
@@ -25,7 +24,13 @@ Pod::Spec.new do |mqttc|
 	end
 
 	mqttc.subspec 'Min' do |min|
-		min.source_files =	"MQTTClient/MQTTClient/MQTTCFSocketDecoder.{h,m}",
+		min.dependency 'MQTTClient/MinNSLog'
+		min.dependency 'CocoaLumberjack', '~> 2.3.0'
+		min.compiler_flags = '-DLUMBERJACK'
+	end
+
+	mqttc.subspec 'MinNSLog' do |minnslog|
+		minnslog.source_files =	"MQTTClient/MQTTClient/MQTTCFSocketDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTCFSocketEncoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTCFSocketTransport.{h,m}",
 					"MQTTClient/MQTTClient/MQTTCoreDataPersistence.{h,m}",
@@ -43,7 +48,6 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
 					"MQTTClient/MQTTClient/MQTTTransport.{h,m}"
-		min.dependency 'CocoaLumberjack'
 	end
 
 	mqttc.subspec 'Manager' do |manager|
