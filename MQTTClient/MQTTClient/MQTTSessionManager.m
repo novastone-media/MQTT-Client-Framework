@@ -403,8 +403,8 @@
             [runLoop addTimer:self.reconnectTimer
                       forMode:NSDefaultRunLoopMode];
 
-            self.state = MQTTSessionManagerStateError;
             self.lastErrorCode = error;
+            self.state = MQTTSessionManagerStateError;
             break;
         }
         default:

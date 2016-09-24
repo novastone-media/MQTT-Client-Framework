@@ -1,6 +1,11 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.8.4
+> Release date 2016-09-??
+
+[FIX] MQTTSessionManager lastErrorCode set too late? #203
+
 ## MQTT-Client-Framework 0.8.3
 > Release date 2016-09-23
 
