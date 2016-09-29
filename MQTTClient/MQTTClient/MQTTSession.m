@@ -15,6 +15,12 @@
 
 #import "MQTTLog.h"
 
+#ifdef LUMBERJACK
+#warning with LumberJack
+#else
+#warning without LumberJack
+#endif
+
 NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 @interface MQTTSession() <MQTTDecoderDelegate, MQTTTransportDelegate>

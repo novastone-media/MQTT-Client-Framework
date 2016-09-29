@@ -31,12 +31,27 @@ Add this to your Podfile:
 ```
 pod 'MQTTClient'
 ```
+which is a short for
+```
+pod 'MQTTClient/Min'
+pod 'MQTTClient/Manager'
+```
+
+The Manager subspec includes the MQTTSessionManager class.
 
 Additionally add this subspec if you want to use MQTT over Websockets:
 
 ```
 pod 'MQTTClient/Websocket'
 ```
+
+If you want to do your logging with CocoaLumberjack (my suggestion), use
+```
+pod 'MQTTClient/MinL'
+pod 'MQTTClient/ManagerL'
+pod 'MQTTClient/WebsocketL'
+```
+instead.
 
 Or use the dynamic library created in the MQTTFramework target.
 

@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
+#import "MQTTLog.h"
 #import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
 
@@ -22,6 +23,13 @@
 
 - (id)setup:(NSDictionary *)parameters
 {
+#ifdef LUMBERJACK
+    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
+    [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+#endif
+
     self.parameters = parameters;
 
     self.session = [MQTTTestHelpers session:parameters];
@@ -117,10 +125,12 @@
 {
     [super setUp];
     
+#ifdef LUMBERJACK
     if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
     if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+    [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+#endif
 
 }
 

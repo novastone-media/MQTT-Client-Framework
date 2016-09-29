@@ -3,20 +3,23 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'MQTTClientTests' do
 	platform :ios, '6.1'
 	pod 'CocoaLumberjack'
-	pod 'MQTTClient', :path => '..'
-	pod 'MQTTClient/Websocket', :path => '..'
+	pod 'MQTTClient/MinL', :path => '..'
+	pod 'MQTTClient/ManagerL', :path => '..'
+	pod 'MQTTClient/WebsocketL', :path => '..'
 end
 
 target 'MQTTClientTVTests' do
 	platform :tvos, '9.0'
 	pod 'CocoaLumberjack'
-	pod 'MQTTClient', :path => '..'
-	pod 'MQTTClient/Websocket', :path => '..'
+	pod 'MQTTClient/MinL', :path => '..'
+	pod 'MQTTClient/ManagerL', :path => '..'
+	pod 'MQTTClient/WebsocketL', :path => '..'
 end
 
 target 'MQTTClientOSXTests' do
 	platform :osx, '10.10'
 	pod 'CocoaLumberjack'
-	pod 'MQTTClient', :path => '..'
-	pod 'MQTTClient/Websocket', :path => '..'
+	pod 'MQTTClient/MinL', :path => '..'
+	pod 'MQTTClient/ManagerL', :path => '..'
+	pod 'MQTTClient/WebsocketL', :path => '..'
 end

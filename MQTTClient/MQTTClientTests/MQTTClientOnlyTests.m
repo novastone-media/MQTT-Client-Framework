@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
+#import "MQTTLog.h"
 #import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
 
@@ -19,10 +20,13 @@
 - (void)setUp {
     [super setUp];
     
+#ifdef LUMBERJACK
     if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
         [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
     if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
         [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+#endif
+    
 }
 
 - (void)tearDown {

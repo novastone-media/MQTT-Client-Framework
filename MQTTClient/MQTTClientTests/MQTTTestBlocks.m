@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
+#import "MQTTLog.h"
 #import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
 

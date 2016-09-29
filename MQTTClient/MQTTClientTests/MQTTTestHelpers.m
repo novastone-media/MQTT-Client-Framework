@@ -6,6 +6,7 @@
 //  Copyright © 2015-2016 Christoph Krey. All rights reserved.
 //
 
+#import "MQTTLog.h"
 #import "MQTTTestHelpers.h"
 #import "MQTTCFSocketTransport.h"
 #import "MQTTInMemoryPersistence.h"
@@ -18,12 +19,13 @@
 - (void)setUp {
     [super setUp];
     
-    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
+#ifdef LUMBERJACK
+   if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
     if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-    
-    
+    [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
+#endif
+
     NSURL *url = [[NSBundle bundleForClass:[MQTTTestHelpers class]] URLForResource:@"MQTTTestHelpers"
                                                                      withExtension:@"plist"];
     NSDictionary *plist = [NSDictionary dictionaryWithContentsOfURL:url];

@@ -13,14 +13,6 @@
 #import "MQTTSessionManager.h"
 #import "MQTTSSLSecurityPolicy.h"
 
-#define LOG_LEVEL_DEF ddLogLevel
-#import <CocoaLumberjack/CocoaLumberjack.h>
-#ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-#else
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#endif
-
 #define TOPIC @"MQTTClient"
 #define MULTI 15 // some test servers are limited in concurrent sessions
 #define BULK 100 // some test servers are limited in queue size

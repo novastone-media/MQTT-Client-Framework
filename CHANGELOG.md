@@ -1,6 +1,11 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.8.5
+> Release date 2016-09-29
+
+[FIX] CocoaLumberjack dependency resolved see #199 and README.md
+
 ## MQTT-Client-Framework 0.8.4
 > Release date 2016-09-??
 
