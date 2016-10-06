@@ -17,7 +17,7 @@
 #import "MQTTCFSocketTransport.h"
 #import "MQTTCoreDataPersistence.h"
 #import "MQTTSSLSecurityPolicyTransport.h"
-
+#import "MQTTSessionManager.h"
 
 //! Project version number for MQTTFramework.
 FOUNDATION_EXPORT double MQTTFrameworkVersionNumber;
