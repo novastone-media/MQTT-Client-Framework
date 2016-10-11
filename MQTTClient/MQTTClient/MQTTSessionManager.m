@@ -52,6 +52,7 @@
 
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *internalSubscriptions;
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
+@property (strong, nonatomic) NSLock *subscriptionLock;
 
 @end
 
@@ -110,6 +111,7 @@
                           name:UIApplicationDidBecomeActiveNotification
                         object:nil];
 #endif
+    self.subscriptionLock = [[NSLock alloc] init];
     return self;
 }
 
@@ -422,9 +424,9 @@
 - (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
     if (self.clean || !self.reconnectFlag || !sessionPresent) {
         NSDictionary *subscriptions = [self.internalSubscriptions copy];
-        @synchronized(self.effectiveSubscriptions) {
-            self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
-        }
+        [self.subscriptionLock lock];
+        self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
+        [self.subscriptionLock unlock];
         if (subscriptions.count) {
             [self.session subscribeToTopics:subscriptions subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
                 if (!error) {
@@ -432,11 +434,11 @@
                     for (int i = 0; i < allTopics.count; i++) {
                         NSString *topic = allTopics[i];
                         NSNumber *gQos = gQoss[i];
-                        @synchronized(self.effectiveSubscriptions) {
-                            NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
-                            [newEffectiveSubscriptions setObject:gQos forKey:topic];
-                            self.effectiveSubscriptions = newEffectiveSubscriptions;
-                        }
+                        [self.subscriptionLock lock];
+                        NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                        [newEffectiveSubscriptions setObject:gQos forKey:topic];
+                        self.effectiveSubscriptions = newEffectiveSubscriptions;
+                        [self.subscriptionLock unlock];
                     }
                 }
             }];
@@ -497,11 +499,11 @@
             if (![newSubscriptions objectForKey:topicFilter]) {
                 [self.session unsubscribeTopic:topicFilter unsubscribeHandler:^(NSError *error) {
                     if (!error) {
-                        @synchronized(self.effectiveSubscriptions) {
-                            NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
-                            [newEffectiveSubscriptions removeObjectForKey:topicFilter];
-                            self.effectiveSubscriptions = newEffectiveSubscriptions;
-                        }
+                        [self.subscriptionLock lock];
+                        NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                        [newEffectiveSubscriptions removeObjectForKey:topicFilter];
+                        self.effectiveSubscriptions = newEffectiveSubscriptions;
+                        [self.subscriptionLock unlock];
                     }
                 }];
             }
@@ -514,11 +516,11 @@
                 [self.session subscribeToTopic:topicFilter atLevel:qos subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
                     if (!error) {
                         NSNumber *gQos = gQoss[0];
-                        @synchronized(self.effectiveSubscriptions) {
-                            NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
-                            [newEffectiveSubscriptions setObject:gQos forKey:topicFilter];
-                            self.effectiveSubscriptions = newEffectiveSubscriptions;
-                        }
+                        [self.subscriptionLock lock];
+                        NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                        [newEffectiveSubscriptions setObject:gQos forKey:topicFilter];
+                        self.effectiveSubscriptions = newEffectiveSubscriptions;
+                        [self.subscriptionLock unlock];
                     }
                 }];
             }
