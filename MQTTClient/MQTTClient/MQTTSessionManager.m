@@ -76,7 +76,7 @@
 - (id)init {
     self = [super init];
 
-    self.state = MQTTSessionManagerStateStarting;
+    [self updateState:MQTTSessionManagerStateStarting];
     self.internalSubscriptions = [[NSMutableDictionary alloc] init];
     self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
     
@@ -350,12 +350,21 @@
 
 - (void)disconnect
 {
-    self.state = MQTTSessionManagerStateClosing;
+    [self updateState:MQTTSessionManagerStateClosing];
     [self.session close];
 
     if (self.reconnectTimer) {
         [self.reconnectTimer invalidate];
         self.reconnectTimer = nil;
+    }
+}
+
+- (void)updateState:(MQTTSessionManagerState)newState
+{
+    self.state = newState;
+    
+    if ([self.delegate respondsToSelector:@selector(sessionManager:didChangeState:)]) {
+        [self.delegate sessionManager:self didChangeState:newState];
     }
 }
 
@@ -379,19 +388,19 @@
         case MQTTSessionEventConnected:
         {
             self.lastErrorCode = nil;
-            self.state = MQTTSessionManagerStateConnected;
+            [self updateState:MQTTSessionManagerStateConnected];
             break;
         }
         case MQTTSessionEventConnectionClosed:
         case MQTTSessionEventConnectionClosedByBroker:
-            self.state = MQTTSessionManagerStateClosed;
+            [self updateState:MQTTSessionManagerStateClosed];
 #if TARGET_OS_IPHONE == 1
             if (self.backgroundTask) {
                 [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
                 self.backgroundTask = UIBackgroundTaskInvalid;
             }
 #endif
-            self.state = MQTTSessionManagerStateStarting;
+            [self updateState:MQTTSessionManagerStateStarting];
             break;
         case MQTTSessionEventProtocolError:
         case MQTTSessionEventConnectionRefused:
@@ -406,7 +415,7 @@
                       forMode:NSDefaultRunLoopMode];
 
             self.lastErrorCode = error;
-            self.state = MQTTSessionManagerStateError;
+            [self updateState:MQTTSessionManagerStateError];
             break;
         }
         default:
@@ -461,7 +470,7 @@
 {
     if (self.state == MQTTSessionManagerStateStarting
         && self.session != nil) {
-        self.state = MQTTSessionManagerStateConnecting;
+        [self updateState:MQTTSessionManagerStateConnecting];
         [self.session connectToHost:self.host
                                port:self.port
                            usingSSL:self.tls];
@@ -471,7 +480,7 @@
 - (void)reconnect
 {
     self.reconnectTimer = nil;
-    self.state = MQTTSessionManagerStateStarting;
+    [self updateState:MQTTSessionManagerStateStarting];
 
     if (self.reconnectTime < RECONNECT_TIMER_MAX) {
         self.reconnectTime *= 2;
