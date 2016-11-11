@@ -49,6 +49,7 @@
 @property (nonatomic) NSUInteger maxWindowSize;
 @property (nonatomic) NSUInteger maxSize;
 @property (nonatomic) NSUInteger maxMessages;
+@property (nonatomic) BOOL shouldConnectInForeground;
 
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *internalSubscriptions;
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
@@ -85,11 +86,7 @@
     self.maxSize = MQTT_MAX_SIZE;
     self.maxMessages = MQTT_MAX_MESSAGES;
     self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
-
-    self.persistent = MQTT_PERSISTENT;
-    self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
-    self.maxSize = MQTT_MAX_SIZE;
-    self.maxMessages = MQTT_MAX_MESSAGES;
+    self.shouldConnectInForeground = YES;
 
 #if TARGET_OS_IPHONE == 1
     self.backgroundTask = UIBackgroundTaskInvalid;
@@ -118,33 +115,41 @@
 - (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
                               maxWindowSize:(NSUInteger)maxWindowSize
                                 maxMessages:(NSUInteger)maxMessages
-                                    maxSize:(NSUInteger)maxSize {
+                                    maxSize:(NSUInteger)maxSize
+                        connectInForeground:(BOOL)connectInForeground {
     self = [self init];
     self.persistent = persistent;
     self.maxWindowSize = maxWindowSize;
     self.maxSize = maxSize;
     self.maxMessages = maxMessages;
+    self.shouldConnectInForeground = connectInForeground;
     return self;
 }
 
 #if TARGET_OS_IPHONE == 1
 - (void)appWillResignActive {
-    [self disconnect];
+    if (self.shouldConnectInForeground) {
+        [self disconnect];
+    }
 }
 
 - (void)appDidEnterBackground {
-    __weak MQTTSessionManager *weakSelf = self;
-    self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        __strong MQTTSessionManager *strongSelf = weakSelf;
-        if (strongSelf.backgroundTask) {
-            [[UIApplication sharedApplication] endBackgroundTask:strongSelf.backgroundTask];
-            strongSelf.backgroundTask = UIBackgroundTaskInvalid;
-        }
-    }];
+    if (self.shouldConnectInForeground) {
+        __weak MQTTSessionManager *weakSelf = self;
+        self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            __strong MQTTSessionManager *strongSelf = weakSelf;
+            if (strongSelf.backgroundTask) {
+                [[UIApplication sharedApplication] endBackgroundTask:strongSelf.backgroundTask];
+                strongSelf.backgroundTask = UIBackgroundTaskInvalid;
+            }
+        }];
+    }
 }
 
 - (void)appDidBecomeActive {
-    [self connectToLast];
+    if (self.shouldConnectInForeground) {
+        [self connectToLast];
+    }
 }
 #endif
 

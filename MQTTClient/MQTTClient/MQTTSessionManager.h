@@ -107,13 +107,15 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param maxWindowSize (a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are stored and transmitted later.
  * @param maxSize (a positive number of bytes, default is 64 MB) to limit the size of the persistence file. Messages published after the limit is reached are dropped.
  * @param maxMessages (a positive number, default is 1024) to limit the number of messages stored. Additional messages published are dropped.
+ * @param connectInForeground Whether or not to connect the MQTTSession when the app enters the foreground, and disconnect when it becomes inactive. When NO, the caller is responsible for calling -connectTo: and -disconnect. Defaults to YES.
  * @return the initialized MQTTSessionManager object
  */
 
 - (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
                               maxWindowSize:(NSUInteger)maxWindowSize
                                 maxMessages:(NSUInteger)maxMessages
-                                    maxSize:(NSUInteger)maxSize;
+                                    maxSize:(NSUInteger)maxSize
+                        connectInForeground:(BOOL)connectInForeground;
 
 /** Connects to the MQTT broker and stores the parameters for subsequent reconnects
  * @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
