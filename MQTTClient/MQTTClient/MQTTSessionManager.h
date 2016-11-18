@@ -14,6 +14,8 @@
 #import "MQTTSessionLegacy.h"
 #import "MQTTSSLSecurityPolicy.h"
 
+@class MQTTSessionManager;
+
 /** delegate gives your application access to received messages
  */
 @protocol MQTTSessionManagerDelegate <NSObject>
@@ -44,6 +46,13 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @note this method is called after a publish with qos 1 or 2 only
  */
 - (void)messageDelivered:(UInt16)msgID;
+
+/** gets called when the connection status changes
+ @param sessionManager the instance of MQTTSessionManager whose state changed
+ @param newState the new connection state of the sessionManager. This will be identical to `sessionManager.state`.
+ */
+- (void)sessionManager:(MQTTSessionManager *)sessonManager didChangeState:(MQTTSessionManagerState)newState;
+
 @end
 
 /** SessionManager handles the MQTT session for your application
