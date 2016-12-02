@@ -410,6 +410,11 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 /** certificates an NSArray holding client certificates or nil */
 @property (strong, nonatomic) NSArray *certificates;
 
+/** Require for VoIP background service
+ * defaults to NO
+ */
+@property (nonatomic) BOOL voip;
+
 /** connect to the given host through the given transport with the given
  *  MQTT session parameters asynchronously
  *
