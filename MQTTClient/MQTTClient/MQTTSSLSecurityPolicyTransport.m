@@ -78,6 +78,9 @@
         self.encoder.runLoop = self.runLoop;
         self.encoder.runLoopMode = self.runLoopMode;
         self.encoder.delegate = self;
+        if (self.voip) {
+            [self.encoder.stream setProperty:NSStreamNetworkServiceTypeVoIP forKey:NSStreamNetworkServiceType];
+        }
         [self.encoder open];
         
         self.decoder = [[MQTTSSLSecurityPolicyDecoder alloc] init];
@@ -87,6 +90,9 @@
         self.decoder.runLoop = self.runLoop;
         self.decoder.runLoopMode = self.runLoopMode;
         self.decoder.delegate = self;
+        if (self.voip) {
+            [self.decoder.stream setProperty:NSStreamNetworkServiceTypeVoIP forKey:NSStreamNetworkServiceType];
+        }
         [self.decoder open];
         
     } else {
