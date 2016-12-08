@@ -115,12 +115,16 @@ static NSMutableDictionary *clientIds;
                     incomingFlag:(BOOL)incomingFlag {
     @synchronized(clientIds) {
         
-        NSArray *flows = nil;
+        NSMutableArray *flows = nil;
         NSMutableDictionary *clientIdFlows = [clientIds objectForKey:clientId];
         if (clientIdFlows) {
             NSMutableDictionary *clientIdDirectedFlow = [clientIdFlows objectForKey:[NSNumber numberWithBool:incomingFlag]];
             if (clientIdDirectedFlow) {
-                flows = clientIdDirectedFlow.allValues;
+                flows = [NSMutableArray array];
+                NSArray *keys = [[clientIdDirectedFlow allKeys] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
+                for (id key in keys) {
+                    [flows addObject:[clientIdDirectedFlow objectForKey:key]];
+                }
             }
         }
         return flows;
