@@ -32,7 +32,8 @@ typedef NS_ENUM(UInt8, MQTTQosLevel) {
  */
 typedef NS_ENUM(UInt8, MQTTProtocolVersion) {
     MQTTProtocolVersion31 = 3,
-    MQTTProtocolVersion311 = 4
+    MQTTProtocolVersion311 = 4,
+    MQTTProtocolVersion50 = 5
 };
 
 typedef NS_ENUM(UInt8, MQTTCommandType) {

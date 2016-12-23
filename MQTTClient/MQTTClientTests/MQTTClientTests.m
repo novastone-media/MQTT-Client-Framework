@@ -510,18 +510,60 @@
  * continue processing the CONNECT packet in accordance with some other specification.
  * In the latter case, the Server MUST NOT continue to process the CONNECT packet in line with this specification.
  */
-- (void)test_connect_other_protocollevel34__MQTT_3_1_2_1 {
+- (void)test_connect_protocollevel3__MQTT_3_1_2_1 {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
-        
+
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.protocolLevel = [parameters[@"protocollevel"] intValue] == MQTTProtocolVersion31 ? MQTTProtocolVersion311 : MQTTProtocolVersion31;
-        
+        self.session.protocolLevel = [parameters[@"protocollevel"] intValue] == MQTTProtocolVersion31;
+
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
-        
+
+        [self shutdown:parameters];
+    }
+}
+/*
+ * [MQTT-3.1.2-1]
+ * If the protocol name is incorrect the Server MAY disconnect the Client, or it MAY
+ * continue processing the CONNECT packet in accordance with some other specification.
+ * In the latter case, the Server MUST NOT continue to process the CONNECT packet in line with this specification.
+ */
+- (void)test_connect_protocollevel4__MQTT_3_1_2_1 {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.protocolLevel = [parameters[@"protocollevel"] intValue] == MQTTProtocolVersion311;
+
+        [self connect:parameters];
+        XCTAssert(!self.timedout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
+
+        [self shutdown:parameters];
+    }
+}
+/*
+ * [MQTT-3.1.2-1]
+ * If the protocol name is incorrect the Server MAY disconnect the Client, or it MAY
+ * continue processing the CONNECT packet in accordance with some other specification.
+ * In the latter case, the Server MUST NOT continue to process the CONNECT packet in line with this specification.
+ */
+- (void)test_connect_protocollevel5__MQTT_3_1_2_1 {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.protocolLevel = [parameters[@"protocollevel"] intValue] == MQTTProtocolVersion50;
+
+        [self connect:parameters];
+        XCTAssert(!self.timedout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
+
         [self shutdown:parameters];
     }
 }
@@ -540,7 +582,7 @@
         NSDictionary *parameters = self.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.protocolLevel = 5;
+        self.session.protocolLevel = 88;
         
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");

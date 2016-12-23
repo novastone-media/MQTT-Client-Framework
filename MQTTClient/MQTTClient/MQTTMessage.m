@@ -24,62 +24,70 @@
 @implementation MQTTMessage
 
 + (MQTTMessage *)connectMessageWithClientId:(NSString *)clientId
-                                  userName:(NSString *)userName
-                                  password:(NSString *)password
-                                 keepAlive:(NSInteger)keepAlive
-                              cleanSession:(BOOL)cleanSessionFlag
-                                      will:(BOOL)will
-                                 willTopic:(NSString *)willTopic
-                                   willMsg:(NSData *)willMsg
-                                   willQoS:(MQTTQosLevel)willQoS
-                                willRetain:(BOOL)willRetainFlag
-                             protocolLevel:(UInt8)protocolLevel {
+                                   userName:(NSString *)userName
+                                   password:(NSString *)password
+                                  keepAlive:(NSInteger)keepAlive
+                               cleanSession:(BOOL)cleanSessionFlag
+                                       will:(BOOL)will
+                                  willTopic:(NSString *)willTopic
+                                    willMsg:(NSData *)willMsg
+                                    willQoS:(MQTTQosLevel)willQoS
+                                 willRetain:(BOOL)willRetainFlag
+                              protocolLevel:(UInt8)protocolLevel {
     /*
      * setup flags w/o basic plausibility checks
      *
      */
     UInt8 flags = 0x00;
-    
+
     if (cleanSessionFlag) {
         flags |= 0x02;
     }
-    
+
     if (userName) {
         flags |= 0x80;
     }
     if (password) {
         flags |= 0x40;
     }
-    
+
     if (will) {
         flags |= 0x04;
     }
-    
+
     flags |= ((willQoS & 0x03) << 3);
-    
+
     if (willRetainFlag) {
         flags |= 0x20;
     }
-    
+
     NSMutableData* data = [NSMutableData data];
-    
+
     switch (protocolLevel) {
-        case 4:
-            [data appendMQTTString:@"MQTT"];
-            [data appendByte:4];
-            break;
-        case 3:
-            [data appendMQTTString:@"MQIsdp"];
-            [data appendByte:3];
-            break;
+        case MQTTProtocolVersion50:
+        [data appendMQTTString:@"MQTT"];
+        [data appendByte:MQTTProtocolVersion50];
+        break;
+
+        case MQTTProtocolVersion311:
+        [data appendMQTTString:@"MQTT"];
+        [data appendByte:MQTTProtocolVersion311];
+        break;
+
+        case MQTTProtocolVersion31:
+        [data appendMQTTString:@"MQIsdp"];
+        [data appendByte:MQTTProtocolVersion31];
+        break;
+
         case 0:
-            [data appendMQTTString:@""];
-            [data appendByte:protocolLevel];
-            break;
+        [data appendMQTTString:@""];
+        [data appendByte:protocolLevel];
+        break;
+
         default:
-            [data appendMQTTString:@"MQTT"];
-            [data appendByte:protocolLevel];
-            break;
+        [data appendMQTTString:@"MQTT"];
+        [data appendByte:protocolLevel];
+        break;
     }
     [data appendByte:flags];
     [data appendUInt16BigEndian:keepAlive];
@@ -97,7 +105,7 @@
     if (password) {
         [data appendMQTTString:password];
     }
-    
+
     MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTConnect
                                                     data:data];
     return msg;
@@ -112,7 +120,7 @@
 }
 
 + (MQTTMessage *)subscribeMessageWithMessageId:(UInt16)msgId
-                                       topics:(NSDictionary *)topics {
+                                        topics:(NSDictionary *)topics {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     for (NSString *topic in topics.allKeys) {
@@ -127,7 +135,7 @@
 }
 
 + (MQTTMessage *)unsubscribeMessageWithMessageId:(UInt16)msgId
-                                         topics:(NSArray *)topics {
+                                          topics:(NSArray *)topics {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     for (NSString *topic in topics) {
@@ -141,11 +149,11 @@
 }
 
 + (MQTTMessage *)publishMessageWithData:(NSData *)payload
-                               onTopic:(NSString *)topic
-                                   qos:(MQTTQosLevel)qosLevel
-                                 msgId:(UInt16)msgId
-                            retainFlag:(BOOL)retain
-                               dupFlag:(BOOL)dup {
+                                onTopic:(NSString *)topic
+                                    qos:(MQTTQosLevel)qosLevel
+                                  msgId:(UInt16)msgId
+                             retainFlag:(BOOL)retain
+                                dupFlag:(BOOL)dup {
     NSMutableData *data = [[NSMutableData alloc] init];
     [data appendMQTTString:topic];
     if (msgId) [data appendUInt16BigEndian:msgId];
@@ -246,7 +254,7 @@
 
 - (NSData *)wireFormat {
     NSMutableData *buffer = [[NSMutableData alloc] init];
-    
+
     // encode fixed header
     UInt8 header;
     header = (self.type & 0x0f) << 4;
@@ -258,7 +266,7 @@
         header |= 0x01;
     }
     [buffer appendBytes:&header length:1];
-    
+
     // encode remaining length
     NSInteger length = self.data.length;
     do {
@@ -270,16 +278,16 @@
         [buffer appendBytes:&digit length:1];
     }
     while (length > 0);
-    
+
     // encode message data
     if (self.data != nil) {
         [buffer appendData:self.data];
     }
-    
+
     DDLogVerbose(@"[MQTTMessage] wireFormat(%lu)=%@...",
-              (unsigned long)buffer.length,
-              [buffer subdataWithRange:NSMakeRange(0, MIN(256, buffer.length))]);
-    
+                 (unsigned long)buffer.length,
+                 [buffer subdataWithRange:NSMakeRange(0, MIN(256, buffer.length))]);
+
     return buffer;
 }
 
@@ -312,7 +320,7 @@
                 break;
             }
         } while ((digit & 0x80) != 0);
-        
+
         if (type >= MQTTConnect &&
             type <= MQTTDisconnect) {
             if (offset > 0 &&
@@ -451,14 +459,14 @@
         //        buf[1] = strLen % 256;
         //        [self appendBytes:buf length:2];
         //        [self appendBytes:utf8String length:strLen];
-        
+
         // This updated code allows for all kind or UTF characters including 0x0000
         NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
         UInt8 buf[2];
         UInt16 len = data.length;
         buf[0] = len / 256;
         buf[1] = len % 256;
-        
+
         [self appendBytes:buf length:2];
         [self appendData:data];
     }

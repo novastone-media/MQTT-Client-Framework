@@ -130,7 +130,10 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 - (void)setProtocolLevel:(MQTTProtocolVersion)protocolLevel
 {
-    //NSAssert(protocolLevel == MQTTProtocolVersion31 || protocolLevel == MQTTProtocolVersion311, @"allowed protocolLevel values are 3 or 4 only");
+//    NSAssert(protocolLevel == MQTTProtocolVersion31 ||
+//             protocolLevel == MQTTProtocolVersion311 ||
+//             protocolLevel == MQTTProtocolVersion50,
+//             @"allowed protocolLevel values are 3,4 or 5 only");
     _protocolLevel = protocolLevel;
 }
 
