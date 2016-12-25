@@ -521,9 +521,9 @@
               <Anchor>a71161804d040ca10e164578d7e7eb855</Anchor>
              </Node>
              <Node>
-              <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:</Name>
+              <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:connectInForeground:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
-              <Anchor>ae57cebdca6694242b821cf089fea458d</Anchor>
+              <Anchor>acae1db469b891501860bc1fbcfb5d7d7</Anchor>
              </Node>
              <Node>
               <Name>sendData:topic:qos:retain:</Name>
@@ -570,6 +570,11 @@
               <Name>messageDelivered:</Name>
               <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
               <Anchor>ac5c24515442786b7f4ee2b29a103fac4</Anchor>
+             </Node>
+             <Node>
+              <Name>sessionManager:didChangeState:</Name>
+              <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
+              <Anchor>a75d3ade6a0461a9b4496241e34d58e30</Anchor>
              </Node>
             </Subnodes>
            </Node>
