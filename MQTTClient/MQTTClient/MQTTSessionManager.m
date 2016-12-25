@@ -126,6 +126,18 @@
     return self;
 }
 
+- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
+                              maxWindowSize:(NSUInteger)maxWindowSize
+                                maxMessages:(NSUInteger)maxMessages
+                                    maxSize:(NSUInteger)maxSize {
+    self = [self initWithPersistence:persistent
+                       maxWindowSize:maxWindowSize
+                         maxMessages:maxMessages
+                             maxSize:maxSize
+                 connectInForeground:YES];
+    return self;
+}
+
 #if TARGET_OS_IPHONE == 1
 - (void)appWillResignActive {
     if (self.shouldConnectInForeground) {

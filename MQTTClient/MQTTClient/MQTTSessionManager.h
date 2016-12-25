@@ -126,6 +126,19 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
                                     maxSize:(NSUInteger)maxSize
                         connectInForeground:(BOOL)connectInForeground;
 
+/** initWithPersistence sets the MQTTPersistence properties other than default
+ * @param persistent YES or NO (default) to establish file or in memory persistence.
+ * @param maxWindowSize (a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are stored and transmitted later.
+ * @param maxSize (a positive number of bytes, default is 64 MB) to limit the size of the persistence file. Messages published after the limit is reached are dropped.
+ * @param maxMessages (a positive number, default is 1024) to limit the number of messages stored. Additional messages published are dropped.
+ * @return the initialized MQTTSessionManager object
+ */
+
+- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
+                              maxWindowSize:(NSUInteger)maxWindowSize
+                                maxMessages:(NSUInteger)maxMessages
+                                    maxSize:(NSUInteger)maxSize;
+
 /** Connects to the MQTT broker and stores the parameters for subsequent reconnects
  * @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
  * @param port specifies the port to connect to
