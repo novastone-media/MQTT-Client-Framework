@@ -132,7 +132,7 @@
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:@"#" atLevel:0];
+        [self testSubscribeSubackExpected:@"MQTTClient/#" atLevel:0];
         [self shutdown:parameters];
     }
 }
@@ -216,7 +216,7 @@
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
-        [self testSubscribeSubackExpected:@"#" atLevel:0];
+        [self testSubscribeSubackExpected:@"+/#" atLevel:0];
 
         self.timedout = false;
         self.SYSreceived = false;
@@ -228,7 +228,6 @@
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         XCTAssertFalse(self.SYSreceived, @"The Server MUST NOT match Topic Filters starting with a wildcard character (# or +) with Topic Names beginning with a $ character [MQTT-4.7.2-1].");
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
         [self shutdown:parameters];
     }

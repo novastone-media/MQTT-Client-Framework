@@ -44,6 +44,8 @@
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
+        self.session.userName = @"user";
+        self.session.password = @"password";
         [self connect:self.session parameters:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];

@@ -516,7 +516,7 @@
         NSDictionary *parameters = self.brokers[broker];
 
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.protocolLevel = [parameters[@"protocollevel"] intValue] == MQTTProtocolVersion31;
+        self.session.protocolLevel = MQTTProtocolVersion31;
 
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
@@ -537,7 +537,7 @@
         NSDictionary *parameters = self.brokers[broker];
 
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.protocolLevel = [parameters[@"protocollevel"] intValue] == MQTTProtocolVersion311;
+        self.session.protocolLevel = MQTTProtocolVersion311;
 
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
@@ -558,7 +558,7 @@
         NSDictionary *parameters = self.brokers[broker];
 
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.protocolLevel = [parameters[@"protocollevel"] intValue] == MQTTProtocolVersion50;
+        self.session.protocolLevel = MQTTProtocolVersion50;
 
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
@@ -576,7 +576,7 @@
  * [MQTT-3.2.2-5]
  * If a server sends a CONNACK packet containing a non-zero return code it MUST then close the Network Connection.
  */
-- (void)test_connect_illegal_protocollevel5_MQTT_3_1_2_2_MQTT_3_2_2_5 {
+- (void)test_connect_illegal_protocollevel88_MQTT_3_1_2_2_MQTT_3_2_2_5 {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
