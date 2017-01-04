@@ -30,6 +30,11 @@
  */
 @property (nonatomic) BOOL tls;
 
+/** Require for VoIP background service
+ * defaults to NO
+ */
+@property (nonatomic) BOOL voip;
+
 /** certificates An identity certificate used to reply to a server requiring client certificates according
  * to the description given for SSLSetCertificate(). You may build the certificates array yourself or use the
  * sundry method clientCertFromP12.

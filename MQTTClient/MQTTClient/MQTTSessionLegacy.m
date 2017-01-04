@@ -345,6 +345,7 @@
         transport.tls = usingSSL;
         transport.securityPolicy = self.securityPolicy;
         transport.certificates = self.certificates;
+        transport.voip = self.voip;
         transport.runLoop = self.runLoop;
         transport.runLoopMode = self.runLoopMode;
         self.transport = transport;
@@ -355,6 +356,7 @@
         transport.port = port;
         transport.tls = usingSSL;
         transport.certificates = self.certificates;
+        transport.voip = self.voip;
         transport.runLoop = self.runLoop;
         transport.runLoopMode = self.runLoopMode;
         self.transport = transport;
