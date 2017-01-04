@@ -1,13 +1,13 @@
 Pod::Spec.new do |mqttc|
 	mqttc.name         = "MQTTClient"
-	mqttc.version      = "0.8.6"
+	mqttc.version      = "0.8.7"
 	mqttc.summary      = "iOS, OSX and tvOS native ObjectiveC MQTT Client Framework"
 	mqttc.homepage     = "https://github.com/ckrey/MQTT-Client-Framework"
 	mqttc.license      = { :type => "EPLv1", :file => "LICENSE" }
 	mqttc.author       = { "Christoph Krey" => "krey.christoph@gmail.com" }
 	mqttc.source       = {
 		:git => "https://github.com/ckrey/MQTT-Client-Framework.git",
-		:tag => "0.8.6",
+		:tag => "0.8.7",
 		:submodules => true
 	}
 
@@ -45,7 +45,8 @@ Pod::Spec.new do |mqttc|
 	end
 
 	mqttc.subspec 'MinL' do |minl|
-		minl.dependency 'CocoaLumberjack'
+		minl.dependency 'CocoaLumberjack', '~> 2.3.0'
+
 		minl.source_files =	"MQTTClient/MQTTClient/MQTTCFSocketDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTCFSocketEncoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTCFSocketTransport.{h,m}",

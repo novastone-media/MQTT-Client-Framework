@@ -1,7 +1,7 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
-## MQTT-Client-Framework 0.8.6
+## MQTT-Client-Framework 0.8.6/7
 > Release date 2017-01-04
 
 [NEW] Support voip applications #243
@@ -9,7 +9,6 @@ MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 [NEW] Use signals for synchronouse calls #250
 [NEW] Configurable connect-in-foreground behaviour #234
 
-[FIX] CocoaLumberjack related issues. Now on current CocoaLumberjack version
 [FIX] Documentation update #252
 [FIX] Backward compatibility issue #253
 [FIX] Publish messages by messageId ascending order when using MQTTInMemoryPersistence #247
