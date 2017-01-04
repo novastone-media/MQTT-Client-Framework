@@ -1,6 +1,24 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.8.6
+> Release date 2017-01-04
+
+[NEW] Support voip applications #243
+[NEW] Add public emqtt broker to test suite
+[NEW] Use signals for synchronouse calls #250
+[NEW] Configurable connect-in-foreground behaviour #234
+
+[FIX] CocoaLumberjack related issues. Now on current CocoaLumberjack version
+[FIX] Documentation update #252
+[FIX] Backward compatibility issue #253
+[FIX] Publish messages by messageId ascending order when using MQTTInMemoryPersistence #247
+[FIX] Adds connectInForeground configuration parameter #223
+[FIX] Correct crashing issue caused by locking on a object which is replaced inside the lock #220
+[FIX] Use an NSLock instead of locking on an object that is often replaced
+[FIX] Adding MQTTSessionManager.h to the umbrella header #213
+[FIX] sharing the scheme to make the project carthage compatible #198
+
 ## MQTT-Client-Framework 0.8.5
 > Release date 2016-09-29
 

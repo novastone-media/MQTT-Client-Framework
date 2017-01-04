@@ -3,7 +3,7 @@
 //  MQTT-Client-Framework
 //
 //  Created by Terry Latanville on 2015-11-25.
-//  Copyright © 2015-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2015-2017 Christoph Krey. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

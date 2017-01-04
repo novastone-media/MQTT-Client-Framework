@@ -2,7 +2,7 @@
 // MQTTSSLSecurityPolicyEncoder.m
 // MQTTClient.framework
 //
-// Copyright © 2013-2016, Christoph Krey
+// Copyright © 2013-2017, Christoph Krey. All rights reserved.
 //
 
 #import "MQTTSSLSecurityPolicyEncoder.h"

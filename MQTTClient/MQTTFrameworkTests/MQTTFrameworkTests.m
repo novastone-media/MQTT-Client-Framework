@@ -3,7 +3,7 @@
 //  MQTTFrameworkTests
 //
 //  Created by Christoph Krey on 21.01.16.
-//  Copyright © 2016 Christoph Krey. All rights reserved.
+//  Copyright © 2016-2017 Christoph Krey. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
