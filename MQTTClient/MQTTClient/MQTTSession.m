@@ -1090,7 +1090,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     static dispatch_once_t onceToken;
     static dispatch_semaphore_t semaphorePub;
     dispatch_once(&onceToken, ^{
-        semaphorePub = dispatch_semaphore_create(1);
+        semaphorePub = dispatch_semaphore_create(0);
     });
     return semaphorePub;
 }
@@ -1099,7 +1099,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     static dispatch_once_t onceToken;
     static dispatch_semaphore_t semaphoreSub;
     dispatch_once(&onceToken, ^{
-        semaphoreSub = dispatch_semaphore_create(1);
+        semaphoreSub = dispatch_semaphore_create(0);
     });
     return semaphoreSub;
 }
@@ -1108,7 +1108,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     static dispatch_once_t onceToken;
     static dispatch_semaphore_t semaphoreUnsub;
     dispatch_once(&onceToken, ^{
-        semaphoreUnsub = dispatch_semaphore_create(1);
+        semaphoreUnsub = dispatch_semaphore_create(0);
     });
     return semaphoreUnsub;
 }
@@ -1117,7 +1117,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     static dispatch_once_t onceToken;
     static dispatch_semaphore_t semaphoreConnect;
     dispatch_once(&onceToken, ^{
-        semaphoreConnect = dispatch_semaphore_create(1);
+        semaphoreConnect = dispatch_semaphore_create(0);
     });
     return semaphoreConnect;
 }
@@ -1126,7 +1126,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     static dispatch_once_t onceToken;
     static dispatch_semaphore_t semaphoreDisconnect;
     dispatch_once(&onceToken, ^{
-        semaphoreDisconnect = dispatch_semaphore_create(1);
+        semaphoreDisconnect = dispatch_semaphore_create(0);
     });
     return semaphoreDisconnect;
 }
