@@ -75,7 +75,8 @@
 }
 
 - (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel timeout:(NSTimeInterval)timeout {
-    
+    NSDate *started = [NSDate date];
+
     UInt16 mid = [self subscribeToTopic:topic atLevel:qosLevel];
     self.synchronSubMid = mid;
     
@@ -84,7 +85,8 @@
     
     DDLogVerbose(@"[MQTTSessionSynchron] end subscribe");
     
-    if (self.synchronSubMid != mid) {
+    if (self.synchronSubMid != mid ||
+        [[NSDate date] timeIntervalSince1970] > [started timeIntervalSince1970] + timeout) {
         return FALSE;
     } else {
         return TRUE;
@@ -96,7 +98,8 @@
 }
 
 - (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics timeout:(NSTimeInterval)timeout {
-    
+    NSDate *started = [NSDate date];
+
     UInt16 mid = [self subscribeToTopics:topics];
     self.synchronSubMid = mid;
     
@@ -105,7 +108,8 @@
     
     DDLogVerbose(@"[MQTTSessionSynchron] end subscribe");
     
-    if (self.synchronSubMid != mid) {
+    if (self.synchronSubMid != mid ||
+        [[NSDate date] timeIntervalSince1970] > [started timeIntervalSince1970] + timeout) {
         return FALSE;
     } else {
         return TRUE;
@@ -117,7 +121,8 @@
 }
 
 - (BOOL)unsubscribeAndWaitTopic:(NSString *)theTopic timeout:(NSTimeInterval)timeout {
-    
+    NSDate *started = [NSDate date];
+
     UInt16 mid = [self unsubscribeTopic:theTopic];
     self.synchronUnsubMid = mid;
     
@@ -126,7 +131,8 @@
     
     DDLogVerbose(@"[MQTTSessionSynchron] end unsubscribe");
     
-    if (self.synchronUnsubMid != mid) {
+    if (self.synchronUnsubMid != mid ||
+        [[NSDate date] timeIntervalSince1970] > [started timeIntervalSince1970] + timeout) {
         return FALSE;
     } else {
         return TRUE;
@@ -138,7 +144,8 @@
 }
 
 - (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics timeout:(NSTimeInterval)timeout {
-    
+    NSDate *started = [NSDate date];
+
     UInt16 mid = [self unsubscribeTopics:topics];
     self.synchronUnsubMid = mid;
     
@@ -147,7 +154,8 @@
     
     DDLogVerbose(@"[MQTTSessionSynchron] end unsubscribe");
     
-    if (self.synchronUnsubMid != mid) {
+    if (self.synchronUnsubMid != mid ||
+        [[NSDate date] timeIntervalSince1970] > [started timeIntervalSince1970] + timeout) {
         return FALSE;
     } else {
         return TRUE;
@@ -166,7 +174,8 @@
                     retain:(BOOL)retainFlag
                        qos:(MQTTQosLevel)qos
                    timeout:(NSTimeInterval)timeout {
-    
+    NSDate *started = [NSDate date];
+
     UInt16 mid = self.synchronPubMid = [self publishData:data onTopic:topic retain:retainFlag qos:qos];
     if (qos == MQTTQosLevelAtMostOnce) {
         return TRUE;
@@ -177,7 +186,8 @@
         
         DDLogVerbose(@"[MQTTSessionSynchron] end publish");
         
-        if (self.synchronPubMid != mid) {
+        if (self.synchronPubMid != mid ||
+            [[NSDate date] timeIntervalSince1970] > [started timeIntervalSince1970] + timeout) {
             return FALSE;
         } else {
             return TRUE;
