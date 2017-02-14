@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F6D08FA31E535B6800CD2566"
+               BlueprintIdentifier = "F6D08FD71E535E9900CD2566"
                BuildableName = "MQTTFramework.framework"
-               BlueprintName = "MQTTMac"
+               BlueprintName = "MQTTtvOS"
                ReferencedContainer = "container:MQTTClient.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F6D08FA31E535B6800CD2566"
+            BlueprintIdentifier = "F6D08FD71E535E9900CD2566"
             BuildableName = "MQTTFramework.framework"
-            BlueprintName = "MQTTMac"
+            BlueprintName = "MQTTtvOS"
             ReferencedContainer = "container:MQTTClient.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F6D08FA31E535B6800CD2566"
+            BlueprintIdentifier = "F6D08FD71E535E9900CD2566"
             BuildableName = "MQTTFramework.framework"
-            BlueprintName = "MQTTMac"
+            BlueprintName = "MQTTtvOS"
             ReferencedContainer = "container:MQTTClient.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
