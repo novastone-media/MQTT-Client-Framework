@@ -6,7 +6,7 @@
 //  Copyright © 2015-2017 Christoph Krey. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 #import "MQTTSession.h"
 #import "MQTTDecoder.h"
