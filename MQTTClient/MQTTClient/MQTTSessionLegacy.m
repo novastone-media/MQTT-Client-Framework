@@ -33,6 +33,11 @@
 
 #import "MQTTLog.h"
 
+@interface MQTTSession()
+@property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
+
+@end
+
 @implementation MQTTSession(Legacy)
 
 - (MQTTSession *)initWithClientId:(NSString *)clientId

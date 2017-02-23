@@ -7,64 +7,16 @@
 		<string>local</string>
 		<string>#localWS</string>
 		<string>#aWsBroker</string>
-		<string>#mosquitto</string>
 		<string>#emqtt</string>
 		<string>#emqttWS</string>
-		<string>#mosquittoWS</string>
+		<string>#mosquitto</string>
 		<string>#mosquittoTLS</string>
+		<string>#mosquittoTLSClient</string>
+		<string>#mosquittoWS</string>
 		<string>#mosquittoWSS</string>
 	</array>
 	<key>brokers</key>
 	<dict>
-		<key>emqttWS</key>
-		<dict>
-			<key>host</key>
-			<string>q.emqtt.com</string>
-			<key>timeout</key>
-			<integer>10</integer>
-			<key>port</key>
-			<integer>8083</integer>
-			<key>tls</key>
-			<false/>
-			<key>protocollevel</key>
-			<integer>4</integer>
-			<key>websocket</key>
-			<true/>
-			<key>user</key>
-			<string>user</string>
-			<key>pass</key>
-			<string>pass</string>
-		</dict>
-		<key>emqtt</key>
-		<dict>
-			<key>host</key>
-			<string>q.emqtt.com</string>
-			<key>timeout</key>
-			<integer>10</integer>
-			<key>port</key>
-			<integer>1883</integer>
-			<key>tls</key>
-			<false/>
-			<key>protocollevel</key>
-			<integer>4</integer>
-			<key>user</key>
-			<string>user</string>
-			<key>pass</key>
-			<string>pass</string>
-		</dict>
-		<key>mosquitto</key>
-		<dict>
-			<key>host</key>
-			<string>test.mosquitto.org</string>
-			<key>timeout</key>
-			<integer>10</integer>
-			<key>port</key>
-			<integer>1883</integer>
-			<key>tls</key>
-			<false/>
-			<key>protocollevel</key>
-			<integer>4</integer>
-		</dict>
 		<key>local</key>
 		<dict>
 			<key>host</key>
@@ -103,20 +55,41 @@
 			<key>allowUntrustedCertificates</key>
 			<false/>
 		</dict>
-		<key>mosquittoWS</key>
+		<key>emqtt</key>
 		<dict>
 			<key>host</key>
-			<string>test.mosquitto.org</string>
+			<string>q.emqtt.com</string>
 			<key>timeout</key>
 			<integer>10</integer>
 			<key>port</key>
-			<integer>8080</integer>
+			<integer>1883</integer>
 			<key>tls</key>
 			<false/>
-			<key>websocket</key>
-			<true/>
 			<key>protocollevel</key>
 			<integer>4</integer>
+			<key>user</key>
+			<string>user</string>
+			<key>pass</key>
+			<string>pass</string>
+		</dict>
+		<key>emqttWS</key>
+		<dict>
+			<key>host</key>
+			<string>q.emqtt.com</string>
+			<key>timeout</key>
+			<integer>10</integer>
+			<key>port</key>
+			<integer>8083</integer>
+			<key>tls</key>
+			<false/>
+			<key>protocollevel</key>
+			<integer>4</integer>
+			<key>websocket</key>
+			<true/>
+			<key>user</key>
+			<string>user</string>
+			<key>pass</key>
+			<string>pass</string>
 		</dict>
 		<key>aWsBroker</key>
 		<dict>
@@ -134,6 +107,34 @@
 			<integer>4</integer>
 			<key>path</key>
 			<string>/control/startpulse?pulseid=control&amp;uid=1234</string>
+		</dict>
+		<key>mosquitto</key>
+		<dict>
+			<key>host</key>
+			<string>test.mosquitto.org</string>
+			<key>timeout</key>
+			<integer>10</integer>
+			<key>port</key>
+			<integer>1883</integer>
+			<key>tls</key>
+			<false/>
+			<key>protocollevel</key>
+			<integer>4</integer>
+		</dict>
+		<key>mosquittoWS</key>
+		<dict>
+			<key>host</key>
+			<string>test.mosquitto.org</string>
+			<key>timeout</key>
+			<integer>10</integer>
+			<key>port</key>
+			<integer>8080</integer>
+			<key>tls</key>
+			<false/>
+			<key>websocket</key>
+			<true/>
+			<key>protocollevel</key>
+			<integer>4</integer>
 		</dict>
 		<key>mosquittoTLS</key>
 		<dict>
@@ -153,6 +154,33 @@
 			<false/>
 			<key>serverCER</key>
 			<string>mosquitto.org</string>
+			<key>secpol</key>
+			<true/>
+			<key>protocollevel</key>
+			<integer>4</integer>
+		</dict>
+		<key>mosquittoTLSClient</key>
+		<dict>
+			<key>host</key>
+			<string>test.mosquitto.org</string>
+			<key>timeout</key>
+			<integer>10</integer>
+			<key>port</key>
+			<real>8884</real>
+			<key>tls</key>
+			<true/>
+			<key>allowUntrustedCertificates</key>
+			<true/>
+			<key>validatesCertificateChain</key>
+			<false/>
+			<key>validatesDomainName</key>
+			<false/>
+			<key>serverCER</key>
+			<string>mosquitto.org</string>
+			<key>clientp12</key>
+			<string>client</string>
+			<key>clientp12pass</key>
+			<string>abcde</string>
 			<key>secpol</key>
 			<true/>
 			<key>protocollevel</key>

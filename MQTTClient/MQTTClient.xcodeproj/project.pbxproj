@@ -143,6 +143,9 @@
 		8435A25D1BF3C69200D2BF33 /* MQTTTestBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */; };
 		8435A25E1BF3C69200D2BF33 /* MQTTTestBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */; };
 		8435A25F1BF3C69200D2BF33 /* MQTTTestBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */; };
+		843713541E41E6B800868093 /* client.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 843713531E41E6B800868093 /* client.p12 */; };
+		843713551E41E80500868093 /* client.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 843713531E41E6B800868093 /* client.p12 */; };
+		843713561E41E81600868093 /* client.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 843713531E41E6B800868093 /* client.p12 */; };
 		8439D5831C2EB3F000C24F4D /* MQTTSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 846191EB1883E8B900101409 /* MQTTSession.m */; };
 		8442BEE91A97B15100D00E55 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests.swift */; };
 		844C93AB1A81645D00CA4A03 /* MQTTACLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */; };
@@ -274,6 +277,7 @@
 		8425D71A1BBE8EF9005AD733 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTTestSessionManager.m; sourceTree = "<group>"; };
 		8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTTestBlocks.m; sourceTree = "<group>"; };
+		843713531E41E6B800868093 /* client.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = client.p12; sourceTree = "<group>"; };
 		8442BEE81A97B15100D00E55 /* SwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTests.swift; sourceTree = "<group>"; };
 		844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTACLTests.m; sourceTree = "<group>"; };
 		84517CF21C182F06006FE09B /* MQTTTestHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTTestHelpers.h; sourceTree = "<group>"; };
@@ -391,6 +395,7 @@
 			isa = PBXGroup;
 			children = (
 				8482D3C91B49332700D81CC8 /* mosquitto.org.cer */,
+				843713531E41E6B800868093 /* client.p12 */,
 				C21D3CA71B1ED2F40012DD2F /* server.der */,
 				C21D3CA11B1EC63E0012DD2F /* adn_0.cer */,
 				C21D3CA31B1EC6420012DD2F /* adn_1.cer */,
@@ -959,6 +964,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				843713551E41E80500868093 /* client.p12 in Resources */,
 				840716411BBEF18B00FBB3CB /* mosquitto.org.cer in Resources */,
 				840716441BBEF18B00FBB3CB /* server.der in Resources */,
 				840716451BBEF18B00FBB3CB /* adn_0.cer in Resources */,
@@ -981,6 +987,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				843713561E41E81600868093 /* client.p12 in Resources */,
 				840716071BBE99B000FBB3CB /* adn_0.cer in Resources */,
 				840716081BBE99B000FBB3CB /* adn_1.cer in Resources */,
 				840716091BBE99B000FBB3CB /* adn_2.cer in Resources */,
@@ -1013,6 +1020,7 @@
 				C21D3C9C1B1EC40C0012DD2F /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */,
 				84BE34901C348BFD007EF8F3 /* MQTTTestHelpers.plist in Resources */,
 				C21D3C961B1EC4000012DD2F /* AltName.cer in Resources */,
+				843713541E41E6B800868093 /* client.p12 in Resources */,
 				C21D3C971B1EC4010012DD2F /* NoDomains.cer in Resources */,
 				C21D3C981B1EC4030012DD2F /* foobar.com.cer in Resources */,
 				C21D3CA21B1EC63E0012DD2F /* adn_0.cer in Resources */,

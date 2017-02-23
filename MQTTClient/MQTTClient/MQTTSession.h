@@ -390,11 +390,6 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 @property (strong, nonatomic) NSString *runLoopMode;
 
 
-/** The security policy used to evaluate server trust for secure connections.
- * (see MQTTSSLSecurityPolicy.h for more detail).
- */
-@property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
-
 /** for mqttio-OBJC backward compatibility
  the connect message used is stored here
  */

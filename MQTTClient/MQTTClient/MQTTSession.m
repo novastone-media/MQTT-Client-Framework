@@ -11,6 +11,8 @@
 #import "MQTTMessage.h"
 #import "MQTTCoreDataPersistence.h"
 
+@class MQTTSSLSecurityPolicy;
+
 //#define myLogLevel DDLogLevelVerbose
 
 #import "MQTTLog.h"
@@ -42,6 +44,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 @property (nonatomic) UInt16 synchronSubMid;
 @property (nonatomic) BOOL synchronConnect;
 @property (nonatomic) BOOL synchronDisconnect;
+
+@property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
 
 @end
 
