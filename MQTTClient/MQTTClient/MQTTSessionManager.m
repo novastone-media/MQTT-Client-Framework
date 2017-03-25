@@ -385,6 +385,16 @@
     }
 }
 
+- (void)endBackgroundTask
+{
+#if TARGET_OS_IPHONE == 1
+    if (self.backgroundTask) {
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
+    }
+#endif
+}
+
 #pragma mark - MQTT Callback methods
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
@@ -409,28 +419,22 @@
             break;
         }
         case MQTTSessionEventConnectionClosed:
-        case MQTTSessionEventConnectionClosedByBroker:
             [self updateState:MQTTSessionManagerStateClosed];
-#if TARGET_OS_IPHONE == 1
-            if (self.backgroundTask) {
-                [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-                self.backgroundTask = UIBackgroundTaskInvalid;
-            }
-#endif
+            [self endBackgroundTask];
             [self updateState:MQTTSessionManagerStateStarting];
             break;
+
+        case MQTTSessionEventConnectionClosedByBroker:
+            [self updateState:MQTTSessionManagerStateClosed];
+            [self endBackgroundTask];
+            [self updateState:MQTTSessionManagerStateStarting];
+            break;
+
         case MQTTSessionEventProtocolError:
         case MQTTSessionEventConnectionRefused:
         case MQTTSessionEventConnectionError:
         {
-            self.reconnectTimer = [NSTimer timerWithTimeInterval:self.reconnectTime
-                                                          target:self
-                                                        selector:@selector(reconnect)
-                                                        userInfo:Nil repeats:FALSE];
-            NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-            [runLoop addTimer:self.reconnectTimer
-                      forMode:NSDefaultRunLoopMode];
-
+            [self triggerDelayedReconnect];
             self.lastErrorCode = error;
             [self updateState:MQTTSessionManagerStateError];
             break;
@@ -510,6 +514,17 @@
     self.reconnectTime = RECONNECT_TIMER;
 
     [self connectToInternal];
+}
+
+- (void)triggerDelayedReconnect
+{
+    self.reconnectTimer = [NSTimer timerWithTimeInterval:self.reconnectTime
+                                                  target:self
+                                                selector:@selector(reconnect)
+                                                userInfo:Nil repeats:FALSE];
+    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+    [runLoop addTimer:self.reconnectTimer
+              forMode:NSDefaultRunLoopMode];
 }
 
 - (NSDictionary<NSString *, NSNumber *> *)subscriptions {
