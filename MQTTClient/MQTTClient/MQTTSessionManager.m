@@ -16,7 +16,7 @@
 @property (nonatomic, readwrite) NSError *lastErrorCode;
 
 @property (strong, nonatomic) NSTimer *reconnectTimer;
-@property (nonatomic) double reconnectTime;
+@property (nonatomic) NSTimeInterval reconnectTime;
 @property (nonatomic) BOOL reconnectFlag;
 
 @property (strong, nonatomic) MQTTSession *session;
@@ -50,6 +50,7 @@
 @property (nonatomic) NSUInteger maxSize;
 @property (nonatomic) NSUInteger maxMessages;
 @property (nonatomic) BOOL shouldConnectInForeground;
+@property (nonatomic) NSTimeInterval maxConnectionRetryInterval;
 
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *internalSubscriptions;
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
@@ -58,7 +59,7 @@
 @end
 
 #define RECONNECT_TIMER 1.0
-#define RECONNECT_TIMER_MAX 64.0
+#define RECONNECT_TIMER_MAX_DEFAULT 64.0
 #define BACKGROUND_DISCONNECT_AFTER 8.0
 
 @implementation MQTTSessionManager
@@ -87,6 +88,7 @@
     self.maxMessages = MQTT_MAX_MESSAGES;
     self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
     self.shouldConnectInForeground = YES;
+    self.maxConnectionRetryInterval = RECONNECT_TIMER_MAX_DEFAULT;
 
 #if TARGET_OS_IPHONE == 1
     self.backgroundTask = UIBackgroundTaskInvalid;
@@ -116,12 +118,14 @@
                               maxWindowSize:(NSUInteger)maxWindowSize
                                 maxMessages:(NSUInteger)maxMessages
                                     maxSize:(NSUInteger)maxSize
+                 maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
                         connectInForeground:(BOOL)connectInForeground {
     self = [self init];
     self.persistent = persistent;
     self.maxWindowSize = maxWindowSize;
     self.maxSize = maxSize;
     self.maxMessages = maxMessages;
+    self.maxConnectionRetryInterval = maxRetryInterval;
     self.shouldConnectInForeground = connectInForeground;
     return self;
 }
@@ -134,6 +138,7 @@
                        maxWindowSize:maxWindowSize
                          maxMessages:maxMessages
                              maxSize:maxSize
+          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
                  connectInForeground:YES];
     return self;
 }
@@ -504,7 +509,7 @@
     self.reconnectTimer = nil;
     [self updateState:MQTTSessionManagerStateStarting];
 
-    if (self.reconnectTime < RECONNECT_TIMER_MAX) {
+    if (self.reconnectTime < self.maxConnectionRetryInterval) {
         self.reconnectTime *= 2;
     }
     [self connectToInternal];
