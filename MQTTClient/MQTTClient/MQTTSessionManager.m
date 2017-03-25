@@ -428,6 +428,7 @@
             [self updateState:MQTTSessionManagerStateClosed];
             [self endBackgroundTask];
             [self updateState:MQTTSessionManagerStateStarting];
+            [self triggerDelayedReconnect];
             break;
 
         case MQTTSessionEventProtocolError:
