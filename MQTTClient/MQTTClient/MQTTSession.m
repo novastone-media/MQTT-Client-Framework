@@ -233,29 +233,59 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     //NSAssert(qos >= 0 && qos <= 2, @"qos must be 0, 1, or 2");
     
     UInt16 msgId = 0;
-    if (qos) {
+    if (!qos) {
+        MQTTMessage *msg = [MQTTMessage publishMessageWithData:data
+                                                       onTopic:topic
+                                                           qos:qos
+                                                         msgId:msgId
+                                                    retainFlag:retainFlag
+                                                       dupFlag:FALSE];
+        NSError *error = nil;
+        if (![self encode:msg]) {
+            error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                        code:MQTTSessionErrorEncoderNotReady
+                                    userInfo:@{NSLocalizedDescriptionKey : @"Encoder not ready"}];
+        }
+        if (publishHandler) {
+            [self onPublish:publishHandler error:error];
+        }
+    } else {
         msgId = [self nextMsgId];
-    }
-    MQTTMessage *msg = [MQTTMessage publishMessageWithData:data
-                                                   onTopic:topic
-                                                       qos:qos
-                                                     msgId:msgId
-                                                retainFlag:retainFlag
-                                                   dupFlag:FALSE];
-    if (qos) {
+        MQTTMessage *msg = nil;
+        
         id<MQTTFlow> flow;
-        if ([self.persistence windowSize:self.clientId] <= self.persistence.maxWindowSize &&
-            self.status == MQTTSessionStatusConnected) {
-            flow = [self.persistence storeMessageForClientId:self.clientId
-                                                       topic:topic
-                                                        data:data
-                                                  retainFlag:retainFlag
-                                                         qos:qos
-                                                       msgId:msgId
-                                                incomingFlag:NO
-                                                 commandType:MQTTPublish
-                                                    deadline:[NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT]];
-        } else {
+        if (self.status == MQTTSessionStatusConnected) {
+            NSArray *flows = [self.persistence allFlowsforClientId:self.clientId
+                                                      incomingFlag:NO];
+            
+            BOOL unprocessedMessageNotExists = TRUE;
+            NSUInteger windowSize = 0;
+            for (id<MQTTFlow> flow in flows) {
+                if ([flow.commandType intValue] != MQTT_None) {
+                    windowSize++;
+                } else {
+                    unprocessedMessageNotExists = FALSE;
+                }
+            }
+            if (unprocessedMessageNotExists && windowSize <= self.persistence.maxWindowSize) {
+                msg = [MQTTMessage publishMessageWithData:data
+                                                  onTopic:topic
+                                                      qos:qos
+                                                    msgId:msgId
+                                               retainFlag:retainFlag
+                                                  dupFlag:FALSE];
+                flow = [self.persistence storeMessageForClientId:self.clientId
+                                                           topic:topic
+                                                            data:data
+                                                      retainFlag:retainFlag
+                                                             qos:qos
+                                                           msgId:msgId
+                                                    incomingFlag:NO
+                                                     commandType:MQTTPublish
+                                                        deadline:[NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT]];
+            }
+        }
+        if (!msg) {
             flow = [self.persistence storeMessageForClientId:self.clientId
                                                        topic:topic
                                                         data:data
@@ -294,16 +324,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
             } else {
                 DDLogVerbose(@"[MQTTSession] queueing message %d", msgId);
             }
-        }
-    } else {
-        NSError *error = nil;
-        if (![self encode:msg]) {
-            error = [NSError errorWithDomain:MQTTSessionErrorDomain
-                                        code:MQTTSessionErrorEncoderNotReady
-                                    userInfo:@{NSLocalizedDescriptionKey : @"Encoder not ready"}];
-        }
-        if (publishHandler) {
-            [self onPublish:publishHandler error:error];
         }
     }
     [self tell];
