@@ -1,6 +1,14 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.8.8
+> Release date 2017-04-03
+
+[FIX] Connection Retry after Closed-by-Broker Errors #297
+[NEW] Configurable maxConnectionRetryInterval for MQTTSessionMananger #297
+[FIX] Don't publish QoS 1 or 2 messages immediately if queued messages exists #295
+
+
 ## MQTT-Client-Framework 0.8.6/7
 > Release date 2017-01-04
 

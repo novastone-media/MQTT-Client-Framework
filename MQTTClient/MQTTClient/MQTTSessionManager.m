@@ -67,10 +67,10 @@
 - (void)dealloc {
 #if TARGET_OS_IPHONE == 1
 
-  NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-  [defaultCenter removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
-  [defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-  [defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 
 #endif
 }
@@ -81,8 +81,8 @@
     [self updateState:MQTTSessionManagerStateStarting];
     self.internalSubscriptions = [[NSMutableDictionary alloc] init];
     self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
-    
-    //Use the default value 
+
+    //Use the default value
     self.persistent = MQTT_PERSISTENT;
     self.maxSize = MQTT_MAX_SIZE;
     self.maxMessages = MQTT_MAX_MESSAGES;
@@ -127,6 +127,20 @@
     self.maxMessages = maxMessages;
     self.maxConnectionRetryInterval = maxRetryInterval;
     self.shouldConnectInForeground = connectInForeground;
+    return self;
+}
+
+- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
+                              maxWindowSize:(NSUInteger)maxWindowSize
+                                maxMessages:(NSUInteger)maxMessages
+                                    maxSize:(NSUInteger)maxSize
+                        connectInForeground:(BOOL)connectInForeground {
+    self = [self initWithPersistence:persistent
+                       maxWindowSize:maxWindowSize
+                         maxMessages:maxMessages
+                             maxSize:maxSize
+          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
+                 connectInForeground:connectInForeground];
     return self;
 }
 
@@ -183,7 +197,7 @@
           willQos:(MQTTQosLevel)willQos
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId {
-  [self connectTo:host
+    [self connectTo:host
                port:port
                 tls:tls
           keepalive:keepalive
@@ -384,7 +398,7 @@
 - (void)updateState:(MQTTSessionManagerState)newState
 {
     self.state = newState;
-    
+
     if ([self.delegate respondsToSelector:@selector(sessionManager:didChangeState:)]) {
         [self.delegate sessionManager:self didChangeState:newState];
     }
@@ -406,13 +420,13 @@
 {
 #ifdef DEBUG
     __unused const NSDictionary *events = @{
-                                   @(MQTTSessionEventConnected): @"connected",
-                                   @(MQTTSessionEventConnectionRefused): @"connection refused",
-                                   @(MQTTSessionEventConnectionClosed): @"connection closed",
-                                   @(MQTTSessionEventConnectionError): @"connection error",
-                                   @(MQTTSessionEventProtocolError): @"protocoll error",
-                                   @(MQTTSessionEventConnectionClosedByBroker): @"connection closed by broker"
-                                   };
+                                            @(MQTTSessionEventConnected): @"connected",
+                                            @(MQTTSessionEventConnectionRefused): @"connection refused",
+                                            @(MQTTSessionEventConnectionClosed): @"connection closed",
+                                            @(MQTTSessionEventConnectionError): @"connection error",
+                                            @(MQTTSessionEventProtocolError): @"protocoll error",
+                                            @(MQTTSessionEventConnectionClosedByBroker): @"connection closed by broker"
+                                            };
     DDLogVerbose(@"[MQTTSessionManager] eventCode: %@ (%ld) %@", events[@(eventCode)], (long)eventCode, error);
 #endif
     [self.reconnectTimer invalidate];
@@ -432,8 +446,10 @@
         case MQTTSessionEventConnectionClosedByBroker:
             [self updateState:MQTTSessionManagerStateClosed];
             [self endBackgroundTask];
+            if (self.state != MQTTSessionManagerStateClosing) {
+                [self triggerDelayedReconnect];
+            }
             [self updateState:MQTTSessionManagerStateStarting];
-            [self triggerDelayedReconnect];
             break;
 
         case MQTTSessionEventProtocolError:
@@ -541,7 +557,7 @@
 {
     if (self.state == MQTTSessionManagerStateConnected) {
         NSDictionary *currentSubscriptions = [self.effectiveSubscriptions copy];
-        
+
         for (NSString *topicFilter in currentSubscriptions) {
             if (![newSubscriptions objectForKey:topicFilter]) {
                 [self.session unsubscribeTopic:topicFilter unsubscribeHandler:^(NSError *error) {
@@ -555,7 +571,7 @@
                 }];
             }
         }
-        
+
         for (NSString *topicFilter in newSubscriptions) {
             if (![currentSubscriptions objectForKey:topicFilter]) {
                 NSNumber *number = newSubscriptions[topicFilter];
