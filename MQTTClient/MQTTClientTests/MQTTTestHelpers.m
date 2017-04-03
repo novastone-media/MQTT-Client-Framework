@@ -336,7 +336,6 @@
     session.password = parameters[@"pass"];
     session.protocolLevel = [parameters[@"protocollevel"] intValue];
     session.persistence = [MQTTTestHelpers persistence:parameters];
-    session.securityPolicy = [MQTTTestHelpers securityPolicy:parameters];
     return session;
 }
 

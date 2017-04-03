@@ -51,7 +51,8 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
     MQTTUnsuback = 11,
     MQTTPingreq = 12,
     MQTTPingresp = 13,
-    MQTTDisconnect = 14
+    MQTTDisconnect = 14,
+    MQTTAuth = 15
 };
 
 @interface MQTTMessage : NSObject
@@ -89,22 +90,34 @@ typedef NS_ENUM(NSUInteger, MQTTConnectReturnCode) {
                               protocolLevel:(UInt8)protocolLevel;
 
 + (MQTTMessage *)pingreqMessage;
-+ (MQTTMessage *)disconnectMessage;
+
++ (MQTTMessage *)disconnectMessage:(MQTTProtocolVersion)protocolLevel;
+
 + (MQTTMessage *)subscribeMessageWithMessageId:(UInt16)msgId
-                                        topics:(NSDictionary *)topics;
+                                        topics:(NSDictionary *)topics
+                                 protocolLevel:(MQTTProtocolVersion)protocolLevel;
+
 + (MQTTMessage *)unsubscribeMessageWithMessageId:(UInt16)msgId
-                                          topics:(NSArray *)topics;
+                                          topics:(NSArray *)topics
+                                   protocolLevel:(MQTTProtocolVersion)protocolLevel;
+
 + (MQTTMessage *)publishMessageWithData:(NSData*)payload
                                 onTopic:(NSString*)topic
                                     qos:(MQTTQosLevel)qosLevel
                                   msgId:(UInt16)msgId
                              retainFlag:(BOOL)retain
-                                dupFlag:(BOOL)dup;
-+ (MQTTMessage *)pubackMessageWithMessageId:(UInt16)msgId;
-+ (MQTTMessage *)pubrecMessageWithMessageId:(UInt16)msgId;
-+ (MQTTMessage *)pubrelMessageWithMessageId:(UInt16)msgId;
-+ (MQTTMessage *)pubcompMessageWithMessageId:(UInt16)msgId;
-+ (MQTTMessage *)messageFromData:(NSData *)data;
+                                dupFlag:(BOOL)dup
+                          protocolLevel:(MQTTProtocolVersion)protocolLevel;
+
++ (MQTTMessage *)pubackMessageWithMessageId:(UInt16)msgId protocolLevel:(MQTTProtocolVersion)protocolLevel;
+
++ (MQTTMessage *)pubrecMessageWithMessageId:(UInt16)msgId protocolLevel:(MQTTProtocolVersion)protocolLevel;
+
++ (MQTTMessage *)pubrelMessageWithMessageId:(UInt16)msgId protocolLevel:(MQTTProtocolVersion)protocolLevel;
+
++ (MQTTMessage *)pubcompMessageWithMessageId:(UInt16)msgId protocolLevel:(MQTTProtocolVersion)protocolLevel;
+
++ (MQTTMessage *)messageFromData:(NSData *)data protocolLevel:(MQTTProtocolVersion)protocolLevel;
 
 // instance methods
 - (instancetype)initWithType:(MQTTCommandType)type;

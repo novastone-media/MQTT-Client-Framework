@@ -144,6 +144,19 @@
     }
 }
 
+- (void)test_init_nonrestricted_clientId {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.clientId = @"123456789.123456789.123";
+        [self connect:parameters];
+        XCTAssert(!self.timedout, @"timeout");
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
+        [self shutdown:parameters];
+    }
+}
+
 - (void)test_init_no_clientId {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
