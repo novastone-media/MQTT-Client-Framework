@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.8.7a
+> Release date ?
+
+[NEW] Framework targest for macOS and tvOS
+[FIX] when i use TLS ,get CFNetwork SSLHandshake failed (-9807) #277
+
 ## MQTT-Client-Framework 0.8.6/7
 > Release date 2017-01-04
 
