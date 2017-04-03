@@ -45,6 +45,11 @@
               <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
               <Anchor>ac0c5a60636d7561abf1d20caddf6ea96</Anchor>
              </Node>
+             <Node>
+              <Name>voip</Name>
+              <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+              <Anchor>a93ad817080f804937ad2bfd7d4db2b8b</Anchor>
+             </Node>
             </Subnodes>
            </Node>
            <Node>
@@ -334,11 +339,6 @@
               <Anchor>a3ab2f0926aa51b0dc7969c66bae215e4</Anchor>
              </Node>
              <Node>
-              <Name>securityPolicy</Name>
-              <Path>interface_m_q_t_t_session.html</Path>
-              <Anchor>a74f593a2857ccf22a5073a71a408e465</Anchor>
-             </Node>
-             <Node>
               <Name>sessionPresent</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>ad0712c44abf0f514feb9462779d3e2b8</Anchor>
@@ -357,6 +357,11 @@
               <Name>userName</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a23cc4596889bf5798bf3749ee0a9e61f</Anchor>
+             </Node>
+             <Node>
+              <Name>voip</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a289e2046978f865a280c61725df526c1</Anchor>
              </Node>
              <Node>
               <Name>willFlag</Name>
@@ -521,9 +526,19 @@
               <Anchor>a71161804d040ca10e164578d7e7eb855</Anchor>
              </Node>
              <Node>
+              <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>ae57cebdca6694242b821cf089fea458d</Anchor>
+             </Node>
+             <Node>
               <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:connectInForeground:</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
               <Anchor>acae1db469b891501860bc1fbcfb5d7d7</Anchor>
+             </Node>
+             <Node>
+              <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:maxConnectionRetryInterval:connectInForeground:</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>a40c9ac2c9110a250caf35b16ff03f008</Anchor>
              </Node>
              <Node>
               <Name>sendData:topic:qos:retain:</Name>
@@ -574,7 +589,7 @@
              <Node>
               <Name>sessionManager:didChangeState:</Name>
               <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
-              <Anchor>a75d3ade6a0461a9b4496241e34d58e30</Anchor>
+              <Anchor>a6569e1ca87d4e098645e715ac69dcc53</Anchor>
              </Node>
             </Subnodes>
            </Node>

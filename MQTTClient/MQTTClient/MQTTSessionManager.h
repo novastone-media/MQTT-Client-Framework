@@ -51,7 +51,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @param sessionManager the instance of MQTTSessionManager whose state changed
  @param newState the new connection state of the sessionManager. This will be identical to `sessionManager.state`.
  */
-- (void)sessionManager:(MQTTSessionManager *)sessonManager didChangeState:(MQTTSessionManagerState)newState;
+- (void)sessionManager:(MQTTSessionManager *)sessionManager didChangeState:(MQTTSessionManagerState)newState;
 
 @end
 
@@ -110,6 +110,25 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 /** SessionManager last error code when state equals MQTTSessionManagerStateError
  */
 @property (nonatomic, readonly) NSError *lastErrorCode;
+
+/** initWithPersistence sets the MQTTPersistence properties other than default
+ * @param persistent YES or NO (default) to establish file or in memory persistence.
+ * @param maxWindowSize (a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are stored and transmitted later.
+ * @param maxSize (a positive number of bytes, default is 64 MB) to limit the size of the persistence file. Messages published after the limit is reached are dropped.
+ * @param maxMessages (a positive number, default is 1024) to limit the number of messages stored. Additional messages published are dropped.
+ * @param maxRetryInterval The duration at which the connection-retry timer should be capped. When MQTTSessionManager receives a ClosedByBroker or an Error
+ event, it will attempt to reconnect to the broker. The time in between connection attempts is doubled each time, until it remains at maxRetryInterval.
+ Defaults to 64 seconds.
+ * @param connectInForeground Whether or not to connect the MQTTSession when the app enters the foreground, and disconnect when it becomes inactive. When NO, the caller is responsible for calling -connectTo: and -disconnect. Defaults to YES.
+ * @return the initialized MQTTSessionManager object
+ */
+
+- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
+                              maxWindowSize:(NSUInteger)maxWindowSize
+                                maxMessages:(NSUInteger)maxMessages
+                                    maxSize:(NSUInteger)maxSize
+                 maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
+                        connectInForeground:(BOOL)connectInForeground;
 
 /** initWithPersistence sets the MQTTPersistence properties other than default
  * @param persistent YES or NO (default) to establish file or in memory persistence.

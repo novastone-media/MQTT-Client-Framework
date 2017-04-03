@@ -60,6 +60,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>voip</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instp</Type>
+      <Scope>MQTTCFSocketTransport</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+    <Anchor>a93ad817080f804937ad2bfd7d4db2b8b</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>certificates</Name>
       <APILanguage>occ</APILanguage>
       <Type>instp</Type>
@@ -1232,16 +1242,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>securityPolicy</Name>
-      <APILanguage>occ</APILanguage>
-      <Type>instp</Type>
-      <Scope>MQTTSession</Scope>
-    </TokenIdentifier>
-    <Path>interface_m_q_t_t_session.html</Path>
-    <Anchor>a74f593a2857ccf22a5073a71a408e465</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>connectMessage</Name>
       <APILanguage>occ</APILanguage>
       <Type>instp</Type>
@@ -1269,6 +1269,16 @@
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session.html</Path>
     <Anchor>a8093f2231e12c54af5eb1791cc60b06f</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>voip</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instp</Type>
+      <Scope>MQTTSession</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session.html</Path>
+    <Anchor>a289e2046978f865a280c61725df526c1</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -1501,6 +1511,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:maxConnectionRetryInterval:connectInForeground:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSessionManager</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session_manager.html</Path>
+    <Anchor>a40c9ac2c9110a250caf35b16ff03f008</Anchor>
+    <DeclaredIn>MQTTSessionManager.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:connectInForeground:</Name>
       <APILanguage>occ</APILanguage>
       <Type>instm</Type>
@@ -1508,6 +1529,17 @@
     </TokenIdentifier>
     <Path>interface_m_q_t_t_session_manager.html</Path>
     <Anchor>acae1db469b891501860bc1fbcfb5d7d7</Anchor>
+    <DeclaredIn>MQTTSessionManager.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>initWithPersistence:maxWindowSize:maxMessages:maxSize:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>MQTTSessionManager</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_session_manager.html</Path>
+    <Anchor>ae57cebdca6694242b821cf089fea458d</Anchor>
     <DeclaredIn>MQTTSessionManager.h</DeclaredIn>
   </Token>
   <Token>
@@ -1677,7 +1709,7 @@
       <Scope>MQTTSessionManagerDelegate -p</Scope>
     </TokenIdentifier>
     <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
-    <Anchor>a75d3ade6a0461a9b4496241e34d58e30</Anchor>
+    <Anchor>a6569e1ca87d4e098645e715ac69dcc53</Anchor>
     <DeclaredIn>MQTTSessionManager.h</DeclaredIn>
   </Token>
   <Token>
@@ -1822,6 +1854,16 @@
     </TokenIdentifier>
     <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
     <Anchor>ac0c5a60636d7561abf1d20caddf6ea96</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>voip</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instp</Type>
+      <Scope>MQTTCFSocketTransport</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
+    <Anchor>a93ad817080f804937ad2bfd7d4db2b8b</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>

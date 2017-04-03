@@ -1,8 +1,6 @@
 MQTT-Client-Framework 
 =====================
 
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-
 an Objective-C native MQTT Framework http://mqtt.org
 
 ### Tested with
@@ -22,7 +20,7 @@ an Objective-C native MQTT Framework http://mqtt.org
 * aws
 * hbmqtt (MQTTv311 only, limitations)
 
-### Howto
+### As a CocoaPod
 
 Use the CocoaPod MQTTClient! 
 
@@ -53,11 +51,17 @@ pod 'MQTTClient/WebsocketL'
 ```
 instead.
 
+### As a dynamic library
+
 Or use the dynamic library created in the MQTTFramework target.
+
+### As source
 
 Or include the source from here.
 
-[Documentation](MQTTClient/dist/documentation/html/index.html)
+### With Carthage
+
+[Carthage](https://github.com/Carthage/Carthage)
 
 ### Usage
 
@@ -116,13 +120,16 @@ Publish a message to a topic:
 	                qos:MQTTQosLevelAtLeastOnce]; // this is part of the asynchronous API
 ```
 
-#### docs
+### docs
 
-Documentation generated with doxygen http://doxygen.org
+Documentation generated with doxygen http://doxygen.org in [Documentation](MQTTClient/dist/documentation/html/index.html)
 
-#### Comparison MQTT Clients for iOS (incomplete)
+
+### Comparison MQTT Clients for iOS (incomplete)
 
 |Wrapper|---|----|MQTTKit  |Marquette|Moscapsule|Musqueteer|MQTT-Client|MqttSDK|CocoaMQTT|
 |-------|---|----|---------|---------|----------|----------|-----------|-------|---------|
 |       |   |    |Obj-C    |Obj-C    |Swift     |Obj-C     |Obj-C      |Obj-C  |Swift    |
 |Library|IBM|Paho|Mosquitto|Mosquitto|Mosquitto |Mosquitto |native     |native |native   |
+
+
