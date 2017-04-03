@@ -51,7 +51,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @param sessionManager the instance of MQTTSessionManager whose state changed
  @param newState the new connection state of the sessionManager. This will be identical to `sessionManager.state`.
  */
-- (void)sessionManager:(MQTTSessionManager *)sessonManager didChangeState:(MQTTSessionManagerState)newState;
+- (void)sessionManager:(MQTTSessionManager *)sessionManager didChangeState:(MQTTSessionManagerState)newState;
 
 @end
 
