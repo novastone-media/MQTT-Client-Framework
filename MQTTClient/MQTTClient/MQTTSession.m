@@ -400,6 +400,18 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         self.decoder.delegate = nil;
     }
     
+    NSArray *flows = [self.persistence allFlowsforClientId:self.clientId
+                                              incomingFlag:NO];
+    for (id<MQTTFlow> flow in flows) {
+        switch ([flow.commandType intValue]) {
+            case MQTTPublish:
+            case MQTTPubrel:
+                flow.deadline = [flow.deadline dateByAddingTimeInterval:-DUPTIMEOUT];
+                [self.persistence sync];
+                break;
+        }
+    }
+    
     self.status = MQTTSessionStatusClosed;
     if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
         [self.delegate handleEvent:self event:MQTTSessionEventConnectionClosed error:nil];
