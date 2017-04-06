@@ -68,6 +68,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionError) {
     MQTTSessionErrorEncoderNotReady = -5,
     MQTTSessionErrorInvalidConnackReceived = -2, // Sent if the message received from server was an invalid connack message
     MQTTSessionErrorNoConnackReceived = -1, // Sent if first message received from server was no connack message
+
     MQTTSessionErrorConnackUnacceptableProtocolVersion = 1, // Value as defined by MQTT Protocol
     MQTTSessionErrorConnackIdentifierRejected = 2, // Value as defined by MQTT Protocol
     MQTTSessionErrorConnackServeUnavailable = 3, // Value as defined by MQTT Protocol
@@ -382,6 +383,36 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 
 /** protocolLevel specifies the protocol to be used */
 @property (nonatomic) MQTTProtocolVersion protocolLevel;
+
+/** sessionExpiryInterval specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *sessionExpiryInterval;
+
+/** authMethod specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSString *authMethod;
+
+/** authData specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSData *authData;
+
+/** requestProblemInformation specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *requestProblemInformation;
+
+/** willDelayInterval specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *willDelayInterval;
+
+/** requestResponseInformation specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *requestResponseInformation;
+
+/** receiveMaximum specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *receiveMaximum;
+
+/** topicAliasMaximum specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *topicAliasMaximum;
+
+/** topicAliasMaximum specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSDictionary <NSString *, NSString*> *userProperty;
+
+/** maximumPacketSize specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *maximumPacketSize;
 
 /** runLoop The runLoop where the streams are scheduled. If nil, defaults to [NSRunLoop currentRunLoop]. */
 @property (strong, nonatomic) NSRunLoop *runLoop;

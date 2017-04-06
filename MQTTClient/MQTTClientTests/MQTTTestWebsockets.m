@@ -264,7 +264,17 @@
                                                                           willMsg:nil
                                                                           willQoS:MQTTQosLevelAtLeastOnce
                                                                        willRetain:false
-                                                                    protocolLevel:3];
+                                                                    protocolLevel:3
+                                                            sessionExpiryInterval:nil
+                                                                       authMethod:nil
+                                                                         authData:nil
+                                                        requestProblemInformation:nil
+                                                                willDelayInterval:nil
+                                                       requestResponseInformation:nil
+                                                                   receiveMaximum:nil
+                                                                topicAliasMaximum:nil
+                                                                     userProperty:nil
+                                                                maximumPacketSize:nil];
             
             self.timedout = FALSE;
             [self performSelector:@selector(timedout:)

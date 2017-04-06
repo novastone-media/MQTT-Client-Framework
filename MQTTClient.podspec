@@ -38,6 +38,7 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicyDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicyEncoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicyTransport.{h,m}",
+					"MQTTClient/MQTTClient/MqttProperties.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSession.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
@@ -45,7 +46,7 @@ Pod::Spec.new do |mqttc|
 	end
 
 	mqttc.subspec 'MinL' do |minl|
-		minl.dependency 'CocoaLumberjack', '~> 2.3.0'
+		minl.dependency 'CocoaLumberjack'
 
 		minl.source_files =	"MQTTClient/MQTTClient/MQTTCFSocketDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTCFSocketEncoder.{h,m}",
