@@ -322,8 +322,7 @@
  @param connectHandler identifies a block which is executed on successfull or unsuccessfull connect. Might be nil
  error is nil in the case of a successful connect
  sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
- 
- @return nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and
+ returns nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and
  - watch for events
  - watch for connect or connectionRefused messages
  - watch for error messages
@@ -343,7 +342,6 @@
  }];
  @endcode
  
- @deprecated as not all connection parameters are supported, use connect
  */
 
 - (void)connectToHost:(NSString *)host
@@ -356,10 +354,8 @@
  @param host see connectToHost for description
  @param port see connectToHost for description
  @param usingSSL see connectToHost for description
- 
- @return see connectToHost for description
- @deprecated as not all connection parameters are supported, use connect
- 
+ returns see connectToHost for description
+
  */
 - (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
 
@@ -369,7 +365,7 @@
  @param port see connectToHost for description
  @deprecated as not all connection parameters are supported, use connect
  */
-- (void)connectToHost:(NSString*)ip port:(UInt32)port;
+- (void)connectToHost:(NSString*)ip port:(UInt32)port __attribute__((deprecated));
 
 /** for mqttio-OBJC backward compatibility
  @param ip see connectToHost for description
@@ -382,7 +378,8 @@
 - (void)connectToHost:(NSString*)ip
                  port:(UInt32)port
 withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
-       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
+       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler
+__attribute__((deprecated));
 
 /** for mqttio-OBJC backward compatibility
  @param ip see connectToHost for description

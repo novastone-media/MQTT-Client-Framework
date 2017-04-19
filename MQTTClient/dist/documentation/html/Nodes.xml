@@ -269,6 +269,16 @@
               <Anchor>a1d566cac765cdcdb2563ffa45ef53bbe</Anchor>
              </Node>
              <Node>
+              <Name>authData</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a79dde69bcc1d7dbd56a30affeb994c20</Anchor>
+             </Node>
+             <Node>
+              <Name>authMethod</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a66319af49757a922a90fe0ad96ab9fac</Anchor>
+             </Node>
+             <Node>
               <Name>certificates</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a8093f2231e12c54af5eb1791cc60b06f</Anchor>
@@ -309,6 +319,11 @@
               <Anchor>aa63e148680fef0724b66218d53caba6d</Anchor>
              </Node>
              <Node>
+              <Name>maximumPacketSize</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a5f760a87b7c349e612e103f0147b516b</Anchor>
+             </Node>
+             <Node>
               <Name>messageHandler</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a0af8d5512fae0ed59e572e9566ac9940</Anchor>
@@ -329,6 +344,21 @@
               <Anchor>a12e20758c5f8a1f0f2bd7dac339fe88f</Anchor>
              </Node>
              <Node>
+              <Name>receiveMaximum</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a7b44b48ef732f87b41c5f9e7082ccc7a</Anchor>
+             </Node>
+             <Node>
+              <Name>requestProblemInformation</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>ad8d55fb716b76724ffa009197dcf85f0</Anchor>
+             </Node>
+             <Node>
+              <Name>requestResponseInformation</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a590a46485d04ce0d94740fe9f2957627</Anchor>
+             </Node>
+             <Node>
               <Name>runLoop</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a49e106f38faead00b6d9d53a77a50472</Anchor>
@@ -337,6 +367,11 @@
               <Name>runLoopMode</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a3ab2f0926aa51b0dc7969c66bae215e4</Anchor>
+             </Node>
+             <Node>
+              <Name>sessionExpiryInterval</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a03173ce5c561ad884fd4c3c86b893f54</Anchor>
              </Node>
              <Node>
               <Name>sessionPresent</Name>
@@ -349,6 +384,11 @@
               <Anchor>adff1474fe186b8af3bb4cac1ccd4ff2d</Anchor>
              </Node>
              <Node>
+              <Name>topicAliasMaximum</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a4cd7f476fc8c6e86927afa8fad70b820</Anchor>
+             </Node>
+             <Node>
               <Name>transport</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>ab3839efa8f1e67c2a1270a0bfa7362c1</Anchor>
@@ -359,9 +399,19 @@
               <Anchor>a23cc4596889bf5798bf3749ee0a9e61f</Anchor>
              </Node>
              <Node>
+              <Name>userProperty</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>aa9f5d1f4c1ced1fd857b60e1f6888f42</Anchor>
+             </Node>
+             <Node>
               <Name>voip</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a289e2046978f865a280c61725df526c1</Anchor>
+             </Node>
+             <Node>
+              <Name>willDelayInterval</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>ad4fb8060a057777d053aec803097c10a</Anchor>
              </Node>
              <Node>
               <Name>willFlag</Name>

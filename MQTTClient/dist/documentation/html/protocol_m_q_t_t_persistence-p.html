@@ -138,8 +138,8 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 <p>Retrieves all <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> elements of a clientId and direction </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">clientId</td><td></td></tr>
-    <tr><td class="paramname">incomingFlag</td><td></td></tr>
+    <tr><td class="paramname">clientId</td><td>whos MQTTFlows should be retrieved </td></tr>
+    <tr><td class="paramname">incomingFlag</td><td>specifies the wether incoming or outgoing flows should be retrieved </td></tr>
   </table>
   </dd>
 </dl>
@@ -164,7 +164,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 <p>Deletes all <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> elements of a clientId </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">clientId</td><td></td></tr>
+    <tr><td class="paramname">clientId</td><td>the client Id identifying all MQTTFlows to be deleted </td></tr>
   </table>
   </dd>
 </dl>
@@ -188,7 +188,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 <p>Deletes an <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> element </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">flow</td><td></td></tr>
+    <tr><td class="paramname">flow</td><td>the <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> to delete </td></tr>
   </table>
   </dd>
 </dl>
@@ -228,9 +228,9 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 <p>Retrieves an <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> element </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">clientId</td><td></td></tr>
-    <tr><td class="paramname">incomingFlag</td><td></td></tr>
-    <tr><td class="paramname">messageId</td><td></td></tr>
+    <tr><td class="paramname">clientId</td><td>to which the <a class="el" href="interface_m_q_t_t_flow.html">MQTTFlow</a> belongs to </td></tr>
+    <tr><td class="paramname">incomingFlag</td><td>specifies the direction of the flow </td></tr>
+    <tr><td class="paramname">messageId</td><td>specifies the message Id of the flow </td></tr>
   </table>
   </dd>
 </dl>
@@ -307,15 +307,15 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 <p>Stores one new message </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">clientId</td><td></td></tr>
-    <tr><td class="paramname">topic</td><td></td></tr>
-    <tr><td class="paramname">data</td><td></td></tr>
-    <tr><td class="paramname">retainFlag</td><td></td></tr>
-    <tr><td class="paramname">qos</td><td></td></tr>
-    <tr><td class="paramname">msgId</td><td></td></tr>
-    <tr><td class="paramname">incomingFlag</td><td></td></tr>
-    <tr><td class="paramname">commandType</td><td></td></tr>
-    <tr><td class="paramname">deadline</td><td></td></tr>
+    <tr><td class="paramname">clientId</td><td>identifying the session </td></tr>
+    <tr><td class="paramname">topic</td><td>the topic of the message </td></tr>
+    <tr><td class="paramname">data</td><td>the message's data </td></tr>
+    <tr><td class="paramname">retainFlag</td><td>the retain flag of the message </td></tr>
+    <tr><td class="paramname">qos</td><td>the quality of service of the message </td></tr>
+    <tr><td class="paramname">msgId</td><td>the id of the message or zero for qos zero </td></tr>
+    <tr><td class="paramname">incomingFlag</td><td>the direction of the message </td></tr>
+    <tr><td class="paramname">commandType</td><td>the command of the message </td></tr>
+    <tr><td class="paramname">deadline</td><td>the deadline of the message for repetitions </td></tr>
   </table>
   </dd>
 </dl>
@@ -358,7 +358,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 <p>The current Window Size for outgoing inflight messages per clientID. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">clientId</td><td></td></tr>
+    <tr><td class="paramname">clientId</td><td>identifying the session </td></tr>
   </table>
   </dd>
 </dl>
@@ -465,7 +465,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Apr 3 2017 13:24:55 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 19 2017 14:51:29 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

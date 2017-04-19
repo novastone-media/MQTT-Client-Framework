@@ -6,6 +6,7 @@ var searchData=
   ['sending_3atype_3aqos_3aretained_3aduped_3amid_3adata_3a',['sending:type:qos:retained:duped:mid:data:',['../protocol_m_q_t_t_session_delegate_01-p.html#ae91831aacee0d83bbba7ba8e407b46d9',1,'MQTTSessionDelegate -p']]],
   ['session_3ahandleevent_3a',['session:handleEvent:',['../protocol_m_q_t_t_session_delegate_01-p.html#aa308f351c7b824665fba1c6875789c1e',1,'MQTTSessionDelegate -p']]],
   ['session_3anewmessage_3aontopic_3a',['session:newMessage:onTopic:',['../protocol_m_q_t_t_session_delegate_01-p.html#aacbda6f90a303f2f1a24cc364ba0f1d5',1,'MQTTSessionDelegate -p']]],
+  ['sessionexpiryinterval',['sessionExpiryInterval',['../interface_m_q_t_t_session.html#a03173ce5c561ad884fd4c3c86b893f54',1,'MQTTSession']]],
   ['sessionmanager_3adidchangestate_3a',['sessionManager:didChangeState:',['../protocol_m_q_t_t_session_manager_delegate_01-p.html#a6569e1ca87d4e098645e715ac69dcc53',1,'MQTTSessionManagerDelegate -p']]],
   ['sessionpresent',['sessionPresent',['../interface_m_q_t_t_session.html#ad0712c44abf0f514feb9462779d3e2b8',1,'MQTTSession']]],
   ['sslpinningmode',['SSLPinningMode',['../interface_m_q_t_t_s_s_l_security_policy.html#aca548d3c82c982c275e6c68d92648d89',1,'MQTTSSLSecurityPolicy']]],

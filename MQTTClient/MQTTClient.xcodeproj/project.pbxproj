@@ -138,6 +138,12 @@
 		8425D7141BBE8D68005AD733 /* MQTTClientPublishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */; };
 		8425D7191BBE8EF1005AD733 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8425D7181BBE8EF1005AD733 /* CoreData.framework */; };
 		8425D71B1BBE8EF9005AD733 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8425D71A1BBE8EF9005AD733 /* Foundation.framework */; };
+		842951D61EA794770066C044 /* MqttProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 8436B1741E93EBAA00E24A4E /* MqttProperties.m */; };
+		842951D71EA794780066C044 /* MqttProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 8436B1741E93EBAA00E24A4E /* MqttProperties.m */; };
+		842951D81EA794790066C044 /* MqttProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 8436B1741E93EBAA00E24A4E /* MqttProperties.m */; };
+		842951D91EA7947E0066C044 /* MqttProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8436B1731E93EBAA00E24A4E /* MqttProperties.h */; };
+		842951DA1EA7947F0066C044 /* MqttProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8436B1731E93EBAA00E24A4E /* MqttProperties.h */; };
+		842951DB1EA794800066C044 /* MqttProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8436B1731E93EBAA00E24A4E /* MqttProperties.h */; };
 		8429773F1B87CEF600A119FB /* MQTTTestSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */; };
 		8435A25D1BF3C69200D2BF33 /* MQTTTestBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */; };
 		8435A25E1BF3C69200D2BF33 /* MQTTTestBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */; };
@@ -908,6 +914,7 @@
 				841D0AA01C35883F006A82DC /* MQTTCoreDataPersistence.h in Headers */,
 				841D0A981C35881F006A82DC /* MQTTSSLSecurityPolicyDecoder.h in Headers */,
 				845922A61C175AA400CCE27E /* MQTTCFSocketDecoder.h in Headers */,
+				842951D91EA7947E0066C044 /* MqttProperties.h in Headers */,
 				84998C841C0ED7EF00119061 /* MQTTSessionLegacy.h in Headers */,
 				84998C8D1C0EE26600119061 /* MQTTSessionSynchron.h in Headers */,
 				845922A21C175AA400CCE27E /* MQTTTransport.h in Headers */,
@@ -936,6 +943,7 @@
 				F6D08FBE1E535BF900CD2566 /* MQTTSSLSecurityPolicy.h in Headers */,
 				F6D08FD21E535CF700CD2566 /* MQTTClient-Prefix.pch in Headers */,
 				F6D08FCC1E535BF900CD2566 /* MQTTCoreDataPersistence.h in Headers */,
+				842951DB1EA794800066C044 /* MqttProperties.h in Headers */,
 				F6D08FD01E535BFF00CD2566 /* MQTTLog.h in Headers */,
 				F6D08FCA1E535BF900CD2566 /* MQTTSessionLegacy.h in Headers */,
 				F6D08FD11E535CBD00CD2566 /* MQTTFramework.h in Headers */,
@@ -951,6 +959,7 @@
 			files = (
 				F6D090001E535F2A00CD2566 /* MQTTInMemoryPersistence.h in Headers */,
 				F6D08FF51E535F2A00CD2566 /* MQTTSSLSecurityPolicyTransport.h in Headers */,
+				842951DA1EA7947F0066C044 /* MqttProperties.h in Headers */,
 				F6D08FF71E535F2A00CD2566 /* MQTTCFSocketDecoder.h in Headers */,
 				F6D08FF21E535F2A00CD2566 /* MQTTSSLSecurityPolicy.h in Headers */,
 				F6D08FFA1E535F2A00CD2566 /* MQTTMessage.h in Headers */,
@@ -1511,6 +1520,7 @@
 				DE9EF5CE1C0628EB009EF667 /* MQTTDecoder.m in Sources */,
 				845922A91C175AA400CCE27E /* MQTTCFSocketTransport.m in Sources */,
 				DE9EF5CF1C0628EB009EF667 /* MQTTCFSocketEncoder.m in Sources */,
+				842951D61EA794770066C044 /* MqttProperties.m in Sources */,
 				84A592171C3C5343008C5199 /* MQTTTransport.m in Sources */,
 				DE9EF5D01C0628EB009EF667 /* MQTTMessage.m in Sources */,
 				DE9EF5D31C0628EB009EF667 /* MQTTSessionManager.m in Sources */,
@@ -1534,6 +1544,7 @@
 				F6D08FB51E535BCB00CD2566 /* MQTTDecoder.m in Sources */,
 				F6D08FB61E535BCB00CD2566 /* MQTTMessage.m in Sources */,
 				F6D08FB71E535BCB00CD2566 /* MQTTSession.m in Sources */,
+				842951D81EA794790066C044 /* MqttProperties.m in Sources */,
 				F6D08FB81E535BCB00CD2566 /* MQTTSessionSynchron.m in Sources */,
 				F6D08FB91E535BCB00CD2566 /* MQTTSessionLegacy.m in Sources */,
 				F6D08FBA1E535BCB00CD2566 /* MQTTCoreDataPersistence.m in Sources */,
@@ -1557,6 +1568,7 @@
 				F6D08FE91E535F1000CD2566 /* MQTTDecoder.m in Sources */,
 				F6D08FEA1E535F1000CD2566 /* MQTTMessage.m in Sources */,
 				F6D08FEB1E535F1000CD2566 /* MQTTSession.m in Sources */,
+				842951D71EA794780066C044 /* MqttProperties.m in Sources */,
 				F6D08FEC1E535F1000CD2566 /* MQTTSessionSynchron.m in Sources */,
 				F6D08FED1E535F1000CD2566 /* MQTTSessionLegacy.m in Sources */,
 				F6D08FEE1E535F1000CD2566 /* MQTTCoreDataPersistence.m in Sources */,

@@ -63,21 +63,21 @@ static NSInteger const MQTT_MAX_MESSAGES = 1024;
 @property (nonatomic) NSUInteger maxSize;
 
 /** The current Window Size for outgoing inflight messages per clientID.
- * @param clientId
+ * @param clientId identifying the session
  * @return the current size of the outgoing inflight window
  */
 - (NSUInteger)windowSize:(NSString *)clientId;
 
 /** Stores one new message
- * @param clientId
- * @param topic
- * @param data
- * @param retainFlag
- * @param qos
- * @param msgId
- * @param incomingFlag
- * @param commandType
- * @param deadline
+ * @param clientId identifying the session
+ * @param topic the topic of the message
+ * @param data the message's data
+ * @param retainFlag the retain flag of the message
+ * @param qos the quality of service of the message
+ * @param msgId the id of the message or zero for qos zero
+ * @param incomingFlag the direction of the message
+ * @param commandType the command of the message
+ * @param deadline the deadline of the message for repetitions
  * @return the created MQTTFlow element or nil if the maxWindowSize has been exceeded
  */
 - (id<MQTTFlow>)storeMessageForClientId:(NSString *)clientId
@@ -91,27 +91,27 @@ static NSInteger const MQTT_MAX_MESSAGES = 1024;
                                deadline:(NSDate *)deadline;
 
 /** Deletes an MQTTFlow element
- * @param flow
+ * @param flow the MQTTFlow to delete
  */
 - (void)deleteFlow:(id<MQTTFlow>)flow;
 
 /** Deletes all MQTTFlow elements of a clientId
- * @param clientId
+ * @param clientId the client Id identifying all MQTTFlows to be deleted
  */
 - (void)deleteAllFlowsForClientId:(NSString *)clientId;
 
 /** Retrieves all MQTTFlow elements of a clientId and direction
- * @param clientId
- * @param incomingFlag
+ * @param clientId whos MQTTFlows should be retrieved
+ * @param incomingFlag specifies the wether incoming or outgoing flows should be retrieved
  * @return an NSArray of the retrieved MQTTFlow elements
  */
 - (NSArray *)allFlowsforClientId:(NSString *)clientId
                     incomingFlag:(BOOL)incomingFlag;
 
 /** Retrieves an MQTTFlow element
- * @param clientId
- * @param incomingFlag
- * @param messageId
+ * @param clientId to which the MQTTFlow belongs to
+ * @param incomingFlag specifies the direction of the flow
+ * @param messageId specifies the message Id of the flow
  * @return the retrieved MQTTFlow element or nil if the elememt was not found
  */
 - (id<MQTTFlow>)flowforClientId:(NSString *)clientId

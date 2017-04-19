@@ -514,9 +514,7 @@
     if (self.state == MQTTSessionManagerStateStarting
         && self.session != nil) {
         [self updateState:MQTTSessionManagerStateConnecting];
-        [self.session connectToHost:self.host
-                               port:self.port
-                           usingSSL:self.tls];
+        [self.session connect];
     }
 }
 

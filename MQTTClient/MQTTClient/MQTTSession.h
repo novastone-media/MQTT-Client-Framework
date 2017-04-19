@@ -334,9 +334,7 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 @property (nonatomic, readonly) BOOL sessionPresent;
 
-/** see initWithClientId for description
- * @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
-
+/** The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
  */
 @property (strong, nonatomic) NSString *clientId;
 
@@ -456,8 +454,7 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  @param connectHandler identifies a block which is executed on successfull or unsuccessfull connect. Might be nil
  error is nil in the case of a successful connect
  sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
- 
- @return nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and
+ returns nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and
  - watch for events
  - watch for connect or connectionRefused messages
  - watch for error messages
