@@ -4,8 +4,8 @@
 <dict>
 	<key>brokerList</key>
 	<array>
-		<string>#local</string>
-		<string>local5</string>
+		<string>local</string>
+		<string>#local5</string>
 		<string>#localWS</string>
 		<string>#aWsBroker</string>
 		<string>#emqtt</string>
@@ -25,7 +25,7 @@
 			<key>timeout</key>
 			<integer>10</integer>
 			<key>port</key>
-			<integer>1883</integer>
+			<real>1883</real>
 			<key>tls</key>
 			<false/>
 			<key>protocollevel</key>
@@ -38,6 +38,10 @@
 			<true/>
 			<key>persistent</key>
 			<true/>
+			<key>user</key>
+			<string>user</string>
+			<key>pass</key>
+			<string>pass</string>
 		</dict>
 		<key>local5</key>
 		<dict>
@@ -46,7 +50,7 @@
 			<key>timeout</key>
 			<integer>10</integer>
 			<key>port</key>
-			<integer>1883</integer>
+			<real>1883</real>
 			<key>tls</key>
 			<false/>
 			<key>protocollevel</key>

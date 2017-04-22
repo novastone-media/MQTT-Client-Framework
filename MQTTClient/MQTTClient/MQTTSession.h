@@ -180,6 +180,22 @@ typedef NS_ENUM(NSInteger, MQTTSessionError) {
  */
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID;
 
+/** gets called when a published message was actually delivered
+ @param session the MQTTSession reporting the delivery
+ @param msgID the Message Identifier of the delivered message
+ @param topic the topic of the delivered message
+ @param data the data Identifier of the delivered message
+ @param qos the QoS level of the delivered message
+ @param retainFlag the retain Flag of the delivered message
+ @note this method is called after a publish with qos 1 or 2 only
+ */
+- (void)messageDelivered:(MQTTSession *)session
+                   msgID:(UInt16)msgID
+                   topic:(NSString *)topic
+                    data:(NSData *)data
+                     qos:(MQTTQosLevel)qos
+              retainFlag:(BOOL)retainFlag;
+
 /** gets called when a subscription is acknowledged by the MQTT broker
  @param session the MQTTSession reporting the acknowledge
  @param msgID the Message Identifier of the SUBSCRIBE message
@@ -737,7 +753,7 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  qos can be 0, 1, or 2.
  
  
- @param publishHandler identifies a block which is executed on successfull or unsuccessfull connect. Might be nil
+ @param publishHandler identifies a block which is executed on successfull or unsuccessfull publsh. Might be nil
  error is nil in the case of a successful connect
  sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
  

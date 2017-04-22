@@ -152,6 +152,17 @@
     self.deliveredMessageMid = msgID;
 }
 
+- (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID topic:(NSString *)topic data:(NSData *)data qos:(MQTTQosLevel)qos retainFlag:(BOOL)retainFlag {
+    DDLogVerbose(@"[MQTTTestHelpers] messageDelivered %d q%d r%d %@:%@",
+                 msgID,
+                 qos,
+                 retainFlag,
+                 topic,
+                 (data.length < 64 ?
+                  data.description :
+                  [data subdataWithRange:NSMakeRange(0, 64)].description));
+}
+
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
     DDLogVerbose(@"[MQTTTestHelpers] newMessage q%d r%d m%d %@:%@",
                  qos, retained, mid, topic, data);

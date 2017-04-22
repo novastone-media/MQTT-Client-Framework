@@ -892,11 +892,16 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                     messageId:messageId];
         if (flow) {
             if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelAtLeastOnce) {
-                [self.persistence deleteFlow:flow];
-                [self.persistence sync];
-                [self tell];
                 if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
                     [self.delegate messageDelivered:self msgID:messageId];
+                }
+                if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:topic:data:qos:retainFlag:)]) {
+                    [self.delegate messageDelivered:self
+                                              msgID:messageId
+                                              topic:flow.topic
+                                               data:flow.data
+                                                qos:[flow.qosLevel intValue]
+                                         retainFlag:[flow.retainedFlag boolValue]];
                 }
                 if (self.synchronPub && self.synchronPubMid == messageId) {
                     self.synchronPub = FALSE;
@@ -906,6 +911,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                     [self.publishHandlers removeObjectForKey:@(msg.mid)];
                     [self onPublish:publishHandler error:nil];
                 }
+                [self.persistence deleteFlow:flow];
+                [self.persistence sync];
+                [self tell];
             }
         }
     }
@@ -961,8 +969,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if (flow) {
         if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelExactlyOnce) {
             flow.commandType = @(MQTTPubrel);
-            flow.topic = nil;
-            flow.data = nil;
             flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
             [self.persistence sync];
         }
@@ -1010,7 +1016,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
             [self.persistence deleteFlow:flow];
             [self.persistence sync];
             [self tell];
-            (void)[self encode:[MQTTMessage pubcompMessageWithMessageId:message.mid protocolLevel:self.protocolLevel
+            (void)[self encode:[MQTTMessage pubcompMessageWithMessageId:message.mid
+                                                          protocolLevel:self.protocolLevel
                                                              returnCode:MQTTSuccess
                                                            reasonString:nil
                                                            userProperty:nil]];
@@ -1023,12 +1030,18 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                              incomingFlag:NO
                                                 messageId:message.mid];
     if (flow && [flow.commandType intValue] == MQTTPubrel) {
-        [self.persistence deleteFlow:flow];
-        [self.persistence sync];
-        [self tell];
         if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
             [self.delegate messageDelivered:self msgID:message.mid];
         }
+        if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:topic:data:qos:retainFlag:)]) {
+            [self.delegate messageDelivered:self
+                                      msgID:message.mid
+                                      topic:flow.topic
+                                       data:flow.data
+                                        qos:[flow.qosLevel intValue]
+                                 retainFlag:[flow.retainedFlag boolValue]];
+        }
+
         if (self.synchronPub && self.synchronPubMid == message.mid) {
             self.synchronPub = FALSE;
         }
@@ -1037,6 +1050,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
             [self.publishHandlers removeObjectForKey:@(message.mid)];
             [self onPublish:publishHandler error:nil];
         }
+        [self.persistence deleteFlow:flow];
+        [self.persistence sync];
+        [self tell];
     }
 }
 
