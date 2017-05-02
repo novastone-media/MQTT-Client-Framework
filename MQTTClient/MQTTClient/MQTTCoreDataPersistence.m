@@ -516,7 +516,7 @@ static unsigned long long fileSystemFreeSize;
             }
         }
 
-        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         [managedObjectContext setParentContext:parentManagedObjectContext];
         [[NSThread currentThread].threadDictionary setObject:managedObjectContext forKey:@"MQTTClient"];
 
