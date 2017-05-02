@@ -638,11 +638,13 @@
                                 message = nil;
                             }
                         }
-                        const UInt8 *bytes = message.data.bytes;
-                        message.returnCode = [NSNumber numberWithInt:bytes[1]];
-                        if (protocolLevel == MQTTProtocolVersion50) {
-                            message.properties = [[MqttProperties alloc] initFromData:
-                                                  [message.data subdataWithRange:NSMakeRange(2, message.data.length - 2)]];
+                        if (message) {
+                            const UInt8 *bytes = message.data.bytes;
+                            message.returnCode = [NSNumber numberWithInt:bytes[1]];
+                            if (protocolLevel == MQTTProtocolVersion50) {
+                                message.properties = [[MqttProperties alloc] initFromData:
+                                                      [message.data subdataWithRange:NSMakeRange(2, message.data.length - 2)]];
+                            }
                         }
                     }
                     if (type == MQTTSubscribe) {

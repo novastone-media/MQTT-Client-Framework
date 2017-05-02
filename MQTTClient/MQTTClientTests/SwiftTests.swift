@@ -95,7 +95,7 @@ class SwiftTests : MQTTTestHelpers {
             )
             
             while (m.state != .connected) {
-                print("waiting for connect %d", m.state);
+                print("waiting for connect \(m.state)");
                 RunLoop.current.run(until: Date(timeIntervalSinceNow: 1))
             }
             
