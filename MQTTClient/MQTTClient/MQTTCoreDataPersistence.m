@@ -506,7 +506,7 @@ static unsigned long long fileSystemFreeSize;
     if (managedObjectContext != nil) {
         return managedObjectContext;
     }
-
+    
     @synchronized (lock) {
         if (parentManagedObjectContext == nil) {
             NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
@@ -515,12 +515,17 @@ static unsigned long long fileSystemFreeSize;
                 [parentManagedObjectContext setPersistentStoreCoordinator:coordinator];
             }
         }
-
-        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [managedObjectContext setParentContext:parentManagedObjectContext];
-        [[NSThread currentThread].threadDictionary setObject:managedObjectContext forKey:@"MQTTClient"];
-
-        return managedObjectContext;
+        
+        if ([[NSThread currentThread] isMainThread]) { // The main MOC is already associated to the main thread
+            return parentManagedObjectContext;
+        } else { // Only create a new managed object context if in a background thread
+            managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+            [managedObjectContext setParentContext:parentManagedObjectContext];
+            
+            [[NSThread currentThread].threadDictionary setObject:managedObjectContext forKey:@"MQTTClient"];
+            
+            return managedObjectContext;
+        }
     }
 }
 
