@@ -43,8 +43,7 @@ static unsigned long long fileSystemFreeSize;
 @synthesize context;
 @synthesize object;
 
-- (MQTTCoreDataFlow *)initWithContext:(NSManagedObjectContext *)c andObject:(id<MQTTFlow>)o
-{
+- (MQTTCoreDataFlow *)initWithContext:(NSManagedObjectContext *)c andObject:(id<MQTTFlow>)o {
     self = [super init];
     self.context = c;
     self.object = o;
@@ -62,6 +61,7 @@ static unsigned long long fileSystemFreeSize;
     }
     return _clientId;
 }
+
 - (void)setClientId:(NSString *)clientId {
     if ([NSThread isMainThread]) {
         object.clientId = clientId;
@@ -72,6 +72,7 @@ static unsigned long long fileSystemFreeSize;
         }];
     }
 }
+
 - (NSNumber *)incomingFlag {
     __block NSNumber *_incomingFlag;
     if ([NSThread isMainThread]) {
@@ -83,16 +84,18 @@ static unsigned long long fileSystemFreeSize;
     }
     return _incomingFlag;
 }
+
 - (void)setIncomingFlag:(NSNumber *)incomingFlag {
     if ([NSThread isMainThread]) {
         object.incomingFlag = incomingFlag;
     } else {
-
         [context performBlockAndWait:^{
             object.incomingFlag = incomingFlag;
         }];
     }
 }
+
+
 - (NSNumber *)retainedFlag {
     __block NSNumber *_retainedFlag;
     if ([NSThread isMainThread]) {
@@ -104,16 +107,17 @@ static unsigned long long fileSystemFreeSize;
     }
     return _retainedFlag;
 }
+
 - (void)setRetainedFlag:(NSNumber *)retainedFlag {
     if ([NSThread isMainThread]) {
         object.retainedFlag = retainedFlag;
     } else {
-
         [context performBlockAndWait:^{
             object.retainedFlag = retainedFlag;
         }];
     }
 }
+
 - (NSNumber *)commandType {
     __block NSNumber *_commandType;
     if ([NSThread isMainThread]) {
@@ -125,6 +129,7 @@ static unsigned long long fileSystemFreeSize;
     }
     return _commandType;
 }
+
 - (void)setCommandType:(NSNumber *)commandType {
     if ([NSThread isMainThread]) {
         object.commandType = commandType;
@@ -135,6 +140,7 @@ static unsigned long long fileSystemFreeSize;
         }];
     }
 }
+
 - (NSNumber *)qosLevel {
     __block NSNumber *_qosLevel;
     if ([NSThread isMainThread]) {
@@ -146,6 +152,7 @@ static unsigned long long fileSystemFreeSize;
     }
     return _qosLevel;
 }
+
 - (void)setQosLevel:(NSNumber *)qosLevel {
     if ([NSThread isMainThread]) {
         object.qosLevel = qosLevel;
@@ -155,6 +162,7 @@ static unsigned long long fileSystemFreeSize;
         }];
     }
 }
+
 - (NSNumber *)messageId {
     __block NSNumber *_messageId;
     if ([NSThread isMainThread]) {
@@ -166,6 +174,7 @@ static unsigned long long fileSystemFreeSize;
     }
     return _messageId;
 }
+
 - (void)setMessageId:(NSNumber *)messageId {
     if ([NSThread isMainThread]) {
         object.messageId = messageId;
@@ -175,6 +184,7 @@ static unsigned long long fileSystemFreeSize;
         }];
     }
 }
+
 - (NSString *)topic {
     __block NSString *_topic;
     if ([NSThread isMainThread]) {
@@ -186,6 +196,7 @@ static unsigned long long fileSystemFreeSize;
     }
     return _topic;
 }
+
 - (void)setTopic:(NSString *)topic {
     if ([NSThread isMainThread]) {
         object.topic = topic;
@@ -195,6 +206,7 @@ static unsigned long long fileSystemFreeSize;
         }];
     }
 }
+
 - (NSData *)data {
     __block NSData *_data;
     if ([NSThread isMainThread]) {
@@ -206,6 +218,7 @@ static unsigned long long fileSystemFreeSize;
     }
     return _data;
 }
+
 - (void)setData:(NSData *)data {
     if ([NSThread isMainThread]) {
         object.data = data;
@@ -215,6 +228,7 @@ static unsigned long long fileSystemFreeSize;
         }];
     }
 }
+
 - (NSDate *)deadline {
     __block NSDate *_deadline;
     if ([NSThread isMainThread]) {
@@ -226,6 +240,7 @@ static unsigned long long fileSystemFreeSize;
     }
     return _deadline;
 }
+
 - (void)setDeadline:(NSDate *)deadline {
     if ([NSThread isMainThread]) {
         object.deadline = deadline;
@@ -327,8 +342,9 @@ static unsigned long long fileSystemFreeSize;
 }
 
 - (void)sync {
-    //Lock multithread execution 
+    DDLogVerbose(@"lock sync %d", [NSThread isMainThread]);
     @synchronized (lock) {
+        DDLogVerbose(@"locked sync %d", [NSThread isMainThread]);
         if ([NSThread isMainThread]) {
             [self internalSync];
         } else {
@@ -344,12 +360,13 @@ static unsigned long long fileSystemFreeSize;
                 [self internalParentSync];
             }];
         }
+        DDLogVerbose(@"unlocked sync %d", [NSThread isMainThread]);
     }
 }
 
 - (void)internalSync {
     if (self.managedObjectContext.hasChanges) {
-        DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
+        DDLogWarn(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
                      (unsigned long)self.managedObjectContext.insertedObjects.count,
                      (unsigned long)self.managedObjectContext.updatedObjects.count,
                      (unsigned long)self.managedObjectContext.deletedObjects.count
@@ -500,14 +517,15 @@ static unsigned long long fileSystemFreeSize;
 
 #pragma mark - Core Data stack
 
-- (NSManagedObjectContext *)managedObjectContext
-{
+- (NSManagedObjectContext *)managedObjectContext {
     NSManagedObjectContext *managedObjectContext = [[NSThread currentThread].threadDictionary valueForKey:@"MQTTClient"];
     if (managedObjectContext != nil) {
         return managedObjectContext;
     }
-    
+
+    DDLogError(@"lock managedObjectcontext %d", [NSThread isMainThread]);
     @synchronized (lock) {
+        DDLogError(@"locked managedObjectcontext %d", [NSThread isMainThread]);
         if (parentManagedObjectContext == nil) {
             NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
             if (coordinator != nil) {
@@ -516,23 +534,29 @@ static unsigned long long fileSystemFreeSize;
             }
         }
         
-        if ([[NSThread currentThread] isMainThread]) { // The main MOC is already associated to the main thread
+        if ([[NSThread currentThread] isMainThread]) {
+            // The main MOC is already associated to the main thread
+            [[NSThread currentThread].threadDictionary setObject:parentManagedObjectContext forKey:@"MQTTClient"];
+            DDLogVerbose(@"unlocked managedObjectcontext %d", [NSThread isMainThread]);
             return parentManagedObjectContext;
-        } else { // Only create a new managed object context if in a background thread
+        } else {
+            // Only create a new managed object context if in a background thread
             managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
             [managedObjectContext setParentContext:parentManagedObjectContext];
             
             [[NSThread currentThread].threadDictionary setObject:managedObjectContext forKey:@"MQTTClient"];
-            
+            DDLogVerbose(@"unlocked managedObjectcontext %d", [NSThread isMainThread]);
             return managedObjectContext;
         }
     }
 }
 
-- (NSManagedObjectModel *)managedObjectModel
-{
+- (NSManagedObjectModel *)managedObjectModel {
+    DDLogVerbose(@"lock managedObjectModel %d", [NSThread isMainThread]);
     @synchronized (lock) {
+        DDLogVerbose(@"locked managedObjectModel %d", [NSThread isMainThread]);
         if (managedObjectModel != nil) {
+            DDLogVerbose(@"unlocked managedObjectModel %d", [NSThread isMainThread]);
             return managedObjectModel;
         }
 
@@ -605,14 +629,17 @@ static unsigned long long fileSystemFreeSize;
         [entities addObject:entityDescription];
         [managedObjectModel setEntities:entities];
 
+        DDLogVerbose(@"unlocked managedObjectModel %d", [NSThread isMainThread]);
         return managedObjectModel;
     }
 }
 
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
-{
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    DDLogVerbose(@"lock persistentStoreCoordinator %d", [NSThread isMainThread]);
     @synchronized (lock) {
+        DDLogVerbose(@"locked persistentStoreCoordinator %d", [NSThread isMainThread]);
         if (persistentStoreCoordinator != nil) {
+            DDLogVerbose(@"unlocked persistentStoreCoordinator %d", [NSThread isMainThread]);
             return persistentStoreCoordinator;
         }
 
@@ -638,7 +665,7 @@ static unsigned long long fileSystemFreeSize;
             DDLogError(@"[MQTTPersistence] managedObjectContext save: %@", error);
             persistentStoreCoordinator = nil;
         }
-
+        DDLogVerbose(@"unlocked persistentStoreCoordinator %d", [NSThread isMainThread]);
         return persistentStoreCoordinator;
     }
 }

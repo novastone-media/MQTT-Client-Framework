@@ -9,8 +9,8 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTLog.h"
-#import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
+#import "MQTTSessionSynchron.h"
 
 @interface OneTest : NSObject <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
@@ -23,13 +23,6 @@
 
 - (id)setup:(NSDictionary *)parameters
 {
-#ifdef LUMBERJACK
-    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
-    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-    [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-#endif
-
     self.parameters = parameters;
 
     self.session = [MQTTTestHelpers session:parameters];
@@ -124,14 +117,6 @@
 - (void)setUp
 {
     [super setUp];
-    
-#ifdef LUMBERJACK
-    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
-    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-    [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-#endif
-
 }
 
 - (void)tearDown

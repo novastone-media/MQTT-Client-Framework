@@ -23,20 +23,6 @@
 
 @implementation MQTTTestSessionManager
 
-- (void)setUp {
-    [super setUp];
-#ifdef LUMBERJACK
-    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelInfo];
-    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-#endif
-}
-
-- (void)tearDown {
-    [super tearDown];
-}
-
 - (void)testMQTTSessionManagerClean {
     [self testMQTTSessionManager:true];
 }

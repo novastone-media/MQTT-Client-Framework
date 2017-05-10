@@ -423,7 +423,7 @@ Properties</h2></td></tr>
     <tr><td class="paramname">topic</td><td>the Topic to identify the data </td></tr>
     <tr><td class="paramname">retainFlag</td><td>if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES </td></tr>
     <tr><td class="paramname">qos</td><td>specifies the Quality of Service for the publish qos can be 0, 1, or 2.</td></tr>
-    <tr><td class="paramname">publishHandler</td><td>identifies a block which is executed on successfull or unsuccessfull connect. Might be nil error is nil in the case of a successful connect sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server</td></tr>
+    <tr><td class="paramname">publishHandler</td><td>identifies a block which is executed on successfull or unsuccessfull publsh. Might be nil error is nil in the case of a successful connect sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server</td></tr>
   </table>
   </dd>
 </dl>
@@ -1504,7 +1504,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 19 2017 14:51:29 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 10 2017 12:59:04 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

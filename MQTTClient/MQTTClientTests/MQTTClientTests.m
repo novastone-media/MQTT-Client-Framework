@@ -9,8 +9,9 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTLog.h"
-#import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
+#import "MQTTSessionSynchron.h"
+#import "MQTTCFSocketTransport.h"
 
 @interface MQTTClientTests : MQTTTestHelpers
 @property (nonatomic) BOOL ungraceful;
@@ -22,22 +23,6 @@
 @end
 
 @implementation MQTTClientTests
-
-- (void)setUp
-{
-    [super setUp];
-#ifdef LUMBERJACK
-    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
-    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-#endif
-}
-
-- (void)tearDown
-{
-    [super tearDown];
-}
 
 - (void)test_init {
     for (NSString *broker in self.brokers.allKeys) {

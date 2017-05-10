@@ -13,19 +13,21 @@
 #import "MQTTCoreDataPersistence.h"
 #import "MQTTWebsocketTransport.h"
 #import "MQTTSSLSecurityPolicy.h"
+#import "MQTTSSLSecurityPolicyTransport.h"
 
 @implementation MQTTTestHelpers
 
 - (void)setUp {
     [super setUp];
-    
-#ifdef LUMBERJACK
-   if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
-    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-    [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-#endif
 
+#ifdef LUMBERJACK
+#ifdef DEBUG
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelVerbose];
+#else
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelWarning];
+#endif
+#endif
+    
     NSURL *url = [[NSBundle bundleForClass:[MQTTTestHelpers class]] URLForResource:@"MQTTTestHelpers"
                                                                      withExtension:@"plist"];
     NSDictionary *plist = [NSDictionary dictionaryWithContentsOfURL:url];

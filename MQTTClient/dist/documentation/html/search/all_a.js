@@ -8,6 +8,7 @@ var searchData=
   ['mqtt_2dclient_2dframework_20ios_2fosx_2ftvos_20release_20notes',['MQTT-Client-Framework iOS/OSX/tvOS Release Notes',['../md___users_ckrey__m_q_t_t-_client-_framework__c_h_a_n_g_e_l_o_g.html',1,'']]],
   ['messagedelivered_3a',['messageDelivered:',['../protocol_m_q_t_t_session_manager_delegate_01-p.html#ac5c24515442786b7f4ee2b29a103fac4',1,'MQTTSessionManagerDelegate -p']]],
   ['messagedelivered_3amsgid_3a',['messageDelivered:msgID:',['../protocol_m_q_t_t_session_delegate_01-p.html#ab96022535f3a7dce2234515ccf4259e3',1,'MQTTSessionDelegate -p']]],
+  ['messagedelivered_3amsgid_3atopic_3adata_3aqos_3aretainflag_3a',['messageDelivered:msgID:topic:data:qos:retainFlag:',['../protocol_m_q_t_t_session_delegate_01-p.html#a1207126b8f3bc1b24b1514e4cd0877c6',1,'MQTTSessionDelegate -p']]],
   ['messagehandler',['messageHandler',['../interface_m_q_t_t_session.html#a0af8d5512fae0ed59e572e9566ac9940',1,'MQTTSession']]],
   ['messageid',['messageId',['../protocol_m_q_t_t_flow-p.html#aebfe27d14d007dbbe4c0f707fb39dc00',1,'MQTTFlow-p']]],
   ['mqttcfsockettransport',['MQTTCFSocketTransport',['../interface_m_q_t_t_c_f_socket_transport.html',1,'']]],

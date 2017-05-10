@@ -9,7 +9,7 @@
 /**
  Include this file to use MQTTClient classes in your application
  
- @author Christoph Krey krey.christoph@gmail.com
+ @author Christoph Krey c@ckrey.de
  @see http://mqtt.org
  */
 
@@ -18,6 +18,7 @@
 #import <MQTTClient/MQTTSession.h>
 #import <MQTTClient/MQTTSessionLegacy.h>
 #import <MQTTClient/MQTTSessionSynchron.h>
+#import <MQTTClient/MQTTProperties.h>
 #import <MQTTClient/MQTTMessage.h>
 #import <MQTTClient/MQTTTransport.h>
 #import <MQTTClient/MQTTCFSocketTransport.h>

@@ -1,5 +1,5 @@
 //
-//  MqttProperties.h
+//  MQTTProperties.h
 //  MQTTClient
 //
 //  Created by Christoph Krey on 04.04.17.
@@ -39,7 +39,7 @@ typedef NS_ENUM(UInt8, MQTTPropertyIdentifier) {
 };
 
 
-@interface MqttProperties : NSObject
+@interface MQTTProperties : NSObject
 
 @property (strong, nonatomic) NSNumber *payloadFormatIndicator;
 @property (strong, nonatomic) NSNumber *publicationExpiryInterval;

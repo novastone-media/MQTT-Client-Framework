@@ -1524,6 +1524,17 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>messageDelivered:msgID:topic:data:qos:retainFlag:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>intfm</Type>
+      <Scope>MQTTSessionDelegate -p</Scope>
+    </TokenIdentifier>
+    <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+    <Anchor>a1207126b8f3bc1b24b1514e4cd0877c6</Anchor>
+    <DeclaredIn>MQTTSession.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>subAckReceived:msgID:grantedQoss:</Name>
       <APILanguage>occ</APILanguage>
       <Type>intfm</Type>

@@ -6,36 +6,28 @@
 //  Copyright © 2016-2017 Christoph Krey. All rights reserved.
 //
 
-#ifndef MQTTLog_h
-
-#define MQTTLog_h
-
-
 #ifdef LUMBERJACK
-    #define LOG_LEVEL_DEF ddLogLevel
-    #import <CocoaLumberjack/CocoaLumberjack.h>
-    #ifndef myLogLevel
-        #ifdef DEBUG
-            static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-        #else
-            static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-        #endif
-    #else
-        static const DDLogLevel ddLogLevel = myLogLevel;
-    #endif
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>
+#ifndef myLogLevel
+#ifdef DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 #else
-    #ifdef DEBUG
-        #define DDLogVerbose NSLog
-        #define DDLogWarn NSLog
-        #define DDLogInfo NSLog
-        #define DDLogError NSLog
-    #else
-        #define DDLogVerbose(...)
-        #define DDLogWarn(...)
-        #define DDLogInfo(...)
-        #define DDLogError(...)
-        #endif
-#endif
-
-
-#endif /* MQTTLog_h */
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif /* DEBUG */
+#else
+static const DDLogLevel ddLogLevel = myLogLevel;
+#endif /* myLogLevel */
+#else
+#ifdef DEBUG
+#define DDLogVerbose NSLog
+#define DDLogWarn NSLog
+#define DDLogInfo NSLog
+#define DDLogError NSLog
+#else
+#define DDLogVerbose(...)
+#define DDLogWarn(...)
+#define DDLogInfo(...)
+#define DDLogError(...)
+#endif /* DEBUG */
+#endif /* LUMBERJACK */

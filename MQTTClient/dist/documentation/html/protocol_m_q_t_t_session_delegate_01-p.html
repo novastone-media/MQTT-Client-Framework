@@ -103,6 +103,8 @@ Instance Methods</h2></td></tr>
 <tr class="separator:aef7d9bfd2b53c2e188a0b88554093db9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab96022535f3a7dce2234515ccf4259e3"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate_01-p.html#ab96022535f3a7dce2234515ccf4259e3">messageDelivered:msgID:</a></td></tr>
 <tr class="separator:ab96022535f3a7dce2234515ccf4259e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1207126b8f3bc1b24b1514e4cd0877c6"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate_01-p.html#a1207126b8f3bc1b24b1514e4cd0877c6">messageDelivered:msgID:topic:data:qos:retainFlag:</a></td></tr>
+<tr class="separator:a1207126b8f3bc1b24b1514e4cd0877c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23603651fef7f317958e947c95a6a726"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate_01-p.html#a23603651fef7f317958e947c95a6a726">subAckReceived:msgID:grantedQoss:</a></td></tr>
 <tr class="separator:a23603651fef7f317958e947c95a6a726"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f740585b1691979cdb40003eb9554b0"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_delegate_01-p.html#a9f740585b1691979cdb40003eb9554b0">unsubAckReceived:msgID:</a></td></tr>
@@ -587,6 +589,78 @@ Instance Methods</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">session</td><td>the <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> reporting the delivery </td></tr>
     <tr><td class="paramname">msgID</td><td>the Message Identifier of the delivered message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>this method is called after a publish with qos 1 or 2 only </dd></dl>
+
+</div>
+</div>
+<a id="a1207126b8f3bc1b24b1514e4cd0877c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1207126b8f3bc1b24b1514e4cd0877c6">&#9670;&nbsp;</a></span>messageDelivered:msgID:topic:data:qos:retainFlag:()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void MQTTSessionDelegate) messageDelivered: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> *)&#160;</td>
+          <td class="paramname"><em>session</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">msgID:</td>
+          <td></td>
+          <td class="paramtype">(UInt16)&#160;</td>
+          <td class="paramname"><em>msgID</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">topic:</td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>topic</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">data:</td>
+          <td></td>
+          <td class="paramtype">(NSData *)&#160;</td>
+          <td class="paramname"><em>data</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">qos:</td>
+          <td></td>
+          <td class="paramtype">(MQTTQosLevel)&#160;</td>
+          <td class="paramname"><em>qos</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">retainFlag:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>retainFlag</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>gets called when a published message was actually delivered </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">session</td><td>the <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> reporting the delivery </td></tr>
+    <tr><td class="paramname">msgID</td><td>the Message Identifier of the delivered message </td></tr>
+    <tr><td class="paramname">topic</td><td>the topic of the delivered message </td></tr>
+    <tr><td class="paramname">data</td><td>the data Identifier of the delivered message </td></tr>
+    <tr><td class="paramname">qos</td><td>the QoS level of the delivered message </td></tr>
+    <tr><td class="paramname">retainFlag</td><td>the retain Flag of the delivered message </td></tr>
   </table>
   </dd>
 </dl>
@@ -1128,7 +1202,7 @@ Instance Methods</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 19 2017 14:51:29 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 10 2017 12:59:04 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

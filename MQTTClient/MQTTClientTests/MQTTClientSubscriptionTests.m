@@ -9,28 +9,13 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTLog.h"
-#import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
+#import "MQTTSessionSynchron.h"
 
 @interface MQTTClientSubscriptionTests : MQTTTestHelpers
 @end
 
 @implementation MQTTClientSubscriptionTests
-
-- (void)setUp {
-    [super setUp];
-
-#ifdef LUMBERJACK
-    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
-    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-#endif
-}
-
-- (void)tearDown {
-    [super tearDown];
-}
 
 - (void)testSubscribe_with_wrong_flags_MQTT_3_8_1_1 {
     DDLogVerbose(@"can't test [MQTT-3.8.1-1]");

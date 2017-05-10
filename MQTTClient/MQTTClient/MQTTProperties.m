@@ -1,19 +1,19 @@
 //
-//  MqttProperties.m
+//  MQTTProperties.m
 //  MQTTClient
 //
 //  Created by Christoph Krey on 04.04.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 
-#import "MqttProperties.h"
+#import "MQTTProperties.h"
 
-@implementation MqttProperties
+@implementation MQTTProperties
 - (instancetype)initFromData:(NSData *)data {
     self = [super init];
 
-    int propertyLength = [MqttProperties getVariableLength:data];
-    int offset = [MqttProperties variableIntLength:propertyLength];
+    int propertyLength = [MQTTProperties getVariableLength:data];
+    int offset = [MQTTProperties variableIntLength:propertyLength];
     NSData *remainingData = [data subdataWithRange:NSMakeRange(offset, data.length - offset)];
     offset = 0;
     if (remainingData.length >= propertyLength) {
@@ -29,41 +29,41 @@
                     break;
                 case MQTTPublicationExpiryInterval:
                     if (propertyLength - offset > 4) {
-                        self.publicationExpiryInterval = [NSNumber numberWithInt:[MqttProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.publicationExpiryInterval = [NSNumber numberWithInt:[MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
                         offset += 5;
                     }
                     break;
                 case MQTTContentType:
                     if (propertyLength - offset > 2) {
-                        int l = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        self.contentType = [MqttProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        self.contentType = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         offset += 1 + 2 + l;
                     }
                     break;
 
                 case MQTTResponseTopic:
                     if (propertyLength - offset > 2) {
-                        int l = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        self.responseTopic = [MqttProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        self.responseTopic = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         offset += 1 + 2 + l;
                     }
                     break;
 
                 case MQTTCorrelationData:
                     if (propertyLength - offset > 2) {
-                        int l = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        self.correlationData = [MqttProperties getBinaryData:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        self.correlationData = [MQTTProperties getBinaryData:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         offset += 1 + 2 + l;
                     }
                     break;
 
                 case MQTTSubscriptionIdentifier:
                     if (propertyLength - offset > 1) {
-                        int subscriptionIdentifier = [MqttProperties getVariableLength:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
-                        int l = [MqttProperties variableIntLength:subscriptionIdentifier];
+                        int subscriptionIdentifier = [MQTTProperties getVariableLength:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties variableIntLength:subscriptionIdentifier];
                         self.subscriptionIdentifier = [NSNumber numberWithInt:subscriptionIdentifier];
                         offset += 1 + l;
 
@@ -72,15 +72,15 @@
 
                 case MQTTSessionExpiryInterval:
                     if (propertyLength - offset > 4) {
-                        self.sessionExpiryInterval = [NSNumber numberWithInt:[MqttProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.sessionExpiryInterval = [NSNumber numberWithInt:[MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
                         offset += 5;
                     }
                     break;
                 case MQTTAssignedClientIdentifier:
                     if (propertyLength - offset > 2) {
-                        int l = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        self.assignedClientIdentifier = [MqttProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        self.assignedClientIdentifier = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         offset += 1 + 2 + l;
                     }
                     break;
@@ -88,16 +88,16 @@
 
                 case MQTTServerKeepAlive:
                     if (propertyLength - offset > 2) {
-                        self.serverKeepAlive = [NSNumber numberWithInt:[MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.serverKeepAlive = [NSNumber numberWithInt:[MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
                         offset += 3;
                     }
                     break;
 
                 case MQTTAuthMethod:
                     if (propertyLength - offset > 2) {
-                        int l = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        self.authMethod = [MqttProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        self.authMethod = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         offset += 1 + 2 + l;
                     }
                     break;
@@ -105,9 +105,9 @@
 
                 case MQTTAuthData:
                     if (propertyLength - offset > 2) {
-                        int l = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        self.authData = [MqttProperties getBinaryData:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        self.authData = [MQTTProperties getBinaryData:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         offset += 1 + 2 + l;
                     }
                     break;
@@ -122,7 +122,7 @@
 
                 case MQTTWillDelayInterval:
                     if (propertyLength - offset > 4) {
-                        self.willDelayInterval = [NSNumber numberWithInt:[MqttProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.willDelayInterval = [NSNumber numberWithInt:[MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
                         offset += 5;
                     }
                     break;
@@ -136,9 +136,9 @@
 
                 case MQTTResponseInformation:
                     if (propertyLength - offset > 2) {
-                        int l = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        self.responseInformation = [MqttProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        self.responseInformation = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         offset += 1 + 2 + l;
                     }
                     break;
@@ -146,9 +146,9 @@
 
                 case MQTTServerReference:
                     if (propertyLength - offset > 2) {
-                        int l = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        self.serverReference = [MqttProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        self.serverReference = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         offset += 1 + 2 + l;
                     }
                     break;
@@ -156,9 +156,9 @@
 
                 case MQTTReasonString:
                     if (propertyLength - offset > 2) {
-                        int l = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int l = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        self.reasonString = [MqttProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        self.reasonString = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         offset += 1 + 2 + l;
                     }
                     break;
@@ -166,21 +166,21 @@
 
                 case MQTTReceiveMaximum:
                     if (propertyLength - offset > 2) {
-                        self.receiveMaximum = [NSNumber numberWithInt:[MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.receiveMaximum = [NSNumber numberWithInt:[MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
                         offset += 3;
                     }
                     break;
 
                 case MQTTTopicAliasMaximum:
                     if (propertyLength - offset > 2) {
-                        self.topicAliasMaximum = [NSNumber numberWithInt:[MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.topicAliasMaximum = [NSNumber numberWithInt:[MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
                         offset += 3;
                     }
                     break;
 
                 case MQTTTopicAlias:
                     if (propertyLength - offset > 2) {
-                        self.topicAlias = [NSNumber numberWithInt:[MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.topicAlias = [NSNumber numberWithInt:[MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
                         offset += 3;
                     }
                     break;
@@ -201,13 +201,13 @@
 
                 case MQTTUserProperty:
                     if (propertyLength - offset > 4) {
-                        int keyL = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        int keyL = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        NSString *key = [MqttProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
+                        NSString *key = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        int valueL = [MqttProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1 + 2 + keyL, remainingData.length - (offset + 1))]];
+                        int valueL = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1 + 2 + keyL, remainingData.length - (offset + 1))]];
 
-                        NSString *value = [MqttProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1 + 2 + keyL, remainingData.length - (offset + 1))]];
+                        NSString *value = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1 + 2 + keyL, remainingData.length - (offset + 1))]];
 
                         if (!self.userProperty) {
                             self.userProperty = [[NSMutableDictionary alloc] init];
@@ -219,7 +219,7 @@
 
                 case MQTTMaximumPacketSize:
                     if (propertyLength - offset > 4) {
-                        self.maximumPacketSize = [NSNumber numberWithInt:[MqttProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.maximumPacketSize = [NSNumber numberWithInt:[MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
                         offset += 5;
                     }
                     break;
@@ -298,7 +298,7 @@
 
 + (NSString *)getUtf8String:(NSData *)data {
     NSString *s;
-    int l = [MqttProperties getTwoByteInt:data];
+    int l = [MQTTProperties getTwoByteInt:data];
     if (data.length >= l + 2) {
         s = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(2, l)] encoding:NSUTF8StringEncoding];
     }
@@ -307,7 +307,7 @@
 
 + (NSData *)getBinaryData:(NSData *)data {
     NSData *d;
-    int l = [MqttProperties getTwoByteInt:data];
+    int l = [MQTTProperties getTwoByteInt:data];
     if (data.length >= l + 2) {
         d = [data subdataWithRange:NSMakeRange(2, l)];
     }

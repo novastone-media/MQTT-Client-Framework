@@ -495,6 +495,11 @@
               <Anchor>ab96022535f3a7dce2234515ccf4259e3</Anchor>
              </Node>
              <Node>
+              <Name>messageDelivered:msgID:topic:data:qos:retainFlag:</Name>
+              <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
+              <Anchor>a1207126b8f3bc1b24b1514e4cd0877c6</Anchor>
+             </Node>
+             <Node>
               <Name>newMessage:data:onTopic:qos:retained:mid:</Name>
               <Path>protocol_m_q_t_t_session_delegate_01-p.html</Path>
               <Anchor>a953cce622315d5f3072d91e52f6abf5c</Anchor>

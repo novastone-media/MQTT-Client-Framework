@@ -9,7 +9,6 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTLog.h"
-#import "MQTTClient.h"
 #import "MQTTWebsocketTransport.h"
 #import "MQTTTestHelpers.h"
 
@@ -21,24 +20,6 @@
 @end
 
 @implementation MQTTClientPublishTests
-
-- (void)setUp
-{
-    [super setUp];
-    
-#ifdef LUMBERJACK
-    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
-    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-    [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-#endif
-
-}
-
-- (void)tearDown
-{
-    [super tearDown];
-}
 
 - (void)testPublish_r0_q0_noPayload {
     for (NSString *broker in self.brokers.allKeys) {

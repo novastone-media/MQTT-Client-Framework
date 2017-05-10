@@ -8,7 +8,7 @@
 /**
  Synchronous API
  
- @author Christoph Krey krey.christoph@gmail.com
+ @author Christoph Krey c@ckrey.de
  @see http://mqtt.org
  */
 

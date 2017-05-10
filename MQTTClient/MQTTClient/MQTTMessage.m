@@ -18,6 +18,7 @@
 //
 
 #import "MQTTMessage.h"
+#import "MQTTProperties.h"
 
 #import "MQTTLog.h"
 
@@ -642,7 +643,7 @@
                             const UInt8 *bytes = message.data.bytes;
                             message.returnCode = [NSNumber numberWithInt:bytes[1]];
                             if (protocolLevel == MQTTProtocolVersion50) {
-                                message.properties = [[MqttProperties alloc] initFromData:
+                                message.properties = [[MQTTProperties alloc] initFromData:
                                                       [message.data subdataWithRange:NSMakeRange(2, message.data.length - 2)]];
                             }
                         }

@@ -9,10 +9,10 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTLog.h"
-#import "MQTTClient.h"
 #import "MQTTTestHelpers.h"
 #import <SocketRocket/SRWebSocket.h>
 #import "MQTTWebsocketTransport.h"
+#import "MQTTSessionSynchron.h"
 
 @interface MQTTTestWebsockets : MQTTTestHelpers <SRWebSocketDelegate>
 @property (strong, nonatomic) SRWebSocket *websocket;
@@ -21,20 +21,6 @@
 @end
 
 @implementation MQTTTestWebsockets
-
-- (void)setUp {
-    [super setUp];
-#ifdef LUMBERJACK
-    if (![[DDLog allLoggers] containsObject:[DDTTYLogger sharedInstance]])
-        [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelAll];
-    if (![[DDLog allLoggers] containsObject:[DDASLLogger sharedInstance]])
-        [DDLog addLogger:[DDASLLogger sharedInstance] withLevel:DDLogLevelWarning];
-#endif
-}
-
-- (void)tearDown {
-    [super tearDown];
-}
 
 - (void)testWSTRANSPORT {
     for (NSString *broker in self.brokers.allKeys) {

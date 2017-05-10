@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <XCTest/XCTest.h>
 
-#import "MQTTClient.h"
 #import "MQTTSessionManager.h"
 #import "MQTTSSLSecurityPolicy.h"
 

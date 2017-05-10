@@ -8,6 +8,7 @@
 
 #import "MQTTSession.h"
 #import "MQTTDecoder.h"
+#import "MQTTProperties.h"
 #import "MQTTMessage.h"
 #import "MQTTCoreDataPersistence.h"
 
@@ -788,9 +789,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
     if ([msg qos] == 0) {
         if (self.protocolLevel == MQTTProtocolVersion50) {
-            int propertiesLength = [MqttProperties getVariableLength:data];
-            int variableLength = [MqttProperties variableIntLength:propertiesLength];
-            msg.properties = [[MqttProperties alloc] initFromData:data];
+            int propertiesLength = [MQTTProperties getVariableLength:data];
+            int variableLength = [MQTTProperties variableIntLength:propertiesLength];
+            msg.properties = [[MQTTProperties alloc] initFromData:data];
             NSRange range = NSMakeRange(variableLength + propertiesLength, [data length] - variableLength - propertiesLength);
             data = [data subdataWithRange:range];
         }
@@ -821,9 +822,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
             data = [data subdataWithRange:NSMakeRange(2, [data length] - 2)];
             if ([msg qos] == 1) {
                 if (self.protocolLevel == MQTTProtocolVersion50) {
-                    int propertiesLength = [MqttProperties getVariableLength:data];
-                    int variableLength = [MqttProperties variableIntLength:propertiesLength];
-                    msg.properties = [[MqttProperties alloc] initFromData:data];
+                    int propertiesLength = [MQTTProperties getVariableLength:data];
+                    int variableLength = [MQTTProperties variableIntLength:propertiesLength];
+                    msg.properties = [[MQTTProperties alloc] initFromData:data];
                     NSRange range = NSMakeRange(variableLength + propertiesLength, [data length] - variableLength - propertiesLength);
                     data = [data subdataWithRange:range];
                 }
@@ -984,8 +985,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         BOOL processed = true;
         NSData *data = flow.data;
         if (self.protocolLevel == MQTTProtocolVersion50) {
-            int propertiesLength = [MqttProperties getVariableLength:data];
-            int variableLength = [MqttProperties variableIntLength:propertiesLength];
+            int propertiesLength = [MQTTProperties getVariableLength:data];
+            int variableLength = [MQTTProperties variableIntLength:propertiesLength];
             NSRange range = NSMakeRange(variableLength + propertiesLength, [data length] - variableLength - propertiesLength);
             data = [data subdataWithRange:range];
         }
