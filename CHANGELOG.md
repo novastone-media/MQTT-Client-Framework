@@ -1,6 +1,19 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.9.0
+> Release date 2017-05-10
+
+[FIX] Fix random crashes on core data persistence #314
+[FIX] use_frameworks!
+[FIX] Swift Tests output
+[FIX] CONNACK return codes
+[NEW] access publish data back messageDelivered is called? closes #296
+[FIX] XCode 8.3.1 warnings and documentation
+[NEW] MQTT v5 properties
+[FIX] Reset PUBLISH/PUBREL command's deadline interval when connection closed #302
+[NEW] initial version 5
+
 ## MQTT-Client-Framework 0.8.8
 > Release date 2017-04-03
 
