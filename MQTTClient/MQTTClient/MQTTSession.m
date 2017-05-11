@@ -50,7 +50,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 @end
 
-#define DUPTIMEOUT 20.0
 #define DUPLOOP 1.0
 
 @implementation MQTTSession
@@ -78,6 +77,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.userName = nil;
     self.password = nil;
     self.keepAliveInterval = 60;
+    self.dupTimeout = 20.0;
     self.cleanSessionFlag = true;
     self.willFlag = false;
     self.willTopic = nil;
@@ -302,7 +302,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                            msgId:msgId
                                                     incomingFlag:NO
                                                      commandType:MQTTPublish
-                                                        deadline:[NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT]];
+                                                        deadline:[NSDate dateWithTimeIntervalSinceNow:self.dupTimeout]];
             }
         }
         if (!msg) {
@@ -407,7 +407,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         switch ([flow.commandType intValue]) {
             case MQTTPublish:
             case MQTTPubrel:
-                flow.deadline = [flow.deadline dateByAddingTimeInterval:-DUPTIMEOUT];
+                flow.deadline = [flow.deadline dateByAddingTimeInterval:-self.dupTimeout];
                 [self.persistence sync];
                 break;
         }
@@ -505,7 +505,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                           contentType:nil];
                         if ([self encode:message]) {
                             flow.commandType = @(MQTTPublish);
-                            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+                            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout];
                             [self.persistence sync];
                             windowSize++;
                         }
@@ -528,7 +528,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                      userProperty:nil
                                                       contentType:nil];
                     if ([self encode:message]) {
-                        flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+                        flow.deadline = [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout];
                         [self.persistence sync];
                     }
                     break;
@@ -540,7 +540,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                          reasonString:nil
                                                          userProperty:nil];
                     if ([self encode:message]) {
-                        flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+                        flow.deadline = [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout];
                         [self.persistence sync];
                     }
                     break;
@@ -866,7 +866,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                          msgId:msgId
                                                   incomingFlag:YES
                                                    commandType:MQTTPubrec
-                                                      deadline:[NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT]]) {
+                                                      deadline:[NSDate dateWithTimeIntervalSinceNow:self.dupTimeout]]) {
                     DDLogWarn(@"[MQTTSession] dropping incoming messages");
                 } else {
                     [self.persistence sync];
@@ -970,7 +970,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if (flow) {
         if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelExactlyOnce) {
             flow.commandType = @(MQTTPubrel);
-            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:DUPTIMEOUT];
+            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout];
             [self.persistence sync];
         }
     }
