@@ -366,6 +366,11 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 @property (nonatomic) UInt16 keepAliveInterval;
 
+/**
+ * dupTimeout If PUBACK or PUBREC not received, message will be resent after this interval
+ */
+@property (nonatomic) double dupTimeout;
+
 /** leanSessionFlag specifies if the server should discard previous session information. */
 @property (nonatomic) BOOL cleanSessionFlag;
 
