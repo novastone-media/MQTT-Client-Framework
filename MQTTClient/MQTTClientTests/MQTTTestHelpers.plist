@@ -4,8 +4,8 @@
 <dict>
 	<key>brokerList</key>
 	<array>
-		<string>local</string>
-		<string>#local5</string>
+		<string>#local</string>
+		<string>local5</string>
 		<string>#localWS</string>
 		<string>#aWsBroker</string>
 		<string>#emqtt</string>
@@ -48,7 +48,7 @@
 			<key>host</key>
 			<string>localhost</string>
 			<key>timeout</key>
-			<integer>10</integer>
+			<integer>30</integer>
 			<key>port</key>
 			<real>1883</real>
 			<key>tls</key>

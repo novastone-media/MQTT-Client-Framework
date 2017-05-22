@@ -366,7 +366,7 @@ static unsigned long long fileSystemFreeSize;
 
 - (void)internalSync {
     if (self.managedObjectContext.hasChanges) {
-        DDLogWarn(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
+        DDLogVerbose(@"[MQTTPersistence] pre-sync: i%lu u%lu d%lu",
                      (unsigned long)self.managedObjectContext.insertedObjects.count,
                      (unsigned long)self.managedObjectContext.updatedObjects.count,
                      (unsigned long)self.managedObjectContext.deletedObjects.count
@@ -523,9 +523,9 @@ static unsigned long long fileSystemFreeSize;
         return managedObjectContext;
     }
 
-    DDLogError(@"lock managedObjectcontext %d", [NSThread isMainThread]);
+    DDLogVerbose(@"lock managedObjectcontext %d", [NSThread isMainThread]);
     @synchronized (lock) {
-        DDLogError(@"locked managedObjectcontext %d", [NSThread isMainThread]);
+        DDLogVerbose(@"locked managedObjectcontext %d", [NSThread isMainThread]);
         if (parentManagedObjectContext == nil) {
             NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
             if (coordinator != nil) {

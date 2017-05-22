@@ -26,6 +26,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 @property (nonatomic, readwrite) BOOL sessionPresent;
 
 @property (strong, nonatomic) NSTimer *keepAliveTimer;
+@property (strong, nonatomic) NSNumber *serverKeepAlive;
+@property (nonatomic) UInt16 effectiveKeepAlive;
 @property (strong, nonatomic) NSTimer *checkDupTimer;
 
 @property (strong, nonatomic) MQTTDecoder *decoder;
@@ -356,25 +358,50 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 }
 
 - (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler {
+    [self closeWithReturnCode:MQTTSuccess
+        sessionExpiryInterval:nil
+                 reasonString:nil
+                 userProperty:nil
+            disconnectHandler:disconnectHandler];
+}
+
+- (void)closeWithReturnCode:(MQTTReturnCode)returnCode
+      sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
+               reasonString:(NSString *)reasonString
+               userProperty:(NSDictionary<NSString *,NSString *> *)userProperty
+          disconnectHandler:(MQTTDisconnectHandler)disconnectHandler {
     DDLogVerbose(@"[MQTTSession] closeWithDisconnectHandler:%p ", disconnectHandler);
     self.disconnectHandler = disconnectHandler;
-    
+
     if (self.status == MQTTSessionStatusConnected) {
-        [self disconnect];
+        [self disconnectWithReturnCode:returnCode
+                 sessionExpiryInterval:sessionExpiryInterval
+                          reasonString:reasonString
+                          userProperty:userProperty];
     } else {
         [self closeInternal];
     }
 }
 
 - (void)disconnect {
+    [self disconnectWithReturnCode:MQTTSuccess
+             sessionExpiryInterval:nil
+                      reasonString:nil
+                      userProperty:nil];
+}
+
+- (void)disconnectWithReturnCode:(MQTTReturnCode)returnCode
+           sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
+                    reasonString:(NSString *)reasonString
+                    userProperty:(NSDictionary<NSString *,NSString *> *)userProperty {
     DDLogVerbose(@"[MQTTSession] sending DISCONNECT");
     self.status = MQTTSessionStatusDisconnecting;
 
     (void)[self encode:[MQTTMessage disconnectMessage:self.protocolLevel
-                                           returnCode:MQTTSuccess
-                                sessionExpiryInterval:nil
-                                         reasonString:nil
-                                         userProperty:nil]];
+                                           returnCode:returnCode
+                                sessionExpiryInterval:sessionExpiryInterval
+                                         reasonString:reasonString
+                                         userProperty:userProperty]];
 }
 
 - (void)closeInternal
@@ -453,14 +480,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 }
 
 
-- (void)keepAlive:(NSTimer *)timer
-{
+- (void)keepAlive:(NSTimer *)timer {
     DDLogVerbose(@"[MQTTSession] keepAlive %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
     (void)[self encode:[MQTTMessage pingreqMessage]];
 }
 
-- (void)checkDup:(NSTimer *)timer
-{
+- (void)checkDup:(NSTimer *)timer {
     DDLogVerbose(@"[MQTTSession] checkDup %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
     [self checkTxFlows];
 }
@@ -632,8 +657,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                         } else {
                             if (message.returnCode && [message.returnCode intValue] == MQTTSuccess) {
                                 self.status = MQTTSessionStatusConnected;
-                                const UInt8 *bytes = message.data.bytes;
-                                self.sessionPresent = ((bytes[0] & 0x01) == 0x01);
+                                if (message.connectAcknowledgeFlags &&
+                                    ([message.connectAcknowledgeFlags unsignedIntValue] & 0x01) == 0x01) {
+                                    self.sessionPresent = true;
+                                } else {
+                                    self.sessionPresent = false;
+                                }
                                 
                                 self.checkDupTimer = [NSTimer timerWithTimeInterval:DUPLOOP
                                                                              target:self
@@ -642,13 +671,25 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                                             repeats:YES];
                                 [self.runLoop addTimer:self.checkDupTimer forMode:self.runLoopMode];
                                 [self checkDup:self.checkDupTimer];
-                                
-                                self.keepAliveTimer = [NSTimer timerWithTimeInterval:self.keepAliveInterval
-                                                                              target:self
-                                                                            selector:@selector(keepAlive:)
-                                                                            userInfo:nil
-                                                                             repeats:YES];
-                                [self.runLoop addTimer:self.keepAliveTimer forMode:self.runLoopMode];
+
+                                if (message.properties) {
+                                    self.serverKeepAlive = message.properties.serverKeepAlive;
+                                }
+                                if (self.serverKeepAlive) {
+                                    self.effectiveKeepAlive = [self.serverKeepAlive unsignedShortValue];
+                                } else {
+                                    self.effectiveKeepAlive = self.keepAliveInterval;
+                                }
+
+                                if (self.effectiveKeepAlive > 0) {
+                                    self.keepAliveTimer = [NSTimer
+                                                           timerWithTimeInterval:self.effectiveKeepAlive
+                                                           target:self
+                                                           selector:@selector(keepAlive:)
+                                                           userInfo:nil
+                                                           repeats:YES];
+                                    [self.runLoop addTimer:self.keepAliveTimer forMode:self.runLoopMode];
+                                }
                                 
                                 if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
                                     [self.delegate handleEvent:self event:MQTTSessionEventConnected error:nil];
@@ -718,6 +759,19 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                             self.synchronConnect = FALSE;
                         }
                         break;
+                    case MQTTDisconnect: {
+                            NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                                                 code:[message.returnCode intValue]
+                                                             userInfo:@{NSLocalizedDescriptionKey : @"MQTT protocol DISCONNECT instead of CONNACK"}];
+
+                            [self protocolError:error];
+                            MQTTConnectHandler connectHandler = self.connectHandler;
+                            if (connectHandler) {
+                                self.connectHandler = nil;
+                                [self onConnect:connectHandler error:error];
+                            }
+                        break;
+                        }
                     default: {
                         NSError * error = [NSError errorWithDomain:MQTTSessionErrorDomain
                                                               code:MQTTSessionErrorNoConnackReceived
@@ -755,6 +809,14 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                     case MQTTUnsuback:
                         [self handleUnsuback:message];
                         break;
+                    case MQTTDisconnect: {
+                        NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                                             code:[message.returnCode intValue]
+                                                         userInfo:@{NSLocalizedDescriptionKey : @"MQTT protocol DISCONNECT received"}];
+
+                        [self protocolError:error];
+                    }
+
                     default:
                         break;
                 }
@@ -882,40 +944,34 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
 }
 
-- (void)handlePuback:(MQTTMessage*)msg
-{
-    if ([[msg data] length] == 2) {
-        UInt8 const *bytes = [[msg data] bytes];
-        UInt16 messageId = (256 * bytes[0] + bytes[1]);
-        msg.mid = messageId;
-        id<MQTTFlow> flow = [self.persistence flowforClientId:self.clientId
-                                                 incomingFlag:NO
-                                                    messageId:messageId];
-        if (flow) {
-            if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelAtLeastOnce) {
-                if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
-                    [self.delegate messageDelivered:self msgID:messageId];
-                }
-                if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:topic:data:qos:retainFlag:)]) {
-                    [self.delegate messageDelivered:self
-                                              msgID:messageId
-                                              topic:flow.topic
-                                               data:flow.data
-                                                qos:[flow.qosLevel intValue]
-                                         retainFlag:[flow.retainedFlag boolValue]];
-                }
-                if (self.synchronPub && self.synchronPubMid == messageId) {
-                    self.synchronPub = FALSE;
-                }
-                MQTTPublishHandler publishHandler = [self.publishHandlers objectForKey:@(msg.mid)];
-                if (publishHandler) {
-                    [self.publishHandlers removeObjectForKey:@(msg.mid)];
-                    [self onPublish:publishHandler error:nil];
-                }
-                [self.persistence deleteFlow:flow];
-                [self.persistence sync];
-                [self tell];
+- (void)handlePuback:(MQTTMessage*)msg {
+    id<MQTTFlow> flow = [self.persistence flowforClientId:self.clientId
+                                             incomingFlag:NO
+                                                messageId:msg.mid];
+    if (flow) {
+        if ([flow.commandType intValue] == MQTTPublish && [flow.qosLevel intValue] == MQTTQosLevelAtLeastOnce) {
+            if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
+                [self.delegate messageDelivered:self msgID:msg.mid];
             }
+            if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:topic:data:qos:retainFlag:)]) {
+                [self.delegate messageDelivered:self
+                                          msgID:msg.mid
+                                          topic:flow.topic
+                                           data:flow.data
+                                            qos:[flow.qosLevel intValue]
+                                     retainFlag:[flow.retainedFlag boolValue]];
+            }
+            if (self.synchronPub && self.synchronPubMid == msg.mid) {
+                self.synchronPub = FALSE;
+            }
+            MQTTPublishHandler publishHandler = [self.publishHandlers objectForKey:@(msg.mid)];
+            if (publishHandler) {
+                [self.publishHandlers removeObjectForKey:@(msg.mid)];
+                [self onPublish:publishHandler error:nil];
+            }
+            [self.persistence deleteFlow:flow];
+            [self.persistence sync];
+            [self tell];
         }
     }
 }

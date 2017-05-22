@@ -645,7 +645,11 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
                withObject:nil
                afterDelay:[parameters[@"timeout"] intValue]];
 
-    [self.session close];
+    [self.session closeWithReturnCode:MQTTSuccess
+                sessionExpiryInterval:nil
+                         reasonString:nil
+                         userProperty:nil
+                    disconnectHandler:nil];
 
     while (self.event == -1 && !self.timedout) {
         DDLogVerbose(@"waiting for disconnect");

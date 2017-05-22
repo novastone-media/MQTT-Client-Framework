@@ -698,7 +698,11 @@
                withObject:nil
                afterDelay:self.timeoutValue];
 
-    [self.session close];
+    [self.session closeWithReturnCode:MQTTSuccess
+                sessionExpiryInterval:nil
+                         reasonString:nil
+                         userProperty:nil
+                    disconnectHandler:nil];
 
     while (self.event == -1 && !self.timedout) {
         DDLogVerbose(@"waiting for disconnect");

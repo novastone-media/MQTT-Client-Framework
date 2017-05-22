@@ -66,6 +66,7 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
 @property (nonatomic) UInt16 mid;
 @property (strong, nonatomic) NSData *data;
 @property (strong, nonatomic) NSNumber *returnCode;
+@property (strong, nonatomic) NSNumber *connectAcknowledgeFlags;
 @property (strong, nonatomic) MQTTProperties *properties;
 
 /**

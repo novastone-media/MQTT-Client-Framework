@@ -75,7 +75,11 @@
 - (void)close
 {
     self.event = -1;
-    [self.session close];
+    [self.session closeWithReturnCode:MQTTSuccess
+                sessionExpiryInterval:nil
+                         reasonString:nil
+                         userProperty:nil
+                    disconnectHandler:nil];
 }
 
 - (void)stop

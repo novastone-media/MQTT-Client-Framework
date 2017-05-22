@@ -17,7 +17,11 @@
 @implementation MQTTClientOnlyTests
 
 - (void)tearDown {
-    [self.session close];
+    [self.session closeWithReturnCode:MQTTSuccess
+                sessionExpiryInterval:nil
+                         reasonString:nil
+                         userProperty:nil
+                    disconnectHandler:nil];
     self.session.delegate = nil;
     self.session = nil;
 

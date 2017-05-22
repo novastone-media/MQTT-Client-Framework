@@ -35,29 +35,6 @@
     }
 }
 
-- (void)test_complete_v5 {
-    for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
-        if ([parameters[@"protocollevel"] integerValue] == 5) {
-            self.session = [MQTTTestHelpers session:parameters];
-            self.session.sessionExpiryInterval = [NSNumber numberWithUnsignedInteger:60];
-            self.session.authMethod = @"method";
-            self.session.authData = [@"data" dataUsingEncoding:NSUTF8StringEncoding];
-            self.session.requestProblemInformation = [NSNumber numberWithUnsignedInteger:1];
-            self.session.willDelayInterval = [NSNumber numberWithUnsignedInteger:30];
-            self.session.requestResponseInformation = [NSNumber numberWithUnsignedInteger:1];
-            self.session.receiveMaximum = [NSNumber numberWithUnsignedInteger:5];
-            self.session.topicAliasMaximum = [NSNumber numberWithUnsignedInteger:10];
-            self.session.userProperty = @{@"u1":@"v1", @"u2": @"v2"};
-            self.session.maximumPacketSize = [NSNumber numberWithUnsignedInteger:8192];
-            [self connect:parameters];
-            XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
-            [self shutdown:parameters];
-        }
-    }
-}
-
 - (void)test_init_zero_clientId_clean {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
@@ -656,7 +633,7 @@
         NSDictionary *parameters = self.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.keepAliveInterval = 5;
+        self.session.keepAliveInterval = [parameters[@"timeout"] intValue] / 2;
         
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
@@ -1082,7 +1059,11 @@
                    withObject:nil
                    afterDelay:[parameters[@"timeout"] intValue]];
         
-        [self.session close];
+        [self.session closeWithReturnCode:MQTTSuccess
+                    sessionExpiryInterval:nil
+                             reasonString:nil
+                             userProperty:nil
+                        disconnectHandler:nil];
         
         while (self.event == -1 && !self.timedout) {
             DDLogVerbose(@"waiting for disconnect");

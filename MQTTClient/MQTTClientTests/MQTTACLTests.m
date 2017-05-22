@@ -50,7 +50,9 @@
         self.session.password = nil;
 
         [self connect:self.session parameters:parameters];
-        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"Not Connected %ld %@", (long)self.event, self.error);
+        XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker ||
+                  self.event == MQTTSessionEventProtocolError,
+                  @"Not rejected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
     }
 }
@@ -89,7 +91,9 @@
         self.session.password = @"password w/o user";
 
         [self connect:self.session parameters:parameters];
-        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"Not Rejected %ld %@", (long)self.event, self.error);
+        XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker ||
+                  self.event == MQTTSessionEventProtocolError,
+                       @"Not Rejected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
     }
 }
@@ -120,7 +124,11 @@
                withObject:nil
                afterDelay:[parameters[@"timeout"] intValue]];
 
-    [self.session close];
+    [self.session closeWithReturnCode:MQTTSuccess
+                sessionExpiryInterval:nil
+                         reasonString:nil
+                         userProperty:nil
+                    disconnectHandler:nil];
 
     while (self.event == -1 && !self.timedout) {
         DDLogVerbose(@"waiting for disconnect");

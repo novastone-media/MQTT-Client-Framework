@@ -199,8 +199,13 @@
                 [properties appendMQTTString:userProperty[key]];
             }
         }
-        [data appendVariableLength:properties.length];
-        [data appendData:properties];
+        if (returnCode != MQTTSuccess || properties.length > 0) {
+            [data appendByte:returnCode];
+        }
+        if (properties.length > 0) {
+            [data appendVariableLength:properties.length];
+            [data appendData:properties];
+        }
     }
     MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTDisconnect
                                                     data:data];
@@ -603,6 +608,10 @@
                             } else {
                                 const UInt8 *bytes = message.data.bytes;
                                 message.returnCode = [NSNumber numberWithInt:bytes[2]];
+                                if (message.data.length >= 3) {
+                                    message.properties = [[MQTTProperties alloc] initFromData:
+                                                          [message.data subdataWithRange:NSMakeRange(3, message.data.length - 3)]];
+                                }
                             }
 
                         }
@@ -614,11 +623,32 @@
                         }
                     }
                     if (type == MQTTPingreq ||
-                        type == MQTTPingresp ||
-                        type == MQTTDisconnect) {
-                        if (message.data.length > 2) {
+                        type == MQTTPingresp) {
+                        if (message.data.length > 0) {
                             DDLogWarn(@"[MQTTMessage] unexpected payload");
                             message = nil;
+                        }
+                    }
+                    if (type == MQTTDisconnect) {
+                        if (protocolLevel == MQTTProtocolVersion50) {
+                            if (message.data.length == 0) {
+                                message.properties = nil;
+                                message.returnCode = MQTTSuccess;
+                            } else if (message.data.length == 1) {
+                                message.properties = nil;
+                                const UInt8 *bytes = message.data.bytes;
+                                message.returnCode = [NSNumber numberWithUnsignedInt:bytes[0]];
+                            } else if (message.data.length > 1) {
+                                const UInt8 *bytes = message.data.bytes;
+                                message.returnCode = [NSNumber numberWithUnsignedInt:bytes[0]];
+                                message.properties = [[MQTTProperties alloc] initFromData:
+                                                      [message.data subdataWithRange:NSMakeRange(1, message.data.length - 1)]];
+                            }
+                        } else {
+                            if (message.data.length != 2) {
+                                DDLogWarn(@"[MQTTMessage] unexpected payload");
+                                message = nil;
+                            }
                         }
                     }
                     if (type == MQTTConnect) {
@@ -641,7 +671,8 @@
                         }
                         if (message) {
                             const UInt8 *bytes = message.data.bytes;
-                            message.returnCode = [NSNumber numberWithInt:bytes[1]];
+                            message.connectAcknowledgeFlags = [NSNumber numberWithUnsignedInt:bytes[0]];
+                            message.returnCode = [NSNumber numberWithUnsignedInt:bytes[1]];
                             if (protocolLevel == MQTTProtocolVersion50) {
                                 message.properties = [[MQTTProperties alloc] initFromData:
                                                       [message.data subdataWithRange:NSMakeRange(2, message.data.length - 2)]];

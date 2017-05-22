@@ -345,6 +345,7 @@
     MQTTSession *session = [[MQTTSession alloc] init];
     session.transport = [MQTTTestHelpers transport:parameters];
     session.clientId = nil;
+    session.sessionExpiryInterval = [NSNumber numberWithInt:0];
     session.userName = parameters[@"user"];
     session.password = parameters[@"pass"];
     session.protocolLevel = [parameters[@"protocollevel"] intValue];

@@ -366,6 +366,19 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 @property (nonatomic) UInt16 keepAliveInterval;
 
+/** The serverKeepAlive is a time interval measured in seconds.
+ *  This value may be set by the broker and overrides keepAliveInterval if present
+ *  Zero means the broker does not perform any keep alive checks
+ */
+@property (readonly, strong, nonatomic) NSNumber *serverKeepAlive;
+
+/** effectiveKeepAlive is a time interval measured in seconds
+ *  It indicates the effective keep alive interval after a successfull connect
+ *  where keepAliveInterval might have been overridden by the broker.
+ */
+@property (readonly, nonatomic) UInt16 effectiveKeepAlive;
+
+
 /**
  * dupTimeout If PUBACK or PUBREC not received, message will be resent after this interval
  */
@@ -504,6 +517,18 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  *
  */
 - (void)disconnect;
+
+/** disconnect V5
+ *  @param returnCode the returncode send to the broker
+ *  @param sessionExpiryInterval the time in seconds before the session can be deleted
+ *  @param reasonString a string explaining the reason
+ *  @param userProperty additional dictionary of user key/value combinations
+ */
+- (void)disconnectWithReturnCode:(MQTTReturnCode)returnCode
+           sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
+                    reasonString:(NSString *)reasonString
+                    userProperty:(NSDictionary <NSString *, NSString *> *)userProperty;
+
 
 /** initialises the MQTT session with default values
  @return the initialised MQTTSession object
@@ -819,6 +844,18 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  
  */
 - (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler;
+
+/** close V5
+ *  @param returnCode the returncode send to the broker
+ *  @param sessionExpiryInterval the time in seconds before the session can be deleted
+ *  @param reasonString a string explaining the reason
+ *  @param userProperty additional dictionary of user key/value combinations
+ */
+- (void)closeWithReturnCode:(MQTTReturnCode)returnCode
+      sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
+               reasonString:(NSString *)reasonString
+               userProperty:(NSDictionary <NSString *, NSString *> *)userProperty
+          disconnectHandler:(MQTTDisconnectHandler)disconnectHandler;
 
 /** closes an MQTTSession gracefully
   */
