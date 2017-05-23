@@ -341,7 +341,6 @@
         [data appendVariableLength:properties.length];
         [data appendData:properties];
     }
-    [data appendUInt16BigEndian:msgId];
     MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPuback
                                                     data:data];
     msg.mid = msgId;
