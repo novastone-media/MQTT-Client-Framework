@@ -1,6 +1,14 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.9.1
+> Release date 2017-05-24
+
+    [NEW] v5 adapted error handling
+    [FIX] Fixed the PUBACK message sent by the client having the message id twice in the message payload #317
+    [NEW] v5 live cycle
+    [NEW] Add a configurable dupTimeout property to MQTTSession #315
+
 ## MQTT-Client-Framework 0.9.0
 > Release date 2017-05-10
 
