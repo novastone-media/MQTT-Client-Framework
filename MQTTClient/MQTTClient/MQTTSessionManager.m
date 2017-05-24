@@ -447,7 +447,7 @@
             [self updateState:MQTTSessionManagerStateClosed];
             [self endBackgroundTask];
             if (self.state != MQTTSessionManagerStateClosing) {
-                [self triggerDelayedReconnect];
+                //[self triggerDelayedReconnect];
             }
             [self updateState:MQTTSessionManagerStateStarting];
             break;
@@ -514,7 +514,9 @@
     if (self.state == MQTTSessionManagerStateStarting
         && self.session != nil) {
         [self updateState:MQTTSessionManagerStateConnecting];
-        [self.session connect];
+        [self.session connectToHost:self.host
+                               port:self.port
+                           usingSSL:self.tls];
     }
 }
 

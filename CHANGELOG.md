@@ -1,6 +1,11 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.9.2
+> Release date 2017-05-24
+
+    [FIX] Regression Error: MQTTSessionManager can't reconnect after applicationDidBecomeActive #312
+
 ## MQTT-Client-Framework 0.9.1
 > Release date 2017-05-24
 
