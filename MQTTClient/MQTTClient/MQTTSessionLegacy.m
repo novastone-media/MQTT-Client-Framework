@@ -434,4 +434,9 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
         [self publishData:data onTopic:theTopic retain:FALSE qos:MQTTQosLevelAtLeastOnce];
     }
 }
+
+- (void)reconnect{
+    [self close];
+    [self connect];
+}
 @end

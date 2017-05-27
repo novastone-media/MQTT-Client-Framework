@@ -450,4 +450,7 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
  */
 - (void)publishJson:(id)payload onTopic:(NSString*)theTopic;
 
+/** Reconnects gracefully from the MQTT broker
+ */
+- (void)reconnect;
 @end
