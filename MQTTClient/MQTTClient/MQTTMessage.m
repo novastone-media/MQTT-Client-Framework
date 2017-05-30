@@ -153,10 +153,10 @@
     }
 
     [data appendMQTTString:clientId];
-    if (willTopic) {
+    if (will && willTopic) {
         [data appendMQTTString:willTopic];
     }
-    if (willMsg) {
+    if (will && willMsg) {
         [data appendUInt16BigEndian:[willMsg length]];
         [data appendData:willMsg];
     }
