@@ -1,6 +1,6 @@
 Pod::Spec.new do |mqttc|
 	mqttc.name         = "MQTTClient"
-	mqttc.version      = "0.9.2"
+	mqttc.version      = "0.9.3"
 	mqttc.summary      = "iOS, OSX and tvOS native ObjectiveC MQTT Client Framework"
 	mqttc.homepage     = "https://github.com/ckrey/MQTT-Client-Framework"
 	mqttc.license      = { :type => "EPLv1", :file => "LICENSE" }
@@ -67,7 +67,7 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
 					"MQTTClient/MQTTClient/MQTTTransport.{h,m}"
-		minl.compiler_flags = '-DLUMBERJACK=1'
+		minl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'LUMBERJACK=1' }
 	end
 
 	mqttc.subspec 'Manager' do |manager|
@@ -78,7 +78,7 @@ Pod::Spec.new do |mqttc|
 	mqttc.subspec 'ManagerL' do |managerl|
 		managerl.source_files =	"MQTTClient/MQTTClient/MQTTSessionManager.{h,m}"
 		managerl.dependency 'MQTTClient/MinL'
-		managerl.compiler_flags = '-DLUMBERJACK=1'
+		managerl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'LUMBERJACK=1' }
 	end
 
 	mqttc.subspec 'Websocket' do |ws|
@@ -95,6 +95,6 @@ Pod::Spec.new do |mqttc|
 		wsl.dependency 'MQTTClient/MinL'
 		wsl.requires_arc = true
 		wsl.libraries = "icucore"
-		wsl.compiler_flags = '-DLUMBERJACK=1'
+		wsl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'LUMBERJACK=1' }
 	end
 end
