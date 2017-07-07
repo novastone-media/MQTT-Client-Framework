@@ -221,6 +221,9 @@
 		C21D3CA21B1EC63E0012DD2F /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
 		C21D3CA41B1EC6420012DD2F /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
 		C21D3CA61B1EC6450012DD2F /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
+		C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
+		C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
+		C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		DE9EF5CE1C0628EB009EF667 /* MQTTDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 846191E81883E8B900101409 /* MQTTDecoder.m */; };
 		DE9EF5CF1C0628EB009EF667 /* MQTTCFSocketEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 846191E91883E8B900101409 /* MQTTCFSocketEncoder.m */; };
 		DE9EF5D01C0628EB009EF667 /* MQTTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 846191EA1883E8B900101409 /* MQTTMessage.m */; };
@@ -425,6 +428,7 @@
 		C21D3CA31B1EC6420012DD2F /* adn_1.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_1.cer; path = ADN.net/ADNNetServerTrustChain/adn_1.cer; sourceTree = "<group>"; };
 		C21D3CA51B1EC6450012DD2F /* adn_2.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_2.cer; path = ADN.net/ADNNetServerTrustChain/adn_2.cer; sourceTree = "<group>"; };
 		C21D3CA71B1ED2F40012DD2F /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
+		C7E397981F0F71F1000C512E /* MQTTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTLog.m; sourceTree = "<group>"; };
 		CCDD395E3B208DFCF6249B17 /* Pods-MQTTClientTVTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientTVTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientTVTests/Pods-MQTTClientTVTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D7A5988C96EB2FBC4DE9A4D2 /* Pods_MQTTClientTVTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTClientTVTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE9EF5C51C0628B1009EF667 /* MQTTFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MQTTFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -674,6 +678,7 @@
 				846B90B81C15F9D4008A5D44 /* Persistence */,
 				846191321883E56800101409 /* MQTTClient.h */,
 				84AA232D1C6B8BE5009B153A /* MQTTLog.h */,
+				C7E397981F0F71F1000C512E /* MQTTLog.m */,
 				84B1AFF0196D99170056B959 /* MQTTSessionManager.h */,
 				84B1AFF1196D99170056B959 /* MQTTSessionManager.m */,
 				846191301883E56800101409 /* Supporting Files */,
@@ -1527,6 +1532,7 @@
 				DE9EF5D31C0628EB009EF667 /* MQTTSessionManager.m in Sources */,
 				84998C941C0EE3D600119061 /* MQTTSessionSynchron.m in Sources */,
 				84E2C45B1EC34E9900BC02CE /* MQTTProperties.m in Sources */,
+				C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */,
 				84998C951C0EE3D600119061 /* MQTTSessionLegacy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1551,6 +1557,7 @@
 				F6D08FBA1E535BCB00CD2566 /* MQTTCoreDataPersistence.m in Sources */,
 				F6D08FBB1E535BCB00CD2566 /* MQTTInMemoryPersistence.m in Sources */,
 				84E2C45D1EC34E9B00BC02CE /* MQTTProperties.m in Sources */,
+				C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */,
 				F6D08FBC1E535BCB00CD2566 /* MQTTSessionManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1575,6 +1582,7 @@
 				F6D08FEE1E535F1000CD2566 /* MQTTCoreDataPersistence.m in Sources */,
 				F6D08FEF1E535F1000CD2566 /* MQTTInMemoryPersistence.m in Sources */,
 				84E2C45C1EC34E9A00BC02CE /* MQTTProperties.m in Sources */,
+				C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */,
 				F6D08FF01E535F1000CD2566 /* MQTTSessionManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
