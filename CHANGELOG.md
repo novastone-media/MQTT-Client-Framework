@@ -1,6 +1,17 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.9.4
+> Release date 2017-07-07
+
+    [NEW] Externally define DDLogLevel #330
+
+
+## MQTT-Client-Framework 0.9.3
+> Release date 2017-07-07
+
+    [NEW] Use xcconfig instead of compiler flag #328
+
 ## MQTT-Client-Framework 0.9.2
 > Release date 2017-05-24
 
