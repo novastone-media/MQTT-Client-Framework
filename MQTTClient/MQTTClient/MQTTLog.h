@@ -6,28 +6,40 @@
 //  Copyright © 2016-2017 Christoph Krey. All rights reserved.
 //
 
+@import Foundation;
+
 #ifdef LUMBERJACK
+
 #define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
-#ifndef myLogLevel
+
+extern DDLogLevel ddLogLevel;
+
+#else
+
 #ifdef DEBUG
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#else
-static const DDLogLevel ddLogLevel = DDLogLevelWarning;
-#endif /* DEBUG */
-#else
-static const DDLogLevel ddLogLevel = myLogLevel;
-#endif /* myLogLevel */
-#else
-#ifdef DEBUG
+
 #define DDLogVerbose NSLog
 #define DDLogWarn NSLog
 #define DDLogInfo NSLog
 #define DDLogError NSLog
+
 #else
+
 #define DDLogVerbose(...)
 #define DDLogWarn(...)
 #define DDLogInfo(...)
 #define DDLogError(...)
+
 #endif /* DEBUG */
 #endif /* LUMBERJACK */
+
+@interface MQTTLog: NSObject
+
+#ifdef LUMBERJACK
+
++ (void)setLogLevel:(DDLogLevel)logLevel;
+
+#endif
+
+@end

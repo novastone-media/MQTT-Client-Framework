@@ -14,8 +14,6 @@
 
 @class MQTTSSLSecurityPolicy;
 
-//#define myLogLevel DDLogLevelVerbose
-
 #import "MQTTLog.h"
 
 NSString * const MQTTSessionErrorDomain = @"MQTT";
