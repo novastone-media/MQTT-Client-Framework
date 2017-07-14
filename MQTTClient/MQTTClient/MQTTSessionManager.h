@@ -63,6 +63,14 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 @interface MQTTSessionManager : NSObject <MQTTSessionDelegate>
 
+/** host an NSString containing the hostName or IP address of the Server
+ */
+@property (readonly) NSString *host;
+
+/** port an unsigned 32 bit integer containing the IP port number of the Server
+ */
+@property (readonly) UInt32 port;
+
 /** the delegate receiving incoming messages
  */
 @property (weak, nonatomic) id<MQTTSessionManagerDelegate> delegate;
