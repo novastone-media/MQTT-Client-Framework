@@ -344,6 +344,14 @@
  
  */
 
+/** host an NSString containing the hostName or IP address of the Server
+ */
+@property (readonly) NSString *host;
+
+/** port an unsigned 16 bit integer containing the IP port number of the Server
+ */
+@property (readonly) UInt16 port;
+
 - (void)connectToHost:(NSString *)host
                  port:(UInt32)port
              usingSSL:(BOOL)usingSSL
