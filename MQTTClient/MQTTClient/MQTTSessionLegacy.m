@@ -332,16 +332,6 @@
                           forMode:theRunLoopMode];
 }
 
-- (NSString *)host
-{
-    return self.transport.host;
-}
-
-- (UInt32)port
-{
-    return self.transport.port;
-}
-
 - (void)connectToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL {
     [self connectToHost:host port:port usingSSL:usingSSL connectHandler:nil];
 }
