@@ -354,9 +354,9 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 @property (readonly) NSString *host;
 
-/** port an unsigned 16 bit integer containing the IP port number of the Server
+/** port an unsigned 32 bit integer containing the IP port number of the Server
  */
-@property (readonly) UInt16 port;
+@property (readonly) UInt32 port;
 
 /** The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
  */

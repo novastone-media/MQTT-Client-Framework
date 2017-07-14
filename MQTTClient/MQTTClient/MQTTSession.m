@@ -98,7 +98,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     return _transport.host;
 }
 
-- (UInt16)port
+- (UInt32)port
 {
     return _transport.port;
 }

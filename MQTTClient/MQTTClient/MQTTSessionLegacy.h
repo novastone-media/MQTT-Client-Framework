@@ -348,9 +348,9 @@
  */
 @property (readonly) NSString *host;
 
-/** port an unsigned 16 bit integer containing the IP port number of the Server
+/** port an unsigned 32 bit integer containing the IP port number of the Server
  */
-@property (readonly) UInt16 port;
+@property (readonly) UInt32 port;
 
 - (void)connectToHost:(NSString *)host
                  port:(UInt32)port
