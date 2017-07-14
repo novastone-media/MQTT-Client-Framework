@@ -469,7 +469,7 @@
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
 {
     if (self.delegate) {
-        [self.delegate handleMessage:data onTopic:topic retained:retained];
+        [self.delegate sessionManager:self receivedMessage:data onTopic:topic retained:retained];
     }
 }
 
@@ -502,8 +502,8 @@
 
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID {
     if (self.delegate) {
-        if ([self.delegate respondsToSelector:@selector(messageDelivered:)]) {
-            [self.delegate messageDelivered:msgID];
+        if ([self.delegate respondsToSelector:@selector(sessionManager:deliveredMessage:)]) {
+            [self.delegate sessionManager:self deliveredMessage:msgID];
         }
     }
 }

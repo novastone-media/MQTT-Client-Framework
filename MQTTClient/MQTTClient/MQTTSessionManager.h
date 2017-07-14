@@ -33,19 +33,23 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 };
 
 /** gets called when a new message was received
+ @param sessionManager the instance of MQTTSessionManager whose state changed
  @param data the data received, might be zero length
  @param topic the topic the data was published to
  @param retained indicates if the data retransmitted from server storage
  */
-- (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained;
+- (void)sessionManager:(MQTTSessionManager *)sessionManager
+       receivedMessage:(NSData *)data
+               onTopic:(NSString *)topic
+              retained:(BOOL)retained;
 
 @optional
 
 /** gets called when a published message was actually delivered
- @param msgID the Message Identifier of the delivered message
+ @param sessionManager the instance of MQTTSessionManager whose state changed
  @note this method is called after a publish with qos 1 or 2 only
  */
-- (void)messageDelivered:(UInt16)msgID;
+- (void)sessionManager:(MQTTSessionManager *)sessionManager deliveredMessage:(UInt16)msgID;
 
 /** gets called when the connection status changes
  @param sessionManager the instance of MQTTSessionManager whose state changed
