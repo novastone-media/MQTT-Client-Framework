@@ -642,10 +642,11 @@
 
 
 - (void)sessionManager:(MQTTSessionManager *)sessionManager
-       receivedMessage:(NSData *)data
+     didReceiveMessage:(NSData *)data
                onTopic:(NSString *)topic
               retained:(BOOL)retained {
-    DDLogInfo(@"[MQTTSessionManager] handleMessage (%lu) t:%@ r%d", data.length, topic, retained);
+    DDLogInfo(@"[MQTTSessionManager] didReceiveMessage (%lu) t:%@ r%d",
+              data.length, topic, retained);
     if ([topic isEqualToString:TOPIC]) {
         if (!retained && data.length) {
             self.received++;

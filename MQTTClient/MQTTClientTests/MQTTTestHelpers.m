@@ -175,10 +175,10 @@
 }
 
 - (void)sessionManager:(MQTTSessionManager *)sessionManager
-       receivedMessage:(NSData *)data
+     didReceiveMessage:(NSData *)data
                onTopic:(NSString *)topic
               retained:(BOOL)retained {
-    DDLogVerbose(@"[MQTTTestHelpers] handleMessage r%d %@:%@",
+    DDLogVerbose(@"[MQTTTestHelpers] didReceiveMessage r%d %@:%@",
                  retained, topic, data);
     if (topic && [topic hasPrefix:@"$"]) {
         self.SYSreceived = true;
