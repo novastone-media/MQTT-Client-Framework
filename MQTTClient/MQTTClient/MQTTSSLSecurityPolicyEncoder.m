@@ -24,7 +24,7 @@
     return self;
 }
 
-- (BOOL)applySSLSecurityPolicy:(NSStream *)writeStream withEvent:(NSStreamEvent)eventCode;
+- (BOOL)applySSLSecurityPolicy:(NSStream *)writeStream withEvent:(NSStreamEvent)eventCode
 {
     if(!self.securityPolicy){
         return YES;
