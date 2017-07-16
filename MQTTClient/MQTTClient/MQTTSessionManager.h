@@ -32,20 +32,39 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
     MQTTSessionManagerStateClosed
 };
 
+@optional
+
 /** gets called when a new message was received
+
  @param data the data received, might be zero length
  @param topic the topic the data was published to
  @param retained indicates if the data retransmitted from server storage
  */
 - (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained;
 
-@optional
+/** gets called when a new message was received
+ @param sessionManager the instance of MQTTSessionManager whose state changed
+ @param data the data received, might be zero length
+ @param topic the topic the data was published to
+ @param retained indicates if the data retransmitted from server storage
+ */
+- (void)sessionManager:(MQTTSessionManager *)sessionManager
+     didReceiveMessage:(NSData *)data
+               onTopic:(NSString *)topic
+              retained:(BOOL)retained;
 
 /** gets called when a published message was actually delivered
+
  @param msgID the Message Identifier of the delivered message
  @note this method is called after a publish with qos 1 or 2 only
  */
 - (void)messageDelivered:(UInt16)msgID;
+
+/** gets called when a published message was actually delivered
+ @param sessionManager the instance of MQTTSessionManager whose state changed
+ @note this method is called after a publish with qos 1 or 2 only
+ */
+- (void)sessionManager:(MQTTSessionManager *)sessionManager didDeliverMessage:(UInt16)msgID;
 
 /** gets called when the connection status changes
  @param sessionManager the instance of MQTTSessionManager whose state changed
@@ -58,6 +77,14 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 /** SessionManager handles the MQTT session for your application
  */
 @interface MQTTSessionManager : NSObject <MQTTSessionDelegate>
+
+/** host an NSString containing the hostName or IP address of the Server
+ */
+@property (readonly) NSString *host;
+
+/** port an unsigned 32 bit integer containing the IP port number of the Server
+ */
+@property (readonly) UInt32 port;
 
 /** the delegate receiving incoming messages
  */
