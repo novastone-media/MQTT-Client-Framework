@@ -20,6 +20,8 @@
 @synthesize delegate;
 @synthesize runLoop;
 @synthesize runLoopMode;
+@dynamic host;
+@dynamic port;
 
 - (instancetype)init {
     self = [super init];
