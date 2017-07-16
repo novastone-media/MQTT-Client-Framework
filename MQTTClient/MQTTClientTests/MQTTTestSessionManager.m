@@ -656,7 +656,7 @@
     }
 }
 
-- (void)messageDelivered:(UInt16)msgID {
+- (void)sessionManager:(MQTTSessionManager *)sessionManager didDeliverMessage:(UInt16)msgID {
     DDLogVerbose(@"[MQTTSessionManager] messageDelivered %d", msgID);
 }
 

@@ -471,7 +471,8 @@
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(sessionManager:didReceiveMessage:onTopic:retained:)]) {
             [self.delegate sessionManager:self didReceiveMessage:data onTopic:topic retained:retained];
-        } else {
+        }
+        if ([self.delegate respondsToSelector:@selector(handleMessage:onTopic:retained:)]) {
             [self.delegate handleMessage:data onTopic:topic retained:retained];
         }
     }
@@ -508,7 +509,8 @@
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(sessionManager:didDeliverMessage:)]) {
             [self.delegate sessionManager:self didDeliverMessage:msgID];
-        } else if ([self.delegate respondsToSelector:@selector(messageDelivered:)]) {
+        }
+        if ([self.delegate respondsToSelector:@selector(messageDelivered:)]) {
             [self.delegate messageDelivered:msgID];
         }
     }
