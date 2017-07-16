@@ -1,6 +1,12 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+
+## MQTT-Client-Framework 0.9.5
+> Release date 2017-07-07
+
+    [NEW] MQTTSession and MQTTTransport extension #337
+
 ## MQTT-Client-Framework 0.9.4
 > Release date 2017-07-07
 
