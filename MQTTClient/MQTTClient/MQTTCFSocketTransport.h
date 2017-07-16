@@ -20,10 +20,10 @@
  */
 @property (strong, nonatomic) NSString *host;
 
-/** port an unsigned 16 bit integer containing the IP port number to connect to 
+/** port an unsigned 32 bit integer containing the IP port number to connect to
  * defaults to 1883
  */
-@property (nonatomic) UInt16 port;
+@property (nonatomic) UInt32 port;
 
 /** tls a boolean indicating whether the transport should be using security 
  * defaults to NO

@@ -15,6 +15,8 @@
 @synthesize runLoop;
 @synthesize runLoopMode;
 @synthesize delegate;
+@synthesize host;
+@synthesize port;
 
 - (instancetype)init {
     self = [super init];
