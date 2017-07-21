@@ -641,8 +641,12 @@
 #pragma mark - helpers
 
 
-- (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained {
-    DDLogInfo(@"[MQTTSessionManager] handleMessage (%lu) t:%@ r%d", data.length, topic, retained);
+- (void)sessionManager:(MQTTSessionManager *)sessionManager
+     didReceiveMessage:(NSData *)data
+               onTopic:(NSString *)topic
+              retained:(BOOL)retained {
+    DDLogInfo(@"[MQTTSessionManager] didReceiveMessage (%lu) t:%@ r%d",
+              data.length, topic, retained);
     if ([topic isEqualToString:TOPIC]) {
         if (!retained && data.length) {
             self.received++;
@@ -652,7 +656,7 @@
     }
 }
 
-- (void)messageDelivered:(UInt16)msgID {
+- (void)sessionManager:(MQTTSessionManager *)sessionManager didDeliverMessage:(UInt16)msgID {
     DDLogVerbose(@"[MQTTSessionManager] messageDelivered %d", msgID);
 }
 

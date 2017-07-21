@@ -14,8 +14,6 @@
 
 @class MQTTSSLSecurityPolicy;
 
-//#define myLogLevel DDLogLevelVerbose
-
 #import "MQTTLog.h"
 
 NSString * const MQTTSessionErrorDomain = @"MQTT";
@@ -93,6 +91,16 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.status = MQTTSessionStatusCreated;
     
     return self;
+}
+
+- (NSString *)host
+{
+    return _transport.host;
+}
+
+- (UInt32)port
+{
+    return _transport.port;
 }
 
 - (void)setClientId:(NSString *)clientId

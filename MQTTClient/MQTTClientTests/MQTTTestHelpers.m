@@ -174,8 +174,11 @@
     }
 }
 
-- (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained {
-    DDLogVerbose(@"[MQTTTestHelpers] handleMessage r%d %@:%@",
+- (void)sessionManager:(MQTTSessionManager *)sessionManager
+     didReceiveMessage:(NSData *)data
+               onTopic:(NSString *)topic
+              retained:(BOOL)retained {
+    DDLogVerbose(@"[MQTTTestHelpers] didReceiveMessage r%d %@:%@",
                  retained, topic, data);
     if (topic && [topic hasPrefix:@"$"]) {
         self.SYSreceived = true;

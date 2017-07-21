@@ -3,7 +3,7 @@ MQTT-Client-Framework
 
 an Objective-C native MQTT Framework http://mqtt.org
 
-### Tested with
+### Tested with a long list of brokers
 
 * mosquitto
 * paho
@@ -19,6 +19,7 @@ an Objective-C native MQTT Framework http://mqtt.org
 * CloudMQTT
 * aws
 * hbmqtt (MQTTv311 only, limitations)
+* [aedes](https://github.com/mcollina/aedes) 
 
 ### As a CocoaPod
 
