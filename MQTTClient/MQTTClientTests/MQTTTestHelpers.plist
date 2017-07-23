@@ -4,14 +4,14 @@
 <dict>
 	<key>brokerList</key>
 	<array>
-		<string>#local</string>
-		<string>local5</string>
+        <string>#local</string>
+		<string>#local5</string>
 		<string>#localWS</string>
 		<string>#aWsBroker</string>
 		<string>#emqtt</string>
 		<string>#emqttWS</string>
 		<string>#mosquitto</string>
-		<string>#mosquittoTLS</string>
+		<string>mosquittoTLS</string>
 		<string>#mosquittoTLSClient</string>
 		<string>#mosquittoWS</string>
 		<string>#mosquittoWSS</string>
@@ -23,7 +23,7 @@
 			<key>host</key>
 			<string>localhost</string>
 			<key>timeout</key>
-			<integer>10</integer>
+			<integer>60</integer>
 			<key>port</key>
 			<real>1883</real>
 			<key>tls</key>

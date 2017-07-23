@@ -277,9 +277,9 @@
                    willQos:MQTTQosLevelAtMostOnce
             willRetainFlag:FALSE
               withClientId:nil
-            securityPolicy:nil
-              certificates:nil];
-        
+            securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+              certificates:[MQTTTestHelpers clientCerts:parameters]];
+
         while (!self.timedout && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"waiting for connect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
@@ -426,8 +426,8 @@
                    willQos:MQTTQosLevelAtMostOnce
             willRetainFlag:FALSE
               withClientId:nil
-            securityPolicy:nil
-              certificates:nil];
+            securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+              certificates:[MQTTTestHelpers clientCerts:parameters]];
         
         while (!self.timedout && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"waiting for connect %d", manager.state);

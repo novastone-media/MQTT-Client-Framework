@@ -21,9 +21,19 @@
 
 @implementation MQTTClientPublishTests
 
+- (void)setUp {
+    [super setUp];
+    [MQTTLog setLogLevel:DDLogLevelVerbose];
+}
+
+- (void)tearDown {
+    [super tearDown];
+}
+
+
 - (void)testPublish_r0_q0_noPayload {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:nil
@@ -36,7 +46,7 @@
 
 - (void)testPublish_r0_q0_zeroLengthPayload {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[[NSData alloc] init]
@@ -49,7 +59,7 @@
 
 - (void)testPublish_r1_q0_zeroLengthPayload {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
@@ -70,7 +80,7 @@
 
 - (void)testPublish_r0_q0 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -91,7 +101,7 @@
     unichar feff = 0xFEFF;
 
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -110,12 +120,12 @@
  * Packet containing ill-formed UTF-8 it MUST close the Network Connection.
  */
 - (void)testPublish_r0_q0_0xD800_MQTT_1_5_3_1 {
-    DDLogVerbose(@"can't test [MQTT-1.5.3-1]");
+    DDLogInfo(@"can't test [MQTT-1.5.3-1]");
     NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
     DDLogVerbose(@"stringWithD800(%lu) %@", (unsigned long)stringWithD800.length, stringWithD800.description);
     
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -139,7 +149,7 @@
     DDLogVerbose(@"stringWith9c(%lu) %@", (unsigned long)stringWith9c.length, stringWith9c.description);
     
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -160,7 +170,7 @@
     DDLogVerbose(@"stringWithNull(%lu) %@", (unsigned long)stringWithNull.length, stringWithNull.description);
 
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -173,7 +183,7 @@
 
 - (void)testPublish_r0_q1 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -186,14 +196,14 @@
 
 - (void)testPublish_a_lot_of_q0 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         for (int i = 0; i < ALOT; i++) {
             NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
             self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelAtMostOnce];
-            DDLogVerbose(@"testing publish %d", self.sentMessageMid);
+            DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
         }
         [self shutdown:parameters];
     }
@@ -211,7 +221,7 @@
             NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
             self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelAtLeastOnce];
-            DDLogVerbose(@"testing publish %d", self.sentMessageMid);
+            DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
             [self.inflight setObject:@"PUBLISHED" forKey:[NSNumber numberWithUnsignedInt:self.sentMessageMid]];
         }
 
@@ -227,13 +237,15 @@
         }
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
+        XCTAssertFalse(self.timedout, @"Timeout after %f seconds", self.timeoutValue);
+        XCTAssert(self.event == -1, @"Event %d happened", self.event);
         [self shutdown:parameters];
     }
 }
 
 - (void)testPublish_a_lot_of_q2 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         
@@ -243,7 +255,7 @@
             NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
             self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelExactlyOnce];
-            DDLogVerbose(@"testing publish %d", self.messageMid);
+            DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
             [self.inflight setObject:@"PUBLISHED" forKey:[NSNumber numberWithUnsignedInt:self.sentMessageMid]];
         }
 
@@ -252,12 +264,13 @@
         [self performSelector:@selector(timedout:)
                    withObject:nil
                    afterDelay:self.timeoutValue];
-        
+
         while (self.inflight.count && !self.timedout && self.event == -1) {
-            DDLogVerbose(@"[MQTTClientPublishTests] waiting for %@", self.inflight);
+            DDLogInfo(@"[MQTTClientPublishTests] waiting for %@", self.inflight);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
-        
+        XCTAssertFalse(self.timedout, @"Timeout after %f seconds", self.timeoutValue);
+        XCTAssert(self.event == -1, @"Event %d happened", self.event);
         [self shutdown:parameters];
     }
 }
@@ -268,7 +281,7 @@
  */
 - (void)testPublish_r1_MQTT_3_3_1_11 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -285,7 +298,7 @@
 
 - (void)testPublish_r0_q2 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -298,7 +311,7 @@
 
 - (void)testPublish_r1_q2 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -311,7 +324,7 @@
 
 - (void)testPublish_r1_q2_long_topic {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         
@@ -331,7 +344,7 @@
 
 - (void)testPublish_r1_q2_long_payload {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         
@@ -356,7 +369,7 @@
  * It MUST be a UTF-8 encoded string.
  */
 - (void)testPublishNoUTF8_MQTT_3_3_2_1 {
-    DDLogVerbose(@"Can't test[MQTT-3.3.2-1]");
+    DDLogInfo(@"Can't test[MQTT-3.3.2-1]");
 }
 
 /*
@@ -366,7 +379,7 @@
  */
 - (void)testPublishWithPlus_MQTT_3_3_2_2 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
 
@@ -388,7 +401,7 @@
  */
 - (void)testPublishWithHash_MQTT_3_3_2_2 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         NSString *topic = [NSString stringWithFormat:@"%@/#%s", TOPIC, __FUNCTION__];
@@ -409,7 +422,7 @@
  */
 - (void)testPublishEmptyTopic_MQTT_4_7_3_1 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -422,7 +435,7 @@
 
 - (void)testPublish_q1 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -435,7 +448,7 @@
 
 - (void)testPublish_q1_x2 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -463,7 +476,7 @@
 
 - (void)testPublish_q2 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -476,7 +489,7 @@
 
 - (void)testPublish_q2_x2 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -515,7 +528,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
  */
 - (void)testPublish_q2_dup_MQTT_3_3_1_1 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         self.timeoutValue= 90;
@@ -664,6 +677,8 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
 }
 
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID {
+    DDLogInfo(@"messageDelivered %d", msgID);
+
     if (self.inflight) {
         [self.inflight setObject:@"DELIVERED" forKey:[NSNumber numberWithUnsignedInt:self.sentMessageMid]];
     }
@@ -672,6 +687,8 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
 
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic
                qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
+    DDLogInfo(@"newMessage %d", mid);
+
     if (self.inflight) {
         [self.inflight removeObjectForKey:[NSNumber numberWithUnsignedInt:mid]];
     }

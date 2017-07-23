@@ -1,0 +1,7 @@
+language: objective-c
+os: osx
+xcode_workspace: MQTTClient/MQTTClient.xcworkspace
+podfile: MQTTClient/Podfile
+xcode_scheme: MQTTClientOSXTests
+
+

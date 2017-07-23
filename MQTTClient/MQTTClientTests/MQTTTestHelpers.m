@@ -145,7 +145,7 @@
 }
 
 - (void)timedout:(id)object {
-    DDLogVerbose(@"[MQTTTestHelpers] timedout");
+    DDLogWarn(@"[MQTTTestHelpers] timedout");
     self.timedout = TRUE;
 }
 
@@ -154,7 +154,12 @@
     self.deliveredMessageMid = msgID;
 }
 
-- (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID topic:(NSString *)topic data:(NSData *)data qos:(MQTTQosLevel)qos retainFlag:(BOOL)retainFlag {
+- (void)messageDelivered:(MQTTSession *)session
+                   msgID:(UInt16)msgID
+                   topic:(NSString *)topic
+                    data:(NSData *)data
+                     qos:(MQTTQosLevel)qos
+              retainFlag:(BOOL)retainFlag {
     DDLogVerbose(@"[MQTTTestHelpers] messageDelivered %d q%d r%d %@:%@",
                  msgID,
                  qos,
@@ -217,14 +222,14 @@
 
 - (void)subAckReceived:(MQTTSession *)session msgID:(UInt16)msgID grantedQoss:(NSArray *)qoss
 {
-    DDLogVerbose(@"[MQTTTestHelpers] subAckReceived:%d grantedQoss:%@", msgID, qoss);
+    DDLogInfo(@"[MQTTTestHelpers] subAckReceived:%d grantedQoss:%@", msgID, qoss);
     self.subMid = msgID;
     self.qoss = qoss;
 }
 
 - (void)unsubAckReceived:(MQTTSession *)session msgID:(UInt16)msgID
 {
-    DDLogVerbose(@"[MQTTTestHelpers] unsubAckReceived:%d", msgID);
+    DDLogInfo(@"[MQTTTestHelpers] unsubAckReceived:%d", msgID);
     self.unsubMid = msgID;
 }
 

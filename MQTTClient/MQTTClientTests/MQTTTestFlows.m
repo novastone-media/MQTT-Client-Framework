@@ -46,6 +46,8 @@
     self.deliveredCounter = 0;
     self.receivedCounter = 0;
     self.processedCounter = 0;
+
+    [MQTTLog setLogLevel:DDLogLevelInfo];
     return self;
 }
 
@@ -80,8 +82,6 @@
     if (qos == MQTTQosLevelAtMostOnce || msgID > 0) {
         self.publishedCounter++;
         DDLogVerbose(@"published(%ld): msgID:%d", (long)self.publishedCounter, msgID);
-    } else {
-        DDLogWarn(@"message dropped(%ld): msgID:%d", (long)self.publishedCounter, msgID);
     }
     if (qos == MQTTQosLevelAtMostOnce) {
         self.deliveredCounter++;
@@ -112,14 +112,14 @@
 
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID {
     self.deliveredCounter++;
-    DDLogVerbose(@"messageDelivered(%ld): msgID:%d", (long)self.deliveredCounter, msgID);
+    DDLogInfo(@"messageDelivered(%ld): msgID:%d", (long)self.deliveredCounter, msgID);
 }
 
 - (BOOL)newMessageWithFeedback:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
     NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
     if (self.processedCounter > self.receivedCounter - self.processingBuffer) {
-        DDLogVerbose(@"newMessageWithFeedback(%ld/%ld/%ld) accepted:%@ onTopic:%@ qos:%d retained:%d mid:%d",
+        DDLogInfo(@"newMessageWithFeedback(%ld/%ld/%ld) accepted:%@ onTopic:%@ qos:%d retained:%d mid:%d",
               (long)self.processedCounter,
               (long)self.receivedCounter,
               (long)self.processingBuffer,
@@ -127,7 +127,7 @@
         self.receivedCounter++;
         return true;
     } else {
-        DDLogVerbose(@"newMessageWithFeedback(%ld/%ld/%ld) rejected:%@ onTopic:%@ qos:%d retained:%d mid:%d",
+        DDLogInfo(@"newMessageWithFeedback(%ld/%ld/%ld) rejected:%@ onTopic:%@ qos:%d retained:%d mid:%d",
               (long)self.processedCounter,
               (long)self.receivedCounter,
               (long)self.processingBuffer,
@@ -147,7 +147,7 @@
 - (void)processingSimulation:(NSTimer *)timer {
     if (self.receivedCounter > self.processedCounter) {
         self.processedCounter++;
-        DDLogVerbose(@"processed %ld/%ld", (long)self.processedCounter, (long)self.receivedCounter);
+        DDLogInfo(@"processed %ld/%ld", (long)self.processedCounter, (long)self.receivedCounter);
     }
 }
 
@@ -347,7 +347,7 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
     self.timeout = timeout;
     
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         self.parameters = self.brokers[broker];
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
@@ -405,7 +405,7 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
     self.timeout = timeout;
     
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         self.parameters = self.brokers[broker];
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self];

@@ -352,7 +352,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                     [self.persistence sync];
                 }
             } else {
-                DDLogVerbose(@"[MQTTSession] queueing message %d", msgId);
+                DDLogInfo(@"[MQTTSession] queueing message %d", msgId);
             }
         }
     }
