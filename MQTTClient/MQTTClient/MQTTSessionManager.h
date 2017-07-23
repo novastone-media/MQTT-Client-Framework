@@ -78,6 +78,10 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 @interface MQTTSessionManager : NSObject <MQTTSessionDelegate>
 
+/** Underlying MQTTSession currently in use.
+ */
+@property (strong, nonatomic, readonly) MQTTSession *session;
+
 /** host an NSString containing the hostName or IP address of the Server
  */
 @property (readonly) NSString *host;
