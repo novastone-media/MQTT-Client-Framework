@@ -262,7 +262,7 @@
                                                          repeats:false];
         
         
-        manager.subscriptions = @{TOPIC: [NSNumber numberWithInt:MQTTQosLevelExactlyOnce]};
+        manager.subscriptions = @{TOPIC: [NSNumber numberWithUnsignedChar:MQTTQosLevelExactlyOnce]};
         [manager connectTo:parameters[@"host"]
                       port:[parameters[@"port"] intValue]
                        tls:[parameters[@"tls"] boolValue]

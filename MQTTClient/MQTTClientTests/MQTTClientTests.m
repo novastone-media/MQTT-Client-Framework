@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTLog.h"
+#import "MQTTStrict.h"
 #import "MQTTTestHelpers.h"
 #import "MQTTSessionSynchron.h"
 #import "MQTTCFSocketTransport.h"
@@ -113,6 +114,33 @@
         XCTAssertEqual(self.event, MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
         XCTAssert(self.error.code == 0x02, @"error = %@", self.error);
         [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-3.1.3-8]
+ * If the Client supplies a zero-byte ClientId with CleanSession set to 0, the Server MUST
+ * respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and
+ * then close the Network Connection.
+ * [MQTT-3.1.3-9]
+ * If the Server rejects the ClientId it MUST respond to the CONNECT Packet with a
+ * CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection.
+ */
+- (void)test_init_zero_clientId_noclean_strict {
+    MQTTStrict.strict = TRUE;
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        self.session = [MQTTTestHelpers session:parameters];
+        @try {
+            self.session.cleanSessionFlag = FALSE;
+            self.session.clientId = @"";
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should not get here but throw exception before");
     }
 }
 
@@ -578,16 +606,43 @@
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
-        
+
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = 88;
-        
+
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
-        
+
         XCTAssertEqual(self.event, MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
         XCTAssert(self.error.code == 0x01, @"error = %@", self.error);
         [self shutdown:parameters];
+    }
+}
+
+/*
+ * [MQTT-3.1.2-2]
+ * The Server MUST respond to the CONNECT Packet with a CONNACK return code
+ * 0x01 (unacceptable protocol level) and then disconnect the Client if the Protocol
+ * Level is not supported by the Server.
+ * [MQTT-3.2.2-5]
+ * If a server sends a CONNACK packet containing a non-zero return code it MUST then close the Network Connection.
+ */
+- (void)test_connect_illegal_protocollevel88_strict {
+    MQTTStrict.strict = TRUE;
+
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+
+        self.session = [MQTTTestHelpers session:parameters];
+        @try {
+            self.session.protocolLevel = 88;
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should not get here but throw exception before");
     }
 }
 

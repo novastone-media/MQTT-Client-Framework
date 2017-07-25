@@ -8,6 +8,7 @@
 
 #import "MQTTSession.h"
 #import "MQTTDecoder.h"
+#import "MQTTStrict.h"
 #import "MQTTProperties.h"
 #import "MQTTMessage.h"
 #import "MQTTCoreDataPersistence.h"
@@ -72,7 +73,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.subscribeHandlers = [[NSMutableDictionary alloc] init];
     self.unsubscribeHandlers = [[NSMutableDictionary alloc] init];
     self.publishHandlers = [[NSMutableDictionary alloc] init];
-    
+
     self.clientId = nil;
     self.userName = nil;
     self.password = nil;
@@ -87,9 +88,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.protocolLevel = MQTTProtocolVersion311;
     self.runLoop = [NSRunLoop currentRunLoop];
     self.runLoopMode = NSRunLoopCommonModes;
-    
+
     self.status = MQTTSessionStatusCreated;
-    
+
     return self;
 }
 
@@ -108,42 +109,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if (!clientId) {
         clientId = [NSString stringWithFormat:@"MQTTClient%.0f",fmod([[NSDate date] timeIntervalSince1970], 1.0) * 1000000.0];
     }
-    
-    //NSAssert(clientId.length > 0 || self.cleanSessionFlag, @"clientId must be at least 1 character long if cleanSessionFlag is off");
-    
-    //NSAssert([clientId dataUsingEncoding:NSUTF8StringEncoding], @"clientId contains non-UTF8 characters");
-    //NSAssert([clientId dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"clientId may not be longer than 65535 bytes in UTF8 representation");
-    
+
     _clientId = clientId;
-}
-
-- (void)setUserName:(NSString *)userName
-{
-    if (userName) {
-        //NSAssert([userName dataUsingEncoding:NSUTF8StringEncoding], @"userName contains non-UTF8 characters");
-        //NSAssert([userName dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"userName may not be longer than 65535 bytes in UTF8 representation");
-    }
-    
-    _userName = userName;
-}
-
-- (void)setPassword:(NSString *)password
-{
-    if (password) {
-        //NSAssert(self.userName, @"password specified without userName");
-        //NSAssert([password dataUsingEncoding:NSUTF8StringEncoding], @"password contains non-UTF8 characters");
-        //NSAssert([password dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L, @"password may not be longer than 65535 bytes in UTF8 representation");
-    }
-    _password = password;
-}
-
-- (void)setProtocolLevel:(MQTTProtocolVersion)protocolLevel
-{
-//    NSAssert(protocolLevel == MQTTProtocolVersion31 ||
-//             protocolLevel == MQTTProtocolVersion311 ||
-//             protocolLevel == MQTTProtocolVersion50,
-//             @"allowed protocolLevel values are 3,4 or 5 only");
-    _protocolLevel = protocolLevel;
 }
 
 - (void)setRunLoop:(NSRunLoop *)runLoop
@@ -177,13 +144,100 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     return [self subscribeToTopics:topics subscribeHandler:nil];
 }
 
+- (void)checkTopicFilters:(NSArray <NSString *> *)topicFilters {
+    for (NSString *topicFilter in topicFilters) {
+        if (MQTTStrict.strict &&
+            topicFilter.length < 1) {
+            NSException* myException = [NSException
+                                        exceptionWithName:@"topicFilter must be at least 1 characters long"
+                                        reason:[NSString stringWithFormat:@"%@", topicFilter]
+                                        userInfo:nil];
+            @throw myException;
+        }
+
+        if (MQTTStrict.strict &&
+            [topicFilter dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
+            NSException* myException = [NSException
+                                        exceptionWithName:@"topicFilter may not be longer than 65535 bytes in UTF8 representation"
+                                        reason:[NSString stringWithFormat:@"topicFilter length = %lu", [topicFilter dataUsingEncoding:NSUTF8StringEncoding].length]
+                                        userInfo:nil];
+            @throw myException;
+        }
+
+        if (MQTTStrict.strict &&
+            ![topicFilter dataUsingEncoding:NSUTF8StringEncoding]) {
+            NSException* myException = [NSException
+                                        exceptionWithName:@"topicFilter must not contain non-UTF8 characters"
+                                        reason:[NSString stringWithFormat:@"topicFilter = %@", topicFilter]
+                                        userInfo:nil];
+            @throw myException;
+        }
+
+        if (MQTTStrict.strict) {
+            NSArray <NSString *> *components = [topicFilter componentsSeparatedByString:@"/"];
+            for (int level = 0; level < components.count; level++) {
+                if ([components[components.count - 1] rangeOfString:@"+"].location != NSNotFound &&
+                    components[components.count - 1].length > 1) {
+                    NSException* myException = [NSException
+                                                exceptionWithName:@"singlelevel wildcard must be alone on a level of a topic filter"
+                                                reason:[NSString stringWithFormat:@"topicFilter = %@", topicFilter]
+                                                userInfo:nil];
+                    @throw myException;
+                }
+            }
+
+            for (int level = 0; level < components.count - 1; level++) {
+                if ([components[components.count - 1] rangeOfString:@"#"].location != NSNotFound) {
+                    NSException* myException = [NSException
+                                                exceptionWithName:@"multilevel wildcard must be on the last level of a topic filter"
+                                                reason:[NSString stringWithFormat:@"topicFilter = %@", topicFilter]
+                                                userInfo:nil];
+                    @throw myException;
+                }
+            }
+            if ([components[components.count - 1] rangeOfString:@"#"].location != NSNotFound &&
+                components[components.count - 1].length > 1) {
+                NSException* myException = [NSException
+                                            exceptionWithName:@"multilevel wildcard must be alone on a level of a topic filter"
+                                            reason:[NSString stringWithFormat:@"topicFilter = %@", topicFilter]
+                                            userInfo:nil];
+                @throw myException;
+            }
+        }
+
+        if (MQTTStrict.strict &&
+            [topicFilter rangeOfString:@"#"].location != NSNotFound &&
+            [topicFilter rangeOfString:@"#"].location != topicFilter.length &&
+            (topicFilter.length == 1 || [[topicFilter substringWithRange:NSMakeRange(topicFilter.length - 2, 1)] isEqualToString:@"/"])
+            ) {
+            NSException* myException = [NSException
+                                        exceptionWithName:@"multilevel wildcard must alone on the last level of a topic filter"
+                                        reason:[NSString stringWithFormat:@"topicFilter = %@", topicFilter]
+                                        userInfo:nil];
+            @throw myException;
+        }
+
+    }
+}
+
 - (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler {
     DDLogVerbose(@"[MQTTSession] subscribeToTopics:%@]", topics);
-    
-    //for (NSNumber *qos in [topics allValues]) {
-    //NSAssert([qos intValue] >= 0 && [qos intValue] <= 2, @"qosLevel must be 0, 1, or 2");
-    //}
-    
+
+    [self checkTopicFilters:topics.allKeys];
+
+    for (NSNumber *qos in [topics allValues]) {
+        if (MQTTStrict.strict &&
+            qos.intValue != MQTTQosLevelAtMostOnce &&
+            qos.intValue != MQTTQosLevelAtLeastOnce &&
+            qos.intValue != MQTTQosLevelExactlyOnce) {
+            NSException* myException = [NSException
+                                        exceptionWithName:@"Illegal QoS level"
+                                        reason:[NSString stringWithFormat:@"%d is not 0, 1, or 2", qos.intValue]
+                                        userInfo:nil];
+            @throw myException;
+        }
+    }
+
     UInt16 mid = [self nextMsgId];
     if (subscribeHandler) {
         [self.subscribeHandlers setObject:[subscribeHandler copy] forKey:@(mid)];
@@ -194,7 +248,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                            topics:topics
                                                     protocolLevel:self.protocolLevel
                                            subscriptionIdentifier:nil]];
-    
+
     return mid;
 }
 
@@ -212,6 +266,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 - (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler {
     DDLogVerbose(@"[MQTTSession] unsubscribeTopics:%@", topics);
+
+    [self checkTopicFilters:topics];
+
     UInt16 mid = [self nextMsgId];
     if (unsubscribeHandler) {
         [self.unsubscribeHandlers setObject:[unsubscribeHandler copy] forKey:@(mid)];
@@ -243,9 +300,69 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                  retainFlag,
                  (long)qos,
                  publishHandler);
-    
-    //NSAssert(qos >= 0 && qos <= 2, @"qos must be 0, 1, or 2");
-    
+
+    if (MQTTStrict.strict &&
+        !topic) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"topic must not be nil"
+                                    reason:[NSString stringWithFormat:@"%@", topic]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        topic &&
+        topic.length < 1) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"topic must not at least 1 character long"
+                                    reason:[NSString stringWithFormat:@"%@", topic]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        topic &&
+        [topic dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"topic may not be longer than 65535 bytes in UTF8 representation"
+                                    reason:[NSString stringWithFormat:@"topic length = %lu", [topic dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        topic &&
+        ![topic dataUsingEncoding:NSUTF8StringEncoding]) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"topic must not contain non-UTF8 characters"
+                                    reason:[NSString stringWithFormat:@"topic = %@", topic]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        self.willTopic &&
+        ([self.willTopic containsString:@"+"] ||
+         [self.willTopic containsString:@"#"])
+        ) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"willTopic must not contain wildcards"
+                                    reason:[NSString stringWithFormat:@"willTopic = %@", self.willTopic]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        qos != MQTTQosLevelAtMostOnce &&
+        qos != MQTTQosLevelAtLeastOnce &&
+        qos != MQTTQosLevelExactlyOnce) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Illegal QoS level"
+                                    reason:[NSString stringWithFormat:@"%d is not 0, 1, or 2", qos]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
     UInt16 msgId = 0;
     if (!qos) {
         MQTTMessage *msg = [MQTTMessage publishMessageWithData:data
@@ -274,12 +391,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     } else {
         msgId = [self nextMsgId];
         MQTTMessage *msg = nil;
-        
+
         id<MQTTFlow> flow;
         if (self.status == MQTTSessionStatusConnected) {
             NSArray *flows = [self.persistence allFlowsforClientId:self.clientId
                                                       incomingFlag:NO];
-            
+
             BOOL unprocessedMessageNotExists = TRUE;
             NSUInteger windowSize = 0;
             for (id<MQTTFlow> flow in flows) {
@@ -342,7 +459,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
             } else {
                 [self.publishHandlers removeObjectForKey:@(msgId)];
             }
-            
+
             if ([flow.commandType intValue] == MQTTPublish) {
                 DDLogVerbose(@"[MQTTSession] PUBLISH %d", msgId);
                 if (![self encode:msg]) {
@@ -415,27 +532,27 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 - (void)closeInternal
 {
     DDLogVerbose(@"[MQTTSession] closeInternal");
-    
+
     if (self.checkDupTimer) {
         [self.checkDupTimer invalidate];
         self.checkDupTimer = nil;
     }
-    
+
     if (self.keepAliveTimer) {
         [self.keepAliveTimer invalidate];
         self.keepAliveTimer = nil;
     }
-    
+
     if (self.transport) {
         [self.transport close];
         self.transport.delegate = nil;
     }
-    
+
     if(self.decoder){
         [self.decoder close];
         self.decoder.delegate = nil;
     }
-    
+
     NSArray *flows = [self.persistence allFlowsforClientId:self.clientId
                                               incomingFlag:NO];
     for (id<MQTTFlow> flow in flows) {
@@ -447,7 +564,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                 break;
         }
     }
-    
+
     self.status = MQTTSessionStatusClosed;
     if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
         [self.delegate handleEvent:self event:MQTTSessionEventConnectionClosed error:nil];
@@ -455,29 +572,29 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if ([self.delegate respondsToSelector:@selector(connectionClosed:)]) {
         [self.delegate connectionClosed:self];
     }
-    
+
     NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
                                          code:MQTTSessionErrorNoResponse
                                      userInfo:@{NSLocalizedDescriptionKey : @"No response"}];
-    
+
     NSArray *allSubscribeHandlers = self.subscribeHandlers.allValues;
     [self.subscribeHandlers removeAllObjects];
     for (MQTTSubscribeHandler subscribeHandler in allSubscribeHandlers) {
         subscribeHandler(error, nil);
     }
-    
+
     NSArray *allUnsubscribeHandlers = self.unsubscribeHandlers.allValues;
     [self.unsubscribeHandlers removeAllObjects];
     for (MQTTUnsubscribeHandler unsubscribeHandler in allUnsubscribeHandlers) {
         unsubscribeHandler(error);
     }
-    
+
     MQTTDisconnectHandler disconnectHandler = self.disconnectHandler;
     if (disconnectHandler) {
         self.disconnectHandler = nil;
         disconnectHandler(nil);
     }
-    
+
     [self tell];
     self.synchronPub = FALSE;
     self.synchronPubMid = 0;
@@ -504,12 +621,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if (self.status != MQTTSessionStatusConnected) {
         return;
     }
-    
+
     NSArray *flows = [self.persistence allFlowsforClientId:self.clientId
                                               incomingFlag:NO];
     windowSize = 0;
     message = nil;
-    
+
     for (id<MQTTFlow> flow in flows) {
         if ([flow.commandType intValue] != MQTT_None) {
             windowSize++;
@@ -586,15 +703,15 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 - (void)decoder:(MQTTDecoder*)sender handleEvent:(MQTTDecoderEvent)eventCode error:(NSError *)error {
     __unused NSArray *events = @[
-                        @"MQTTDecoderEventProtocolError",
-                        @"MQTTDecoderEventConnectionClosed",
-                        @"MQTTDecoderEventConnectionError"
-                        ];
+                                 @"MQTTDecoderEventProtocolError",
+                                 @"MQTTDecoderEventConnectionClosed",
+                                 @"MQTTDecoderEventConnectionError"
+                                 ];
     DDLogVerbose(@"[MQTTSession] decoder handleEvent: %@ (%d) %@",
                  events[eventCode % [events count]],
                  eventCode,
                  [error description]);
-    
+
     switch (eventCode) {
         case MQTTDecoderEventConnectionClosed:
             [self error:MQTTSessionEventConnectionClosedByBroker error:error];
@@ -624,7 +741,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
         return;
     }
-    
+
     @synchronized(sender) {
         if ([self.delegate respondsToSelector:@selector(received:type:qos:retained:duped:mid:data:)]) {
             [self.delegate received:self
@@ -655,7 +772,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                             NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
                                                                  code:MQTTSessionErrorInvalidConnackReceived
                                                              userInfo:@{NSLocalizedDescriptionKey : @"MQTT protocol CONNACK expected"}];
-                            
+
                             [self protocolError:error];
                             MQTTConnectHandler connectHandler = self.connectHandler;
                             if (connectHandler) {
@@ -671,7 +788,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                 } else {
                                     self.sessionPresent = false;
                                 }
-                                
+
                                 self.checkDupTimer = [NSTimer timerWithTimeInterval:DUPLOOP
                                                                              target:self
                                                                            selector:@selector(checkDup:)
@@ -698,7 +815,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                            repeats:YES];
                                     [self.runLoop addTimer:self.keepAliveTimer forMode:self.runLoopMode];
                                 }
-                                
+
                                 if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
                                     [self.delegate handleEvent:self event:MQTTSessionEventConnected error:nil];
                                 }
@@ -708,7 +825,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                 if ([self.delegate respondsToSelector:@selector(connected:sessionPresent:)]) {
                                     [self.delegate connected:self sessionPresent:self.sessionPresent];
                                 }
-                                
+
                                 if(self.connectionHandler){
                                     self.connectionHandler(MQTTSessionEventConnected);
                                 }
@@ -717,7 +834,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                     self.connectHandler = nil;
                                     [self onConnect:connectHandler error:nil];
                                 }
-                                
+
                             } else {
                                 NSString *errorDescription = @"unknown";
                                 NSInteger errorCode = 0;
@@ -749,7 +866,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                             break;
                                     }
                                 }
-                                
+
                                 NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
                                                                      code:errorCode
                                                                  userInfo:@{NSLocalizedDescriptionKey : errorDescription}];
@@ -763,23 +880,23 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                     [self onConnect:connectHandler error:error];
                                 }
                             }
-                            
+
                             self.synchronConnect = FALSE;
                         }
                         break;
                     case MQTTDisconnect: {
-                            NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
-                                                                 code:[message.returnCode intValue]
-                                                             userInfo:@{NSLocalizedDescriptionKey : @"MQTT protocol DISCONNECT instead of CONNACK"}];
+                        NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
+                                                             code:[message.returnCode intValue]
+                                                         userInfo:@{NSLocalizedDescriptionKey : @"MQTT protocol DISCONNECT instead of CONNACK"}];
 
-                            [self protocolError:error];
-                            MQTTConnectHandler connectHandler = self.connectHandler;
-                            if (connectHandler) {
-                                self.connectHandler = nil;
-                                [self onConnect:connectHandler error:error];
-                            }
-                        break;
+                        [self protocolError:error];
+                        MQTTConnectHandler connectHandler = self.connectHandler;
+                        if (connectHandler) {
+                            self.connectHandler = nil;
+                            [self onConnect:connectHandler error:error];
                         }
+                        break;
+                    }
                     default: {
                         NSError * error = [NSError errorWithDomain:MQTTSessionErrorDomain
                                                               code:MQTTSessionErrorNoConnackReceived
@@ -1141,13 +1258,13 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 }
 
 - (void)error:(MQTTSessionEvent)eventCode error:(NSError *)error {
-    
+
     self.status = MQTTSessionStatusError;
     [self closeInternal];
     if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
         [self.delegate handleEvent:self event:eventCode error:error];
     }
-    
+
     if(self.connectionHandler){
         self.connectionHandler(eventCode);
     }
@@ -1161,7 +1278,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         self.connectHandler = nil;
         [self onConnect:connectHandler error:error];
     }
-    
+
     self.synchronPub = FALSE;
     self.synchronPubMid = 0;
     self.synchronSub = FALSE;
@@ -1290,6 +1407,195 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 #pragma mark - MQTTTransport interface
 
 - (void)connect {
+
+    if (MQTTStrict.strict &&
+        self.clientId && self.clientId.length < 1 &&
+        !self.cleanSessionFlag) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"clientId must be at least 1 character long if cleanSessionFlag is off"
+                                    reason:[NSString stringWithFormat:@"clientId length = %lu", [self.clientId dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        !self.clientId) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"clientId must not be nil"
+                                    reason:[NSString stringWithFormat:@"clientId length = %lu", [self.clientId dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        [self.clientId dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"clientId may not be longer than 65535 bytes in UTF8 representation"
+                                    reason:[NSString stringWithFormat:@"clientId length = %lu", [self.clientId dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        ![self.clientId dataUsingEncoding:NSUTF8StringEncoding]) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"clientId must not contain non-UTF8 characters"
+                                    reason:[NSString stringWithFormat:@"clientId = %@", self.clientId]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        [self.userName dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"userName may not be longer than 65535 bytes in UTF8 representation"
+                                    reason:[NSString stringWithFormat:@"userName length = %lu", [self.userName dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        ![self.userName dataUsingEncoding:NSUTF8StringEncoding]) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"userName must not contain non-UTF8 characters"
+                                    reason:[NSString stringWithFormat:@"password = %@", self.userName]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        !self.userName) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"password specified without userName"
+                                    reason:[NSString stringWithFormat:@"password = %@", self.password]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        self.protocolLevel != MQTTProtocolVersion31 &&
+        self.protocolLevel != MQTTProtocolVersion311 &&
+        self.protocolLevel != MQTTProtocolVersion50) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Illegal protocolLevel"
+                                    reason:[NSString stringWithFormat:@"%d is not 3, 4, or 5", self.protocolLevel]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        !self.willFlag &&
+        self.willTopic) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Will topic must be nil if willFlag is false"
+                                    reason:[NSString stringWithFormat:@"%@", self.willTopic]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        !self.willFlag &&
+        self.willMsg) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Will message must be nil if willFlag is false"
+                                    reason:[NSString stringWithFormat:@"%@", self.willMsg]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        !self.willFlag &&
+        self.willRetainFlag) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Will retain must be false if willFlag is false"
+                                    reason:[NSString stringWithFormat:@"%d", self.willRetainFlag]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        !self.willFlag &&
+        self.willQoS != MQTTQosLevelAtMostOnce) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Will QoS Level must be 0 if willFlag is false"
+                                    reason:[NSString stringWithFormat:@"%d", self.willQoS]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        self.willQoS != MQTTQosLevelAtMostOnce &&
+        self.willQoS != MQTTQosLevelAtLeastOnce &&
+        self.willQoS != MQTTQosLevelExactlyOnce) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Illegal will QoS level"
+                                    reason:[NSString stringWithFormat:@"%d is not 0, 1, or 2", self.willQoS]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        self.willFlag &&
+        !self.willTopic) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Will topic must not be nil if willFlag is true"
+                                    reason:[NSString stringWithFormat:@"%@", self.willTopic]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        self.willTopic &&
+        self.willTopic.length < 1) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Will topic must be at least 1 character long"
+                                    reason:[NSString stringWithFormat:@"%@", self.willTopic]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        self.willTopic &&
+        [self.willTopic dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"willTopic may not be longer than 65535 bytes in UTF8 representation"
+                                    reason:[NSString stringWithFormat:@"willTopic length = %lu", [self.willTopic dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        self.willTopic &&
+        ![self.willTopic dataUsingEncoding:NSUTF8StringEncoding]) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"willTopic must not contain non-UTF8 characters"
+                                    reason:[NSString stringWithFormat:@"willTopic = %@", self.willTopic]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        self.willTopic &&
+        ([self.willTopic containsString:@"+"] ||
+         [self.willTopic containsString:@"#"])
+        ) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"willTopic must not contain wildcards"
+                                    reason:[NSString stringWithFormat:@"willTopic = %@", self.self.willTopic]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
+    if (MQTTStrict.strict &&
+        self.willFlag &&
+        !self.willMsg) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Will message must not be nil if willFlag is true"
+                                    reason:[NSString stringWithFormat:@"%@", self.willMsg]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
     DDLogVerbose(@"[MQTTSession] connecting");
     if (self.cleanSessionFlag) {
         [self.persistence deleteAllFlowsForClientId:self.clientId];
@@ -1298,15 +1604,15 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         [self.publishHandlers removeAllObjects];
     }
     [self tell];
-    
+
     self.status = MQTTSessionStatusConnecting;
-    
+
     self.decoder = [[MQTTDecoder alloc] init];
     self.decoder.runLoop = self.runLoop;
     self.decoder.runLoopMode = self.runLoopMode;
     self.decoder.delegate = self;
     [self.decoder open];
-    
+
     self.transport.delegate = self;
     [self.transport open];
 }
@@ -1347,23 +1653,23 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 #pragma mark - MQTTTransport delegate
 - (void)mqttTransport:(id<MQTTTransport>)mqttTransport didReceiveMessage:(NSData *)message {
     DDLogVerbose(@"[MQTTSession] mqttTransport didReceiveMessage");
-    
+
     [self.decoder decodeMessage:message];
-    
+
 }
 
 - (void)mqttTransportDidClose:(id<MQTTTransport>)mqttTransport {
     DDLogVerbose(@"[MQTTSession] mqttTransport mqttTransportDidClose");
-    
+
     [self error:MQTTSessionEventConnectionClosedByBroker error:nil];
-    
+
 }
 
 - (void)mqttTransportDidOpen:(id<MQTTTransport>)mqttTransport {
     DDLogVerbose(@"[MQTTSession] mqttTransportDidOpen");
-    
+
     DDLogVerbose(@"[MQTTSession] sending CONNECT");
-    
+
     if (!self.connectMessage) {
         (void)[self encode:[MQTTMessage connectMessageWithClientId:self.clientId
                                                           userName:self.userName
@@ -1376,7 +1682,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                            willQoS:self.willQoS
                                                         willRetain:self.willRetainFlag
                                                      protocolLevel:self.protocolLevel
-                            sessionExpiryInterval:self.sessionExpiryInterval
+                                             sessionExpiryInterval:self.sessionExpiryInterval
                                                         authMethod:self.authMethod
                                                           authData:self.authData
                                          requestProblemInformation:self.requestProblemInformation

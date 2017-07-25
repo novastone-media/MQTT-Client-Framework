@@ -54,7 +54,6 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
               retained:(BOOL)retained;
 
 /** gets called when a published message was actually delivered
-
  @param msgID the Message Identifier of the delivered message
  @note this method is called after a publish with qos 1 or 2 only
  */
@@ -62,6 +61,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 
 /** gets called when a published message was actually delivered
  @param sessionManager the instance of MQTTSessionManager whose state changed
+ @param msgID the Message Identifier of the delivered message
  @note this method is called after a publish with qos 1 or 2 only
  */
 - (void)sessionManager:(MQTTSessionManager *)sessionManager didDeliverMessage:(UInt16)msgID;

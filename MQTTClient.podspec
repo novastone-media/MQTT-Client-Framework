@@ -1,13 +1,13 @@
 Pod::Spec.new do |mqttc|
 	mqttc.name         = "MQTTClient"
-	mqttc.version      = "0.9.5"
+	mqttc.version      = "0.9.6"
 	mqttc.summary      = "iOS, OSX and tvOS native ObjectiveC MQTT Client Framework"
 	mqttc.homepage     = "https://github.com/ckrey/MQTT-Client-Framework"
 	mqttc.license      = { :type => "EPLv1", :file => "LICENSE" }
 	mqttc.author       = { "Christoph Krey" => "krey.christoph@gmail.com" }
 	mqttc.source       = {
 		:git => "https://github.com/ckrey/MQTT-Client-Framework.git",
-		:tag => "0.9.5",
+		:tag => "0.9.6",
 		:submodules => true
 	}
 
@@ -31,6 +31,7 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTInMemoryPersistence.{h,m}",
 					"MQTTClient/MQTTClient/MQTTLog.{h,m}",
+					"MQTTClient/MQTTClient/MQTTStrict.{h,m}",
 					"MQTTClient/MQTTClient/MQTTClient.h",
 					"MQTTClient/MQTTClient/MQTTMessage.{h,m}",
 					"MQTTClient/MQTTClient/MQTTPersistence.h",
@@ -55,6 +56,7 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTInMemoryPersistence.{h,m}",
 					"MQTTClient/MQTTClient/MQTTLog.{h,m}",
+					"MQTTClient/MQTTClient/MQTTStrict.{h,m}",
 					"MQTTClient/MQTTClient/MQTTClient.h",
 					"MQTTClient/MQTTClient/MQTTMessage.{h,m}",
 					"MQTTClient/MQTTClient/MQTTPersistence.h",

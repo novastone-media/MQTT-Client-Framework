@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTLog.h"
+#import "MQTTStrict.h"
 #import "MQTTTestHelpers.h"
 
 @interface MQTTACLTests : MQTTTestHelpers
@@ -93,11 +94,101 @@
         [self connect:self.session parameters:parameters];
         XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker ||
                   self.event == MQTTSessionEventProtocolError,
-                       @"Not Rejected %ld %@", (long)self.event, self.error);
+                  @"Not Rejected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
     }
 }
- 
+
+/*
+ * [MQTT-3.1.2-22]
+ * If the User Name Flag is set to 0, the Password Flag MUST be set to 0.
+ */
+
+- (void)test_connect_no_user_but_pwd_strict {
+    MQTTStrict.strict = TRUE;
+
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.userName = nil;
+        @try {
+            self.session.password = @"password w/o user";
+            [self.session connect];
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should not get here but throw exception before");
+    }
+}
+
+/*
+ * [MQTT-3.1.2-22]
+ * If the User Name Flag is set to 0, the Password Flag MUST be set to 0.
+ */
+
+- (void)test_connect_long_user_strict {
+    MQTTStrict.strict = TRUE;
+
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.userName = @"long user";
+        self.session.password = @"password";
+
+        while ([self.session.userName dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L) {
+            DDLogVerbose(@"userName length %lu",
+                         [self.session.userName dataUsingEncoding:NSUTF8StringEncoding].length);
+            self.session.userName = [self.session.userName stringByAppendingString:self.session.userName];
+        }
+
+        @try {
+            [self.session connect];
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should not get here but throw exception before");
+    }
+}
+
+- (void)test_connect_user_nonUTF8_strict {
+    MQTTStrict.strict = TRUE;
+
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        self.session = [MQTTTestHelpers session:parameters];
+        self.session.userName = @"user";
+
+        NSData *data = [NSData dataWithBytes:"MQTTClient/abc\x9c\x9dxyz" length:19];
+        NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+
+        NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
+
+        NSString *stringWithFEFF = [NSString stringWithFormat:@"%@<%C>/%s", TOPIC, 0xfeff, __FUNCTION__];
+
+        NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
+
+        @try {
+            //self.session.userName = stringWith9c;
+            self.session.userName = stringWithD800;
+            //self.session.userName = stringWithFEFF;
+            //self.session.userName = stringWithNull;
+            [self.session connect];
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should not get here but throw exception before");
+    }
+}
+
 - (void)connect:(MQTTSession *)session parameters:(NSDictionary *)parameters{
     session.delegate = self;
     self.event = -1;

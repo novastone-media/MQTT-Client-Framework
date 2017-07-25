@@ -66,6 +66,10 @@
 		840716591BBEF19E00FBB3CB /* MQTTTestSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */; };
 		8407165B1BBEF19E00FBB3CB /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests.swift */; };
 		840785A918A2AA26009158D5 /* MQTTClientPublishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */; };
+		840D3CEB1F264AD00072019B /* MQTTStrict.h in Headers */ = {isa = PBXBuildFile; fileRef = 840D3CE91F264AD00072019B /* MQTTStrict.h */; };
+		840D3CED1F264AE20072019B /* MQTTStrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D3CEA1F264AD00072019B /* MQTTStrict.m */; };
+		840D3CEE1F264AE30072019B /* MQTTStrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D3CEA1F264AD00072019B /* MQTTStrict.m */; };
+		840D3CEF1F264AE40072019B /* MQTTStrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D3CEA1F264AD00072019B /* MQTTStrict.m */; };
 		841D0A3E1C3585D4006A82DC /* MQTTTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B6A18F1C14E1BB00618573 /* MQTTTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		841D0A431C3585D4006A82DC /* MQTTWebsocketTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B633BC1C176ECA0024CE2E /* MQTTWebsocketTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		841D0A441C3585D4006A82DC /* MQTTCFSocketEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FD1883E8FD00101409 /* MQTTCFSocketEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -350,6 +354,8 @@
 		8407163D1BBEF16E00FBB3CB /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
 		8407163F1BBEF17600FBB3CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientPublishTests.m; sourceTree = "<group>"; };
+		840D3CE91F264AD00072019B /* MQTTStrict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTStrict.h; sourceTree = "<group>"; };
+		840D3CEA1F264AD00072019B /* MQTTStrict.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTStrict.m; sourceTree = "<group>"; };
 		84141A5C1C12315C00CBD3B9 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/lib/libicucore.tbd; sourceTree = DEVELOPER_DIR; };
 		841D0A791C35876E006A82DC /* MQTTSSLSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTSSLSecurityPolicy.h; sourceTree = "<group>"; };
 		841D0A7A1C35876E006A82DC /* MQTTSSLSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSSLSecurityPolicy.m; sourceTree = "<group>"; };
@@ -679,6 +685,8 @@
 				846191321883E56800101409 /* MQTTClient.h */,
 				84AA232D1C6B8BE5009B153A /* MQTTLog.h */,
 				C7E397981F0F71F1000C512E /* MQTTLog.m */,
+				840D3CE91F264AD00072019B /* MQTTStrict.h */,
+				840D3CEA1F264AD00072019B /* MQTTStrict.m */,
 				84B1AFF0196D99170056B959 /* MQTTSessionManager.h */,
 				84B1AFF1196D99170056B959 /* MQTTSessionManager.m */,
 				846191301883E56800101409 /* Supporting Files */,
@@ -835,6 +843,7 @@
 				841D0A871C35876E006A82DC /* MQTTSSLSecurityPolicyTransport.h in Headers */,
 				841D0A8F1C358793006A82DC /* MQTTInMemoryPersistence.h in Headers */,
 				841D0A8B1C358785006A82DC /* MQTTCoreDataPersistence.h in Headers */,
+				840D3CEB1F264AD00072019B /* MQTTStrict.h in Headers */,
 				841D0A491C3585D4006A82DC /* MQTTSession.h in Headers */,
 				841D0A4A1C3585D4006A82DC /* MQTTSessionSynchron.h in Headers */,
 				84E2C4581EC34E9000BC02CE /* MQTTProperties.h in Headers */,
@@ -1519,6 +1528,7 @@
 				84A592181C3C64A9008C5199 /* MQTTSSLSecurityPolicy.m in Sources */,
 				84A592191C3C64A9008C5199 /* MQTTSSLSecurityPolicyDecoder.m in Sources */,
 				84A5921A1C3C64A9008C5199 /* MQTTSSLSecurityPolicyEncoder.m in Sources */,
+				840D3CED1F264AE20072019B /* MQTTStrict.m in Sources */,
 				84A5921B1C3C64A9008C5199 /* MQTTSSLSecurityPolicyTransport.m in Sources */,
 				84A5921C1C3C64A9008C5199 /* MQTTCoreDataPersistence.m in Sources */,
 				84A5921D1C3C64A9008C5199 /* MQTTInMemoryPersistence.m in Sources */,
@@ -1544,6 +1554,7 @@
 				F6D08FAC1E535BCB00CD2566 /* MQTTTransport.m in Sources */,
 				F6D08FAD1E535BCB00CD2566 /* MQTTSSLSecurityPolicy.m in Sources */,
 				F6D08FAE1E535BCB00CD2566 /* MQTTSSLSecurityPolicyDecoder.m in Sources */,
+				840D3CEF1F264AE40072019B /* MQTTStrict.m in Sources */,
 				F6D08FAF1E535BCB00CD2566 /* MQTTSSLSecurityPolicyEncoder.m in Sources */,
 				F6D08FB01E535BCB00CD2566 /* MQTTSSLSecurityPolicyTransport.m in Sources */,
 				F6D08FB21E535BCB00CD2566 /* MQTTCFSocketEncoder.m in Sources */,
@@ -1569,6 +1580,7 @@
 				F6D08FE11E535F1000CD2566 /* MQTTTransport.m in Sources */,
 				F6D08FE21E535F1000CD2566 /* MQTTSSLSecurityPolicy.m in Sources */,
 				F6D08FE31E535F1000CD2566 /* MQTTSSLSecurityPolicyDecoder.m in Sources */,
+				840D3CEE1F264AE30072019B /* MQTTStrict.m in Sources */,
 				F6D08FE41E535F1000CD2566 /* MQTTSSLSecurityPolicyEncoder.m in Sources */,
 				F6D08FE51E535F1000CD2566 /* MQTTSSLSecurityPolicyTransport.m in Sources */,
 				F6D08FE61E535F1000CD2566 /* MQTTCFSocketEncoder.m in Sources */,

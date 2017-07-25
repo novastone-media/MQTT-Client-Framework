@@ -38,7 +38,7 @@
              <Node>
               <Name>port</Name>
               <Path>interface_m_q_t_t_c_f_socket_transport.html</Path>
-              <Anchor>a2b8899b8e97c85b4d9757705aa6ba968</Anchor>
+              <Anchor>a834c05604814188efb4f11a12a4b93c1</Anchor>
              </Node>
              <Node>
               <Name>tls</Name>
@@ -124,6 +124,10 @@
             <Path>interface_m_q_t_t_in_memory_persistence.html</Path>
            </Node>
            <Node>
+            <Name>MQTTLog</Name>
+            <Path>interface_m_q_t_t_log.html</Path>
+           </Node>
+           <Node>
             <Name>&lt;MQTTPersistence&gt;</Name>
             <Path>protocol_m_q_t_t_persistence-p.html</Path>
             <Subnodes>
@@ -199,6 +203,11 @@
               <Anchor>a5a617d3cee077dd60f48a340d4b34d99</Anchor>
              </Node>
              <Node>
+              <Name>closeWithReturnCode:sessionExpiryInterval:reasonString:userProperty:disconnectHandler:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>add8e169ab335825e0bb9879c7cbce54b</Anchor>
+             </Node>
+             <Node>
               <Name>connect</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>ad443eb80793d71150a825513303405b5</Anchor>
@@ -212,6 +221,11 @@
               <Name>disconnect</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>aef2d0980b561184800908e95dd3a9fc7</Anchor>
+             </Node>
+             <Node>
+              <Name>disconnectWithReturnCode:sessionExpiryInterval:reasonString:userProperty:</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a693cd5762ad92a97971ba95b7e0235c3</Anchor>
              </Node>
              <Node>
               <Name>init</Name>
@@ -314,6 +328,21 @@
               <Anchor>a1a8eb040c4fd693c218999bae64d1281</Anchor>
              </Node>
              <Node>
+              <Name>dupTimeout</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a92914b34c08b83665b838ec9f75f983c</Anchor>
+             </Node>
+             <Node>
+              <Name>effectiveKeepAlive</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a18c68ee9ea84d8a008a3893aa8e95f03</Anchor>
+             </Node>
+             <Node>
+              <Name>host</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a72a66b7bf08ab39c71369dc6debf5853</Anchor>
+             </Node>
+             <Node>
               <Name>keepAliveInterval</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>aa63e148680fef0724b66218d53caba6d</Anchor>
@@ -337,6 +366,11 @@
               <Name>persistence</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>ae97bbef7489e0eb1f3bbbc93b02b6f41</Anchor>
+             </Node>
+             <Node>
+              <Name>port</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a22334eec8bf0b3ba97e2391f70d43320</Anchor>
              </Node>
              <Node>
               <Name>protocolLevel</Name>
@@ -367,6 +401,11 @@
               <Name>runLoopMode</Name>
               <Path>interface_m_q_t_t_session.html</Path>
               <Anchor>a3ab2f0926aa51b0dc7969c66bae215e4</Anchor>
+             </Node>
+             <Node>
+              <Name>serverKeepAlive</Name>
+              <Path>interface_m_q_t_t_session.html</Path>
+              <Anchor>a423d97593b11b2aba0eabbc13ee29011</Anchor>
              </Node>
              <Node>
               <Name>sessionExpiryInterval</Name>
@@ -611,9 +650,24 @@
               <Anchor>a2c6507254d370d9f860b299608b37280</Anchor>
              </Node>
              <Node>
+              <Name>host</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>a9254ba4654f77ec3ff37dab05cd1d4d1</Anchor>
+             </Node>
+             <Node>
               <Name>lastErrorCode</Name>
               <Path>interface_m_q_t_t_session_manager.html</Path>
               <Anchor>aa2522a9c3be18812cea22cf2f6a40754</Anchor>
+             </Node>
+             <Node>
+              <Name>port</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>aba240cdc089994d549452cbaecc6af4a</Anchor>
+             </Node>
+             <Node>
+              <Name>session</Name>
+              <Path>interface_m_q_t_t_session_manager.html</Path>
+              <Anchor>ab85b572d885a43b0faa79373a9cc6913</Anchor>
              </Node>
              <Node>
               <Name>state</Name>
@@ -645,6 +699,16 @@
               <Name>sessionManager:didChangeState:</Name>
               <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
               <Anchor>a6569e1ca87d4e098645e715ac69dcc53</Anchor>
+             </Node>
+             <Node>
+              <Name>sessionManager:didDeliverMessage:</Name>
+              <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
+              <Anchor>ac76a8d6565abe56028b22a77f75d0af5</Anchor>
+             </Node>
+             <Node>
+              <Name>sessionManager:didReceiveMessage:onTopic:retained:</Name>
+              <Path>protocol_m_q_t_t_session_manager_delegate_01-p.html</Path>
+              <Anchor>aeb6f07319f8362c30f914cf02e1843c8</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -696,6 +760,12 @@
             </Subnodes>
            </Node>
            <Node>
+            <Name>MQTTStrict</Name>
+            <Path>interface_m_q_t_t_strict.html</Path>
+            <Subnodes>
+            </Subnodes>
+           </Node>
+           <Node>
             <Name>MQTTTransport</Name>
             <Path>interface_m_q_t_t_transport.html</Path>
            </Node>
@@ -722,6 +792,16 @@
               <Name>delegate</Name>
               <Path>protocol_m_q_t_t_transport_01-p.html</Path>
               <Anchor>a182ba6c4509d5b5e38ec0c783cd1b26d</Anchor>
+             </Node>
+             <Node>
+              <Name>host</Name>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
+              <Anchor>a1ffe0631c337850b0bcbdd061a89b355</Anchor>
+             </Node>
+             <Node>
+              <Name>port</Name>
+              <Path>protocol_m_q_t_t_transport_01-p.html</Path>
+              <Anchor>a62ecc92bb9e7e1f0cd94b4add918c711</Anchor>
              </Node>
              <Node>
               <Name>runLoop</Name>
@@ -793,7 +873,7 @@
              <Node>
               <Name>port</Name>
               <Path>interface_m_q_t_t_websocket_transport.html</Path>
-              <Anchor>a7a1139bbbe91d41a44b7b529dde39633</Anchor>
+              <Anchor>aed94b3a21446f3c4a45bbdae97095e31</Anchor>
              </Node>
              <Node>
               <Name>tls</Name>
@@ -939,6 +1019,10 @@
               <Path>interface_m_q_t_t_in_memory_persistence.html</Path>
              </Node>
              <Node>
+              <Name>MQTTLog</Name>
+              <Path>interface_m_q_t_t_log.html</Path>
+             </Node>
+             <Node>
               <Name>MQTTSession</Name>
               <Path>interface_m_q_t_t_session.html</Path>
              </Node>
@@ -957,6 +1041,10 @@
              <Node>
               <Name>MQTTSSLSecurityPolicy</Name>
               <Path>interface_m_q_t_t_s_s_l_security_policy.html</Path>
+             </Node>
+             <Node>
+              <Name>MQTTStrict</Name>
+              <Path>interface_m_q_t_t_strict.html</Path>
              </Node>
              <Node>
               <Name>MQTTTransport</Name>
@@ -1035,6 +1123,10 @@
             <Path>_m_q_t_t_in_memory_persistence_8h_source.html</Path>
            </Node>
            <Node>
+            <Name>MQTTLog.h</Name>
+            <Path>_m_q_t_t_log_8h_source.html</Path>
+           </Node>
+           <Node>
             <Name>MQTTPersistence.h</Name>
             <Path>_m_q_t_t_persistence_8h_source.html</Path>
            </Node>
@@ -1053,6 +1145,10 @@
            <Node>
             <Name>MQTTSSLSecurityPolicyTransport.h</Name>
             <Path>_m_q_t_t_s_s_l_security_policy_transport_8h_source.html</Path>
+           </Node>
+           <Node>
+            <Name>MQTTStrict.h</Name>
+            <Path>_m_q_t_t_strict_8h_source.html</Path>
            </Node>
            <Node>
             <Name>MQTTTransport.h</Name>

@@ -112,6 +112,9 @@ $(function() {
 <li>closeWithDisconnectHandler:
 : <a class="el" href="interface_m_q_t_t_session.html#a5a617d3cee077dd60f48a340d4b34d99">MQTTSession</a>
 </li>
+<li>closeWithReturnCode:sessionExpiryInterval:reasonString:userProperty:disconnectHandler:
+: <a class="el" href="interface_m_q_t_t_session.html#add8e169ab335825e0bb9879c7cbce54b">MQTTSession</a>
+</li>
 <li>commandType
 : <a class="el" href="protocol_m_q_t_t_flow-p.html#a08a38c51f8220a7af42fc2e3d2eb9969">&lt;MQTTFlow&gt;</a>
 </li>
@@ -188,10 +191,19 @@ $(function() {
 : <a class="el" href="interface_m_q_t_t_session.html#aef2d0980b561184800908e95dd3a9fc7">MQTTSession</a>
 , <a class="el" href="interface_m_q_t_t_session_manager.html#a71161804d040ca10e164578d7e7eb855">MQTTSessionManager</a>
 </li>
+<li>disconnectWithReturnCode:sessionExpiryInterval:reasonString:userProperty:
+: <a class="el" href="interface_m_q_t_t_session.html#a693cd5762ad92a97971ba95b7e0235c3">MQTTSession</a>
+</li>
+<li>dupTimeout
+: <a class="el" href="interface_m_q_t_t_session.html#a92914b34c08b83665b838ec9f75f983c">MQTTSession</a>
+</li>
 </ul>
 
 
 <h3><a id="index_e"></a>- e -</h3><ul>
+<li>effectiveKeepAlive
+: <a class="el" href="interface_m_q_t_t_session.html#a18c68ee9ea84d8a008a3893aa8e95f03">MQTTSession</a>
+</li>
 <li>effectiveSubscriptions
 : <a class="el" href="interface_m_q_t_t_session_manager.html#a2c6507254d370d9f860b299608b37280">MQTTSessionManager</a>
 </li>
@@ -217,6 +229,9 @@ $(function() {
 </li>
 <li>host
 : <a class="el" href="interface_m_q_t_t_c_f_socket_transport.html#ae30997b61a8be6b11bf3bb33cf751995">MQTTCFSocketTransport</a>
+, <a class="el" href="interface_m_q_t_t_session.html#a72a66b7bf08ab39c71369dc6debf5853">MQTTSession</a>
+, <a class="el" href="interface_m_q_t_t_session_manager.html#a9254ba4654f77ec3ff37dab05cd1d4d1">MQTTSessionManager</a>
+, <a class="el" href="protocol_m_q_t_t_transport_01-p.html#a1ffe0631c337850b0bcbdd061a89b355">&lt;MQTTTransport &gt;</a>
 , <a class="el" href="interface_m_q_t_t_websocket_transport.html#a1e4c2c9fa31f833f46379dc57ca9536d">MQTTWebsocketTransport</a>
 </li>
 </ul>
@@ -339,8 +354,11 @@ $(function() {
 : <a class="el" href="interface_m_q_t_t_s_s_l_security_policy.html#a7d009f8f895d9305e5025bf37fda636d">MQTTSSLSecurityPolicy</a>
 </li>
 <li>port
-: <a class="el" href="interface_m_q_t_t_c_f_socket_transport.html#a2b8899b8e97c85b4d9757705aa6ba968">MQTTCFSocketTransport</a>
-, <a class="el" href="interface_m_q_t_t_websocket_transport.html#a7a1139bbbe91d41a44b7b529dde39633">MQTTWebsocketTransport</a>
+: <a class="el" href="interface_m_q_t_t_c_f_socket_transport.html#a834c05604814188efb4f11a12a4b93c1">MQTTCFSocketTransport</a>
+, <a class="el" href="interface_m_q_t_t_session.html#a22334eec8bf0b3ba97e2391f70d43320">MQTTSession</a>
+, <a class="el" href="interface_m_q_t_t_session_manager.html#aba240cdc089994d549452cbaecc6af4a">MQTTSessionManager</a>
+, <a class="el" href="protocol_m_q_t_t_transport_01-p.html#a62ecc92bb9e7e1f0cd94b4add918c711">&lt;MQTTTransport &gt;</a>
+, <a class="el" href="interface_m_q_t_t_websocket_transport.html#aed94b3a21446f3c4a45bbdae97095e31">MQTTWebsocketTransport</a>
 </li>
 <li>protocolError:error:
 : <a class="el" href="protocol_m_q_t_t_session_delegate_01-p.html#aef7d9bfd2b53c2e188a0b88554093db9">&lt;MQTTSessionDelegate &gt;</a>
@@ -404,6 +422,12 @@ $(function() {
 <li>sending:type:qos:retained:duped:mid:data:
 : <a class="el" href="protocol_m_q_t_t_session_delegate_01-p.html#ae91831aacee0d83bbba7ba8e407b46d9">&lt;MQTTSessionDelegate &gt;</a>
 </li>
+<li>serverKeepAlive
+: <a class="el" href="interface_m_q_t_t_session.html#a423d97593b11b2aba0eabbc13ee29011">MQTTSession</a>
+</li>
+<li>session
+: <a class="el" href="interface_m_q_t_t_session_manager.html#ab85b572d885a43b0faa79373a9cc6913">MQTTSessionManager</a>
+</li>
 <li>session:handleEvent:
 : <a class="el" href="protocol_m_q_t_t_session_delegate_01-p.html#aa308f351c7b824665fba1c6875789c1e">&lt;MQTTSessionDelegate &gt;</a>
 </li>
@@ -416,8 +440,17 @@ $(function() {
 <li>sessionManager:didChangeState:
 : <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#a6569e1ca87d4e098645e715ac69dcc53">&lt;MQTTSessionManagerDelegate &gt;</a>
 </li>
+<li>sessionManager:didDeliverMessage:
+: <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#ac76a8d6565abe56028b22a77f75d0af5">&lt;MQTTSessionManagerDelegate &gt;</a>
+</li>
+<li>sessionManager:didReceiveMessage:onTopic:retained:
+: <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#aeb6f07319f8362c30f914cf02e1843c8">&lt;MQTTSessionManagerDelegate &gt;</a>
+</li>
 <li>sessionPresent
 : <a class="el" href="interface_m_q_t_t_session.html#ad0712c44abf0f514feb9462779d3e2b8">MQTTSession</a>
+</li>
+<li>setStrict:
+: <a class="el" href="interface_m_q_t_t_strict.html#aa6c70443d4ab02e58dfe2c184b021039">MQTTStrict</a>
 </li>
 <li>SSLPinningMode
 : <a class="el" href="interface_m_q_t_t_s_s_l_security_policy.html#aca548d3c82c982c275e6c68d92648d89">MQTTSSLSecurityPolicy</a>
@@ -431,6 +464,9 @@ $(function() {
 </li>
 <li>storeMessageForClientId:topic:data:retainFlag:qos:msgId:incomingFlag:commandType:deadline:
 : <a class="el" href="protocol_m_q_t_t_persistence-p.html#ac4dcb1941bac80050f643fab3faf0fe4">&lt;MQTTPersistence&gt;</a>
+</li>
+<li>strict
+: <a class="el" href="interface_m_q_t_t_strict.html#ae2662f2299f2e9936fee25522cd44cf3">MQTTStrict</a>
 </li>
 <li>subAckReceived:msgID:grantedQoss:
 : <a class="el" href="protocol_m_q_t_t_session_delegate_01-p.html#a23603651fef7f317958e947c95a6a726">&lt;MQTTSessionDelegate &gt;</a>
@@ -538,7 +574,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 10 2017 12:59:04 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 25 2017 09:58:10 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -40,7 +40,6 @@
  @param runLoop see runLoop for description.
  @param runLoopMode see runLoopMode for description.
  @return the initialised MQTTSession object
- @exception NSInternalInconsistencyException if the parameters are invalid
  */
 - (MQTTSession *)initWithClientId:(NSString *)clientId
                          userName:(NSString *)userName
@@ -72,7 +71,6 @@
  @param runLoopMode see initWithClientId for description.
  @param securityPolicy see initWithClientId for description.
  @return the initialised MQTTSession object
- @exception NSInternalInconsistencyException if the parameters are invalid
  */
 - (MQTTSession *)initWithClientId:(NSString *)clientId
                          userName:(NSString *)userName
@@ -124,7 +122,6 @@
  * @param securityPolicy The security policy used to evaluate server trust for secure connections.
  * @param certificates An identity certificate used to reply to a server requiring client certificates according to the description given for SSLSetCertificate(). You may build the certificates array yourself or use the sundry method clientCertFromP12
  * @return the initialised MQTTSession object
- * @exception NSInternalInconsistencyException if the parameters are invalid
  *
  * @code
  #import "MQTTClient.h"

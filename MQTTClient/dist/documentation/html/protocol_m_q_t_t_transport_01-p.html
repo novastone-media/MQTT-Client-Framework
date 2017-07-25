@@ -93,6 +93,10 @@ Properties</h2></td></tr>
 <tr class="separator:a7b97ce4c4dcc299bcf68909cd31eb3d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af671f3734cc589cfca98add6750ac45d"><td class="memItemLeft" align="right" valign="top">NSString *_Nonnull&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_m_q_t_t_transport_01-p.html#af671f3734cc589cfca98add6750ac45d">runLoopMode</a></td></tr>
 <tr class="separator:af671f3734cc589cfca98add6750ac45d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ffe0631c337850b0bcbdd061a89b355"><td class="memItemLeft" align="right" valign="top">NSString *_Nonnull&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_m_q_t_t_transport_01-p.html#a1ffe0631c337850b0bcbdd061a89b355">host</a></td></tr>
+<tr class="separator:a1ffe0631c337850b0bcbdd061a89b355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62ecc92bb9e7e1f0cd94b4add918c711"><td class="memItemLeft" align="right" valign="top">UInt32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_m_q_t_t_transport_01-p.html#a62ecc92bb9e7e1f0cd94b4add918c711">port</a></td></tr>
+<tr class="separator:a62ecc92bb9e7e1f0cd94b4add918c711"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a182ba6c4509d5b5e38ec0c783cd1b26d"><td class="memItemLeft" align="right" valign="top">_Nullable id&lt; MQTTTransportDelegate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_m_q_t_t_transport_01-p.html#a182ba6c4509d5b5e38ec0c783cd1b26d">delegate</a></td></tr>
 <tr class="separator:a182ba6c4509d5b5e38ec0c783cd1b26d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a599b4d50a3951a9effaa08895b45f340"><td class="memItemLeft" align="right" valign="top">MQTTTransportState&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_m_q_t_t_transport_01-p.html#a599b4d50a3951a9effaa08895b45f340">state</a></td></tr>
@@ -186,6 +190,52 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a1ffe0631c337850b0bcbdd061a89b355"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ffe0631c337850b0bcbdd061a89b355">&#9670;&nbsp;</a></span>host</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (NSString* _Nonnull <a class="el" href="interface_m_q_t_t_transport.html">MQTTTransport</a>) host</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>host an NSString containing the hostName or IP address of the host to connect to </p>
+
+</div>
+</div>
+<a id="a62ecc92bb9e7e1f0cd94b4add918c711"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62ecc92bb9e7e1f0cd94b4add918c711">&#9670;&nbsp;</a></span>port</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (UInt32 <a class="el" href="interface_m_q_t_t_transport.html">MQTTTransport</a>) port</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">assign</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>port an unsigned 32 bit integer containing the IP port number to connect to </p>
+
+</div>
+</div>
 <a id="a7b97ce4c4dcc299bcf68909cd31eb3d9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7b97ce4c4dcc299bcf68909cd31eb3d9">&#9670;&nbsp;</a></span>runLoop</h2>
 
@@ -261,7 +311,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 10 2017 12:59:04 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 25 2017 09:58:10 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

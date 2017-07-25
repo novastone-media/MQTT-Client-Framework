@@ -6,6 +6,7 @@ var searchData=
   ['clientid',['clientId',['../interface_m_q_t_t_session.html#aa426b344bb913f5f338cacb1844dfb6a',1,'MQTTSession::clientId()'],['../protocol_m_q_t_t_flow-p.html#adcecd8d7fb46a9ee206eee3aa55317ab',1,'MQTTFlow-p::clientId()']]],
   ['close',['close',['../interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440',1,'MQTTSession::close()'],['../protocol_m_q_t_t_transport_01-p.html#a7a0c40f02204b591d3e47ee02d83c5e6',1,'MQTTTransport -p::close()']]],
   ['closewithdisconnecthandler_3a',['closeWithDisconnectHandler:',['../interface_m_q_t_t_session.html#a5a617d3cee077dd60f48a340d4b34d99',1,'MQTTSession']]],
+  ['closewithreturncode_3asessionexpiryinterval_3areasonstring_3auserproperty_3adisconnecthandler_3a',['closeWithReturnCode:sessionExpiryInterval:reasonString:userProperty:disconnectHandler:',['../interface_m_q_t_t_session.html#add8e169ab335825e0bb9879c7cbce54b',1,'MQTTSession']]],
   ['commandtype',['commandType',['../protocol_m_q_t_t_flow-p.html#a08a38c51f8220a7af42fc2e3d2eb9969',1,'MQTTFlow-p']]],
   ['connect',['connect',['../interface_m_q_t_t_session.html#ad443eb80793d71150a825513303405b5',1,'MQTTSession']]],
   ['connected_3a',['connected:',['../protocol_m_q_t_t_session_delegate_01-p.html#a01fe0f17f1c6faca6c21227203e5fd55',1,'MQTTSessionDelegate -p']]],

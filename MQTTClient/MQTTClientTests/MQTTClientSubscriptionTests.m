@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTLog.h"
+#import "MQTTStrict.h"
 #import "MQTTTestHelpers.h"
 #import "MQTTSessionSynchron.h"
 
@@ -151,6 +152,23 @@
         [self connect:parameters];
         [self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0];
         [self shutdown:parameters];
+    }
+}
+
+- (void)testSubscribeTopicHashnotlast_strict {
+    MQTTStrict.strict = TRUE;
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        [self connect:parameters];
+        @try {
+            [self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0];
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should never get here, exception expected");
     }
 }
 
@@ -408,6 +426,24 @@
         [self connect:parameters];
         [self testUnsubscribeTopicCloseExpected:@"#abc"];
         [self shutdown:parameters];
+    }
+}
+
+- (void)testUnsubscribeTopicHashnotalone_strict {
+    MQTTStrict.strict = TRUE;
+
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        [self connect:parameters];
+        @try {
+            [self testUnsubscribeTopicCloseExpected:@"#abc"];
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should never get here, exception expected");
     }
 }
 

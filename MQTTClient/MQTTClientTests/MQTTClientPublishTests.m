@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "MQTTLog.h"
+#import "MQTTStrict.h"
 #import "MQTTWebsocketTransport.h"
 #import "MQTTTestHelpers.h"
 
@@ -222,7 +223,7 @@
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
             self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelAtLeastOnce];
             DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
-            [self.inflight setObject:@"PUBLISHED" forKey:[NSNumber numberWithUnsignedInt:self.sentMessageMid]];
+            [self.inflight setObject:@"PUBLISHED" forKey:[NSNumber numberWithUnsignedShort:self.sentMessageMid]];
         }
 
         self.timedout = false;
@@ -256,7 +257,7 @@
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
             self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelExactlyOnce];
             DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
-            [self.inflight setObject:@"PUBLISHED" forKey:[NSNumber numberWithUnsignedInt:self.sentMessageMid]];
+            [self.inflight setObject:@"PUBLISHED" forKey:[NSNumber numberWithUnsignedShort:self.sentMessageMid]];
         }
 
         self.timedout = false;
@@ -306,6 +307,40 @@
                    retain:NO
                   atLevel:2];
         [self shutdown:parameters];
+    }
+}
+
+- (void)testPublish_r0_q3 {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogInfo(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        [self connect:parameters];
+        [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                   retain:NO
+                  atLevel:3];
+        [self shutdown:parameters];
+    }
+}
+
+- (void)testPublish_r0_q3_strict {
+    MQTTStrict.strict = TRUE;
+
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogInfo(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        [self connect:parameters];
+        @try {
+            [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                      onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                       retain:NO
+                      atLevel:3];
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should not get here but throw exception before");
     }
 }
 
@@ -680,7 +715,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
     DDLogInfo(@"messageDelivered %d", msgID);
 
     if (self.inflight) {
-        [self.inflight setObject:@"DELIVERED" forKey:[NSNumber numberWithUnsignedInt:self.sentMessageMid]];
+        [self.inflight setObject:@"DELIVERED" forKey:[NSNumber numberWithUnsignedShort:self.sentMessageMid]];
     }
     [super messageDelivered:session msgID:msgID];
 }

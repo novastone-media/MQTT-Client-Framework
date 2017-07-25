@@ -3,6 +3,7 @@ var searchData=
   ['clientcertsfromp12_3apassphrase_3a',['clientCertsFromP12:passphrase:',['../interface_m_q_t_t_c_f_socket_transport.html#ad16ebe588f4117e04f908e59935f096a',1,'MQTTCFSocketTransport']]],
   ['close',['close',['../interface_m_q_t_t_session.html#a6e08af5a1b20daabe6be9b9a0618c440',1,'MQTTSession::close()'],['../protocol_m_q_t_t_transport_01-p.html#a7a0c40f02204b591d3e47ee02d83c5e6',1,'MQTTTransport -p::close()']]],
   ['closewithdisconnecthandler_3a',['closeWithDisconnectHandler:',['../interface_m_q_t_t_session.html#a5a617d3cee077dd60f48a340d4b34d99',1,'MQTTSession']]],
+  ['closewithreturncode_3asessionexpiryinterval_3areasonstring_3auserproperty_3adisconnecthandler_3a',['closeWithReturnCode:sessionExpiryInterval:reasonString:userProperty:disconnectHandler:',['../interface_m_q_t_t_session.html#add8e169ab335825e0bb9879c7cbce54b',1,'MQTTSession']]],
   ['connect',['connect',['../interface_m_q_t_t_session.html#ad443eb80793d71150a825513303405b5',1,'MQTTSession']]],
   ['connected_3a',['connected:',['../protocol_m_q_t_t_session_delegate_01-p.html#a01fe0f17f1c6faca6c21227203e5fd55',1,'MQTTSessionDelegate -p']]],
   ['connected_3asessionpresent_3a',['connected:sessionPresent:',['../protocol_m_q_t_t_session_delegate_01-p.html#aee43b13ba6cecba98c5b604c8a83bbdd',1,'MQTTSessionDelegate -p']]],

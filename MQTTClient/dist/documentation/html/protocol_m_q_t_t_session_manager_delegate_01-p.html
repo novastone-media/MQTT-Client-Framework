@@ -81,8 +81,12 @@ Inheritance diagram for &lt;MQTTSessionManagerDelegate &gt;:</div>
 Instance Methods</h2></td></tr>
 <tr class="memitem:a227652079bb618b7b72daeb2bc4ff2ec"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#a227652079bb618b7b72daeb2bc4ff2ec">handleMessage:onTopic:retained:</a></td></tr>
 <tr class="separator:a227652079bb618b7b72daeb2bc4ff2ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb6f07319f8362c30f914cf02e1843c8"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#aeb6f07319f8362c30f914cf02e1843c8">sessionManager:didReceiveMessage:onTopic:retained:</a></td></tr>
+<tr class="separator:aeb6f07319f8362c30f914cf02e1843c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5c24515442786b7f4ee2b29a103fac4"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#ac5c24515442786b7f4ee2b29a103fac4">messageDelivered:</a></td></tr>
 <tr class="separator:ac5c24515442786b7f4ee2b29a103fac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac76a8d6565abe56028b22a77f75d0af5"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#ac76a8d6565abe56028b22a77f75d0af5">sessionManager:didDeliverMessage:</a></td></tr>
+<tr class="separator:ac76a8d6565abe56028b22a77f75d0af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6569e1ca87d4e098645e715ac69dcc53"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#a6569e1ca87d4e098645e715ac69dcc53">sessionManager:didChangeState:</a></td></tr>
 <tr class="separator:a6569e1ca87d4e098645e715ac69dcc53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -94,6 +98,9 @@ Instance Methods</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">- (void MQTTSessionManagerDelegate) handleMessage: </td>
@@ -119,8 +126,14 @@ Instance Methods</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>gets called when a new message was received </p><dl class="params"><dt>Parameters</dt><dd>
+<p>gets called when a new message was received</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>the data received, might be zero length </td></tr>
     <tr><td class="paramname">topic</td><td>the topic the data was published to </td></tr>
@@ -207,13 +220,114 @@ Instance Methods</h2></td></tr>
 
 </div>
 </div>
+<a id="ac76a8d6565abe56028b22a77f75d0af5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac76a8d6565abe56028b22a77f75d0af5">&#9670;&nbsp;</a></span>sessionManager:didDeliverMessage:()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void MQTTSessionManagerDelegate) sessionManager: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> *)&#160;</td>
+          <td class="paramname"><em>sessionManager</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">didDeliverMessage:</td>
+          <td></td>
+          <td class="paramtype">(UInt16)&#160;</td>
+          <td class="paramname"><em>msgID</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>gets called when a published message was actually delivered </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionManager</td><td>the instance of <a class="el" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> whose state changed </td></tr>
+    <tr><td class="paramname">msgID</td><td>the Message Identifier of the delivered message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>this method is called after a publish with qos 1 or 2 only </dd></dl>
+
+</div>
+</div>
+<a id="aeb6f07319f8362c30f914cf02e1843c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb6f07319f8362c30f914cf02e1843c8">&#9670;&nbsp;</a></span>sessionManager:didReceiveMessage:onTopic:retained:()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void MQTTSessionManagerDelegate) sessionManager: </td>
+          <td></td>
+          <td class="paramtype">(<a class="el" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> *)&#160;</td>
+          <td class="paramname"><em>sessionManager</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">didReceiveMessage:</td>
+          <td></td>
+          <td class="paramtype">(NSData *)&#160;</td>
+          <td class="paramname"><em>data</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">onTopic:</td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>topic</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">retained:</td>
+          <td></td>
+          <td class="paramtype">(BOOL)&#160;</td>
+          <td class="paramname"><em>retained</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">optional</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>gets called when a new message was received </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionManager</td><td>the instance of <a class="el" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> whose state changed </td></tr>
+    <tr><td class="paramname">data</td><td>the data received, might be zero length </td></tr>
+    <tr><td class="paramname">topic</td><td>the topic the data was published to </td></tr>
+    <tr><td class="paramname">retained</td><td>indicates if the data retransmitted from server storage </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this protocol was generated from the following file:<ul>
 <li><a class="el" href="_m_q_t_t_session_manager_8h_source.html">MQTTSessionManager.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 10 2017 12:59:04 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 25 2017 09:58:10 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

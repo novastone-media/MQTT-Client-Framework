@@ -103,6 +103,12 @@ Instance Methods</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:ab85b572d885a43b0faa79373a9cc6913"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#ab85b572d885a43b0faa79373a9cc6913">session</a></td></tr>
+<tr class="separator:ab85b572d885a43b0faa79373a9cc6913"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9254ba4654f77ec3ff37dab05cd1d4d1"><td class="memItemLeft" align="right" valign="top">NSString *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#a9254ba4654f77ec3ff37dab05cd1d4d1">host</a></td></tr>
+<tr class="separator:a9254ba4654f77ec3ff37dab05cd1d4d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba240cdc089994d549452cbaecc6af4a"><td class="memItemLeft" align="right" valign="top">UInt32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#aba240cdc089994d549452cbaecc6af4a">port</a></td></tr>
+<tr class="separator:aba240cdc089994d549452cbaecc6af4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc07e05f3c0593b0bd851e8d69255381"><td class="memItemLeft" align="right" valign="top">id&lt; MQTTSessionManagerDelegate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#abc07e05f3c0593b0bd851e8d69255381">delegate</a></td></tr>
 <tr class="separator:abc07e05f3c0593b0bd851e8d69255381"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58ff79b8f16b7172d6466dfe55927428"><td class="memItemLeft" align="right" valign="top">NSDictionary&lt; NSString *, NSNumber * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_m_q_t_t_session_manager.html#a58ff79b8f16b7172d6466dfe55927428">subscriptions</a></td></tr>
@@ -926,6 +932,29 @@ Properties</h2></td></tr>
 <p>effectiveSubscriptions s a dictionary of NSNumber instances indicating the granted MQTTQoSLevel, or 0x80 for subscription failure. The keys are topic filters. effectiveSubscriptions is observable and is updated everytime subscriptions change </p><div class="fragment"><div class="line">    ...</div><div class="line">    <a class="code" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> *manager = [[<a class="code" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> alloc] init];</div><div class="line">    manager.<a class="code" href="interface_m_q_t_t_session_manager.html#abc07e05f3c0593b0bd851e8d69255381">delegate</a> = <span class="keyword">self</span>;</div><div class="line"></div><div class="line">    [manager addObserver:<span class="keyword">self</span></div><div class="line">        forKeyPath:<span class="stringliteral">@&quot;effectiveSubscriptions&quot;</span></div><div class="line">        options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew</div><div class="line">        context:nil];</div><div class="line">        manager.<a class="code" href="interface_m_q_t_t_session_manager.html#a58ff79b8f16b7172d6466dfe55927428">subscriptions</a> = [@{<span class="stringliteral">@&quot;#&quot;</span>: @(0)} mutableCopy];</div><div class="line">        [manager connectTo: ...</div><div class="line">    ...</div><div class="line">    [manager removeObserver:<span class="keyword">self</span> forKeyPath:<span class="stringliteral">@&quot;effectiveSubscriptions&quot;</span>];</div><div class="line">    ...</div><div class="line"></div><div class="line">- (void)observeValueForKeyPath:(NSString *)keyPath</div><div class="line">    ofObject:(id)<span class="keywordtype">object</span></div><div class="line">    change:(NSDictionary&lt;NSString *,id&gt; *)change</div><div class="line">    context:(<span class="keywordtype">void</span> *)context {</div><div class="line">    <span class="keywordflow">if</span> ([keyPath isEqualToString:<span class="stringliteral">@&quot;effectiveSubscriptions&quot;</span>]) {</div><div class="line">        <a class="code" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> *manager = (<a class="code" href="interface_m_q_t_t_session_manager.html">MQTTSessionManager</a> *)<span class="keywordtype">object</span>;</div><div class="line">        DDLogVerbose(<span class="stringliteral">@&quot;effectiveSubscriptions changed: %@&quot;</span>, manager.<a class="code" href="interface_m_q_t_t_session_manager.html#a2c6507254d370d9f860b299608b37280">effectiveSubscriptions</a>);</div><div class="line">    }</div><div class="line">}</div></div><!-- fragment --> 
 </div>
 </div>
+<a id="a9254ba4654f77ec3ff37dab05cd1d4d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9254ba4654f77ec3ff37dab05cd1d4d1">&#9670;&nbsp;</a></span>host</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (NSString*) host</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">atomic</span><span class="mlabel">assign</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>host an NSString containing the hostName or IP address of the Server </p>
+
+</div>
+</div>
 <a id="aa2522a9c3be18812cea22cf2f6a40754"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa2522a9c3be18812cea22cf2f6a40754">&#9670;&nbsp;</a></span>lastErrorCode</h2>
 
@@ -946,6 +975,52 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>SessionManager last error code when state equals MQTTSessionManagerStateError </p>
+
+</div>
+</div>
+<a id="aba240cdc089994d549452cbaecc6af4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba240cdc089994d549452cbaecc6af4a">&#9670;&nbsp;</a></span>port</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (UInt32) port</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">atomic</span><span class="mlabel">assign</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>port an unsigned 32 bit integer containing the IP port number of the Server </p>
+
+</div>
+</div>
+<a id="ab85b572d885a43b0faa79373a9cc6913"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab85b572d885a43b0faa79373a9cc6913">&#9670;&nbsp;</a></span>session</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (<a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a>*) session</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">nonatomic</span><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Underlying <a class="el" href="interface_m_q_t_t_session.html">MQTTSession</a> currently in use. </p>
 
 </div>
 </div>
@@ -1001,7 +1076,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 10 2017 12:59:04 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 25 2017 09:58:10 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

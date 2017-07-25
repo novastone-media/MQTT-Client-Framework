@@ -89,6 +89,9 @@ $(function() {
 <li>closeWithDisconnectHandler:
 : <a class="el" href="interface_m_q_t_t_session.html#a5a617d3cee077dd60f48a340d4b34d99">MQTTSession</a>
 </li>
+<li>closeWithReturnCode:sessionExpiryInterval:reasonString:userProperty:disconnectHandler:
+: <a class="el" href="interface_m_q_t_t_session.html#add8e169ab335825e0bb9879c7cbce54b">MQTTSession</a>
+</li>
 <li>connect
 : <a class="el" href="interface_m_q_t_t_session.html#ad443eb80793d71150a825513303405b5">MQTTSession</a>
 </li>
@@ -141,6 +144,9 @@ $(function() {
 <li>disconnect
 : <a class="el" href="interface_m_q_t_t_session.html#aef2d0980b561184800908e95dd3a9fc7">MQTTSession</a>
 , <a class="el" href="interface_m_q_t_t_session_manager.html#a71161804d040ca10e164578d7e7eb855">MQTTSessionManager</a>
+</li>
+<li>disconnectWithReturnCode:sessionExpiryInterval:reasonString:userProperty:
+: <a class="el" href="interface_m_q_t_t_session.html#a693cd5762ad92a97971ba95b7e0235c3">MQTTSession</a>
 </li>
 </ul>
 
@@ -272,8 +278,20 @@ $(function() {
 <li>sessionManager:didChangeState:
 : <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#a6569e1ca87d4e098645e715ac69dcc53">&lt;MQTTSessionManagerDelegate &gt;</a>
 </li>
+<li>sessionManager:didDeliverMessage:
+: <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#ac76a8d6565abe56028b22a77f75d0af5">&lt;MQTTSessionManagerDelegate &gt;</a>
+</li>
+<li>sessionManager:didReceiveMessage:onTopic:retained:
+: <a class="el" href="protocol_m_q_t_t_session_manager_delegate_01-p.html#aeb6f07319f8362c30f914cf02e1843c8">&lt;MQTTSessionManagerDelegate &gt;</a>
+</li>
+<li>setStrict:
+: <a class="el" href="interface_m_q_t_t_strict.html#aa6c70443d4ab02e58dfe2c184b021039">MQTTStrict</a>
+</li>
 <li>storeMessageForClientId:topic:data:retainFlag:qos:msgId:incomingFlag:commandType:deadline:
 : <a class="el" href="protocol_m_q_t_t_persistence-p.html#ac4dcb1941bac80050f643fab3faf0fe4">&lt;MQTTPersistence&gt;</a>
+</li>
+<li>strict
+: <a class="el" href="interface_m_q_t_t_strict.html#ae2662f2299f2e9936fee25522cd44cf3">MQTTStrict</a>
 </li>
 <li>subAckReceived:msgID:grantedQoss:
 : <a class="el" href="protocol_m_q_t_t_session_delegate_01-p.html#a23603651fef7f317958e947c95a6a726">&lt;MQTTSessionDelegate &gt;</a>
@@ -323,7 +341,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 10 2017 12:59:04 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 25 2017 09:58:10 for MQTTClient by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
