@@ -24,10 +24,12 @@
 @implementation MQTTTestSessionManager
 
 - (void)testMQTTSessionManagerClean {
+    [MQTTLog setLogLevel:DDLogLevelInfo];
     [self testMQTTSessionManager:true];
 }
 
 - (void)testMQTTSessionManagerNoClean {
+    [MQTTLog setLogLevel:DDLogLevelInfo];
     [self testMQTTSessionManager:false];
 }
 
@@ -136,6 +138,7 @@
 }
 
 - (void)testMQTTSessionManagerPersistent {
+    [MQTTLog setLogLevel:DDLogLevelInfo];
     for (NSString *broker in self.brokers.allKeys) {
         DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -239,6 +242,7 @@
 }
 
 - (void)testSessionManagerShort {
+    [MQTTLog setLogLevel:DDLogLevelInfo];
     for (NSString *broker in self.brokers.allKeys) {
         DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -322,6 +326,7 @@
 }
 
 - (void)testSessionManagerALotSubscriptions {
+    [MQTTLog setLogLevel:DDLogLevelInfo];
     for (NSString *broker in self.brokers.allKeys) {
         DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];

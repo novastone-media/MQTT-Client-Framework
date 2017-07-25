@@ -15,7 +15,7 @@
 #define TOPIC @"MQTTClient"
 #define MULTI 15 // some test servers are limited in concurrent sessions
 #define BULK 100 // some test servers are limited in queue size
-#define ALOT 1000 // some test servers are limited in queue size
+#define ALOT 256 // some test servers are limited in queue size
 
 @interface MQTTTestHelpers : XCTestCase <MQTTSessionDelegate, MQTTSessionManagerDelegate>
 - (void)timedout:(id)object;
@@ -31,6 +31,10 @@
 
 @property (nonatomic) int event;
 @property (strong, nonatomic) NSError *error;
+
+@property (strong, nonatomic) NSError *connectionError;
+@property (nonatomic) BOOL connected;
+@property (nonatomic) BOOL sessionPresent;
 
 @property (nonatomic) UInt16 subMid;
 @property (nonatomic) UInt16 unsubMid;

@@ -36,6 +36,24 @@
     }
 }
 
+- (void)testSubscribeWMultipleTopics_None_strict {
+    MQTTStrict.strict = TRUE;
+
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogVerbose(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        [self connect:parameters];
+        @try {
+            [self testMultiSubscribeCloseExpected:@{}];
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should never get here, exception expected");
+    }
+}
+
 - (void)testSubscribeWMultipleTopics_One {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);

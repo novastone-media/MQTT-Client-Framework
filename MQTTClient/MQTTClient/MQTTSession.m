@@ -145,6 +145,14 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 }
 
 - (void)checkTopicFilters:(NSArray <NSString *> *)topicFilters {
+    if (topicFilters.count == 0) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"topicFilter array in SUBSCRIBE or UNSUBSRIBE must not be empty"
+                                    reason:[NSString stringWithFormat:@"%@", topicFilters]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
     for (NSString *topicFilter in topicFilters) {
         if (MQTTStrict.strict &&
             topicFilter.length < 1) {
@@ -176,8 +184,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         if (MQTTStrict.strict) {
             NSArray <NSString *> *components = [topicFilter componentsSeparatedByString:@"/"];
             for (int level = 0; level < components.count; level++) {
-                if ([components[components.count - 1] rangeOfString:@"+"].location != NSNotFound &&
-                    components[components.count - 1].length > 1) {
+                if ([components[level] rangeOfString:@"+"].location != NSNotFound &&
+                    components[level].length > 1) {
                     NSException* myException = [NSException
                                                 exceptionWithName:@"singlelevel wildcard must be alone on a level of a topic filter"
                                                 reason:[NSString stringWithFormat:@"topicFilter = %@", topicFilter]
@@ -187,7 +195,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
             }
 
             for (int level = 0; level < components.count - 1; level++) {
-                if ([components[components.count - 1] rangeOfString:@"#"].location != NSNotFound) {
+                if ([components[level] rangeOfString:@"#"].location != NSNotFound) {
                     NSException* myException = [NSException
                                                 exceptionWithName:@"multilevel wildcard must be on the last level of a topic filter"
                                                 reason:[NSString stringWithFormat:@"topicFilter = %@", topicFilter]

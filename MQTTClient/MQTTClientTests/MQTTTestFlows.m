@@ -29,9 +29,9 @@
 @property (nonatomic) BOOL closed;
 @property (nonatomic) BOOL subscribed;
 
-
-
 @end
+
+#define COUNT 100
 
 @implementation ATest
 
@@ -176,7 +176,7 @@
 @implementation MQTTTestFlows
 
 - (void)testFlow0 {
-    [self testAnyFlow:1000
+    [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelAtMostOnce
          publisherQos:MQTTQosLevelAtMostOnce
    secondPublisherQos:MQTTQosLevelAtMostOnce
@@ -185,11 +185,11 @@
 secondPublisherWindow:32
      processingBuffer:2000
        processingTime:0.001
-              timeout:60];
+              timeout:300];
 }
 
 - (void)testFlow1 {
-    [self testAnyFlow:1000
+    [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelAtLeastOnce
          publisherQos:MQTTQosLevelAtLeastOnce
    secondPublisherQos:MQTTQosLevelAtLeastOnce
@@ -198,11 +198,11 @@ secondPublisherWindow:32
 secondPublisherWindow:512
      processingBuffer:512
        processingTime:0.01
-              timeout:180];
+              timeout:300];
 }
 
 - (void)testFlow2 {
-    [self testAnyFlow:1000
+    [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelExactlyOnce
          publisherQos:MQTTQosLevelExactlyOnce
    secondPublisherQos:MQTTQosLevelExactlyOnce
@@ -215,7 +215,7 @@ secondPublisherWindow:32
 }
 
 - (void)testFlowFastSubscriber {
-    [self testAnyFlow:1000
+    [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelExactlyOnce
          publisherQos:MQTTQosLevelExactlyOnce
    secondPublisherQos:MQTTQosLevelExactlyOnce
@@ -229,7 +229,7 @@ secondPublisherWindow:64
 }
 
 - (void)testFlowUnreliableSubscriber {
-    [self testAnyFlow:1000
+    [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelExactlyOnce
          publisherQos:MQTTQosLevelExactlyOnce
    secondPublisherQos:MQTTQosLevelExactlyOnce
@@ -242,7 +242,7 @@ secondPublisherWindow:32
 }
 
 - (void)testFlowUnreliableSubscriberQos1and2 {
-    [self testAnyFlow:1000
+    [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelExactlyOnce
          publisherQos:MQTTQosLevelExactlyOnce
    secondPublisherQos:MQTTQosLevelAtLeastOnce
@@ -255,7 +255,7 @@ secondPublisherWindow:32
 }
 
 - (void)testFlowSlowSubscriberQos1and2 {
-    [self testAnyFlow:1000
+    [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelExactlyOnce
          publisherQos:MQTTQosLevelExactlyOnce
    secondPublisherQos:MQTTQosLevelAtLeastOnce
@@ -269,7 +269,7 @@ secondPublisherWindow:2000
 
 
 - (void)testFlowSharedSession0 {
-    [self testAnyFlowSharedSession:1000
+    [self testAnyFlowSharedSession:COUNT
                      subscriberQos:MQTTQosLevelAtMostOnce
                       publisherQos:MQTTQosLevelAtMostOnce
                 secondPublisherQos:MQTTQosLevelAtMostOnce
@@ -280,7 +280,7 @@ secondPublisherWindow:2000
 }
 
 - (void)testFlowSharedSession1 {
-    [self testAnyFlowSharedSession:1000
+    [self testAnyFlowSharedSession:COUNT
                      subscriberQos:MQTTQosLevelAtLeastOnce
                       publisherQos:MQTTQosLevelAtLeastOnce
                 secondPublisherQos:MQTTQosLevelAtLeastOnce
@@ -291,7 +291,7 @@ secondPublisherWindow:2000
 }
 
 - (void)testFlowSharedSession1small {
-    [self testAnyFlowSharedSession:1000
+    [self testAnyFlowSharedSession:COUNT
                      subscriberQos:MQTTQosLevelAtLeastOnce
                       publisherQos:MQTTQosLevelAtLeastOnce
                 secondPublisherQos:MQTTQosLevelAtLeastOnce
@@ -302,7 +302,7 @@ secondPublisherWindow:2000
 }
 
 - (void)testFlowSharedSession2 {
-    [self testAnyFlowSharedSession:1000
+    [self testAnyFlowSharedSession:COUNT
                      subscriberQos:MQTTQosLevelExactlyOnce
                       publisherQos:MQTTQosLevelExactlyOnce
                 secondPublisherQos:MQTTQosLevelExactlyOnce
@@ -313,7 +313,7 @@ secondPublisherWindow:2000
 }
 
 - (void)testFlowSharedSession12 {
-    [self testAnyFlowSharedSession:1000
+    [self testAnyFlowSharedSession:COUNT
                      subscriberQos:MQTTQosLevelAtLeastOnce
                       publisherQos:MQTTQosLevelExactlyOnce
                 secondPublisherQos:MQTTQosLevelAtLeastOnce
@@ -448,6 +448,8 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
 - (void)runSubscriber:(NSDictionary *)parameters {
     ATest *test = [[ATest alloc] init];
     [test setup:parameters];
+    test.session.clientId = @"MQTTClientS";
+
     [test start:self.processingBuffer processingTime:self.processingTime maxMessages:self.subscriberWindow];
     
     while (!test.connected) {
@@ -466,10 +468,11 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
         self.subscriberReady = true;
         test.session.cleanSessionFlag = false;
         
-//        while (test.processedCounter < self.count * 2)  {
-//            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-//        }
-//        
+        while (test.processedCounter < self.count * 2)  {
+            DDLogInfo(@"waiting for processing (%ld)", (long)test.processedCounter);
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        
         [test close];
         
         while (!test.closed) {
@@ -485,6 +488,8 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
 {
     ATest *test = [[ATest alloc] init];
     [test setup:parameters];
+    test.session.clientId = @"MQTTClientP1";
+
     [test start:0 processingTime:0 maxMessages:self.publisherWindow];
     
     while (!test.connected) {
@@ -519,6 +524,8 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
 {
     ATest *test = [[ATest alloc] init];
     [test setup:parameters];
+    test.session.clientId = @"MQTTClientP2";
+
     [test start:0 processingTime:0 maxMessages:self.secondPublisherWindow];
     
     while (!test.connected) {
@@ -557,6 +564,8 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
                                                      repeats:true];
     
     [test setup:self.parameters];
+    test.session.clientId = @"MQTTClientShared";
+
     [test start:self.processingBuffer processingTime:self.processingTime maxMessages:self.subscriberWindow];
     
     while (!test.connected) {
@@ -576,7 +585,7 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
         test.session.cleanSessionFlag = false;
         
         while (test.processedCounter < self.count)  {
-            DDLogVerbose(@"waiting for processing (%ld)", (long)test.processedCounter);
+            DDLogInfo(@"waiting for processing (%ld)", (long)test.processedCounter);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
     }

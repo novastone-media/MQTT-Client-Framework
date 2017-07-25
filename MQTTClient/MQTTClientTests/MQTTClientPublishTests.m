@@ -24,7 +24,7 @@
 
 - (void)setUp {
     [super setUp];
-    [MQTTLog setLogLevel:DDLogLevelVerbose];
+    [MQTTLog setLogLevel:DDLogLevelInfo];
 }
 
 - (void)tearDown {
@@ -50,10 +50,10 @@
         DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
-        [self testPublish:[[NSData alloc] init]
-                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
-                   retain:NO
-                  atLevel:0];
+        [self.session publishData:[[NSData alloc] init]
+                          onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                           retain:NO
+                              qos:0];
         [self shutdown:parameters];
     }
 }
@@ -182,6 +182,48 @@
     }
 }
 
+/*
+ * [MQTT-1.5.3-2]
+ * A UTF-8 encoded string MUST NOT include an encoding of the null character U+0000.
+ * If a receiver (Server or Client) receives a Control Packet containing U+0000 it MUST close the Network Connection.
+ */
+- (void)testPublish_r0_q0_illegal_topic_strict {
+    MQTTStrict.strict = TRUE;
+    
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogInfo(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        [self connect:parameters];
+        
+        NSData *data = [NSData dataWithBytes:"MQTTClient/abc\x9c\x9dxyz" length:19];
+        NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+
+        NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
+
+        NSString *stringWithFEFF = [NSString stringWithFormat:@"%@<%C>/%s", TOPIC, 0xfeff, __FUNCTION__];
+
+        NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
+
+        @try {
+            [self.session publishData:[[NSData alloc] init]
+                              onTopic:stringWith9c retain:0 qos:0];
+            [self.session publishData:[[NSData alloc] init]
+                              onTopic:stringWithNull retain:0 qos:0];
+            [self.session publishData:[[NSData alloc] init]
+                              onTopic:stringWithFEFF retain:0 qos:0];
+            [self.session publishData:[[NSData alloc] init]
+                              onTopic:stringWithD800 retain:0 qos:0];
+            [self.session connect];
+        } @catch (NSException *exception) {
+            continue;
+        } @finally {
+            //
+        }
+        XCTFail(@"Should not get here but throw exception before");
+    }
+}
+
+
 - (void)testPublish_r0_q1 {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogInfo(@"testing broker %@", broker);
@@ -212,7 +254,7 @@
 
 - (void)testPublish_a_lot_of_q1 {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
         
@@ -233,7 +275,7 @@
                    afterDelay:self.timeoutValue];
         
         while (self.inflight.count && !self.timedout && self.event == -1) {
-            DDLogVerbose(@"[MQTTClientPublishTests] waiting for %@", self.inflight);
+            DDLogInfo(@"[MQTTClientPublishTests] waiting for %lu", (unsigned long)self.inflight.count);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
@@ -267,7 +309,7 @@
                    afterDelay:self.timeoutValue];
 
         while (self.inflight.count && !self.timedout && self.event == -1) {
-            DDLogInfo(@"[MQTTClientPublishTests] waiting for %@", self.inflight);
+            DDLogInfo(@"[MQTTClientPublishTests] waiting for %lu", (unsigned long)self.inflight.count);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         XCTAssertFalse(self.timedout, @"Timeout after %f seconds", self.timeoutValue);
@@ -315,10 +357,10 @@
         DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
-        [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
-                  onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
-                   retain:NO
-                  atLevel:3];
+        [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
+                               onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                                retain:NO
+                               atLevel:3];
         [self shutdown:parameters];
     }
 }
@@ -715,7 +757,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
     DDLogInfo(@"messageDelivered %d", msgID);
 
     if (self.inflight) {
-        [self.inflight setObject:@"DELIVERED" forKey:[NSNumber numberWithUnsignedShort:self.sentMessageMid]];
+        [self.inflight removeObjectForKey:[NSNumber numberWithUnsignedShort:msgID]];
     }
     [super messageDelivered:session msgID:msgID];
 }

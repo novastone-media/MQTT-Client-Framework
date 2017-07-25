@@ -135,6 +135,7 @@
         @try {
             self.session.cleanSessionFlag = FALSE;
             self.session.clientId = @"";
+            [self.session connect];
         } @catch (NSException *exception) {
             continue;
         } @finally {
@@ -588,7 +589,7 @@
 
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
-        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
+        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"session not closed %@", self.error);
 
         [self shutdown:parameters];
     }
@@ -611,10 +612,10 @@
         self.session.protocolLevel = 88;
 
         [self connect:parameters];
-        XCTAssert(!self.timedout, @"timeout");
 
-        XCTAssertEqual(self.event, MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
-        XCTAssert(self.error.code == 0x01, @"error = %@", self.error);
+        XCTAssert(!self.timedout, @"timeout");
+        XCTAssert(self.connectionError.code == MQTTSessionErrorConnackUnacceptableProtocolVersion, @"error = %@", self.connectionError);
+
         [self shutdown:parameters];
     }
 }
@@ -637,6 +638,7 @@
         self.session = [MQTTTestHelpers session:parameters];
         @try {
             self.session.protocolLevel = 88;
+            [self.session connect];
         } @catch (NSException *exception) {
             continue;
         } @finally {
@@ -775,7 +777,7 @@
         NSDictionary *parameters = self.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.protocolLevel = 5;
+        self.session.protocolLevel = 88;
         
         [self connect:parameters];
         

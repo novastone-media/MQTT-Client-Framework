@@ -51,9 +51,7 @@
         self.session.password = nil;
 
         [self connect:self.session parameters:parameters];
-        XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker ||
-                  self.event == MQTTSessionEventProtocolError,
-                  @"Not rejected %ld %@", (long)self.event, self.error);
+        XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
         [self shutdown:parameters];
     }
 }

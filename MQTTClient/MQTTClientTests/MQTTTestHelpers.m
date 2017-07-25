@@ -196,6 +196,16 @@
     self.error = error;
 }
 
+- (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
+    self.connected = TRUE;
+    self.sessionPresent = sessionPresent;
+}
+
+- (void)connectionRefused:(MQTTSession *)session error:(NSError *)error {
+    self.error = error;
+    self.connectionError = error;
+}
+
 - (void)sending:(MQTTSession *)session
            type:(MQTTCommandType)type
             qos:(MQTTQosLevel)qos
