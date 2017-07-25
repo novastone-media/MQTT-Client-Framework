@@ -2,6 +2,12 @@ MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
 
+## MQTT-Client-Framework 0.9.6
+> Release date 2017-07-25
+
+    [NEW] Strict parameter checking
+    [NEW] MQTT 3.1.1 CONNECT package does not conform #268
+
 ## MQTT-Client-Framework 0.9.5
 > Release date 2017-07-07
 
