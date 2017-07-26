@@ -126,6 +126,8 @@
            <Node>
             <Name>MQTTLog</Name>
             <Path>interface_m_q_t_t_log.html</Path>
+            <Subnodes>
+            </Subnodes>
            </Node>
            <Node>
             <Name>&lt;MQTTPersistence&gt;</Name>

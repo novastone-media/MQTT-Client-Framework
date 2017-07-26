@@ -1,0 +1,156 @@
+an Objective-\/C native M\+Q\+TT Framework \href{http://mqtt.org}{\tt http\+://mqtt.\+org}
+
+\subsubsection*{Tested with a long list of brokers}
+
+
+\begin{DoxyItemize}
+\item mosquitto
+\item paho
+\item rabbitmq
+\item hivemq
+\item rsmb
+\item mosca
+\item vernemq
+\item emqtt
+\item moquette
+\item Active\+MQ
+\item Apollo
+\item Cloud\+M\+Q\+TT
+\item aws
+\item hbmqtt (M\+Q\+T\+Tv311 only, limitations)
+\item \href{https://github.com/mcollina/aedes}{\tt aedes}
+\end{DoxyItemize}
+
+\subsubsection*{As a Cocoa\+Pod}
+
+Use the Cocoa\+Pod M\+Q\+T\+T\+Client!
+
+Add this to your Podfile\+:
+
+
+\begin{DoxyCode}
+pod 'MQTTClient'
+\end{DoxyCode}
+ which is a short for 
+\begin{DoxyCode}
+pod 'MQTTClient/Min'
+pod 'MQTTClient/Manager'
+\end{DoxyCode}
+
+
+The Manager subspec includes the \hyperlink{interface_m_q_t_t_session_manager}{M\+Q\+T\+T\+Session\+Manager} class.
+
+Additionally add this subspec if you want to use M\+Q\+TT over Websockets\+:
+
+
+\begin{DoxyCode}
+pod 'MQTTClient/Websocket'
+\end{DoxyCode}
+
+
+If you want to do your logging with Cocoa\+Lumberjack (my suggestion), use 
+\begin{DoxyCode}
+pod 'MQTTClient/MinL'
+pod 'MQTTClient/ManagerL'
+pod 'MQTTClient/WebsocketL'
+\end{DoxyCode}
+ instead.
+
+\subsubsection*{As a dynamic library}
+
+Or use the dynamic library created in the M\+Q\+T\+T\+Framework target.
+
+\subsubsection*{As source}
+
+Or include the source from here.
+
+\subsubsection*{With Carthage}
+
+\href{https://github.com/Carthage/Carthage}{\tt Carthage}
+
+\subsubsection*{Usage}
+
+Create a new client and connect to a broker\+:
+
+
+\begin{DoxyCode}
+#import "MQTTClient.h"
+
+\(\backslash\)@interface MyDelegate : ... <MQTTSessionDelegate>
+...
+
+        MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
+        transport.host = @"localhost";
+        transport.port = 1883;
+
+        MQTTSession *session = [[MQTTSession alloc] init];
+        session.transport = transport;
+
+    session.delegate = self;
+
+    [session connectAndWaitTimeout:30];  //this is part of the synchronous API
+\end{DoxyCode}
+
+
+Subscribe to a topic\+:
+
+
+\begin{DoxyCode}
+[session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray<NSNumber *>
+       *gQoss)\{
+    if (error) \{
+        NSLog(@"Subscription failed %@", error.localizedDescription);
+    \} else \{
+        NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
+    \}
+ \}]; // this is part of the block API
+\end{DoxyCode}
+
+
+Add the following to receive messages for the subscribed topics 
+\begin{DoxyCode}
+ - (void)newMessage:(MQTTSession *)session
+    data:(NSData *)data
+    onTopic:(NSString *)topic
+    qos:(MQTTQosLevel)qos
+    retained:(BOOL)retained
+    mid:(unsigned int)mid \{
+    // this is one of the delegate callbacks
+\}
+\end{DoxyCode}
+
+
+Publish a message to a topic\+:
+
+
+\begin{DoxyCode}
+[session publishAndWaitData:data
+                    onTopic:@"topic"
+                     retain:NO
+                    qos:MQTTQosLevelAtLeastOnce]; // this is part of the asynchronous API
+\end{DoxyCode}
+
+
+\subsubsection*{docs}
+
+Documentation generated with doxygen \href{http://doxygen.org}{\tt http\+://doxygen.\+org} in the {\ttfamily ./\+M\+Q\+T\+T\+Client/dist/documentation} subdirectory.
+
+You may open the H\+T\+ML version of the documentation here `./\+M\+Q\+T\+T\+Client/dist/documentation/html/index.html\textquotesingle{}
+
+Run {\ttfamily make install} in the {\ttfamily ./\+M\+Q\+T\+T\+Client/dist/documentation/html} subdirectory to install the the documentation as a D\+O\+C\+S\+ET on your Mac.
+
+\subsubsection*{Comparison M\+Q\+TT Clients for i\+OS (incomplete)}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{10}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Wrapper}&\textbf{ ---}&\textbf{ -\/---}&\textbf{ M\+Q\+T\+T\+Kit }&\textbf{ Marquette}&\textbf{ Moscapsule}&\textbf{ Musqueteer}&\textbf{ M\+Q\+T\+T-\/\+Client}&\textbf{ Mqtt\+S\+DK}&\textbf{ Cocoa\+M\+Q\+TT  }\\\cline{1-10}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Wrapper}&\textbf{ ---}&\textbf{ -\/---}&\textbf{ M\+Q\+T\+T\+Kit }&\textbf{ Marquette}&\textbf{ Moscapsule}&\textbf{ Musqueteer}&\textbf{ M\+Q\+T\+T-\/\+Client}&\textbf{ Mqtt\+S\+DK}&\textbf{ Cocoa\+M\+Q\+TT  }\\\cline{1-10}
+\endhead
+&&&Obj-\/C &Obj-\/C &Swift &Obj-\/C &Obj-\/C &Obj-\/C &Swift \\\cline{1-10}
+Library&I\+BM&Paho&Mosquitto&Mosquitto&Mosquitto &Mosquitto &native &native &native \\\cline{1-10}
+\end{longtabu}

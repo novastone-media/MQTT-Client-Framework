@@ -2,6 +2,12 @@ MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
 
+## MQTT-Client-Framework 0.9.7
+> Release date 2017-07-26
+
+    [NEW] Logging centrally controlled even without CocoaLumberjack
+    [NEW] Docs as PDF, HTML, and docset
+
 ## MQTT-Client-Framework 0.9.6
 > Release date 2017-07-25
 

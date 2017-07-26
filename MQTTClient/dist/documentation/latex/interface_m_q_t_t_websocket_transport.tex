@@ -1,0 +1,74 @@
+\hypertarget{interface_m_q_t_t_websocket_transport}{}\section{M\+Q\+T\+T\+Websocket\+Transport Class Reference}
+\label{interface_m_q_t_t_websocket_transport}\index{M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}}
+
+
+{\ttfamily \#import $<$M\+Q\+T\+T\+Websocket\+Transport.\+h$>$}
+
+Inheritance diagram for M\+Q\+T\+T\+Websocket\+Transport\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.470588cm]{interface_m_q_t_t_websocket_transport}
+\end{center}
+\end{figure}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+N\+S\+String $\ast$ \hyperlink{interface_m_q_t_t_websocket_transport_a1e4c2c9fa31f833f46379dc57ca9536d}{host}
+\item 
+U\+Int32 \hyperlink{interface_m_q_t_t_websocket_transport_aed94b3a21446f3c4a45bbdae97095e31}{port}
+\item 
+B\+O\+OL \hyperlink{interface_m_q_t_t_websocket_transport_a028dce824b120b670e0759c994066ce0}{tls}
+\item 
+N\+S\+String $\ast$ \hyperlink{interface_m_q_t_t_websocket_transport_a9261bfd30cf1e8fa50de06f56f3c9c1b}{path}
+\item 
+B\+O\+OL \hyperlink{interface_m_q_t_t_websocket_transport_a4df39d1f59fd822446ed0630164475ae}{allow\+Untrusted\+Certificates}
+\item 
+N\+S\+Array $\ast$ \hyperlink{interface_m_q_t_t_websocket_transport_aaafe7397cd1c3e41240cd9752bcb446b}{pinned\+Certificates}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{interface_m_q_t_t_c_f_socket_transport}{M\+Q\+T\+T\+C\+F\+Socket\+Transport} implements an \hyperlink{interface_m_q_t_t_transport}{M\+Q\+T\+T\+Transport} on top of Websockets (Socket\+Rocket) 
+
+\subsection{Property Documentation}
+\mbox{\Hypertarget{interface_m_q_t_t_websocket_transport_a4df39d1f59fd822446ed0630164475ae}\label{interface_m_q_t_t_websocket_transport_a4df39d1f59fd822446ed0630164475ae}} 
+\index{M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}!allow\+Untrusted\+Certificates@{allow\+Untrusted\+Certificates}}
+\index{allow\+Untrusted\+Certificates@{allow\+Untrusted\+Certificates}!M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}}
+\subsubsection{\texorpdfstring{allow\+Untrusted\+Certificates}{allowUntrustedCertificates}}
+{\footnotesize\ttfamily -\/ (B\+O\+OL) allow\+Untrusted\+Certificates\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [assign]}}
+
+allow\+Untrusted\+Certificates a boolean indicating whether self signed or expired certificates should be accepted defaults to NO \mbox{\Hypertarget{interface_m_q_t_t_websocket_transport_a1e4c2c9fa31f833f46379dc57ca9536d}\label{interface_m_q_t_t_websocket_transport_a1e4c2c9fa31f833f46379dc57ca9536d}} 
+\index{M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}!host@{host}}
+\index{host@{host}!M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}}
+\subsubsection{\texorpdfstring{host}{host}}
+{\footnotesize\ttfamily -\/ (N\+S\+String$\ast$) host\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [strong]}}
+
+host an N\+S\+String containing the host\+Name or IP address of the host to connect to defaults to "localhost" \mbox{\Hypertarget{interface_m_q_t_t_websocket_transport_a9261bfd30cf1e8fa50de06f56f3c9c1b}\label{interface_m_q_t_t_websocket_transport_a9261bfd30cf1e8fa50de06f56f3c9c1b}} 
+\index{M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}!path@{path}}
+\index{path@{path}!M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}}
+\subsubsection{\texorpdfstring{path}{path}}
+{\footnotesize\ttfamily -\/ (N\+S\+String$\ast$) path\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [strong]}}
+
+path an N\+S\+String indicating the path component of the websocket U\+RL request defaults to "/html" \mbox{\Hypertarget{interface_m_q_t_t_websocket_transport_aaafe7397cd1c3e41240cd9752bcb446b}\label{interface_m_q_t_t_websocket_transport_aaafe7397cd1c3e41240cd9752bcb446b}} 
+\index{M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}!pinned\+Certificates@{pinned\+Certificates}}
+\index{pinned\+Certificates@{pinned\+Certificates}!M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}}
+\subsubsection{\texorpdfstring{pinned\+Certificates}{pinnedCertificates}}
+{\footnotesize\ttfamily -\/ (N\+S\+Array$\ast$) pinned\+Certificates\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [strong]}}
+
+pinned\+Certificates an N\+S\+Array containing certificates to validate server certificates against defaults to nil \mbox{\Hypertarget{interface_m_q_t_t_websocket_transport_aed94b3a21446f3c4a45bbdae97095e31}\label{interface_m_q_t_t_websocket_transport_aed94b3a21446f3c4a45bbdae97095e31}} 
+\index{M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}!port@{port}}
+\index{port@{port}!M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}}
+\subsubsection{\texorpdfstring{port}{port}}
+{\footnotesize\ttfamily -\/ (U\+Int32) port\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [assign]}}
+
+port an unsigned 32 bit integer containing the IP port number to connect to defaults to 80 \mbox{\Hypertarget{interface_m_q_t_t_websocket_transport_a028dce824b120b670e0759c994066ce0}\label{interface_m_q_t_t_websocket_transport_a028dce824b120b670e0759c994066ce0}} 
+\index{M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}!tls@{tls}}
+\index{tls@{tls}!M\+Q\+T\+T\+Websocket\+Transport@{M\+Q\+T\+T\+Websocket\+Transport}}
+\subsubsection{\texorpdfstring{tls}{tls}}
+{\footnotesize\ttfamily -\/ (B\+O\+OL) tls\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [assign]}}
+
+tls a boolean indicating whether the transport should be using security defaults to NO 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+M\+Q\+T\+T\+Websocket\+Transport/M\+Q\+T\+T\+Websocket\+Transport.\+h\end{DoxyCompactItemize}

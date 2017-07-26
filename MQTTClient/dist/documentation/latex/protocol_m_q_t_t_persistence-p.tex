@@ -1,0 +1,184 @@
+\hypertarget{protocol_m_q_t_t_persistence-p}{}\section{$<$M\+Q\+T\+T\+Persistence$>$ Protocol Reference}
+\label{protocol_m_q_t_t_persistence-p}\index{$<$\+M\+Q\+T\+T\+Persistence$>$@{$<$\+M\+Q\+T\+T\+Persistence$>$}}
+
+
+{\ttfamily \#import $<$M\+Q\+T\+T\+Persistence.\+h$>$}
+
+Inheritance diagram for $<$M\+Q\+T\+T\+Persistence$>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{protocol_m_q_t_t_persistence-p}
+\end{center}
+\end{figure}
+\subsection*{Instance Methods}
+\begin{DoxyCompactItemize}
+\item 
+(N\+S\+U\+Integer) -\/ \hyperlink{protocol_m_q_t_t_persistence-p_a8521b079578db32e593d841ce2941fc0}{window\+Size\+:}
+\item 
+(id$<$ \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} $>$) -\/ \hyperlink{protocol_m_q_t_t_persistence-p_ac4dcb1941bac80050f643fab3faf0fe4}{store\+Message\+For\+Client\+Id\+:topic\+:data\+:retain\+Flag\+:qos\+:msg\+Id\+:incoming\+Flag\+:command\+Type\+:deadline\+:}
+\item 
+(void) -\/ \hyperlink{protocol_m_q_t_t_persistence-p_a415cc2c67ea2e73d7942973a2186d083}{delete\+Flow\+:}
+\item 
+(void) -\/ \hyperlink{protocol_m_q_t_t_persistence-p_a2c880d902ade2b17078545cef8d212e7}{delete\+All\+Flows\+For\+Client\+Id\+:}
+\item 
+(N\+S\+Array $\ast$) -\/ \hyperlink{protocol_m_q_t_t_persistence-p_a513e62e567e187ce73fab26f53d2272a}{all\+Flowsfor\+Client\+Id\+:incoming\+Flag\+:}
+\item 
+(id$<$ \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} $>$) -\/ \hyperlink{protocol_m_q_t_t_persistence-p_a2ca81852c486e32d888ef502b8dc47d5}{flowfor\+Client\+Id\+:incoming\+Flag\+:message\+Id\+:}
+\item 
+(void) -\/ \hyperlink{protocol_m_q_t_t_persistence-p_afd0744d75cb430bfa2c430e14c3a65e8}{sync}
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+N\+S\+U\+Integer \hyperlink{protocol_m_q_t_t_persistence-p_a7566c5b7fff68c034ffd836c32d1b822}{max\+Window\+Size}
+\item 
+N\+S\+U\+Integer \hyperlink{protocol_m_q_t_t_persistence-p_a25da1e10303f72b9f5c0acded51780d2}{max\+Messages}
+\item 
+B\+O\+OL \hyperlink{protocol_m_q_t_t_persistence-p_abe825bce839eb0d41e4b7428893ad8b8}{persistent}
+\item 
+N\+S\+U\+Integer \hyperlink{protocol_m_q_t_t_persistence-p_a9803a6b662157637e28949766186c3d5}{max\+Size}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{protocol_m_q_t_t_persistence-p}{M\+Q\+T\+T\+Persistence} protocol is an abstraction of persistence classes for \hyperlink{interface_m_q_t_t_session}{M\+Q\+T\+T\+Session} 
+
+\subsection{Method Documentation}
+\mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_a513e62e567e187ce73fab26f53d2272a}\label{protocol_m_q_t_t_persistence-p_a513e62e567e187ce73fab26f53d2272a}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!all\+Flowsfor\+Client\+Id\+:incoming\+Flag\+:@{all\+Flowsfor\+Client\+Id\+:incoming\+Flag\+:}}
+\index{all\+Flowsfor\+Client\+Id\+:incoming\+Flag\+:@{all\+Flowsfor\+Client\+Id\+:incoming\+Flag\+:}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{all\+Flowsfor\+Client\+Id\+:incoming\+Flag\+:()}{allFlowsforClientId:incomingFlag:()}}
+{\footnotesize\ttfamily -\/ (N\+S\+Array $\ast$) all\+Flowsfor\+Client\+Id\+: \begin{DoxyParamCaption}\item[{(N\+S\+String $\ast$)}]{client\+Id }\item[{incomingFlag:(B\+O\+OL)}]{incoming\+Flag }\end{DoxyParamCaption}}
+
+Retrieves all \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} elements of a client\+Id and direction 
+\begin{DoxyParams}{Parameters}
+{\em client\+Id} & whos M\+Q\+T\+T\+Flows should be retrieved \\
+\hline
+{\em incoming\+Flag} & specifies the wether incoming or outgoing flows should be retrieved \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an N\+S\+Array of the retrieved \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} elements 
+\end{DoxyReturn}
+\mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_a2c880d902ade2b17078545cef8d212e7}\label{protocol_m_q_t_t_persistence-p_a2c880d902ade2b17078545cef8d212e7}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!delete\+All\+Flows\+For\+Client\+Id\+:@{delete\+All\+Flows\+For\+Client\+Id\+:}}
+\index{delete\+All\+Flows\+For\+Client\+Id\+:@{delete\+All\+Flows\+For\+Client\+Id\+:}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{delete\+All\+Flows\+For\+Client\+Id\+:()}{deleteAllFlowsForClientId:()}}
+{\footnotesize\ttfamily -\/ (void) delete\+All\+Flows\+For\+Client\+Id\+: \begin{DoxyParamCaption}\item[{(N\+S\+String $\ast$)}]{client\+Id }\end{DoxyParamCaption}}
+
+Deletes all \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} elements of a client\+Id 
+\begin{DoxyParams}{Parameters}
+{\em client\+Id} & the client Id identifying all M\+Q\+T\+T\+Flows to be deleted \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_a415cc2c67ea2e73d7942973a2186d083}\label{protocol_m_q_t_t_persistence-p_a415cc2c67ea2e73d7942973a2186d083}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!delete\+Flow\+:@{delete\+Flow\+:}}
+\index{delete\+Flow\+:@{delete\+Flow\+:}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{delete\+Flow\+:()}{deleteFlow:()}}
+{\footnotesize\ttfamily -\/ (void) delete\+Flow\+: \begin{DoxyParamCaption}\item[{(id$<$ \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} $>$)}]{flow }\end{DoxyParamCaption}}
+
+Deletes an \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} element 
+\begin{DoxyParams}{Parameters}
+{\em flow} & the \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} to delete \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_a2ca81852c486e32d888ef502b8dc47d5}\label{protocol_m_q_t_t_persistence-p_a2ca81852c486e32d888ef502b8dc47d5}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!flowfor\+Client\+Id\+:incoming\+Flag\+:message\+Id\+:@{flowfor\+Client\+Id\+:incoming\+Flag\+:message\+Id\+:}}
+\index{flowfor\+Client\+Id\+:incoming\+Flag\+:message\+Id\+:@{flowfor\+Client\+Id\+:incoming\+Flag\+:message\+Id\+:}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{flowfor\+Client\+Id\+:incoming\+Flag\+:message\+Id\+:()}{flowforClientId:incomingFlag:messageId:()}}
+{\footnotesize\ttfamily -\/ (id$<$\hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow}$>$) flowfor\+Client\+Id\+: \begin{DoxyParamCaption}\item[{(N\+S\+String $\ast$)}]{client\+Id }\item[{incomingFlag:(B\+O\+OL)}]{incoming\+Flag }\item[{messageId:(U\+Int16)}]{message\+Id }\end{DoxyParamCaption}}
+
+Retrieves an \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} element 
+\begin{DoxyParams}{Parameters}
+{\em client\+Id} & to which the \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} belongs to \\
+\hline
+{\em incoming\+Flag} & specifies the direction of the flow \\
+\hline
+{\em message\+Id} & specifies the message Id of the flow \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the retrieved \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} element or nil if the elememt was not found 
+\end{DoxyReturn}
+\mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_ac4dcb1941bac80050f643fab3faf0fe4}\label{protocol_m_q_t_t_persistence-p_ac4dcb1941bac80050f643fab3faf0fe4}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!store\+Message\+For\+Client\+Id\+:topic\+:data\+:retain\+Flag\+:qos\+:msg\+Id\+:incoming\+Flag\+:command\+Type\+:deadline\+:@{store\+Message\+For\+Client\+Id\+:topic\+:data\+:retain\+Flag\+:qos\+:msg\+Id\+:incoming\+Flag\+:command\+Type\+:deadline\+:}}
+\index{store\+Message\+For\+Client\+Id\+:topic\+:data\+:retain\+Flag\+:qos\+:msg\+Id\+:incoming\+Flag\+:command\+Type\+:deadline\+:@{store\+Message\+For\+Client\+Id\+:topic\+:data\+:retain\+Flag\+:qos\+:msg\+Id\+:incoming\+Flag\+:command\+Type\+:deadline\+:}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{store\+Message\+For\+Client\+Id\+:topic\+:data\+:retain\+Flag\+:qos\+:msg\+Id\+:incoming\+Flag\+:command\+Type\+:deadline\+:()}{storeMessageForClientId:topic:data:retainFlag:qos:msgId:incomingFlag:commandType:deadline:()}}
+{\footnotesize\ttfamily -\/ (id$<$\hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow}$>$) store\+Message\+For\+Client\+Id\+: \begin{DoxyParamCaption}\item[{(N\+S\+String $\ast$)}]{client\+Id }\item[{topic:(N\+S\+String $\ast$)}]{topic }\item[{data:(N\+S\+Data $\ast$)}]{data }\item[{retainFlag:(B\+O\+OL)}]{retain\+Flag }\item[{qos:(M\+Q\+T\+T\+Qos\+Level)}]{qos }\item[{msgId:(U\+Int16)}]{msg\+Id }\item[{incomingFlag:(B\+O\+OL)}]{incoming\+Flag }\item[{commandType:(U\+Int8)}]{command\+Type }\item[{deadline:(N\+S\+Date $\ast$)}]{deadline }\end{DoxyParamCaption}}
+
+Stores one new message 
+\begin{DoxyParams}{Parameters}
+{\em client\+Id} & identifying the session \\
+\hline
+{\em topic} & the topic of the message \\
+\hline
+{\em data} & the message\textquotesingle{}s data \\
+\hline
+{\em retain\+Flag} & the retain flag of the message \\
+\hline
+{\em qos} & the quality of service of the message \\
+\hline
+{\em msg\+Id} & the id of the message or zero for qos zero \\
+\hline
+{\em incoming\+Flag} & the direction of the message \\
+\hline
+{\em command\+Type} & the command of the message \\
+\hline
+{\em deadline} & the deadline of the message for repetitions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the created \hyperlink{interface_m_q_t_t_flow}{M\+Q\+T\+T\+Flow} element or nil if the max\+Window\+Size has been exceeded 
+\end{DoxyReturn}
+\mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_afd0744d75cb430bfa2c430e14c3a65e8}\label{protocol_m_q_t_t_persistence-p_afd0744d75cb430bfa2c430e14c3a65e8}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!sync@{sync}}
+\index{sync@{sync}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{sync()}{sync()}}
+{\footnotesize\ttfamily -\/ (void) sync \begin{DoxyParamCaption}{ }\end{DoxyParamCaption}}
+
+sync is called to allow the \hyperlink{protocol_m_q_t_t_persistence-p}{M\+Q\+T\+T\+Persistence} implemetation to save data permanently \mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_a8521b079578db32e593d841ce2941fc0}\label{protocol_m_q_t_t_persistence-p_a8521b079578db32e593d841ce2941fc0}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!window\+Size\+:@{window\+Size\+:}}
+\index{window\+Size\+:@{window\+Size\+:}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{window\+Size\+:()}{windowSize:()}}
+{\footnotesize\ttfamily -\/ (N\+S\+U\+Integer) window\+Size\+: \begin{DoxyParamCaption}\item[{(N\+S\+String $\ast$)}]{client\+Id }\end{DoxyParamCaption}}
+
+The current Window Size for outgoing inflight messages per client\+ID. 
+\begin{DoxyParams}{Parameters}
+{\em client\+Id} & identifying the session \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the current size of the outgoing inflight window 
+\end{DoxyReturn}
+
+
+\subsection{Property Documentation}
+\mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_a25da1e10303f72b9f5c0acded51780d2}\label{protocol_m_q_t_t_persistence-p_a25da1e10303f72b9f5c0acded51780d2}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!max\+Messages@{max\+Messages}}
+\index{max\+Messages@{max\+Messages}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{max\+Messages}{maxMessages}}
+{\footnotesize\ttfamily -\/ (N\+S\+U\+Integer) max\+Messages\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [assign]}}
+
+The maximum number of messages kept per client\+ID and direction. Defaults to 1024 \mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_a9803a6b662157637e28949766186c3d5}\label{protocol_m_q_t_t_persistence-p_a9803a6b662157637e28949766186c3d5}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!max\+Size@{max\+Size}}
+\index{max\+Size@{max\+Size}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{max\+Size}{maxSize}}
+{\footnotesize\ttfamily -\/ (N\+S\+U\+Integer) max\+Size\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [assign]}}
+
+The maximum size of the storage used for persistence in total in bytes. Defaults to 1024$\ast$1024 bytes \mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_a7566c5b7fff68c034ffd836c32d1b822}\label{protocol_m_q_t_t_persistence-p_a7566c5b7fff68c034ffd836c32d1b822}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!max\+Window\+Size@{max\+Window\+Size}}
+\index{max\+Window\+Size@{max\+Window\+Size}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{max\+Window\+Size}{maxWindowSize}}
+{\footnotesize\ttfamily -\/ (N\+S\+U\+Integer) max\+Window\+Size\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [assign]}}
+
+The maximum Window Size for outgoing inflight messages per client\+ID. Defaults to 16 \mbox{\Hypertarget{protocol_m_q_t_t_persistence-p_abe825bce839eb0d41e4b7428893ad8b8}\label{protocol_m_q_t_t_persistence-p_abe825bce839eb0d41e4b7428893ad8b8}} 
+\index{M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}!persistent@{persistent}}
+\index{persistent@{persistent}!M\+Q\+T\+T\+Persistence-\/p@{M\+Q\+T\+T\+Persistence-\/p}}
+\subsubsection{\texorpdfstring{persistent}{persistent}}
+{\footnotesize\ttfamily -\/ (B\+O\+OL) persistent\hspace{0.3cm}{\ttfamily [read]}, {\ttfamily [write]}, {\ttfamily [nonatomic]}, {\ttfamily [assign]}}
+
+Indicates if the persistence implementation should make the information permannent. Defaults to NO 
+
+The documentation for this protocol was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+M\+Q\+T\+T\+Persistence.\+h\end{DoxyCompactItemize}

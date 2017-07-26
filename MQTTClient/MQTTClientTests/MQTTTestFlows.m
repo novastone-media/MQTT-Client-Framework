@@ -47,7 +47,6 @@
     self.receivedCounter = 0;
     self.processedCounter = 0;
 
-    [MQTTLog setLogLevel:DDLogLevelInfo];
     return self;
 }
 
@@ -334,7 +333,9 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
    processingBuffer:(NSInteger)processingBuffer
      processingTime:(NSTimeInterval)processingTime
             timeout:(NSTimeInterval)timeout {
-    
+
+    [MQTTLog setLogLevel:DDLogLevelInfo];
+
     self.subscriberQos = subscriberQos;
     self.publisherQos = publisherQos;
     self.secondPublisherQos = secondPublisherQos;
@@ -392,7 +393,9 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
                 processingBuffer:(NSInteger)processingBuffer
                   processingTime:(NSTimeInterval)processingTime
                          timeout:(NSTimeInterval)timeout {
-    
+
+    [MQTTLog setLogLevel:DDLogLevelInfo];
+
     self.subscriberQos = subscriberQos;
     self.publisherQos = publisherQos;
     self.secondPublisherQos = secondPublisherQos;

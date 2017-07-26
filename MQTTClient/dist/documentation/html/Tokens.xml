@@ -735,6 +735,18 @@
       <Scope>MQTTLog</Scope>
     </TokenIdentifier>
     <Path>interface_m_q_t_t_log.html</Path>
+    <DeclaredIn>MQTTLog.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>setLogLevel:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>clm</Type>
+      <Scope>MQTTLog</Scope>
+    </TokenIdentifier>
+    <Path>interface_m_q_t_t_log.html</Path>
+    <Anchor>a27f49af5a0c2f9b5d975bf3e9fef2c6c</Anchor>
+    <DeclaredIn>MQTTLog.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>

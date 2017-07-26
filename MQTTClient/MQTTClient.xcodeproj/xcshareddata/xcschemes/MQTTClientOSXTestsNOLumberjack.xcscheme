@@ -8,15 +8,15 @@
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "84B739AA1A66EDFC00B103F4"
-               BuildableName = "Doxygen Docs"
-               BlueprintName = "Doxygen Docs"
+               BlueprintIdentifier = "840D3CF01F28A7C20072019B"
+               BuildableName = "MQTTClientOSXTestsNOLumberjack.xctest"
+               BlueprintName = "MQTTClientOSXTestsNOLumberjack"
                ReferencedContainer = "container:MQTTClient.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "840D3CF01F28A7C20072019B"
+               BuildableName = "MQTTClientOSXTestsNOLumberjack.xctest"
+               BlueprintName = "MQTTClientOSXTestsNOLumberjack"
+               ReferencedContainer = "container:MQTTClient.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "840D3CF01F28A7C20072019B"
+            BuildableName = "MQTTClientOSXTestsNOLumberjack.xctest"
+            BlueprintName = "MQTTClientOSXTestsNOLumberjack"
+            ReferencedContainer = "container:MQTTClient.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -42,15 +61,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "84B739AA1A66EDFC00B103F4"
-            BuildableName = "Doxygen Docs"
-            BlueprintName = "Doxygen Docs"
-            ReferencedContainer = "container:MQTTClient.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -60,15 +70,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "84B739AA1A66EDFC00B103F4"
-            BuildableName = "Doxygen Docs"
-            BlueprintName = "Doxygen Docs"
-            ReferencedContainer = "container:MQTTClient.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

@@ -10,8 +10,6 @@
 
 @implementation MQTTLog
 
-#ifdef LUMBERJACK
-
 #ifdef DEBUG
 
 DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -20,12 +18,10 @@ DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 DDLogLevel ddLogLevel = DDLogLevelWarning;
 
-#endif /* DEBUG */
+#endif
 
 + (void)setLogLevel:(DDLogLevel)logLevel {
     ddLogLevel = logLevel;
 }
-
-#endif
 
 @end
