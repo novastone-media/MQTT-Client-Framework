@@ -68,9 +68,9 @@ Or include the source from here.
 
 Documentation generated with doxygen http://doxygen.org in the `./MQTTClient/dist/documentation` subdirectory.
 
-Here is the [PDF](`./MQTTClient/dist/documentation/latex/refman.pdf').
+Here is the [PDF](MQTTClient/dist/documentation/latex/refman.pdf).
 
-You may open the HTML version of the documentation here  `./MQTTClient/dist/documentation/html/index.html'
+You may open the HTML version of the documentation here  [index.html](MQTTClient/dist/documentation/html/index.html)
 
 Run `make install` in the `./MQTTClient/dist/documentation/html` subdirectory to install the the documentation as a DOCSET on your Mac.
 
