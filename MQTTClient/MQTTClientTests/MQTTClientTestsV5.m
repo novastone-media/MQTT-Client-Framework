@@ -30,16 +30,16 @@
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
-            self.session.sessionExpiryInterval = [NSNumber numberWithUnsignedInteger:60];
+            self.session.sessionExpiryInterval = @60U;
             self.session.authMethod = @"method";
             self.session.authData = [@"data" dataUsingEncoding:NSUTF8StringEncoding];
-            self.session.requestProblemInformation = [NSNumber numberWithUnsignedInteger:1];
-            self.session.willDelayInterval = [NSNumber numberWithUnsignedInteger:30];
-            self.session.requestResponseInformation = [NSNumber numberWithUnsignedInteger:1];
-            self.session.receiveMaximum = [NSNumber numberWithUnsignedInteger:5];
-            self.session.topicAliasMaximum = [NSNumber numberWithUnsignedInteger:10];
+            self.session.requestProblemInformation = @1U;
+            self.session.willDelayInterval = @30U;
+            self.session.requestResponseInformation = @1U;
+            self.session.receiveMaximum = @5U;
+            self.session.topicAliasMaximum = @10U;
             self.session.userProperty = @{@"u1":@"v1", @"u2": @"v2"};
-            self.session.maximumPacketSize = [NSNumber numberWithUnsignedInteger:8192];
+            self.session.maximumPacketSize = @8192U;
             [self connect:parameters];
             XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
             [self shutdown:parameters
@@ -57,7 +57,7 @@
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
-            self.session.sessionExpiryInterval = [NSNumber numberWithUnsignedInteger:5];
+            self.session.sessionExpiryInterval = @5U;
             [self connect:parameters];
             XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
             [self shutdown:parameters
@@ -75,7 +75,7 @@
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
-            self.session.sessionExpiryInterval = [NSNumber numberWithUnsignedInteger:0];
+            self.session.sessionExpiryInterval = @0U;
             [self connect:parameters];
             XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
             [self shutdown:parameters
@@ -110,8 +110,8 @@
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
-            self.session.sessionExpiryInterval = [NSNumber numberWithUnsignedInteger:10];
-            self.session.willDelayInterval = [NSNumber numberWithUnsignedInteger:5];
+            self.session.sessionExpiryInterval = @10U;
+            self.session.willDelayInterval = @5U;
             self.session.willFlag = true;
             self.session.willTopic = TOPIC;
             self.session.willMsg = [@"will" dataUsingEncoding:NSUTF8StringEncoding];
@@ -133,8 +133,8 @@
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
-            self.session.sessionExpiryInterval = [NSNumber numberWithUnsignedInteger:5];
-            self.session.willDelayInterval = [NSNumber numberWithUnsignedInteger:0];
+            self.session.sessionExpiryInterval = @5U;
+            self.session.willDelayInterval = @0U;
             self.session.willFlag = true;
             self.session.willTopic = TOPIC;
             self.session.willMsg = [@"will" dataUsingEncoding:NSUTF8StringEncoding];
@@ -157,7 +157,7 @@
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
-            self.session.sessionExpiryInterval = [NSNumber numberWithUnsignedInteger:0];
+            self.session.sessionExpiryInterval = @0U;
             self.session.willFlag = true;
             self.session.willTopic = TOPIC;
             self.session.willMsg = [@"will" dataUsingEncoding:NSUTF8StringEncoding];

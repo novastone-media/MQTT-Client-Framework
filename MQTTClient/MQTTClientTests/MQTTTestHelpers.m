@@ -31,14 +31,14 @@
     NSURL *url = [[NSBundle bundleForClass:[MQTTTestHelpers class]] URLForResource:@"MQTTTestHelpers"
                                                                      withExtension:@"plist"];
     NSDictionary *plist = [NSDictionary dictionaryWithContentsOfURL:url];
-    NSArray *brokerList = [plist objectForKey:@"brokerList"];
-    NSDictionary *brokers = [plist objectForKey:@"brokers"];
+    NSArray *brokerList = plist[@"brokerList"];
+    NSDictionary *brokers = plist[@"brokers"];
 
     self.brokers = [[NSMutableDictionary alloc] init];
     for (NSString *brokerName in brokerList) {
-        NSDictionary *broker = [brokers objectForKey:brokerName];
+        NSDictionary *broker = brokers[brokerName];
         if (broker) {
-            [self.brokers setObject:broker forKey:brokerName];
+            (self.brokers)[brokerName] = broker;
         }
     }
 //
@@ -271,7 +271,7 @@
                 NSData *certificateData = [NSData dataWithContentsOfFile:path];
                 if (certificateData) {
                     securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-                    securityPolicy.pinnedCertificates = [[NSArray alloc] initWithObjects:certificateData, nil];
+                    securityPolicy.pinnedCertificates = @[certificateData];
                 } else {
                     DDLogError(@"[MQTTTestHelpers] error reading cer file");
                 }
@@ -363,7 +363,7 @@
     MQTTSession *session = [[MQTTSession alloc] init];
     session.transport = [MQTTTestHelpers transport:parameters];
     session.clientId = nil;
-    session.sessionExpiryInterval = [NSNumber numberWithInt:0];
+    session.sessionExpiryInterval = @0;
     session.userName = parameters[@"user"];
     session.password = parameters[@"pass"];
     session.protocolLevel = [parameters[@"protocollevel"] intValue];

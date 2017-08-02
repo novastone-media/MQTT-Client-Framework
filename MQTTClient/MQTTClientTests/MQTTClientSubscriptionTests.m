@@ -82,7 +82,7 @@
         for (int TOPICS = 16; TOPICS <= 256; TOPICS += 16) {
             NSMutableDictionary *topics = [[NSMutableDictionary alloc] initWithCapacity:TOPICS];
             for (int i = 0; i < TOPICS; i++) {
-                [topics setObject:@(1) forKey:[NSString stringWithFormat:@"MQTTClient/a/lot/%d", i]];
+                topics[[NSString stringWithFormat:@"MQTTClient/a/lot/%d", i]] = @(1);
             }
             DDLogVerbose(@"testing %d subscriptions", TOPICS);
             [self testMultiSubscribeSubackExpected:topics];

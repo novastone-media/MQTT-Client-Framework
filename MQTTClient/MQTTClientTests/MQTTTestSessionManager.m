@@ -266,7 +266,7 @@
                                                          repeats:false];
         
         
-        manager.subscriptions = @{TOPIC: [NSNumber numberWithUnsignedChar:MQTTQosLevelExactlyOnce]};
+        manager.subscriptions = @{TOPIC: @(MQTTQosLevelExactlyOnce)};
         [manager connectTo:parameters[@"host"]
                       port:[parameters[@"port"] intValue]
                        tls:[parameters[@"tls"] boolValue]
@@ -580,7 +580,7 @@
         
         
         for (int i = 0; i < 30; i++) {
-            [subscriptions setObject:@1 forKey:[NSString stringWithFormat:@"abc/%d", i]];
+            subscriptions[[NSString stringWithFormat:@"abc/%d", i]] = @1;
             manager.subscriptions = subscriptions;
         }
         

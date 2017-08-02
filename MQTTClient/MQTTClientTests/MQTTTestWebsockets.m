@@ -132,7 +132,7 @@
                 
                 while (!self.timedout) {
                     DDLogVerbose(@"looping for messages");
-                    [self.session publishAndWaitData:[[[NSDate date] description] dataUsingEncoding:NSUTF8StringEncoding]
+                    [self.session publishAndWaitData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
                                              onTopic:@"MQTTClient"
                                               retain:false
                                                  qos:MQTTQosLevelAtLeastOnce];
@@ -181,7 +181,7 @@
                 
                 NSString *payload = @"abcdefgh";
                 
-                while (!self.timedout && strlen([[payload substringFromIndex:1] UTF8String]) <= 1000) {
+                while (!self.timedout && strlen([payload substringFromIndex:1].UTF8String) <= 1000) {
                     DDLogVerbose(@"looping for messages");
                     [self.session publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding]
                                              onTopic:@"MQTTClient"

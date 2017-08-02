@@ -281,7 +281,7 @@
         DDLogVerbose(@"testing broker %@", broker);
         NSMutableDictionary *parameters = self.brokers[broker];
         
-        [parameters setObject:@"abc" forKey:@"host"];
+        parameters[@"host"] = @"abc";
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
         
@@ -307,7 +307,7 @@
         DDLogVerbose(@"testing broker %@", broker);
         NSMutableDictionary *parameters = self.brokers[broker];
         
-        [parameters setObject:@1998 forKey:@"port"];
+        parameters[@"port"] = @1998;
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
         

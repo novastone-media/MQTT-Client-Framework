@@ -173,7 +173,7 @@
 * @return the initialised MQTTSession object
 * All other parameters are set to defaults
 */
-- (id)initWithClientId:(NSString *)theClientId;
+- (instancetype)initWithClientId:(NSString *)theClientId;
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.
@@ -182,7 +182,7 @@
  @return the initialised MQTTSession object
  All other parameters are set to defaults
  */
-- (id)initWithClientId:(NSString*)theClientId
+- (instancetype)initWithClientId:(NSString*)theClientId
                runLoop:(NSRunLoop*)theRunLoop
                forMode:(NSString*)theRunLoopMode;
 
@@ -193,7 +193,7 @@
  @return the initialised MQTTSession object
  All other parameters are set to defaults
  */
-- (id)initWithClientId:(NSString*)theClientId
+- (instancetype)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUsername
               password:(NSString*)thePassword;
 
@@ -206,7 +206,7 @@
  @return the initialised MQTTSession object
  All other parameters are set to defaults
  */
-- (id)initWithClientId:(NSString*)theClientId
+- (instancetype)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUserName
               password:(NSString*)thePassword
                runLoop:(NSRunLoop*)theRunLoop
@@ -221,7 +221,7 @@
  @return the initialised MQTTSession object
  All other parameters are set to defaults
  */
-- (id)initWithClientId:(NSString*)theClientId
+- (instancetype)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUsername
               password:(NSString*)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
@@ -238,7 +238,7 @@
  @return the initialised MQTTSession object
  All other parameters are set to defaults
  */
-- (id)initWithClientId:(NSString*)theClientId
+- (instancetype)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUsername
               password:(NSString*)thePassword
              keepAlive:(UInt16)theKeepAlive
@@ -259,7 +259,7 @@
  @return the initialised MQTTSession object
  All other parameters are set to defaults
  */
-- (id)initWithClientId:(NSString*)theClientId
+- (instancetype)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUserName
               password:(NSString*)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
@@ -284,7 +284,7 @@
  @return the initialised MQTTSession object
  All other parameters are set to defaults
  */
-- (id)initWithClientId:(NSString*)theClientId
+- (instancetype)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUserName
               password:(NSString*)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
@@ -305,7 +305,7 @@
  @return the initialised MQTTSession object
  All other parameters are set to defaults
  */
-- (id)initWithClientId:(NSString*)theClientId
+- (instancetype)initWithClientId:(NSString*)theClientId
              keepAlive:(UInt16)theKeepAliveInterval
         connectMessage:(MQTTMessage*)theConnectMessage
                runLoop:(NSRunLoop*)theRunLoop

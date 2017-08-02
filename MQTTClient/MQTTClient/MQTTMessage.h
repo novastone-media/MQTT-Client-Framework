@@ -216,7 +216,7 @@ typedef NS_ENUM(NSUInteger, MQTTReturnCode) {
                      dupFlag:(BOOL)dupFlag
                         data:(NSData *)data;
 
-- (NSData *)wireFormat;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSData *wireFormat;
 
 
 @end

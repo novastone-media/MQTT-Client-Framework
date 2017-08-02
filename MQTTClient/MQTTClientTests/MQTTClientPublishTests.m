@@ -265,7 +265,7 @@
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
             self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelAtLeastOnce];
             DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
-            [self.inflight setObject:@"PUBLISHED" forKey:[NSNumber numberWithUnsignedShort:self.sentMessageMid]];
+            (self.inflight)[@(self.sentMessageMid)] = @"PUBLISHED";
         }
 
         self.timedout = false;
@@ -299,7 +299,7 @@
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
             self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelExactlyOnce];
             DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
-            [self.inflight setObject:@"PUBLISHED" forKey:[NSNumber numberWithUnsignedShort:self.sentMessageMid]];
+            (self.inflight)[@(self.sentMessageMid)] = @"PUBLISHED";
         }
 
         self.timedout = false;
@@ -406,7 +406,7 @@
         [self connect:parameters];
         
         NSString *topic = @"gg";
-        while (strlen([[topic substringFromIndex:1] UTF8String]) <= 32768) {
+        while (strlen([topic substringFromIndex:1].UTF8String) <= 32768) {
             DDLogVerbose(@"LongPublishTopic (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
             [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
                       onTopic:[NSString stringWithFormat:@"%@/%@", TOPIC, topic]
@@ -426,7 +426,7 @@
         [self connect:parameters];
         
         NSString *payload = @"gg";
-        while (strlen([[payload substringFromIndex:1] UTF8String]) <= 1000000) {
+        while (strlen([payload substringFromIndex:1].UTF8String) <= 1000000) {
             DDLogVerbose(@"LongPublishPayload (%lu)", strlen([[payload substringFromIndex:1] UTF8String]));
             [self testPublish:[payload dataUsingEncoding:NSUTF8StringEncoding]
                       onTopic:[NSString stringWithFormat:@"%@", TOPIC]
@@ -757,7 +757,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
     DDLogInfo(@"messageDelivered %d", msgID);
 
     if (self.inflight) {
-        [self.inflight removeObjectForKey:[NSNumber numberWithUnsignedShort:msgID]];
+        [self.inflight removeObjectForKey:@(msgID)];
     }
     [super messageDelivered:session msgID:msgID];
 }
@@ -767,7 +767,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
     DDLogInfo(@"newMessage %d", mid);
 
     if (self.inflight) {
-        [self.inflight removeObjectForKey:[NSNumber numberWithUnsignedInt:mid]];
+        [self.inflight removeObjectForKey:@(mid)];
     }
     [super newMessage:session data:data onTopic:topic
                   qos:qos retained:retained mid:mid];
