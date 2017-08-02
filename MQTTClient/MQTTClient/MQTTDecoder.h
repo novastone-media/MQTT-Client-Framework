@@ -20,13 +20,13 @@
 #import <Foundation/Foundation.h>
 #import "MQTTMessage.h"
 
-typedef enum {
+typedef NS_ENUM(unsigned int, MQTTDecoderEvent) {
     MQTTDecoderEventProtocolError,
     MQTTDecoderEventConnectionClosed,
     MQTTDecoderEventConnectionError
-} MQTTDecoderEvent;
+};
 
-typedef enum {
+typedef NS_ENUM(unsigned int, MQTTDecoderState) {
     MQTTDecoderStateInitializing,
     MQTTDecoderStateDecodingHeader,
     MQTTDecoderStateDecodingLength,
@@ -34,7 +34,7 @@ typedef enum {
     MQTTDecoderStateConnectionClosed,
     MQTTDecoderStateConnectionError,
     MQTTDecoderStateProtocolError
-} MQTTDecoderState;
+};
 
 @class MQTTDecoder;
 

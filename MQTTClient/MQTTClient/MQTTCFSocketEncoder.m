@@ -33,7 +33,7 @@
 }
 
 - (void)open {
-    [self.stream setDelegate:self];
+    (self.stream).delegate = self;
     [self.stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
     [self.stream open];
 }

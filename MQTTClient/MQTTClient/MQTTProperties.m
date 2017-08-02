@@ -29,7 +29,7 @@
                     break;
                 case MQTTPublicationExpiryInterval:
                     if (propertyLength - offset > 4) {
-                        self.publicationExpiryInterval = [NSNumber numberWithInt:[MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.publicationExpiryInterval = @([MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
                         offset += 5;
                     }
                     break;
@@ -64,7 +64,7 @@
                     if (propertyLength - offset > 1) {
                         int subscriptionIdentifier = [MQTTProperties getVariableLength:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         int l = [MQTTProperties variableIntLength:subscriptionIdentifier];
-                        self.subscriptionIdentifier = [NSNumber numberWithInt:subscriptionIdentifier];
+                        self.subscriptionIdentifier = @(subscriptionIdentifier);
                         offset += 1 + l;
 
                     }
@@ -72,7 +72,7 @@
 
                 case MQTTSessionExpiryInterval:
                     if (propertyLength - offset > 4) {
-                        self.sessionExpiryInterval = [NSNumber numberWithInt:[MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.sessionExpiryInterval = @([MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
                         offset += 5;
                     }
                     break;
@@ -88,7 +88,7 @@
 
                 case MQTTServerKeepAlive:
                     if (propertyLength - offset > 2) {
-                        self.serverKeepAlive = [NSNumber numberWithInt:[MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.serverKeepAlive = @([MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
                         offset += 3;
                     }
                     break;
@@ -122,7 +122,7 @@
 
                 case MQTTWillDelayInterval:
                     if (propertyLength - offset > 4) {
-                        self.willDelayInterval = [NSNumber numberWithInt:[MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.willDelayInterval = @([MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
                         offset += 5;
                     }
                     break;
@@ -166,21 +166,21 @@
 
                 case MQTTReceiveMaximum:
                     if (propertyLength - offset > 2) {
-                        self.receiveMaximum = [NSNumber numberWithInt:[MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.receiveMaximum = @([MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
                         offset += 3;
                     }
                     break;
 
                 case MQTTTopicAliasMaximum:
                     if (propertyLength - offset > 2) {
-                        self.topicAliasMaximum = [NSNumber numberWithInt:[MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.topicAliasMaximum = @([MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
                         offset += 3;
                     }
                     break;
 
                 case MQTTTopicAlias:
                     if (propertyLength - offset > 2) {
-                        self.topicAlias = [NSNumber numberWithInt:[MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.topicAlias = @([MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
                         offset += 3;
                     }
                     break;
@@ -219,7 +219,7 @@
 
                 case MQTTMaximumPacketSize:
                     if (propertyLength - offset > 4) {
-                        self.maximumPacketSize = [NSNumber numberWithInt:[MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]];
+                        self.maximumPacketSize = @([MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
                         offset += 5;
                     }
                     break;

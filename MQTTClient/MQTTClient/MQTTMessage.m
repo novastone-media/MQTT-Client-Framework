@@ -107,7 +107,7 @@
         NSMutableData *properties = [[NSMutableData alloc] init];
         if (sessionExpiryInterval) {
             [properties appendByte:MQTTSessionExpiryInterval];
-            [properties appendUInt32BigEndian:[sessionExpiryInterval unsignedIntValue]];
+            [properties appendUInt32BigEndian:sessionExpiryInterval.unsignedIntValue];
         }
         if (authMethod) {
             [properties appendByte:MQTTAuthMethod];
@@ -119,23 +119,23 @@
         }
         if (requestProblemInformation) {
             [properties appendByte:MQTTRequestProblemInformation];
-            [properties appendByte:[requestProblemInformation unsignedIntValue]];
+            [properties appendByte:requestProblemInformation.unsignedIntValue];
         }
         if (willDelayInterval) {
             [properties appendByte:MQTTWillDelayInterval];
-            [properties appendUInt32BigEndian:[willDelayInterval unsignedIntValue]];
+            [properties appendUInt32BigEndian:willDelayInterval.unsignedIntValue];
         }
         if (requestResponseInformation) {
             [properties appendByte:MQTTRequestResponseInformation];
-            [properties appendByte:[requestResponseInformation unsignedIntValue]];
+            [properties appendByte:requestResponseInformation.unsignedIntValue];
         }
         if (receiveMaximum) {
             [properties appendByte:MQTTReceiveMaximum];
-            [properties appendUInt16BigEndian:[receiveMaximum unsignedIntValue]];
+            [properties appendUInt16BigEndian:receiveMaximum.unsignedIntValue];
         }
         if (topicAliasMaximum) {
             [properties appendByte:MQTTTopicAliasMaximum];
-            [properties appendUInt16BigEndian:[topicAliasMaximum unsignedIntValue]];
+            [properties appendUInt16BigEndian:topicAliasMaximum.unsignedIntValue];
         }
         if (userProperty) {
             for (NSString *key in userProperty.allKeys) {
@@ -146,7 +146,7 @@
         }
         if (maximumPacketSize) {
             [properties appendByte:MQTTMaximumPacketSize];
-            [properties appendUInt32BigEndian:[maximumPacketSize unsignedIntValue]];
+            [properties appendUInt32BigEndian:maximumPacketSize.unsignedIntValue];
         }
         [data appendVariableLength:properties.length];
         [data appendData:properties];
@@ -157,7 +157,7 @@
         [data appendMQTTString:willTopic];
     }
     if (willMsg) {
-        [data appendUInt16BigEndian:[willMsg length]];
+        [data appendUInt16BigEndian:willMsg.length];
         [data appendData:willMsg];
     }
     if (userName) {
@@ -186,7 +186,7 @@
         NSMutableData *properties = [[NSMutableData alloc] init];
         if (sessionExpiryInterval) {
             [properties appendByte:MQTTSessionExpiryInterval];
-            [properties appendUInt32BigEndian:[sessionExpiryInterval unsignedIntValue]];
+            [properties appendUInt32BigEndian:sessionExpiryInterval.unsignedIntValue];
         }
         if (reasonString) {
             [properties appendByte:MQTTReasonString];
@@ -222,7 +222,7 @@
         NSMutableData *properties = [[NSMutableData alloc] init];
         if (subscriptionIdentifier) {
             [properties appendByte:MQTTSubscriptionIdentifier];
-            [properties appendVariableLength:[subscriptionIdentifier unsignedLongValue]];
+            [properties appendVariableLength:subscriptionIdentifier.unsignedLongValue];
         }
         [data appendVariableLength:properties.length];
         [data appendData:properties];
@@ -275,15 +275,15 @@
         NSMutableData *properties = [[NSMutableData alloc] init];
         if (payloadFormatIndicator) {
             [properties appendByte:MQTTPayloadFormatIndicator];
-            [properties appendByte:[payloadFormatIndicator unsignedIntValue]];
+            [properties appendByte:payloadFormatIndicator.unsignedIntValue];
         }
         if (publicationExpiryInterval) {
             [properties appendByte:MQTTPublicationExpiryInterval];
-            [properties appendUInt32BigEndian:[publicationExpiryInterval unsignedIntValue]];
+            [properties appendUInt32BigEndian:publicationExpiryInterval.unsignedIntValue];
         }
         if (topicAlias) {
             [properties appendByte:MQTTTopicAlias];
-            [properties appendUInt16BigEndian:[topicAlias unsignedIntValue]];
+            [properties appendUInt16BigEndian:topicAlias.unsignedIntValue];
         }
         if (responseTopic) {
             [properties appendByte:MQTTResponseTopic];

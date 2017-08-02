@@ -152,7 +152,7 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
         NSBundle *bundle = [NSBundle bundleForClass:[self class]];
         NSArray *paths = [bundle pathsForResourcesOfType:@"cer" inDirectory:@"."];
 
-        NSMutableArray *certificates = [NSMutableArray arrayWithCapacity:[paths count]];
+        NSMutableArray *certificates = [NSMutableArray arrayWithCapacity:paths.count];
         for (NSString *path in paths) {
             NSData *certificateData = [NSData dataWithContentsOfFile:path];
             [certificates addObject:certificateData];
@@ -175,12 +175,12 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
     MQTTSSLSecurityPolicy *securityPolicy = [[self alloc] init];
     securityPolicy.SSLPinningMode = pinningMode;
 
-    [securityPolicy setPinnedCertificates:[self defaultPinnedCertificates]];
+    securityPolicy.pinnedCertificates = [self defaultPinnedCertificates];
 
     return securityPolicy;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (!self) {
         return nil;
@@ -193,10 +193,10 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
 }
 
 - (void)setPinnedCertificates:(NSArray *)pinnedCertificates {
-    _pinnedCertificates = [[NSOrderedSet orderedSetWithArray:pinnedCertificates] array];
+    _pinnedCertificates = [NSOrderedSet orderedSetWithArray:pinnedCertificates].array;
     
     if (self.pinnedCertificates) {
-        NSMutableArray *mutablePinnedPublicKeys = [NSMutableArray arrayWithCapacity:[self.pinnedCertificates count]];
+        NSMutableArray *mutablePinnedPublicKeys = [NSMutableArray arrayWithCapacity:(self.pinnedCertificates).count];
         for (NSData *certificate in self.pinnedCertificates) {
             id publicKey = SSLPublicKeyForCertificate(certificate);
             if (!publicKey) {
@@ -264,13 +264,13 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
                 }
             }
 
-            return trustedCertificateCount == [serverCertificates count];
+            return trustedCertificateCount == serverCertificates.count;
         }
         case MQTTSSLPinningModePublicKey: {
             NSUInteger trustedPublicKeyCount = 0;
             NSArray *publicKeys = SSLPublicKeyTrustChainForServerTrust(serverTrust);
-            if (!self.validatesCertificateChain && [publicKeys count] > 0) {
-                publicKeys = @[[publicKeys firstObject]];
+            if (!self.validatesCertificateChain && publicKeys.count > 0) {
+                publicKeys = @[publicKeys.firstObject];
             }
 
             for (id trustChainPublicKey in publicKeys) {
@@ -281,7 +281,7 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
                 }
             }
 
-            return trustedPublicKeyCount > 0 && ((self.validatesCertificateChain && trustedPublicKeyCount == [serverCertificates count]) || (!self.validatesCertificateChain && trustedPublicKeyCount >= 1));
+            return trustedPublicKeyCount > 0 && ((self.validatesCertificateChain && trustedPublicKeyCount == serverCertificates.count) || (!self.validatesCertificateChain && trustedPublicKeyCount >= 1));
         }
     }
 

@@ -48,14 +48,11 @@
         // delegate certificates verify operation to our secure policy.
         // by disabling chain validation, it becomes our responsibility to verify that the host at the other end can be trusted.
         // the server's certificates will be verified during MQTT encoder/decoder processing.
-        [sslOptions setObject:(NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
-                       forKey:(NSString*)kCFStreamSSLLevel];
-        [sslOptions setObject:[NSNumber numberWithBool:NO]
-                       forKey:(NSString *)kCFStreamSSLValidatesCertificateChain];
+        sslOptions[(NSString*)kCFStreamSSLLevel] = (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL;
+        sslOptions[(NSString *)kCFStreamSSLValidatesCertificateChain] = @NO;
         
         if (self.certificates) {
-            [sslOptions setObject:self.certificates
-                           forKey:(NSString *)kCFStreamSSLCertificates];
+            sslOptions[(NSString *)kCFStreamSSLCertificates] = self.certificates;
         }
         
         if(!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){

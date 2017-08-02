@@ -35,7 +35,7 @@
 
 - (void)openStream:(NSInputStream*)stream {
     [self.streams addObject:stream];
-    [stream setDelegate:self];
+    stream.delegate = self;
     DDLogVerbose(@"[MQTTDecoder] #streams=%lu", (unsigned long)self.streams.count);
     if (self.streams.count == 1) {
         [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
@@ -149,7 +149,7 @@
             [stream close];
             [self.streams removeObject:stream];
             if (self.streams.count) {
-                NSInputStream *stream = [self.streams objectAtIndex:0];
+                NSInputStream *stream = (self.streams)[0];
                 [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
                 [stream open];
             }
@@ -160,11 +160,11 @@
         DDLogVerbose(@"[MQTTDecoder] NSStreamEventErrorOccurred");
         
         self.state = MQTTDecoderStateConnectionError;
-        NSError *error = [stream streamError];
+        NSError *error = stream.streamError;
         if (self.streams) {
             [self.streams removeObject:stream];
             if (self.streams.count) {
-                NSInputStream *stream = [self.streams objectAtIndex:0];
+                NSInputStream *stream = (self.streams)[0];
                 [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
                 [stream open];
             }

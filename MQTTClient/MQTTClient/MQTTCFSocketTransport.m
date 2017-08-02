@@ -50,12 +50,10 @@
     if (self.tls) {
         NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
         
-        [sslOptions setObject:(NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
-                       forKey:(NSString*)kCFStreamSSLLevel];
+        sslOptions[(NSString*)kCFStreamSSLLevel] = (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL;
         
         if (self.certificates) {
-            [sslOptions setObject:self.certificates
-                           forKey:(NSString *)kCFStreamSSLCertificates];
+            sslOptions[(NSString *)kCFStreamSSLCertificates] = self.certificates;
         }
         
         if(!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
@@ -166,9 +164,7 @@
     }
     CFArrayRef keyref = NULL;
     OSStatus importStatus = SecPKCS12Import((__bridge CFDataRef)pkcs12data,
-                                            (__bridge CFDictionaryRef)[NSDictionary
-                                                                       dictionaryWithObject:passphrase
-                                                                       forKey:(__bridge id)kSecImportExportPassphrase],
+                                            (__bridge CFDictionaryRef)@{(__bridge id)kSecImportExportPassphrase: passphrase},
                                             &keyref);
     if (importStatus != noErr) {
         DDLogWarn(@"[MQTTCFSocketTransport] Error while importing pkcs12 [%d]", (int)importStatus);
@@ -195,7 +191,7 @@
         return nil;
     }
     
-    NSArray *clientCerts = [[NSArray alloc] initWithObjects:(__bridge id)identityRef, (__bridge id)cert, nil];
+    NSArray *clientCerts = @[(__bridge id)identityRef, (__bridge id)cert];
     return clientCerts;
 }
 

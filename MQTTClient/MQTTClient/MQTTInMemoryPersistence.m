@@ -51,7 +51,7 @@ static NSMutableDictionary *clientIds;
     NSArray *flows = [self allFlowsforClientId:clientId
                                   incomingFlag:NO];
     for (MQTTInMemoryFlow *flow in flows) {
-        if ([flow.commandType intValue] != MQTT_None) {
+        if ((flow.commandType).intValue != MQTT_None) {
             windowSize++;
         }
     }
@@ -75,8 +75,8 @@ static NSMutableDictionary *clientIds;
                                                                            messageId:msgId];
             flow.topic = topic;
             flow.data = data;
-            flow.retainedFlag = [NSNumber numberWithBool:retainFlag];
-            flow.qosLevel = [NSNumber numberWithUnsignedInteger:qos];
+            flow.retainedFlag = @(retainFlag);
+            flow.qosLevel = @(qos);
             flow.commandType = [NSNumber numberWithUnsignedInteger:commandType];
             flow.deadline = deadline;
             return flow;
@@ -89,9 +89,9 @@ static NSMutableDictionary *clientIds;
 - (void)deleteFlow:(MQTTInMemoryFlow *)flow {
     @synchronized(clientIds) {
         
-        NSMutableDictionary *clientIdFlows = [clientIds objectForKey:flow.clientId];
+        NSMutableDictionary *clientIdFlows = clientIds[flow.clientId];
         if (clientIdFlows) {
-            NSMutableDictionary *clientIdDirectedFlow = [clientIdFlows objectForKey:flow.incomingFlag];
+            NSMutableDictionary *clientIdDirectedFlow = clientIdFlows[flow.incomingFlag];
             if (clientIdDirectedFlow) {
                 [clientIdDirectedFlow removeObjectForKey:flow.messageId];
             }
@@ -116,14 +116,14 @@ static NSMutableDictionary *clientIds;
     @synchronized(clientIds) {
         
         NSMutableArray *flows = nil;
-        NSMutableDictionary *clientIdFlows = [clientIds objectForKey:clientId];
+        NSMutableDictionary *clientIdFlows = clientIds[clientId];
         if (clientIdFlows) {
-            NSMutableDictionary *clientIdDirectedFlow = [clientIdFlows objectForKey:[NSNumber numberWithBool:incomingFlag]];
+            NSMutableDictionary *clientIdDirectedFlow = clientIdFlows[@(incomingFlag)];
             if (clientIdDirectedFlow) {
                 flows = [NSMutableArray array];
-                NSArray *keys = [[clientIdDirectedFlow allKeys] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
+                NSArray *keys = [clientIdDirectedFlow.allKeys sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
                 for (id key in keys) {
-                    [flows addObject:[clientIdDirectedFlow objectForKey:key]];
+                    [flows addObject:clientIdDirectedFlow[key]];
                 }
             }
         }
@@ -138,11 +138,11 @@ static NSMutableDictionary *clientIds;
         
         MQTTInMemoryFlow *flow = nil;
         
-        NSMutableDictionary *clientIdFlows = [clientIds objectForKey:clientId];
+        NSMutableDictionary *clientIdFlows = clientIds[clientId];
         if (clientIdFlows) {
-            NSMutableDictionary *clientIdDirectedFlow = [clientIdFlows objectForKey:[NSNumber numberWithBool:incomingFlag]];
+            NSMutableDictionary *clientIdDirectedFlow = clientIdFlows[@(incomingFlag)];
             if (clientIdDirectedFlow) {
-                flow = [clientIdDirectedFlow objectForKey:[NSNumber numberWithUnsignedInteger:messageId]];
+                flow = clientIdDirectedFlow[[NSNumber numberWithUnsignedInteger:messageId]];
             }
         }
         
@@ -154,24 +154,24 @@ static NSMutableDictionary *clientIds;
                                incomingFlag:(BOOL)incomingFlag
                                   messageId:(UInt16)messageId {
     @synchronized(clientIds) {
-        NSMutableDictionary *clientIdFlows = [clientIds objectForKey:clientId];
+        NSMutableDictionary *clientIdFlows = clientIds[clientId];
         if (!clientIdFlows) {
             clientIdFlows = [[NSMutableDictionary alloc] init];
-            [clientIds setObject:clientIdFlows forKey:clientId];
+            clientIds[clientId] = clientIdFlows;
         }
         
-        NSMutableDictionary *clientIdDirectedFlow = [clientIdFlows objectForKey:[NSNumber numberWithBool:incomingFlag]];
+        NSMutableDictionary *clientIdDirectedFlow = clientIdFlows[@(incomingFlag)];
         if (!clientIdDirectedFlow) {
             clientIdDirectedFlow = [[NSMutableDictionary alloc] init];
-            [clientIdFlows setObject:clientIdDirectedFlow forKey:[NSNumber numberWithBool:incomingFlag]];
+            clientIdFlows[@(incomingFlag)] = clientIdDirectedFlow;
         }
         
         MQTTInMemoryFlow *flow = [[MQTTInMemoryFlow alloc] init];
         flow.clientId = clientId;
-        flow.incomingFlag = [NSNumber numberWithBool:incomingFlag];
+        flow.incomingFlag = @(incomingFlag);
         flow.messageId = [NSNumber numberWithUnsignedInteger:messageId];
         
-        [clientIdDirectedFlow setObject:flow forKey:[NSNumber numberWithUnsignedInteger:messageId]];
+        clientIdDirectedFlow[[NSNumber numberWithUnsignedInteger:messageId]] = flow;
         
         return flow;
     }

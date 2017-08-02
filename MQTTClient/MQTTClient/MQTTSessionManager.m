@@ -76,7 +76,7 @@
 #endif
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
 
     [self updateState:MQTTSessionManagerStateStarting];
@@ -494,7 +494,7 @@
                         NSNumber *gQos = gQoss[i];
                         [self.subscriptionLock lock];
                         NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
-                        [newEffectiveSubscriptions setObject:gQos forKey:topic];
+                        newEffectiveSubscriptions[topic] = gQos;
                         self.effectiveSubscriptions = newEffectiveSubscriptions;
                         [self.subscriptionLock unlock];
                     }
@@ -572,7 +572,7 @@
         NSDictionary *currentSubscriptions = [self.effectiveSubscriptions copy];
 
         for (NSString *topicFilter in currentSubscriptions) {
-            if (![newSubscriptions objectForKey:topicFilter]) {
+            if (!newSubscriptions[topicFilter]) {
                 [self.session unsubscribeTopic:topicFilter unsubscribeHandler:^(NSError *error) {
                     if (!error) {
                         [self.subscriptionLock lock];
@@ -586,15 +586,15 @@
         }
 
         for (NSString *topicFilter in newSubscriptions) {
-            if (![currentSubscriptions objectForKey:topicFilter]) {
+            if (!currentSubscriptions[topicFilter]) {
                 NSNumber *number = newSubscriptions[topicFilter];
-                MQTTQosLevel qos = [number unsignedIntValue];
+                MQTTQosLevel qos = number.unsignedIntValue;
                 [self.session subscribeToTopic:topicFilter atLevel:qos subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
                     if (!error) {
                         NSNumber *gQos = gQoss[0];
                         [self.subscriptionLock lock];
                         NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
-                        [newEffectiveSubscriptions setObject:gQos forKey:topicFilter];
+                        newEffectiveSubscriptions[topicFilter] = gQos;
                         self.effectiveSubscriptions = newEffectiveSubscriptions;
                         [self.subscriptionLock unlock];
                     }

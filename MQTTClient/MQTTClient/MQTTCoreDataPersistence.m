@@ -276,7 +276,7 @@ static unsigned long long fileSystemFreeSize;
     NSArray *flows = [self allFlowsforClientId:clientId
                                   incomingFlag:NO];
     for (MQTTCoreDataFlow *flow in flows) {
-        if ([flow.commandType unsignedIntegerValue] != MQTT_None) {
+        if ((flow.commandType).unsignedIntegerValue != MQTT_None) {
             windowSize++;
         }
     }
@@ -299,8 +299,8 @@ static unsigned long long fileSystemFreeSize;
                                                    messageId:msgId];
         flow.topic = topic;
         flow.data = data;
-        flow.retainedFlag = [NSNumber numberWithBool:retainFlag];
-        flow.qosLevel = [NSNumber numberWithUnsignedInteger:qos];
+        flow.retainedFlag = @(retainFlag);
+        flow.qosLevel = @(qos);
         flow.commandType = [NSNumber numberWithUnsignedInteger:commandType];
         flow.deadline = deadline;
         return flow;
@@ -477,8 +477,8 @@ static unsigned long long fileSystemFreeSize;
     if (!rows) {
         DDLogError(@"[MQTTPersistence] flowForClientId %@", error);
     } else {
-        if ([rows count]) {
-            flow = [[MQTTCoreDataFlow alloc] initWithContext:self.managedObjectContext andObject:[rows lastObject]];
+        if (rows.count) {
+            flow = [[MQTTCoreDataFlow alloc] initWithContext:self.managedObjectContext andObject:rows.lastObject];
         }
     }
     return flow;
@@ -530,21 +530,21 @@ static unsigned long long fileSystemFreeSize;
             NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
             if (coordinator != nil) {
                 parentManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-                [parentManagedObjectContext setPersistentStoreCoordinator:coordinator];
+                parentManagedObjectContext.persistentStoreCoordinator = coordinator;
             }
         }
         
-        if ([[NSThread currentThread] isMainThread]) {
+        if ([NSThread currentThread].isMainThread) {
             // The main MOC is already associated to the main thread
-            [[NSThread currentThread].threadDictionary setObject:parentManagedObjectContext forKey:@"MQTTClient"];
+            ([NSThread currentThread].threadDictionary)[@"MQTTClient"] = parentManagedObjectContext;
             DDLogVerbose(@"unlocked managedObjectcontext %d", [NSThread isMainThread]);
             return parentManagedObjectContext;
         } else {
             // Only create a new managed object context if in a background thread
             managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-            [managedObjectContext setParentContext:parentManagedObjectContext];
+            managedObjectContext.parentContext = parentManagedObjectContext;
             
-            [[NSThread currentThread].threadDictionary setObject:managedObjectContext forKey:@"MQTTClient"];
+            ([NSThread currentThread].threadDictionary)[@"MQTTClient"] = managedObjectContext;
             DDLogVerbose(@"unlocked managedObjectcontext %d", [NSThread isMainThread]);
             return managedObjectContext;
         }
@@ -627,7 +627,7 @@ static unsigned long long fileSystemFreeSize;
         entityDescription.properties = properties;
 
         [entities addObject:entityDescription];
-        [managedObjectModel setEntities:entities];
+        managedObjectModel.entities = entities;
 
         DDLogVerbose(@"unlocked managedObjectModel %d", [NSThread isMainThread]);
         return managedObjectModel;
@@ -674,13 +674,13 @@ static unsigned long long fileSystemFreeSize;
 
 - (NSURL *)applicationDocumentsDirectory
 {
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    return [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].lastObject;
 }
 
 - (void)sizes {
     if (self.persistent) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *documentsDirectory = paths[0];
         NSString *persistentStorePath = [documentsDirectory stringByAppendingPathComponent:@"MQTTClient"];
 
         NSError *error = nil;
@@ -689,8 +689,8 @@ static unsigned long long fileSystemFreeSize;
         NSDictionary *fileSystemAttributes = [[NSFileManager defaultManager]
                                               attributesOfFileSystemForPath:persistentStorePath
                                               error:&error];
-        fileSize = [[fileAttributes objectForKey:NSFileSize] unsignedLongLongValue];
-        fileSystemFreeSize = [[fileSystemAttributes objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
+        fileSize = [fileAttributes[NSFileSize] unsignedLongLongValue];
+        fileSystemFreeSize = [fileSystemAttributes[NSFileSystemFreeSize] unsignedLongLongValue];
     } else {
         fileSize = 0;
         fileSystemFreeSize = 0;
