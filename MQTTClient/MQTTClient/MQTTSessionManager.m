@@ -18,6 +18,7 @@
 @property (strong, nonatomic) NSTimer *reconnectTimer;
 @property (nonatomic) NSTimeInterval reconnectTime;
 @property (nonatomic) BOOL reconnectFlag;
+@property (nonatomic) BOOL reconnectAfterDisconnect;
 
 @property (strong, nonatomic) MQTTSession *session;
 
@@ -446,10 +447,10 @@
         case MQTTSessionEventConnectionClosedByBroker:
             [self updateState:MQTTSessionManagerStateClosed];
             [self endBackgroundTask];
-            if (self.state != MQTTSessionManagerStateClosing) {
-                //[self triggerDelayedReconnect];
-            }
             [self updateState:MQTTSessionManagerStateStarting];
+            if (self.reconnectAfterDisconnect) {
+                [self connectToLast];
+            }
             break;
 
         case MQTTSessionEventProtocolError:
@@ -519,12 +520,16 @@
 
 - (void)connectToInternal
 {
-    if (self.state == MQTTSessionManagerStateStarting
-        && self.session != nil) {
-        [self updateState:MQTTSessionManagerStateConnecting];
-        [self.session connectToHost:self.host
-                               port:self.port
-                           usingSSL:self.tls];
+    if (self.session) {
+        if (self.state == MQTTSessionManagerStateStarting) {
+            self.reconnectAfterDisconnect = FALSE;
+            [self updateState:MQTTSessionManagerStateConnecting];
+            [self.session connectToHost:self.host
+                                   port:self.port
+                               usingSSL:self.tls];
+        } else {
+            self.reconnectAfterDisconnect = TRUE;
+        }
     }
 }
 

@@ -451,6 +451,8 @@
 		84998C811C0ED09700119061 /* MQTTSessionLegacy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionLegacy.m; sourceTree = "<group>"; };
 		84998C871C0EDBAA00119061 /* MQTTSessionSynchron.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTSessionSynchron.h; sourceTree = "<group>"; };
 		84998C881C0EDBAA00119061 /* MQTTSessionSynchron.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionSynchron.m; sourceTree = "<group>"; };
+		84A1AF791F3247D200234C79 /* MQTTiOS copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MQTTiOS copy-Info.plist"; path = "/Users/ckrey/MQTT-Client-Framework/MQTTClient/MQTTiOS copy-Info.plist"; sourceTree = "<absolute>"; };
+		84A1AF7D1F32482300234C79 /* SocketRocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketRocket.framework; path = "Pods/../build/Debug-iphoneos/SocketRocket-iOS/SocketRocket.framework"; sourceTree = "<group>"; };
 		84A592131C3C5343008C5199 /* MQTTTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTTransport.m; sourceTree = "<group>"; };
 		84AA232D1C6B8BE5009B153A /* MQTTLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MQTTLog.h; sourceTree = "<group>"; };
 		84B1AFED196C7AF60056B959 /* MQTTTestMultiThreading.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTTestMultiThreading.m; sourceTree = "<group>"; };
@@ -691,6 +693,7 @@
 				8461912B1883E56800101409 /* Products */,
 				D2FAD5DD1F715937B3A70FF5 /* Pods */,
 				840D3D321F28A7C30072019B /* MQTTClientOSXTests copy-Info.plist */,
+				84A1AF791F3247D200234C79 /* MQTTiOS copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -712,6 +715,7 @@
 		8461912C1883E56800101409 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84A1AF7D1F32482300234C79 /* SocketRocket.framework */,
 				F6D0900A1E535F5B00CD2566 /* Foundation.framework */,
 				F6D090081E535F5600CD2566 /* CoreData.framework */,
 				F6D090061E535F4F00CD2566 /* Foundation.framework */,
@@ -1296,11 +1300,11 @@
 				846191391883E56800101409 /* MQTTClientTests */,
 				8425D7001BBE8D3D005AD733 /* MQTTClientTVTests */,
 				840716311BBEF13A00FBB3CB /* MQTTClientOSXTests */,
+				840D3CF01F28A7C20072019B /* MQTTClientOSXTestsNOLumberjack */,
+				8404875D1C51212600569C79 /* MQTTiOSTests */,
 				DE9EF5C41C0628B1009EF667 /* MQTTiOS */,
 				F6D08FD71E535E9900CD2566 /* MQTTtvOS */,
 				F6D08FA31E535B6800CD2566 /* MQTTMac */,
-				8404875D1C51212600569C79 /* MQTTiOSTests */,
-				840D3CF01F28A7C20072019B /* MQTTClientOSXTestsNOLumberjack */,
 			);
 		};
 /* End PBXProject section */
