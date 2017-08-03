@@ -19,14 +19,18 @@
 @implementation MQTTClientSubscriptionTests
 
 - (void)testSubscribe_with_wrong_flags_MQTT_3_8_1_1 {
+    MQTTStrict.strict = TRUE;
     DDLogVerbose(@"can't test [MQTT-3.8.1-1]");
 }
 
 - (void)testUnsubscribe_with_wrong_flags_MQTT_3_10_1_1 {
+    MQTTStrict.strict = FALSE;
     DDLogVerbose(@"can't test [MQTT-3.10.1-1]");
 }
 
 - (void)testSubscribeWMultipleTopics_None_MQTT_3_8_3_3 {
+    MQTTStrict.strict = FALSE;
+
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];

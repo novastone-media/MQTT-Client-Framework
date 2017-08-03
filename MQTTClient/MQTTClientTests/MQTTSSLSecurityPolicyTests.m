@@ -9,6 +9,7 @@
 
 #import "MQTTLog.h"
 #import "MQTTSSLSecurityPolicy.h"
+#import "MQTTSSLSecurityPolicyTransport.h"
 #import "MQTTTestHelpers.h"
 
 @interface MQTTSSLSecurityPolicyTests : MQTTTestHelpers
@@ -578,5 +579,40 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy defaultPolicy];
     XCTAssertNil(policy.pinnedCertificates, @"Default certificate array should be empty for default policy.");
 }
+
+- (void)testblockWithCustomPolicy {
+    NSString *certificate = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]]
+                             pathForResource:@"httpbinorg_01162016" ofType:@"cer"];
+    MQTTSession *session = [[MQTTSession alloc] init];
+    MQTTSSLSecurityPolicy *securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
+    securityPolicy.pinnedCertificates = @[[NSData dataWithContentsOfFile:certificate]];
+    securityPolicy.allowInvalidCertificates = YES;
+    MQTTSSLSecurityPolicyTransport *transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
+    transport.securityPolicy = securityPolicy;
+    session.transport = transport;
+
+    __block BOOL handled = FALSE;
+
+    [session connectToHost:@"localhost"
+                      port:1883
+                  usingSSL:TRUE
+            connectHandler:^(NSError *error) {
+                if (error) {
+                    NSLog(@"\n<<< Error in Connection Handler: %@\n", error.localizedDescription);
+                } else {
+                    NSLog(@"\n<<< Success in Connection Handler\n");
+                }
+                handled = TRUE;
+            }
+     ];
+
+    while (!handled) {
+        DDLogVerbose(@"waiting for connect");
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+
+
+}
+
 
 @end
