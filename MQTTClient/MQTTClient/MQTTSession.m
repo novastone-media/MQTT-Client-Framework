@@ -145,7 +145,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 }
 
 - (void)checkTopicFilters:(NSArray <NSString *> *)topicFilters {
-    if (topicFilters.count == 0) {
+    if (MQTTStrict.strict &&
+        topicFilters.count == 0) {
         NSException* myException = [NSException
                                     exceptionWithName:@"topicFilter array in SUBSCRIBE or UNSUBSRIBE must not be empty"
                                     reason:[NSString stringWithFormat:@"%@", topicFilters]
