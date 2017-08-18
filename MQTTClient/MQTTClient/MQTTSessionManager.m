@@ -170,10 +170,7 @@
         __weak MQTTSessionManager *weakSelf = self;
         self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
             __strong MQTTSessionManager *strongSelf = weakSelf;
-            if (strongSelf.backgroundTask) {
-                [[UIApplication sharedApplication] endBackgroundTask:strongSelf.backgroundTask];
-                strongSelf.backgroundTask = UIBackgroundTaskInvalid;
-            }
+            [strongSelf endBackgroundTask];
         }];
     }
 }
