@@ -167,6 +167,11 @@
 
 - (void)appDidEnterBackground {
     if (self.shouldConnectInForeground) {
+        if (self.state == MQTTSessionManagerStateClosed || self.state == MQTTSessionManagerStateStarting) {
+            // we don't want to tear down session as it's already closed
+            return;
+        }
+
         __weak MQTTSessionManager *weakSelf = self;
         self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
             __strong MQTTSessionManager *strongSelf = weakSelf;
