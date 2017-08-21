@@ -5,17 +5,17 @@ PODS:
   - CocoaLumberjack/Default (3.2.0)
   - CocoaLumberjack/Extensions (3.2.0):
     - CocoaLumberjack/Default
-  - MQTTClient/Manager (0.9.6):
+  - MQTTClient/Manager (0.9.7):
     - MQTTClient/Min
-  - MQTTClient/ManagerL (0.9.6):
+  - MQTTClient/ManagerL (0.9.7):
     - MQTTClient/MinL
-  - MQTTClient/Min (0.9.6)
-  - MQTTClient/MinL (0.9.6):
+  - MQTTClient/Min (0.9.7)
+  - MQTTClient/MinL (0.9.7):
     - CocoaLumberjack
-  - MQTTClient/Websocket (0.9.6):
+  - MQTTClient/Websocket (0.9.7):
     - MQTTClient/Min
     - SocketRocket
-  - MQTTClient/WebsocketL (0.9.6):
+  - MQTTClient/WebsocketL (0.9.7):
     - MQTTClient/MinL
     - SocketRocket
   - SocketRocket (0.5.1)
@@ -31,13 +31,13 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   MQTTClient:
-    :path: ..
+    :path: ".."
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 9b4aed7073d242f29cc2f62068d995faf67f703a
-  MQTTClient: 4b9ef9d9aeab2ce03db21e06716c35a47c55e2ba
+  MQTTClient: 06755c47fdf8e50f0abaca844a226fd26574fb34
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
 
 PODFILE CHECKSUM: 40e36ed6f235775736189677995f0c7928d68fb5
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.2.0
