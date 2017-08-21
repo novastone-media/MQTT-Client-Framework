@@ -8,10 +8,10 @@
 
 #import "MQTTSessionManager.h"
 #import "MQTTCoreDataPersistence.h"
-
 #import "MQTTLog.h"
 
 @interface MQTTSessionManager()
+
 @property (nonatomic, readwrite) MQTTSessionManagerState state;
 @property (nonatomic, readwrite) NSError *lastErrorCode;
 
@@ -363,18 +363,17 @@
         self.reconnectTime = RECONNECT_TIMER;
         self.reconnectFlag = FALSE;
     }
-    if(shouldReconnect){
+    if (shouldReconnect) {
         DDLogVerbose(@"[MQTTSessionManager] reconnecting");
         [self disconnect];
         [self reconnect];
-    }else{
+    } else {
         DDLogVerbose(@"[MQTTSessionManager] connecting");
         [self connectToInternal];
     }
 }
 
-- (UInt16)sendData:(NSData *)data topic:(NSString *)topic qos:(MQTTQosLevel)qos retain:(BOOL)retainFlag
-{
+- (UInt16)sendData:(NSData *)data topic:(NSString *)topic qos:(MQTTQosLevel)qos retain:(BOOL)retainFlag {
     if (self.state != MQTTSessionManagerStateConnected) {
         [self connectToLast];
     }
@@ -385,8 +384,7 @@
     return msgId;
 }
 
-- (void)disconnect
-{
+- (void)disconnect {
     [self updateState:MQTTSessionManagerStateClosing];
     [self.session close];
 
@@ -396,8 +394,7 @@
     }
 }
 
-- (void)updateState:(MQTTSessionManagerState)newState
-{
+- (void)updateState:(MQTTSessionManagerState)newState {
     self.state = newState;
 
     if ([self.delegate respondsToSelector:@selector(sessionManager:didChangeState:)]) {
@@ -405,8 +402,7 @@
     }
 }
 
-- (void)endBackgroundTask
-{
+- (void)endBackgroundTask {
 #if TARGET_OS_IPHONE == 1
     if (self.backgroundTask) {
         [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
@@ -417,8 +413,7 @@
 
 #pragma mark - MQTT Callback methods
 
-- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
-{
+- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
 #ifdef DEBUG
     __unused const NSDictionary *events = @{
                                             @(MQTTSessionEventConnected): @"connected",
@@ -433,17 +428,16 @@
     [self.reconnectTimer invalidate];
     switch (eventCode) {
         case MQTTSessionEventConnected:
-        {
             self.lastErrorCode = nil;
             [self updateState:MQTTSessionManagerStateConnected];
             break;
-        }
+            
         case MQTTSessionEventConnectionClosed:
             [self updateState:MQTTSessionManagerStateClosed];
             [self endBackgroundTask];
             [self updateState:MQTTSessionManagerStateStarting];
             break;
-
+            
         case MQTTSessionEventConnectionClosedByBroker:
             [self updateState:MQTTSessionManagerStateClosed];
             [self endBackgroundTask];
@@ -456,19 +450,17 @@
         case MQTTSessionEventProtocolError:
         case MQTTSessionEventConnectionRefused:
         case MQTTSessionEventConnectionError:
-        {
             [self triggerDelayedReconnect];
             self.lastErrorCode = error;
             [self updateState:MQTTSessionManagerStateError];
             break;
-        }
+
         default:
             break;
     }
 }
 
-- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid
-{
+- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(sessionManager:didReceiveMessage:onTopic:retained:)]) {
             [self.delegate sessionManager:self didReceiveMessage:data onTopic:topic retained:retained];
@@ -518,8 +510,7 @@
 }
 
 
-- (void)connectToInternal
-{
+- (void)connectToInternal {
     if (self.session) {
         if (self.state == MQTTSessionManagerStateStarting) {
             self.reconnectAfterDisconnect = FALSE;
@@ -533,8 +524,7 @@
     }
 }
 
-- (void)reconnect
-{
+- (void)reconnect {
     self.reconnectTimer = nil;
     [self updateState:MQTTSessionManagerStateStarting];
 
@@ -544,15 +534,12 @@
     [self connectToInternal];
 }
 
-- (void)connectToLast
-{
+- (void)connectToLast {
     self.reconnectTime = RECONNECT_TIMER;
-
     [self connectToInternal];
 }
 
-- (void)triggerDelayedReconnect
-{
+- (void)triggerDelayedReconnect {
     self.reconnectTimer = [NSTimer timerWithTimeInterval:self.reconnectTime
                                                   target:self
                                                 selector:@selector(reconnect)
@@ -566,8 +553,7 @@
     return self.internalSubscriptions;
 }
 
-- (void)setSubscriptions:(NSDictionary<NSString *, NSNumber *> *)newSubscriptions
-{
+- (void)setSubscriptions:(NSDictionary<NSString *, NSNumber *> *)newSubscriptions {
     if (self.state == MQTTSessionManagerStateConnected) {
         NSDictionary *currentSubscriptions = [self.effectiveSubscriptions copy];
 
