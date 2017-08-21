@@ -40,8 +40,6 @@
 @property (strong, nonatomic) NSArray *certificates;
 @property (nonatomic) MQTTProtocolVersion protocolLevel;
 
-@property (strong, nonatomic) NSTimer *disconnectTimer;
-@property (strong, nonatomic) NSTimer *activityTimer;
 #if TARGET_OS_IPHONE == 1
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 #endif
