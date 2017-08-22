@@ -14,5 +14,7 @@
                      maxRetryInterval:(NSTimeInterval)maxRetryInterval
                        reconnectBlock:(void (^)())block;
 - (void)schedule;
+- (void)stop;
+- (void)resetRetryInterval;
 
 @end
