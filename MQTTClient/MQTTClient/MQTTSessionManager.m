@@ -357,11 +357,11 @@
                                             };
     DDLogVerbose(@"[MQTTSessionManager] eventCode: %@ (%ld) %@", events[@(eventCode)], (long)eventCode, error);
 #endif
-    [self.reconnectTimer stop];
     switch (eventCode) {
         case MQTTSessionEventConnected:
             self.lastErrorCode = nil;
             [self updateState:MQTTSessionManagerStateConnected];
+            [self.reconnectTimer resetRetryInterval];
             break;
             
         case MQTTSessionEventConnectionClosed:
@@ -369,8 +369,10 @@
             break;
             
         case MQTTSessionEventConnectionClosedByBroker:
+            if (self.state != MQTTSessionManagerStateClosing) {
+                [self triggerDelayedReconnect];
+            }
             [self updateState:MQTTSessionManagerStateClosed];
-            [self triggerDelayedReconnect];
             break;
 
         case MQTTSessionEventProtocolError:

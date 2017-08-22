@@ -1267,13 +1267,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 }
 
 - (void)error:(MQTTSessionEvent)eventCode error:(NSError *)error {
-
     self.status = MQTTSessionStatusError;
-    [self closeInternal];
     if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
         [self.delegate handleEvent:self event:eventCode error:error];
     }
-
+    [self closeInternal];
+    
     if(self.connectionHandler){
         self.connectionHandler(eventCode);
     }
