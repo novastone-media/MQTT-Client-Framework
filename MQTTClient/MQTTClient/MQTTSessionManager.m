@@ -19,7 +19,6 @@
 
 @property (strong, nonatomic) ReconnectTimer *reconnectTimer;
 @property (nonatomic) BOOL reconnectFlag;
-@property (nonatomic) BOOL reconnectAfterDisconnect;
 
 @property (strong, nonatomic) MQTTSession *session;
 
@@ -367,15 +366,11 @@
             
         case MQTTSessionEventConnectionClosed:
             [self updateState:MQTTSessionManagerStateClosed];
-            [self updateState:MQTTSessionManagerStateStarting];
             break;
             
         case MQTTSessionEventConnectionClosedByBroker:
             [self updateState:MQTTSessionManagerStateClosed];
-            [self updateState:MQTTSessionManagerStateStarting];
-            if (self.reconnectAfterDisconnect) {
-                [self connectToLast];
-            }
+            [self triggerDelayedReconnect];
             break;
 
         case MQTTSessionEventProtocolError:
@@ -442,16 +437,11 @@
 
 
 - (void)connectToInternal {
-    if (self.session) {
-        if (self.state == MQTTSessionManagerStateStarting) {
-            self.reconnectAfterDisconnect = FALSE;
-            [self updateState:MQTTSessionManagerStateConnecting];
-            [self.session connectToHost:self.host
-                                   port:self.port
-                               usingSSL:self.tls];
-        } else {
-            self.reconnectAfterDisconnect = TRUE;
-        }
+    if (self.session && self.state == MQTTSessionManagerStateStarting) {
+        [self updateState:MQTTSessionManagerStateConnecting];
+        [self.session connectToHost:self.host
+                               port:self.port
+                           usingSSL:self.tls];
     }
 }
 
