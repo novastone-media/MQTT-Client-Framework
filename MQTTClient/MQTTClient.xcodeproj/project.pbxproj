@@ -747,8 +747,7 @@
 				C7E397981F0F71F1000C512E /* MQTTLog.m */,
 				840D3CE91F264AD00072019B /* MQTTStrict.h */,
 				840D3CEA1F264AD00072019B /* MQTTStrict.m */,
-				84B1AFF0196D99170056B959 /* MQTTSessionManager.h */,
-				84B1AFF1196D99170056B959 /* MQTTSessionManager.m */,
+				C7515E881F4B1BA80071CFFE /* SessionManager */,
 				846191301883E56800101409 /* Supporting Files */,
 			);
 			path = MQTTClient;
@@ -858,6 +857,15 @@
 				840621441C3069510096ABB3 /* InMemory */,
 			);
 			name = Persistence;
+			sourceTree = "<group>";
+		};
+		C7515E881F4B1BA80071CFFE /* SessionManager */ = {
+			isa = PBXGroup;
+			children = (
+				84B1AFF0196D99170056B959 /* MQTTSessionManager.h */,
+				84B1AFF1196D99170056B959 /* MQTTSessionManager.m */,
+			);
+			name = SessionManager;
 			sourceTree = "<group>";
 		};
 		D2FAD5DD1F715937B3A70FF5 /* Pods */ = {
