@@ -159,7 +159,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
                                 maxMessages:(NSUInteger)maxMessages
                                     maxSize:(NSUInteger)maxSize
                  maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
-                        connectInForeground:(BOOL)connectInForeground;
+                        connectInForeground:(BOOL)connectInForeground NS_DESIGNATED_INITIALIZER;
 
 /** initWithPersistence sets the MQTTPersistence properties other than default
  * @param persistent YES or NO (default) to establish file or in memory persistence.
