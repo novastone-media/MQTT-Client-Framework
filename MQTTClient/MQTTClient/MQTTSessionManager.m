@@ -9,14 +9,14 @@
 #import "MQTTSessionManager.h"
 #import "MQTTCoreDataPersistence.h"
 #import "MQTTLog.h"
+#import "ReconnectTimer.h"
 
 @interface MQTTSessionManager()
 
 @property (nonatomic, readwrite) MQTTSessionManagerState state;
 @property (nonatomic, readwrite) NSError *lastErrorCode;
 
-@property (strong, nonatomic) NSTimer *reconnectTimer;
-@property (nonatomic) NSTimeInterval reconnectTime;
+@property (strong, nonatomic) ReconnectTimer *reconnectTimer;
 @property (nonatomic) BOOL reconnectFlag;
 @property (nonatomic) BOOL reconnectAfterDisconnect;
 
@@ -49,7 +49,6 @@
 @property (nonatomic) NSUInteger maxSize;
 @property (nonatomic) NSUInteger maxMessages;
 @property (nonatomic) BOOL shouldConnectInForeground;
-@property (nonatomic) NSTimeInterval maxConnectionRetryInterval;
 
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *internalSubscriptions;
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
@@ -75,41 +74,12 @@
 }
 
 - (instancetype)init {
-    self = [super init];
-
-    [self updateState:MQTTSessionManagerStateStarting];
-    self.internalSubscriptions = [[NSMutableDictionary alloc] init];
-    self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
-
-    //Use the default value
-    self.persistent = MQTT_PERSISTENT;
-    self.maxSize = MQTT_MAX_SIZE;
-    self.maxMessages = MQTT_MAX_MESSAGES;
-    self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
-    self.shouldConnectInForeground = YES;
-    self.maxConnectionRetryInterval = RECONNECT_TIMER_MAX_DEFAULT;
-
-#if TARGET_OS_IPHONE == 1
-    self.backgroundTask = UIBackgroundTaskInvalid;
-
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-
-    [defaultCenter addObserver:self
-                      selector:@selector(appWillResignActive)
-                          name:UIApplicationWillResignActiveNotification
-                        object:nil];
-
-    [defaultCenter addObserver:self
-                      selector:@selector(appDidEnterBackground)
-                          name:UIApplicationDidEnterBackgroundNotification
-                        object:nil];
-
-    [defaultCenter addObserver:self
-                      selector:@selector(appDidBecomeActive)
-                          name:UIApplicationDidBecomeActiveNotification
-                        object:nil];
-#endif
-    self.subscriptionLock = [[NSLock alloc] init];
+    self = [self initWithPersistence:MQTT_PERSISTENT
+                       maxWindowSize:MQTT_MAX_WINDOW_SIZE
+                         maxMessages:MQTT_MAX_MESSAGES
+                             maxSize:MQTT_MAX_SIZE
+          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
+                 connectInForeground:YES];
     return self;
 }
 
@@ -119,13 +89,45 @@
                                     maxSize:(NSUInteger)maxSize
                  maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
                         connectInForeground:(BOOL)connectInForeground {
-    self = [self init];
+    self = [super init];
+    
+    [self updateState:MQTTSessionManagerStateStarting];
+    self.internalSubscriptions = [[NSMutableDictionary alloc] init];
+    self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
+    
     self.persistent = persistent;
     self.maxWindowSize = maxWindowSize;
     self.maxSize = maxSize;
     self.maxMessages = maxMessages;
-    self.maxConnectionRetryInterval = maxRetryInterval;
+    self.reconnectTimer = [[ReconnectTimer alloc] initWithRetryInterval:RECONNECT_TIMER
+                                                       maxRetryInterval:maxRetryInterval
+                                                         reconnectBlock:^{
+                                                             [self reconnect];
+                                                         }];
     self.shouldConnectInForeground = connectInForeground;
+    
+#if TARGET_OS_IPHONE == 1
+    self.backgroundTask = UIBackgroundTaskInvalid;
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter addObserver:self
+                      selector:@selector(appWillResignActive)
+                          name:UIApplicationWillResignActiveNotification
+                        object:nil];
+    
+    [defaultCenter addObserver:self
+                      selector:@selector(appDidEnterBackground)
+                          name:UIApplicationDidEnterBackgroundNotification
+                        object:nil];
+    
+    [defaultCenter addObserver:self
+                      selector:@selector(appDidBecomeActive)
+                          name:UIApplicationDidBecomeActiveNotification
+                        object:nil];
+#endif
+    self.subscriptionLock = [[NSLock alloc] init];
+    
     return self;
 }
 
@@ -358,7 +360,6 @@
         self.session.persistence = persistence;
 
         self.session.delegate = self;
-        self.reconnectTime = RECONNECT_TIMER;
         self.reconnectFlag = FALSE;
     }
     if (shouldReconnect) {
@@ -385,11 +386,7 @@
 - (void)disconnect {
     [self updateState:MQTTSessionManagerStateClosing];
     [self.session close];
-
-    if (self.reconnectTimer) {
-        [self.reconnectTimer invalidate];
-        self.reconnectTimer = nil;
-    }
+    [self.reconnectTimer stop];
 }
 
 - (void)updateState:(MQTTSessionManagerState)newState {
@@ -423,7 +420,7 @@
                                             };
     DDLogVerbose(@"[MQTTSessionManager] eventCode: %@ (%ld) %@", events[@(eventCode)], (long)eventCode, error);
 #endif
-    [self.reconnectTimer invalidate];
+    [self.reconnectTimer stop];
     switch (eventCode) {
         case MQTTSessionEventConnected:
             self.lastErrorCode = nil;
@@ -523,28 +520,17 @@
 }
 
 - (void)reconnect {
-    self.reconnectTimer = nil;
     [self updateState:MQTTSessionManagerStateStarting];
-
-    if (self.reconnectTime < self.maxConnectionRetryInterval) {
-        self.reconnectTime *= 2;
-    }
     [self connectToInternal];
 }
 
 - (void)connectToLast {
-    self.reconnectTime = RECONNECT_TIMER;
+    [self.reconnectTimer resetRetryInterval];
     [self connectToInternal];
 }
 
 - (void)triggerDelayedReconnect {
-    self.reconnectTimer = [NSTimer timerWithTimeInterval:self.reconnectTime
-                                                  target:self
-                                                selector:@selector(reconnect)
-                                                userInfo:Nil repeats:FALSE];
-    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:self.reconnectTimer
-              forMode:NSDefaultRunLoopMode];
+    [self.reconnectTimer schedule];
 }
 
 - (NSDictionary<NSString *, NSNumber *> *)subscriptions {
