@@ -10,6 +10,7 @@
 #import "MQTTCoreDataPersistence.h"
 #import "MQTTLog.h"
 #import "ReconnectTimer.h"
+#import "ForegroundReconnection.h"
 
 @interface MQTTSessionManager()
 
@@ -41,14 +42,13 @@
 @property (nonatomic) MQTTProtocolVersion protocolLevel;
 
 #if TARGET_OS_IPHONE == 1
-@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
+@property (strong, nonatomic) ForegroundReconnection *foregroundReconnection;
 #endif
 
 @property (nonatomic) BOOL persistent;
 @property (nonatomic) NSUInteger maxWindowSize;
 @property (nonatomic) NSUInteger maxSize;
 @property (nonatomic) NSUInteger maxMessages;
-@property (nonatomic) BOOL shouldConnectInForeground;
 
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *internalSubscriptions;
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
@@ -61,27 +61,6 @@
 #define BACKGROUND_DISCONNECT_AFTER 8.0
 
 @implementation MQTTSessionManager
-
-- (void)dealloc {
-#if TARGET_OS_IPHONE == 1
-
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    [defaultCenter removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
-    [defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-
-#endif
-}
-
-- (instancetype)init {
-    self = [self initWithPersistence:MQTT_PERSISTENT
-                       maxWindowSize:MQTT_MAX_WINDOW_SIZE
-                         maxMessages:MQTT_MAX_MESSAGES
-                             maxSize:MQTT_MAX_SIZE
-          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
-                 connectInForeground:YES];
-    return self;
-}
 
 - (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
                               maxWindowSize:(NSUInteger)maxWindowSize
@@ -102,29 +81,13 @@
     self.reconnectTimer = [[ReconnectTimer alloc] initWithRetryInterval:RECONNECT_TIMER
                                                        maxRetryInterval:maxRetryInterval
                                                          reconnectBlock:^{
-                                                             [self reconnect];
+                                                             __weak MQTTSessionManager *weakSelf = self;
+                                                             [weakSelf reconnect];
                                                          }];
-    self.shouldConnectInForeground = connectInForeground;
-    
 #if TARGET_OS_IPHONE == 1
-    self.backgroundTask = UIBackgroundTaskInvalid;
-    
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
-    [defaultCenter addObserver:self
-                      selector:@selector(appWillResignActive)
-                          name:UIApplicationWillResignActiveNotification
-                        object:nil];
-    
-    [defaultCenter addObserver:self
-                      selector:@selector(appDidEnterBackground)
-                          name:UIApplicationDidEnterBackgroundNotification
-                        object:nil];
-    
-    [defaultCenter addObserver:self
-                      selector:@selector(appDidBecomeActive)
-                          name:UIApplicationDidBecomeActiveNotification
-                        object:nil];
+    if (connectInForeground) {
+        self.foregroundReconnection = [[ForegroundReconnection alloc] initWithMQTTSessionManager:self];
+    }
 #endif
     self.subscriptionLock = [[NSLock alloc] init];
     
@@ -145,6 +108,16 @@
     return self;
 }
 
+- (instancetype)init {
+    self = [self initWithPersistence:MQTT_PERSISTENT
+                       maxWindowSize:MQTT_MAX_WINDOW_SIZE
+                         maxMessages:MQTT_MAX_MESSAGES
+                             maxSize:MQTT_MAX_SIZE
+          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
+                 connectInForeground:YES];
+    return self;
+}
+
 - (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
                               maxWindowSize:(NSUInteger)maxWindowSize
                                 maxMessages:(NSUInteger)maxMessages
@@ -157,33 +130,6 @@
                  connectInForeground:YES];
     return self;
 }
-
-#if TARGET_OS_IPHONE == 1
-- (void)appWillResignActive {
-    if (self.shouldConnectInForeground) {
-        [self disconnect];
-    }
-}
-
-- (void)appDidEnterBackground {
-    if (self.shouldConnectInForeground) {
-        __weak MQTTSessionManager *weakSelf = self;
-        self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            __strong MQTTSessionManager *strongSelf = weakSelf;
-            if (strongSelf.backgroundTask) {
-                [[UIApplication sharedApplication] endBackgroundTask:strongSelf.backgroundTask];
-                strongSelf.backgroundTask = UIBackgroundTaskInvalid;
-            }
-        }];
-    }
-}
-
-- (void)appDidBecomeActive {
-    if (self.shouldConnectInForeground) {
-        [self connectToLast];
-    }
-}
-#endif
 
 - (void)connectTo:(NSString *)host
              port:(NSInteger)port
@@ -397,14 +343,6 @@
     }
 }
 
-- (void)endBackgroundTask {
-#if TARGET_OS_IPHONE == 1
-    if (self.backgroundTask) {
-        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-        self.backgroundTask = UIBackgroundTaskInvalid;
-    }
-#endif
-}
 
 #pragma mark - MQTT Callback methods
 
@@ -429,13 +367,11 @@
             
         case MQTTSessionEventConnectionClosed:
             [self updateState:MQTTSessionManagerStateClosed];
-            [self endBackgroundTask];
             [self updateState:MQTTSessionManagerStateStarting];
             break;
             
         case MQTTSessionEventConnectionClosedByBroker:
             [self updateState:MQTTSessionManagerStateClosed];
-            [self endBackgroundTask];
             [self updateState:MQTTSessionManagerStateStarting];
             if (self.reconnectAfterDisconnect) {
                 [self connectToLast];
