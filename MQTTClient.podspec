@@ -73,12 +73,16 @@ Pod::Spec.new do |mqttc|
 	end
 
 	mqttc.subspec 'Manager' do |manager|
-		manager.source_files =	"MQTTClient/MQTTClient/MQTTSessionManager.{h,m}", "MQTTClient/MQTTClient/ReconnectTimer.{h,m}"
+		manager.source_files =	"MQTTClient/MQTTClient/MQTTSessionManager.{h,m}", 
+					"MQTTClient/MQTTClient/ReconnectTimer.{h,m}",
+					"MQTTClient/MQTTClient/ForegroundReconnection.{h,m}"
 		manager.dependency 'MQTTClient/Min'
 	end
 
 	mqttc.subspec 'ManagerL' do |managerl|
-		managerl.source_files =	"MQTTClient/MQTTClient/MQTTSessionManager.{h,m}", "MQTTClient/MQTTClient/ReconnectTimer.{h,m}"
+		managerl.source_files =	"MQTTClient/MQTTClient/MQTTSessionManager.{h,m}", 
+					"MQTTClient/MQTTClient/ReconnectTimer.{h,m}", 
+					"MQTTClient/MQTTClient/ForegroundReconnection.{h,m}"
 		managerl.dependency 'MQTTClient/MinL'
 		managerl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'LUMBERJACK=1' }
 	end
