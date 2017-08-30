@@ -265,6 +265,20 @@
 		C21D3CA21B1EC63E0012DD2F /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
 		C21D3CA41B1EC6420012DD2F /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
 		C21D3CA61B1EC6450012DD2F /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
+		C7515EAC1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
+		C7515EAD1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
+		C7515EAE1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
+		C7515EAF1F4C51600071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C7515EB01F4C51600071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C7515EB11F4C51600071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C7515EB21F4C516B0071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; };
+		C7515EB31F4C516C0071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C7515EB41F4C516C0071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C7515EB51F4C516C0071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C7515EB71F4C51A00071CFFE /* ReconnectTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */; };
+		C7515EB81F4C51A60071CFFE /* ReconnectTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */; };
+		C7515EB91F4C51A60071CFFE /* ReconnectTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */; };
+		C7515EBA1F4C51A70071CFFE /* ReconnectTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */; };
 		C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
@@ -479,6 +493,9 @@
 		C21D3CA51B1EC6450012DD2F /* adn_2.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_2.cer; path = ADN.net/ADNNetServerTrustChain/adn_2.cer; sourceTree = "<group>"; };
 		C21D3CA71B1ED2F40012DD2F /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
 		C53615C962DC60ED0FD7E799 /* Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientOSXTestsNOLumberjack/Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; sourceTree = "<group>"; };
+		C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReconnectTimer.m; sourceTree = "<group>"; };
+		C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReconnectTimer.h; sourceTree = "<group>"; };
+		C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReconnectTimerTests.m; sourceTree = "<group>"; };
 		C7E397981F0F71F1000C512E /* MQTTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTLog.m; sourceTree = "<group>"; };
 		CCDD395E3B208DFCF6249B17 /* Pods-MQTTClientTVTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientTVTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientTVTests/Pods-MQTTClientTVTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D7A5988C96EB2FBC4DE9A4D2 /* Pods_MQTTClientTVTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTClientTVTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -747,8 +764,7 @@
 				C7E397981F0F71F1000C512E /* MQTTLog.m */,
 				840D3CE91F264AD00072019B /* MQTTStrict.h */,
 				840D3CEA1F264AD00072019B /* MQTTStrict.m */,
-				84B1AFF0196D99170056B959 /* MQTTSessionManager.h */,
-				84B1AFF1196D99170056B959 /* MQTTSessionManager.m */,
+				C7515E881F4B1BA80071CFFE /* SessionManager */,
 				846191301883E56800101409 /* Supporting Files */,
 			);
 			path = MQTTClient;
@@ -780,6 +796,7 @@
 				840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */,
 				8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */,
 				84B6A1881C133A9F00618573 /* MQTTTestWebsockets.m */,
+				C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */,
 				8442BEE81A97B15100D00E55 /* SwiftTests.swift */,
 				84B739B11A66F07900B103F4 /* MQTTClientTests-Bridging-Header.h */,
 				846191441883E56800101409 /* Supporting Files */,
@@ -860,6 +877,17 @@
 			name = Persistence;
 			sourceTree = "<group>";
 		};
+		C7515E881F4B1BA80071CFFE /* SessionManager */ = {
+			isa = PBXGroup;
+			children = (
+				84B1AFF0196D99170056B959 /* MQTTSessionManager.h */,
+				84B1AFF1196D99170056B959 /* MQTTSessionManager.m */,
+				C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */,
+				C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */,
+			);
+			name = SessionManager;
+			sourceTree = "<group>";
+		};
 		D2FAD5DD1F715937B3A70FF5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -900,6 +928,7 @@
 				840D3D1C1F28A7C20072019B /* MQTTCFSocketTransport.h in Headers */,
 				840D3D1D1F28A7C20072019B /* MQTTDecoder.h in Headers */,
 				840D3D1E1F28A7C20072019B /* MQTTInMemoryPersistence.h in Headers */,
+				C7515EB21F4C516B0071CFFE /* ReconnectTimer.h in Headers */,
 				840D3D1F1F28A7C20072019B /* MQTTSSLSecurityPolicyTransport.h in Headers */,
 				840D3D201F28A7C20072019B /* MQTTMessage.h in Headers */,
 				840D3D211F28A7C20072019B /* MQTTCoreDataPersistence.h in Headers */,
@@ -934,6 +963,7 @@
 				841D0A8F1C358793006A82DC /* MQTTInMemoryPersistence.h in Headers */,
 				841D0A8B1C358785006A82DC /* MQTTCoreDataPersistence.h in Headers */,
 				840D3CEB1F264AD00072019B /* MQTTStrict.h in Headers */,
+				C7515EB51F4C516C0071CFFE /* ReconnectTimer.h in Headers */,
 				841D0A491C3585D4006A82DC /* MQTTSession.h in Headers */,
 				841D0A4A1C3585D4006A82DC /* MQTTSessionSynchron.h in Headers */,
 				84E2C4581EC34E9000BC02CE /* MQTTProperties.h in Headers */,
@@ -957,6 +987,7 @@
 				841D0A5A1C358600006A82DC /* MQTTCFSocketTransport.h in Headers */,
 				841D0A5B1C358600006A82DC /* MQTTDecoder.h in Headers */,
 				841D0AA11C358842006A82DC /* MQTTInMemoryPersistence.h in Headers */,
+				C7515EB41F4C516C0071CFFE /* ReconnectTimer.h in Headers */,
 				841D0A911C35880A006A82DC /* MQTTSSLSecurityPolicyTransport.h in Headers */,
 				841D0A5C1C358601006A82DC /* MQTTMessage.h in Headers */,
 				841D0A9E1C35883E006A82DC /* MQTTCoreDataPersistence.h in Headers */,
@@ -985,6 +1016,7 @@
 				841D0A6E1C35861D006A82DC /* MQTTCFSocketTransport.h in Headers */,
 				841D0A6F1C35861E006A82DC /* MQTTDecoder.h in Headers */,
 				841D0AA21C358843006A82DC /* MQTTInMemoryPersistence.h in Headers */,
+				C7515EB31F4C516C0071CFFE /* ReconnectTimer.h in Headers */,
 				841D0A921C35880B006A82DC /* MQTTSSLSecurityPolicyTransport.h in Headers */,
 				841D0A701C35861E006A82DC /* MQTTMessage.h in Headers */,
 				841D0A9F1C35883F006A82DC /* MQTTCoreDataPersistence.h in Headers */,
@@ -1019,6 +1051,7 @@
 				841D0A951C35881A006A82DC /* MQTTSSLSecurityPolicy.h in Headers */,
 				841D0AA01C35883F006A82DC /* MQTTCoreDataPersistence.h in Headers */,
 				841D0A981C35881F006A82DC /* MQTTSSLSecurityPolicyDecoder.h in Headers */,
+				C7515EAF1F4C51600071CFFE /* ReconnectTimer.h in Headers */,
 				845922A61C175AA400CCE27E /* MQTTCFSocketDecoder.h in Headers */,
 				842951D91EA7947E0066C044 /* MQTTProperties.h in Headers */,
 				84998C841C0ED7EF00119061 /* MQTTSessionLegacy.h in Headers */,
@@ -1048,6 +1081,7 @@
 				F6D08FC91E535BF900CD2566 /* MQTTSessionSynchron.h in Headers */,
 				F6D08FBE1E535BF900CD2566 /* MQTTSSLSecurityPolicy.h in Headers */,
 				F6D08FD21E535CF700CD2566 /* MQTTClient-Prefix.pch in Headers */,
+				C7515EB11F4C51600071CFFE /* ReconnectTimer.h in Headers */,
 				F6D08FCC1E535BF900CD2566 /* MQTTCoreDataPersistence.h in Headers */,
 				842951DB1EA794800066C044 /* MQTTProperties.h in Headers */,
 				F6D08FD01E535BFF00CD2566 /* MQTTLog.h in Headers */,
@@ -1071,6 +1105,7 @@
 				F6D08FFA1E535F2A00CD2566 /* MQTTMessage.h in Headers */,
 				F6D08FF91E535F2A00CD2566 /* MQTTDecoder.h in Headers */,
 				F6D08FFB1E535F2A00CD2566 /* MQTTSession.h in Headers */,
+				C7515EB01F4C51600071CFFE /* ReconnectTimer.h in Headers */,
 				F6D08FF61E535F2A00CD2566 /* MQTTCFSocketEncoder.h in Headers */,
 				F6D08FF11E535F2A00CD2566 /* MQTTTransport.h in Headers */,
 				F6D08FF31E535F2A00CD2566 /* MQTTSSLSecurityPolicyDecoder.h in Headers */,
@@ -1633,6 +1668,7 @@
 				840716541BBEF19E00FBB3CB /* MQTTTestMultiThreading.m in Sources */,
 				840716551BBEF19E00FBB3CB /* MQTTACLTests.m in Sources */,
 				840716561BBEF19E00FBB3CB /* MQTTClientOnlyTests.m in Sources */,
+				C7515EB91F4C51A60071CFFE /* ReconnectTimerTests.m in Sources */,
 				840716581BBEF19E00FBB3CB /* MQTTClientPublishTests.m in Sources */,
 				84FED2171C35515800741A77 /* MQTTClientSubscriptionTests.m in Sources */,
 				840716591BBEF19E00FBB3CB /* MQTTTestSessionManager.m in Sources */,
@@ -1654,6 +1690,7 @@
 				840D3CF91F28A7C20072019B /* MQTTTestMultiThreading.m in Sources */,
 				840D3CFA1F28A7C20072019B /* MQTTACLTests.m in Sources */,
 				840D3CFB1F28A7C20072019B /* MQTTClientOnlyTests.m in Sources */,
+				C7515EB81F4C51A60071CFFE /* ReconnectTimerTests.m in Sources */,
 				840D3CFC1F28A7C20072019B /* MQTTClientPublishTests.m in Sources */,
 				840D3CFD1F28A7C20072019B /* MQTTClientSubscriptionTests.m in Sources */,
 				840D3CFE1F28A7C20072019B /* MQTTTestSessionManager.m in Sources */,
@@ -1675,6 +1712,7 @@
 				8407160B1BBEE68900FBB3CB /* MQTTTestSessionManager.m in Sources */,
 				8425D70D1BBE8D68005AD733 /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				8425D70F1BBE8D68005AD733 /* MQTTClientTests.m in Sources */,
+				C7515EBA1F4C51A70071CFFE /* ReconnectTimerTests.m in Sources */,
 				8425D7101BBE8D68005AD733 /* MQTTTestMultiThreading.m in Sources */,
 				8425D7111BBE8D68005AD733 /* MQTTACLTests.m in Sources */,
 				84517CF51C182F06006FE09B /* MQTTTestHelpers.m in Sources */,
@@ -1696,6 +1734,7 @@
 				8461914A1883E56800101409 /* MQTTClientTests.m in Sources */,
 				844C93AB1A81645D00CA4A03 /* MQTTACLTests.m in Sources */,
 				84C845A41BDD8DB400FEC354 /* MQTTTestFlows.m in Sources */,
+				C7515EB71F4C51A00071CFFE /* ReconnectTimerTests.m in Sources */,
 				84B1AFEE196C7AF60056B959 /* MQTTTestMultiThreading.m in Sources */,
 				84FED2181C35515800741A77 /* MQTTClientSubscriptionTests.m in Sources */,
 				848BB8F3195FF7A2004FCAE2 /* MQTTClientOnlyTests.m in Sources */,
@@ -1725,6 +1764,7 @@
 				DE9EF5D31C0628EB009EF667 /* MQTTSessionManager.m in Sources */,
 				84998C941C0EE3D600119061 /* MQTTSessionSynchron.m in Sources */,
 				84E2C45B1EC34E9900BC02CE /* MQTTProperties.m in Sources */,
+				C7515EAC1F4C51600071CFFE /* ReconnectTimer.m in Sources */,
 				C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */,
 				84998C951C0EE3D600119061 /* MQTTSessionLegacy.m in Sources */,
 			);
@@ -1751,6 +1791,7 @@
 				F6D08FBA1E535BCB00CD2566 /* MQTTCoreDataPersistence.m in Sources */,
 				F6D08FBB1E535BCB00CD2566 /* MQTTInMemoryPersistence.m in Sources */,
 				84E2C45D1EC34E9B00BC02CE /* MQTTProperties.m in Sources */,
+				C7515EAE1F4C51600071CFFE /* ReconnectTimer.m in Sources */,
 				C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */,
 				F6D08FBC1E535BCB00CD2566 /* MQTTSessionManager.m in Sources */,
 			);
@@ -1777,6 +1818,7 @@
 				F6D08FEE1E535F1000CD2566 /* MQTTCoreDataPersistence.m in Sources */,
 				F6D08FEF1E535F1000CD2566 /* MQTTInMemoryPersistence.m in Sources */,
 				84E2C45C1EC34E9A00BC02CE /* MQTTProperties.m in Sources */,
+				C7515EAD1F4C51600071CFFE /* ReconnectTimer.m in Sources */,
 				C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */,
 				F6D08FF01E535F1000CD2566 /* MQTTSessionManager.m in Sources */,
 			);
