@@ -55,13 +55,10 @@
 }
 
 - (void)appDidEnterBackground {
-    __weak ForegroundReconnection *weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        __strong ForegroundReconnection *strongSelf = weakSelf;
-        if (strongSelf.backgroundTask) {
-            [[UIApplication sharedApplication] endBackgroundTask:strongSelf.backgroundTask];
-            strongSelf.backgroundTask = UIBackgroundTaskInvalid;
-        }
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf endBackgroundTask];
     }];
 }
 
