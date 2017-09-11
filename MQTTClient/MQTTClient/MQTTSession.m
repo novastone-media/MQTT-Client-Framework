@@ -531,11 +531,14 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     DDLogVerbose(@"[MQTTSession] sending DISCONNECT");
     self.status = MQTTSessionStatusDisconnecting;
 
-    (void)[self encode:[MQTTMessage disconnectMessage:self.protocolLevel
-                                           returnCode:returnCode
-                                sessionExpiryInterval:sessionExpiryInterval
-                                         reasonString:reasonString
-                                         userProperty:userProperty]];
+    BOOL isSent = [self encode:[MQTTMessage disconnectMessage:self.protocolLevel
+                                                   returnCode:returnCode
+                                        sessionExpiryInterval:sessionExpiryInterval
+                                                 reasonString:reasonString
+                                                 userProperty:userProperty]];
+    if (isSent) {
+        [self closeInternal];
+    }
 }
 
 - (void)closeInternal

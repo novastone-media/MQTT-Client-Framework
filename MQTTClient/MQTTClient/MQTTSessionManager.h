@@ -94,6 +94,10 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 @property (weak, nonatomic) id<MQTTSessionManagerDelegate> delegate;
 
+/** indicates if manager requires tear down
+ */
+@property (readonly) BOOL requiresTearDown;
+
 /** subscriptions is a dictionary of NSNumber instances indicating the MQTTQoSLevel.
  *  The keys are topic filters.
  *  The SessionManager subscribes to the given subscriptions after successfull (re-)connect

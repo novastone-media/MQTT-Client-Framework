@@ -55,6 +55,11 @@
 }
 
 - (void)appDidEnterBackground {
+    if (!self.sessionManager.requiresTearDown) {
+        // we don't want to tear down session as it's already closed
+        return;
+    }
+    
     __weak typeof(self) weakSelf = self;
     self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
