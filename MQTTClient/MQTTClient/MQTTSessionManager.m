@@ -459,7 +459,7 @@
 
 - (void)connectToLast {
     [self.reconnectTimer resetRetryInterval];
-    [self connectToInternal];
+    [self reconnect];
 }
 
 - (void)triggerDelayedReconnect {
