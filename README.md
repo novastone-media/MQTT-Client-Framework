@@ -63,6 +63,9 @@ Or include the source from here.
 ### With Carthage
 
 [Carthage](https://github.com/Carthage/Carthage)
+```
+github "ckrey/MQTT-Client-Framework"
+```
 
 ### docs
 
