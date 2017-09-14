@@ -610,6 +610,53 @@
     }
 }
 
+- (void)testMQTTSessionManagerRecconnectionWithConnectToLast {
+    for (NSString *broker in self.brokers.allKeys) {
+        DDLogInfo(@"testing broker %@", broker);
+        NSDictionary *parameters = self.brokers[broker];
+        if ([parameters[@"websocket"] boolValue]) {
+            continue;
+        }
+        self.step = -1;
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:[parameters[@"timeout"] intValue]
+                                                          target:self
+                                                        selector:@selector(stepper:)
+                                                        userInfo:nil
+                                                         repeats:true];
+
+        MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
+        manager.delegate = self;
+
+        [manager connectWithParameters:parameters clean:YES];
+
+        while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
+            DDLogInfo(@"[testMQTTSessionManager] waiting for connect %d", manager.state);
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
+
+        [manager disconnect];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
+        XCTAssertEqual(manager.state, MQTTSessionManagerStateClosed);
+
+        while (self.step <= 0) {
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+
+        [manager connectToLast];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
+        XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
+
+        while (self.step <= 1) {
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+        
+        [timer invalidate];
+    }
+}
+
 #pragma mark - helpers
 
 
