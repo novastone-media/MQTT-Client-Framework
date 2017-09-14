@@ -41,55 +41,6 @@
             (self.brokers)[brokerName] = broker;
         }
     }
-//
-//    NSDictionary *eclipseBroker = @{
-//                                    @"host": @"m2m.eclipse.org",
-//                                    @"port": @1883,
-//                                    @"tls": @NO,
-//                                    @"protocollevel": @4,
-//                                    @"timeout": @10
-//                                    };
-//    [self.brokers setObject:eclipseBroker forKey:@"eclipseBroker"];
-//
-//    
-//    NSDictionary *pahoBroker = @{
-//                                 @"host": @"iot.eclipse.org",
-//                                 @"port": @1883,
-//                                 @"tls": @NO,
-//                                 @"protocollevel": @4,
-//                                 @"timeout": @10
-//                                 };
-//    [self.brokers setObject:pahoBroker forKey:@"pahoBroker"];
-//
-//    
-//    NSDictionary *m2mBroker = @{
-//                                @"host": @"q.m2m.io",
-//                                @"port": @1883,
-//                                @"tls": @NO,
-//                                @"protocollevel": @4,
-//                                @"timeout": @10
-//                                };
-//    [self.brokers setObject:m2mBroker forKey:@"m2mBroker"];
-//
-//    
-//    NSDictionary *hivemqBroker = @{
-//                                   @"host": @"broker.mqtt-dashboard.com",
-//                                   @"port": @1883,
-//                                   @"tls": @NO,
-//                                   @"protocollevel": @4,
-//                                   @"timeout": @30
-//                                   };
-//    [self.brokers setObject:hivemqBroker forKey:@"hivemqBroker"];
-//
-//    
-//    NSDictionary *rabbitmqBroker = @{
-//                                     @"host": @"dev.rabbitmq.com",
-//                                     @"port": @1883,
-//                                     @"tls": @NO,
-//                                     @"protocollevel": @4,
-//                                     @"timeout": @10
-//                                     };
-//    [self.brokers setObject:rabbitmqBroker forKey:@"rabbitmqBroker"];
 
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1
                                                   target:self
