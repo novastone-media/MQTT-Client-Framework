@@ -13,6 +13,36 @@
 #import "MQTTCFSocketTransport.h"
 #import "MQTTTestHelpers.h"
 
+@interface MQTTSessionManager (Tests)
+
+- (void)connectWithParameters:(NSDictionary *)parameters clean:(BOOL)clean;
+
+@end
+
+@implementation MQTTSessionManager (Tests)
+
+- (void)connectWithParameters:(NSDictionary *)parameters clean:(BOOL)clean {
+    [self connectTo:parameters[@"host"]
+               port:[parameters[@"port"] intValue]
+                tls:[parameters[@"tls"] boolValue]
+          keepalive:60
+              clean:clean
+               auth:NO
+               user:nil
+               pass:nil
+               will:NO
+          willTopic:nil
+            willMsg:nil
+            willQos:MQTTQosLevelAtMostOnce
+     willRetainFlag:NO
+       withClientId:nil
+     securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
+       certificates:[MQTTTestHelpers clientCerts:parameters]
+      protocolLevel:[parameters[@"protocollevel"] intValue]];
+}
+
+@end
+
 @interface MQTTTestSessionManager : MQTTTestHelpers <MQTTSessionManagerDelegate>
 @property (nonatomic) int step;
 @property (nonatomic) int sent;
@@ -56,23 +86,7 @@
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
         manager.subscriptions = [@{TOPIC: @(0)} mutableCopy];
-        [manager connectTo:parameters[@"host"]
-                      port:[parameters[@"port"] intValue]
-                       tls:[parameters[@"tls"] boolValue]
-                 keepalive:60
-                     clean:clean
-                      auth:NO
-                      user:nil
-                      pass:nil
-                      will:NO
-                 willTopic:nil
-                   willMsg:nil
-                   willQos:MQTTQosLevelAtMostOnce
-            willRetainFlag:FALSE
-              withClientId:nil
-            securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-              certificates:[MQTTTestHelpers clientCerts:parameters]
-             protocolLevel:[parameters[@"protocollevel"] intValue]];
+        [manager connectWithParameters:parameters clean:clean];
         
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"[testMQTTSessionManager] waiting for connect %d", manager.state);
@@ -166,22 +180,7 @@
                      context:nil];
         
         manager.subscriptions = [@{TOPIC: @(0)} mutableCopy];
-        [manager connectTo:parameters[@"host"]
-                      port:[parameters[@"port"] intValue]
-                       tls:[parameters[@"tls"] boolValue]
-                 keepalive:60
-                     clean:TRUE
-                      auth:NO
-                      user:nil
-                      pass:nil
-                      will:NO
-                 willTopic:nil
-                   willMsg:nil
-                   willQos:MQTTQosLevelAtMostOnce
-            willRetainFlag:FALSE
-              withClientId:nil
-            securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-              certificates:[MQTTTestHelpers clientCerts:parameters]];
+        [manager connectWithParameters:parameters clean:YES];
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"[testMQTTSessionManagerPersistent] waiting for connect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
@@ -268,22 +267,7 @@
         
         
         manager.subscriptions = @{TOPIC: @(MQTTQosLevelExactlyOnce)};
-        [manager connectTo:parameters[@"host"]
-                      port:[parameters[@"port"] intValue]
-                       tls:[parameters[@"tls"] boolValue]
-                 keepalive:60
-                     clean:TRUE
-                      auth:NO
-                      user:nil
-                      pass:nil
-                      will:NO
-                 willTopic:nil
-                   willMsg:nil
-                   willQos:MQTTQosLevelAtMostOnce
-            willRetainFlag:FALSE
-              withClientId:nil
-            securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-              certificates:[MQTTTestHelpers clientCerts:parameters]];
+        [manager connectWithParameters:parameters clean:YES];
 
         while (!self.timedout && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"waiting for connect %d", manager.state);
@@ -416,24 +400,8 @@
                                                         selector:@selector(timedout:)
                                                         userInfo:nil
                                                          repeats:false];
-        
-        
-        [manager connectTo:parameters[@"host"]
-                      port:[parameters[@"port"] intValue]
-                       tls:[parameters[@"tls"] boolValue]
-                 keepalive:60
-                     clean:TRUE
-                      auth:NO
-                      user:nil
-                      pass:nil
-                      will:NO
-                 willTopic:nil
-                   willMsg:nil
-                   willQos:MQTTQosLevelAtMostOnce
-            willRetainFlag:FALSE
-              withClientId:nil
-            securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-              certificates:[MQTTTestHelpers clientCerts:parameters]];
+
+        [manager connectWithParameters:parameters clean:YES];
         
         while (!self.timedout && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"waiting for connect %d", manager.state);
@@ -597,8 +565,7 @@
                                                selector:@selector(timedout:)
                                                userInfo:nil
                                                 repeats:false];
-        
-        
+
         while (!self.timedout) {
             [manager sendData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
                         topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:FALSE];
@@ -613,8 +580,7 @@
                                                selector:@selector(timedout:)
                                                userInfo:nil
                                                 repeats:false];
-        
-        
+
         while (!self.timedout) {
             [manager sendData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
                         topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:FALSE];
