@@ -71,7 +71,8 @@
             willRetainFlag:FALSE
               withClientId:nil
             securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
-              certificates:[MQTTTestHelpers clientCerts:parameters]];
+              certificates:[MQTTTestHelpers clientCerts:parameters]
+             protocolLevel:[parameters[@"protocollevel"] intValue]];
         
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"[testMQTTSessionManager] waiting for connect %d", manager.state);
