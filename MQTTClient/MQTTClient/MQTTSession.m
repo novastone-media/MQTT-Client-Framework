@@ -168,7 +168,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
             [topicFilter dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
             NSException* myException = [NSException
                                         exceptionWithName:@"topicFilter may not be longer than 65535 bytes in UTF8 representation"
-                                        reason:[NSString stringWithFormat:@"topicFilter length = %lu", [topicFilter dataUsingEncoding:NSUTF8StringEncoding].length]
+                                        reason:[NSString stringWithFormat:@"topicFilter length = %lu",
+                                                (unsigned long)[topicFilter dataUsingEncoding:NSUTF8StringEncoding].length]
                                         userInfo:nil];
             @throw myException;
         }
@@ -334,7 +335,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         [topic dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
         NSException* myException = [NSException
                                     exceptionWithName:@"topic may not be longer than 65535 bytes in UTF8 representation"
-                                    reason:[NSString stringWithFormat:@"topic length = %lu", [topic dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    reason:[NSString stringWithFormat:@"topic length = %lu",
+                                            (unsigned long)[topic dataUsingEncoding:NSUTF8StringEncoding].length]
                                     userInfo:nil];
         @throw myException;
     }
@@ -1424,7 +1426,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         !self.cleanSessionFlag) {
         NSException* myException = [NSException
                                     exceptionWithName:@"clientId must be at least 1 character long if cleanSessionFlag is off"
-                                    reason:[NSString stringWithFormat:@"clientId length = %lu", [self.clientId dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    reason:[NSString stringWithFormat:@"clientId length = %lu",
+                                            (unsigned long)[self.clientId dataUsingEncoding:NSUTF8StringEncoding].length]
                                     userInfo:nil];
         @throw myException;
     }
@@ -1433,7 +1436,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         !self.clientId) {
         NSException* myException = [NSException
                                     exceptionWithName:@"clientId must not be nil"
-                                    reason:[NSString stringWithFormat:@"clientId length = %lu", [self.clientId dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    reason:[NSString stringWithFormat:@"clientId length = %lu",
+                                            (unsigned long)[self.clientId dataUsingEncoding:NSUTF8StringEncoding].length]
                                     userInfo:nil];
         @throw myException;
     }
@@ -1442,7 +1446,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         [self.clientId dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
         NSException* myException = [NSException
                                     exceptionWithName:@"clientId may not be longer than 65535 bytes in UTF8 representation"
-                                    reason:[NSString stringWithFormat:@"clientId length = %lu", [self.clientId dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    reason:[NSString stringWithFormat:@"clientId length = %lu",
+                                            (unsigned long)[self.clientId dataUsingEncoding:NSUTF8StringEncoding].length]
                                     userInfo:nil];
         @throw myException;
     }
@@ -1460,7 +1465,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         [self.userName dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
         NSException* myException = [NSException
                                     exceptionWithName:@"userName may not be longer than 65535 bytes in UTF8 representation"
-                                    reason:[NSString stringWithFormat:@"userName length = %lu", [self.userName dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    reason:[NSString stringWithFormat:@"userName length = %lu",
+                                            (unsigned long)[self.userName dataUsingEncoding:NSUTF8StringEncoding].length]
                                     userInfo:nil];
         @throw myException;
     }
@@ -1570,7 +1576,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         [self.willTopic dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
         NSException* myException = [NSException
                                     exceptionWithName:@"willTopic may not be longer than 65535 bytes in UTF8 representation"
-                                    reason:[NSString stringWithFormat:@"willTopic length = %lu", [self.willTopic dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    reason:[NSString stringWithFormat:@"willTopic length = %lu",
+                                            (unsigned long)[self.willTopic dataUsingEncoding:NSUTF8StringEncoding].length]
                                     userInfo:nil];
         @throw myException;
     }
