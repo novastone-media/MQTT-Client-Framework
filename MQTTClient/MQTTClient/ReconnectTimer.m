@@ -14,7 +14,7 @@
 @property (assign, nonatomic) NSTimeInterval retryInterval;
 @property (assign, nonatomic) NSTimeInterval currentRetryInterval;
 @property (assign, nonatomic) NSTimeInterval maxRetryInterval;
-@property (copy, nonatomic) void (^reconnectBlock)();
+@property (copy, nonatomic) void (^reconnectBlock)(void);
 
 @end
 
@@ -22,7 +22,7 @@
 
 - (instancetype)initWithRetryInterval:(NSTimeInterval)retryInterval
                      maxRetryInterval:(NSTimeInterval)maxRetryInterval
-                       reconnectBlock:(void (^)())block {
+                       reconnectBlock:(void (^)(void))block {
     self = [super init];
     if (self) {
         self.retryInterval = retryInterval;

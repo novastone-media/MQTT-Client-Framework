@@ -632,7 +632,7 @@
                         if (protocolLevel == MQTTProtocolVersion50) {
                             if (message.data.length == 0) {
                                 message.properties = nil;
-                                message.returnCode = MQTTSuccess;
+                                message.returnCode = @(MQTTSuccess);
                             } else if (message.data.length == 1) {
                                 message.properties = nil;
                                 const UInt8 *bytes = message.data.bytes;

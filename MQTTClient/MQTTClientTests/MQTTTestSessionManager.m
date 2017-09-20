@@ -665,7 +665,7 @@
                onTopic:(NSString *)topic
               retained:(BOOL)retained {
     DDLogInfo(@"[MQTTSessionManager] didReceiveMessage (%lu) t:%@ r%d",
-              data.length, topic, retained);
+              (unsigned long)data.length, topic, retained);
     if ([topic isEqualToString:TOPIC]) {
         if (!retained && data.length) {
             self.received++;

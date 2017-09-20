@@ -2,6 +2,12 @@ MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
 
+## MQTT-Client-Framework 0.9.8
+> Release date 2017-09-20
+    [FIX] Format string warnings #374
+    [FIX] Xcode9 warnings
+    [FIX] Cocoalumberjack upgrade
+
 ## MQTT-Client-Framework 0.9.7
 > Release date 2017-07-26
 
