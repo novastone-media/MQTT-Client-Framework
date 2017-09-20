@@ -458,6 +458,9 @@
 }
 
 - (void)connectToLast {
+    if (self.state == MQTTSessionManagerStateConnected) {
+        return;
+    }
     [self.reconnectTimer resetRetryInterval];
     [self reconnect];
 }
