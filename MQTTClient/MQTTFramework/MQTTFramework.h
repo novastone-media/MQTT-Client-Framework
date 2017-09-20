@@ -1,28 +1,17 @@
 //
 //  MQTTFramework.h
-//  MQTT-Client-Framework
+//  MQTTFramework
 //
-//  Created by Terry Latanville on 2015-11-25.
-//  Copyright © 2015-2017 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 13.09.17.
+//  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
-#import "MQTTSession.h"
-#import "MQTTDecoder.h"
-#import "MQTTSessionLegacy.h"
-#import "MQTTSessionSynchron.h"
-#import "MQTTMessage.h"
-#import "MQTTTransport.h"
-#import "MQTTCFSocketTransport.h"
-#import "MQTTCoreDataPersistence.h"
-#import "MQTTSSLSecurityPolicyTransport.h"
-#import "MQTTSessionManager.h"
+#import <WatchKit/WatchKit.h>
 
 //! Project version number for MQTTFramework.
 FOUNDATION_EXPORT double MQTTFrameworkVersionNumber;
 
-//! Project version string for MQTTFramework&lt;.
+//! Project version string for MQTTFramework.
 FOUNDATION_EXPORT const unsigned char MQTTFrameworkVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <MQTTFramework/PublicHeader.h>

@@ -150,7 +150,7 @@
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.clientId = @"123456789.123456789.1234";
+        self.session.clientId = @"123456789012345678901234";
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -163,7 +163,7 @@
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.clientId = @"123456789.123456789.123";
+        self.session.clientId = @"12345678901234567890123";
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -200,10 +200,11 @@
         NSDictionary *parameters = self.brokers[broker];
         
         MQTTSession *subscribingSession = [MQTTTestHelpers session:parameters];
-        subscribingSession.clientId = @"MQTTClient-sub";
+        subscribingSession.clientId = @"MQTTClientSub";
         
         if (![subscribingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
             XCTFail(@"no connection for sub to %@", broker);
+            return;
         }
         [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
         
@@ -238,9 +239,10 @@
         NSDictionary *parameters = self.brokers[broker];
         
         MQTTSession *subscribingSession = [MQTTTestHelpers session:parameters];
-        subscribingSession.clientId = @"MQTTClient-sub";
+        subscribingSession.clientId = @"MQTTClientSub";
         if (![subscribingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
             XCTFail(@"no connection for sub to %@", broker);
+            return;
         }
         [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
         
@@ -435,6 +437,7 @@
  * be used by the Server, and the Will Topic and Will Message fields MUST be present in the payload.
  */
 - (void)test_connect_will_flagged_but_no_willTopic_MQTT_3_1_2_9 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -459,6 +462,7 @@
  * be used by the Server, and the Will Topic and Will Message fields MUST be present in the payload.
  */
 - (void)test_connect_will_flagged_but_no_willMsg_MQTT_3_1_2_9 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -589,7 +593,9 @@
 
         [self connect:parameters];
         XCTAssert(!self.timedout, @"timeout");
-        XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"session not closed %@", self.error);
+        if (self.session.protocolLevel != MQTTProtocolVersion50) {
+            XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"session not closed %@", self.error);
+        }
 
         [self shutdown:parameters];
     }
@@ -655,6 +661,8 @@
  * In the latter case, the Server MUST NOT continue to process the CONNECT packet in line with this specification.
  */
 - (void)test_connect_illegal_protocollevel0_and_protocolname_MQTT_3_1_2_1 {
+    MQTTStrict.strict = FALSE;
+
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -979,7 +987,7 @@
         DDLogVerbose(@"Cleaning topic");
         
         MQTTSession *sendingSession = [MQTTTestHelpers session:parameters];
-        sendingSession.clientId = @"MQTTClient-pub";
+        sendingSession.clientId = @"MQTTClientPub";
         if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
             XCTFail(@"no connection for pub to %@", broker);
         }
@@ -987,13 +995,13 @@
         
         DDLogVerbose(@"Clearing old subs");
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.clientId = @"MQTTClient-sub";
+        self.session.clientId = @"MQTTClientSub";
         [self connect:parameters];
         [self shutdown:parameters];
         
         DDLogVerbose(@"Subscribing to topic");
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.clientId = @"MQTTClient-sub";
+        self.session.clientId = @"MQTTClientSub";
         self.session.cleanSessionFlag = FALSE;
         
         [self connect:parameters];
@@ -1009,7 +1017,7 @@
         
         DDLogVerbose(@"receiving from topic");
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.clientId = @"MQTTClient-sub";
+        self.session.clientId = @"MQTTClientSub";
         self.session.cleanSessionFlag = FALSE;
         
         [self connect:parameters];
@@ -1036,7 +1044,7 @@
         
         DDLogVerbose(@"Cleaning topic");
         MQTTSession *sendingSession = [MQTTTestHelpers session:parameters];
-        sendingSession.clientId = @"MQTTClient-pub";
+        sendingSession.clientId = @"MQTTClientSub";
         
         if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
             XCTFail(@"no connection for pub to %@", broker);
@@ -1045,13 +1053,13 @@
         
         DDLogVerbose(@"Clearing old subs");
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.clientId = @"MQTTClient-sub";
+        self.session.clientId = @"MQTTClientSub";
         [self connect:parameters];
         [self shutdown:parameters];
         
         DDLogVerbose(@"Subscribing to topic");
         self.session = [MQTTTestHelpers session:parameters];
-        self.session.clientId = @"MQTTClient-sub";
+        self.session.clientId = @"MQTTClientSub";
         [self connect:parameters];
         [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos];
         
@@ -1119,7 +1127,7 @@
         [self.session closeWithReturnCode:MQTTSuccess
                     sessionExpiryInterval:nil
                              reasonString:nil
-                             userProperty:nil
+                           userProperties:nil
                         disconnectHandler:nil];
         
         while (self.event == -1 && !self.timedout) {

@@ -8,7 +8,7 @@
 
 #import "ForegroundReconnection.h"
 
-#if TARGET_OS_IPHONE == 1
+#if TARGET_OS_IPHONE == 1 && TARGET_OS_WATCH == 0
 #import "MQTTSessionManager.h"
 #import <UIKit/UIKit.h>
 @interface ForegroundReconnection ()

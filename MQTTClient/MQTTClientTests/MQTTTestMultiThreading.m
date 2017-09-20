@@ -78,7 +78,7 @@
     [self.session closeWithReturnCode:MQTTSuccess
                 sessionExpiryInterval:nil
                          reasonString:nil
-                         userProperty:nil
+                       userProperties:nil
                     disconnectHandler:nil];
 }
 

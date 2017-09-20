@@ -41,8 +41,16 @@ static NSInteger const MQTT_MAX_MESSAGES = 1024;
 /** The data of the flow element */
 @property (strong, nonatomic) NSData *data;
 
-/** The deadline of the flow elelment before (re)trying transmission */
+/** The deadline of the flow element before (re)trying transmission */
 @property (strong, nonatomic) NSDate *deadline;
+
+@property (strong, nonatomic) NSNumber *payloadFormatIndicator;
+@property (strong, nonatomic) NSNumber *publicationExpiryInterval;
+@property (strong, nonatomic) NSNumber *topicAlias;
+@property (strong, nonatomic) NSString *responseTopic;
+@property (strong, nonatomic) NSData *correlationData;
+@property (strong, nonatomic) NSData *userProperties;
+@property (strong, nonatomic) NSString *contentType;
 
 @end
 
@@ -88,7 +96,14 @@ static NSInteger const MQTT_MAX_MESSAGES = 1024;
                                   msgId:(UInt16)msgId
                            incomingFlag:(BOOL)incomingFlag
                             commandType:(UInt8)commandType
-                               deadline:(NSDate *)deadline;
+                               deadline:(NSDate *)deadline
+                 payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
+              publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+                             topicAlias:(NSNumber *)topicAlias
+                          responseTopic:(NSString *)responseTopic
+                        correlationData:(NSData *)correlationData
+                         userProperties:(NSData *)userProperties
+                            contentType:(NSString *)contentType;
 
 /** Deletes an MQTTFlow element
  * @param flow the MQTTFlow to delete

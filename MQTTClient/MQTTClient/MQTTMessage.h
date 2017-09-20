@@ -30,6 +30,15 @@ typedef NS_ENUM(UInt8, MQTTQosLevel) {
 };
 
 /**
+ Enumeration of MQTT SUBSCRIBE retain handling options
+ */
+typedef NS_ENUM(UInt8, MQTTRetainHandling) {
+    MQTTSendRetained = 0,
+    MQTTSendRetainedIfNotYetSubscribed = 1,
+    MQTTDontSendRetained = 2
+};
+
+/**
  Enumeration of MQTT protocol version
  */
 typedef NS_ENUM(UInt8, MQTTProtocolVersion) {
@@ -141,7 +150,7 @@ typedef NS_ENUM(NSUInteger, MQTTReturnCode) {
                  requestResponseInformation:(NSNumber *)requestResponseInformation
                              receiveMaximum:(NSNumber *)receiveMaximum
                           topicAliasMaximum:(NSNumber *)topicAliasMaximum
-                               userProperty:(NSDictionary <NSString *, NSString *> *)userProperty
+                             userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties
                           maximumPacketSize:(NSNumber *)maximumPacketSize
 ;
 
@@ -151,12 +160,12 @@ typedef NS_ENUM(NSUInteger, MQTTReturnCode) {
                         returnCode:(MQTTReturnCode)returnCode
              sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
                       reasonString:(NSString *)reasonString
-                      userProperty:(NSDictionary <NSString *, NSString *> *)userProperty;
+                    userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties;
 
 + (MQTTMessage *)subscribeMessageWithMessageId:(UInt16)msgId
                                         topics:(NSDictionary *)topics
                                  protocolLevel:(MQTTProtocolVersion)protocolLevel
-                        subscriptionIdentifier:(NSNumber *)subscriptionIdentifier;
+                       subscriptionIdentifier:(NSNumber *)subscriptionIdentifier;
 
 + (MQTTMessage *)unsubscribeMessageWithMessageId:(UInt16)msgId
                                           topics:(NSArray *)topics
@@ -174,32 +183,32 @@ typedef NS_ENUM(NSUInteger, MQTTReturnCode) {
                              topicAlias:(NSNumber *)topicAlias
                           responseTopic:(NSString *)responseTopic
                         correlationData:(NSData *)correlationData
-                           userProperty:(NSDictionary <NSString *, NSString *> *)userProperty
+                         userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties
                             contentType:(NSString *)contentType;
 
 + (MQTTMessage *)pubackMessageWithMessageId:(UInt16)msgId
                               protocolLevel:(MQTTProtocolVersion)protocolLevel
                                  returnCode:(MQTTReturnCode)returnCode
                                reasonString:(NSString *)reasonString
-                               userProperty:(NSDictionary <NSString *, NSString *> *)userProperty;
+                             userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties;
 
 + (MQTTMessage *)pubrecMessageWithMessageId:(UInt16)msgId
                               protocolLevel:(MQTTProtocolVersion)protocolLevel
                                  returnCode:(MQTTReturnCode)returnCode
                                reasonString:(NSString *)reasonString
-                               userProperty:(NSDictionary <NSString *, NSString *> *)userProperty;
+                             userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties;
 
 + (MQTTMessage *)pubrelMessageWithMessageId:(UInt16)msgId
                               protocolLevel:(MQTTProtocolVersion)protocolLevel
                                  returnCode:(MQTTReturnCode)returnCode
                                reasonString:(NSString *)reasonString
-                               userProperty:(NSDictionary <NSString *, NSString *> *)userProperty;
+                             userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties;
 
 + (MQTTMessage *)pubcompMessageWithMessageId:(UInt16)msgId
                                protocolLevel:(MQTTProtocolVersion)protocolLevel
                                   returnCode:(MQTTReturnCode)returnCode
                                 reasonString:(NSString *)reasonString
-                                userProperty:(NSDictionary <NSString *, NSString *> *)userProperty;
+                              userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties;
 
 + (MQTTMessage *)messageFromData:(NSData *)data protocolLevel:(MQTTProtocolVersion)protocolLevel;
 

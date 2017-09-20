@@ -20,6 +20,13 @@
 @synthesize topic;
 @synthesize data;
 @synthesize deadline;
+@dynamic payloadFormatIndicator;
+@dynamic publicationExpiryInterval;
+@dynamic topicAlias;
+@dynamic responseTopic;
+@dynamic correlationData;
+@dynamic userProperties;
+@dynamic contentType;
 
 @end
 
@@ -66,7 +73,14 @@ static NSMutableDictionary *clientIds;
                                         msgId:(UInt16)msgId
                                  incomingFlag:(BOOL)incomingFlag
                                   commandType:(UInt8)commandType
-                                     deadline:(NSDate *)deadline {
+                                     deadline:(NSDate *)deadline
+                       payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
+                    publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+                                   topicAlias:(NSNumber *)topicAlias
+                                responseTopic:(NSString *)responseTopic
+                              correlationData:(NSData *)correlationData
+                               userProperties:(NSData *)userProperties
+                                  contentType:(NSString *)contentType{
     @synchronized(clientIds) {
         
         if (([self allFlowsforClientId:clientId incomingFlag:incomingFlag].count <= self.maxMessages)) {
@@ -79,6 +93,12 @@ static NSMutableDictionary *clientIds;
             flow.qosLevel = @(qos);
             flow.commandType = [NSNumber numberWithUnsignedInteger:commandType];
             flow.deadline = deadline;
+            flow.payloadFormatIndicator = payloadFormatIndicator;
+            flow.publicationExpiryInterval = publicationExpiryInterval;
+            flow.topicAlias = topicAlias;
+            flow.correlationData = correlationData;
+            flow.userProperties = userProperties;
+            flow.contentType = contentType;
             return flow;
         } else {
             return nil;

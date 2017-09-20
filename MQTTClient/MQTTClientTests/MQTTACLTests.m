@@ -139,7 +139,7 @@
 
         while ([self.session.userName dataUsingEncoding:NSUTF8StringEncoding].length <= 65535L) {
             DDLogVerbose(@"userName length %lu",
-                         [self.session.userName dataUsingEncoding:NSUTF8StringEncoding].length);
+                         (unsigned long)[self.session.userName dataUsingEncoding:NSUTF8StringEncoding].length);
             self.session.userName = [self.session.userName stringByAppendingString:self.session.userName];
         }
 
@@ -163,19 +163,15 @@
         self.session = [MQTTTestHelpers session:parameters];
         self.session.userName = @"user";
 
-        NSData *data = [NSData dataWithBytes:"MQTTClient/abc\x9c\x9dxyz" length:19];
-        NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
-
-        NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
-
-        NSString *stringWithFEFF = [NSString stringWithFormat:@"%@<%C>/%s", TOPIC, 0xfeff, __FUNCTION__];
-
-        NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
-
         @try {
+            //NSData *data = [NSData dataWithBytes:"MQTTClient/abc\x9c\x9dxyz" length:19];
+            //NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
             //self.session.userName = stringWith9c;
+            NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
             self.session.userName = stringWithD800;
+            //NSString *stringWithFEFF = [NSString stringWithFormat:@"%@<%C>/%s", TOPIC, 0xfeff, __FUNCTION__];
             //self.session.userName = stringWithFEFF;
+            //NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
             //self.session.userName = stringWithNull;
             [self.session connect];
         } @catch (NSException *exception) {
@@ -216,7 +212,7 @@
     [self.session closeWithReturnCode:MQTTSuccess
                 sessionExpiryInterval:nil
                          reasonString:nil
-                         userProperty:nil
+                       userProperties:nil
                     disconnectHandler:nil];
 
     while (self.event == -1 && !self.timedout) {

@@ -38,7 +38,7 @@
             self.session.requestResponseInformation = @1U;
             self.session.receiveMaximum = @5U;
             self.session.topicAliasMaximum = @10U;
-            self.session.userProperty = @{@"u1":@"v1", @"u2": @"v2"};
+            self.session.userProperties = @[@{@"u1":@"v1"}, @{@"u2": @"v2"}];
             self.session.maximumPacketSize = @8192U;
             [self connect:parameters];
             XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -46,7 +46,7 @@
                 returnCode:MQTTSuccess
      sessionExpiryInterval:nil
               reasonString:nil
-              userProperty:nil];
+            userProperties:nil];
         }
     }
 }
@@ -64,7 +64,7 @@
                 returnCode:MQTTSuccess
      sessionExpiryInterval:nil
               reasonString:nil
-              userProperty:nil];
+            userProperties:nil];
         }
     }
 }
@@ -82,7 +82,7 @@
                 returnCode:MQTTSuccess
      sessionExpiryInterval:nil
               reasonString:nil
-              userProperty:nil];
+            userProperties:nil];
         }
     }
 }
@@ -99,7 +99,7 @@
                 returnCode:MQTTSuccess
      sessionExpiryInterval:nil
               reasonString:nil
-              userProperty:nil];
+            userProperties:nil];
         }
     }
 }
@@ -123,7 +123,7 @@
                 returnCode:MQTTDisconnectWithWillMessage
      sessionExpiryInterval:nil
               reasonString:nil
-              userProperty:nil];
+            userProperties:nil];
         }
     }
 }
@@ -146,7 +146,7 @@
                 returnCode:MQTTDisconnectWithWillMessage
      sessionExpiryInterval:nil
               reasonString:nil
-              userProperty:nil];
+            userProperties:nil];
         }
     }
 }
@@ -169,7 +169,7 @@
                 returnCode:MQTTDisconnectWithWillMessage
      sessionExpiryInterval:nil
               reasonString:nil
-              userProperty:nil];
+            userProperties:nil];
         }
     }
 }
@@ -199,7 +199,7 @@
             returnCode:MQTTSuccess
  sessionExpiryInterval:nil
           reasonString:nil
-          userProperty:nil];
+        userProperties:nil];
 
         DDLogVerbose(@"Subscribing to topic");
         self.session = [MQTTTestHelpers session:parameters];
@@ -212,7 +212,7 @@
             returnCode:MQTTSuccess
  sessionExpiryInterval:nil
           reasonString:nil
-          userProperty:nil];
+        userProperties:nil];
 
         for (int i = 1; i < BULK; i++) {
             DDLogVerbose(@"publishing to topic %d", i);
@@ -243,7 +243,7 @@
             returnCode:MQTTSuccess
  sessionExpiryInterval:nil
           reasonString:nil
-          userProperty:nil];
+        userProperties:nil];
     }
 }
 
@@ -269,7 +269,7 @@
             returnCode:MQTTSuccess
  sessionExpiryInterval:nil
           reasonString:nil
-          userProperty:nil];
+        userProperties:nil];
 
         DDLogVerbose(@"Subscribing to topic");
         self.session = [MQTTTestHelpers session:parameters];
@@ -298,7 +298,7 @@
             returnCode:MQTTSuccess
  sessionExpiryInterval:nil
           reasonString:nil
-          userProperty:nil];
+        userProperties:nil];
     }
 }
 
@@ -336,7 +336,7 @@
       returnCode:(MQTTReturnCode)returnCode
 sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
     reasonString:(NSString *)reasonString
-    userProperty:(NSDictionary <NSString *, NSString *> *)userProperty {
+  userProperties:(NSDictionary <NSString *, NSString *> *)userProperties {
     if (!self.ungraceful) {
         self.event = -1;
         
@@ -348,10 +348,10 @@ sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
         
         [self.session closeWithReturnCode:returnCode
                     sessionExpiryInterval:sessionExpiryInterval
-                            reasonString:reasonString
-                             userProperty:userProperty
+                             reasonString:reasonString
+                           userProperties:userProperties
                         disconnectHandler:nil];
-        
+
         while (self.event == -1 && !self.timedout) {
             DDLogVerbose(@"waiting for disconnect");
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];

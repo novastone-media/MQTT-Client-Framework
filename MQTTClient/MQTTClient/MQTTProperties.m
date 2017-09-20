@@ -9,6 +9,11 @@
 #import "MQTTProperties.h"
 
 @implementation MQTTProperties
+
+- (instancetype)init {
+    return [self initFromData:[[NSData alloc] init]];
+}
+
 - (instancetype)initFromData:(NSData *)data {
     self = [super init];
 
@@ -64,9 +69,11 @@
                     if (propertyLength - offset > 1) {
                         int subscriptionIdentifier = [MQTTProperties getVariableLength:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
                         int l = [MQTTProperties variableIntLength:subscriptionIdentifier];
-                        self.subscriptionIdentifier = @(subscriptionIdentifier);
+                        if (!self.subscriptionIdentifiers) {
+                            self.subscriptionIdentifiers = [[NSMutableArray alloc] init];
+                        }
+                        [self.subscriptionIdentifiers addObject:@(subscriptionIdentifier)];
                         offset += 1 + l;
-
                     }
                     break;
 
@@ -205,14 +212,14 @@
 
                         NSString *key = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]];
 
-                        int valueL = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1 + 2 + keyL, remainingData.length - (offset + 1))]];
+                        int valueL = [MQTTProperties getTwoByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1 + 2 + keyL, remainingData.length - (offset + 1 + 2 + keyL))]];
 
-                        NSString *value = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1 + 2 + keyL, remainingData.length - (offset + 1))]];
+                        NSString *value = [MQTTProperties getUtf8String:[remainingData subdataWithRange:NSMakeRange(offset + 1 + 2 + keyL, remainingData.length - (offset + 1 + 2 + keyL))]];
 
-                        if (!self.userProperty) {
-                            self.userProperty = [[NSMutableDictionary alloc] init];
+                        if (!self.userProperties) {
+                            self.userProperties = [[NSMutableArray alloc] init];
                         }
-                        self.userProperty[key] = value;
+                        [self.userProperties addObject:@{key: value}];
                         offset += 1 + 2 + keyL + 2 + valueL;
                     }
                     break;

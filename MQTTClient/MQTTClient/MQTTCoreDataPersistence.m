@@ -27,6 +27,13 @@ static unsigned long long fileSystemFreeSize;
 @dynamic topic;
 @dynamic data;
 @dynamic deadline;
+@dynamic payloadFormatIndicator;
+@dynamic publicationExpiryInterval;
+@dynamic topicAlias;
+@dynamic responseTopic;
+@dynamic userProperties;
+@dynamic correlationData;
+@dynamic contentType;
 
 @end
 
@@ -251,6 +258,160 @@ static unsigned long long fileSystemFreeSize;
     }
 }
 
+- (NSData *)correlationData {
+    __block NSData *_correlationData;
+    if ([NSThread isMainThread]) {
+        _correlationData = object.correlationData;
+    } else {
+        [context performBlockAndWait:^{
+            _correlationData = object.correlationData;
+        }];
+    }
+    return _correlationData;
+}
+
+- (void)setCorrelationData:(NSData *)correlationData {
+    if ([NSThread isMainThread]) {
+        object.correlationData = correlationData;
+    } else {
+        [context performBlockAndWait:^{
+            object.correlationData = correlationData;
+        }];
+    }
+}
+
+- (NSString *)responseTopic {
+    __block NSString *_responseTopic;
+    if ([NSThread isMainThread]) {
+        _responseTopic = object.responseTopic;
+    } else {
+        [context performBlockAndWait:^{
+            _responseTopic = object.responseTopic;
+        }];
+    }
+    return _responseTopic;
+}
+
+- (void)setResponseTopic:(NSString *)responseTopic {
+    if ([NSThread isMainThread]) {
+        object.responseTopic = responseTopic;
+    } else {
+        [context performBlockAndWait:^{
+            object.responseTopic = responseTopic;
+        }];
+    }
+}
+
+- (NSString *)contentType {
+    __block NSString *_contentType;
+    if ([NSThread isMainThread]) {
+        _contentType = object.contentType;
+    } else {
+        [context performBlockAndWait:^{
+            _contentType = object.contentType;
+        }];
+    }
+    return _contentType;
+}
+
+- (void)setContentType:(NSString *)contentType {
+    if ([NSThread isMainThread]) {
+        object.contentType = contentType;
+    } else {
+        [context performBlockAndWait:^{
+            object.contentType = contentType;
+        }];
+    }
+}
+
+- (NSData *)userProperties {
+    __block NSData *_userProperties;
+    if ([NSThread isMainThread]) {
+        _userProperties = object.userProperties;
+    } else {
+        [context performBlockAndWait:^{
+            _userProperties = object.userProperties;
+        }];
+    }
+    return _userProperties;
+}
+
+- (void)setUserProperties:(NSData *)userProperties {
+    if ([NSThread isMainThread]) {
+        object.userProperties = userProperties;
+    } else {
+        [context performBlockAndWait:^{
+            object.userProperties = userProperties;
+        }];
+    }
+}
+
+- (NSNumber *)payloadFormatIndicator {
+    __block NSNumber *_payloadFormatIndicator;
+    if ([NSThread isMainThread]) {
+        _payloadFormatIndicator = object.payloadFormatIndicator;
+    } else {
+        [context performBlockAndWait:^{
+            _payloadFormatIndicator = object.payloadFormatIndicator;
+        }];
+    }
+    return _payloadFormatIndicator;
+}
+
+- (void)setPayloadFormatIndicator:(NSNumber *)payloadFormatIndicator {
+    if ([NSThread isMainThread]) {
+        object.payloadFormatIndicator = payloadFormatIndicator;
+    } else {
+        [context performBlockAndWait:^{
+            object.payloadFormatIndicator = payloadFormatIndicator;
+        }];
+    }
+}
+
+- (NSNumber *)publicationExpiryInterval {
+    __block NSNumber *_publicationExpiryInterval;
+    if ([NSThread isMainThread]) {
+        _publicationExpiryInterval = object.publicationExpiryInterval;
+    } else {
+        [context performBlockAndWait:^{
+            _publicationExpiryInterval = object.publicationExpiryInterval;
+        }];
+    }
+    return _publicationExpiryInterval;
+}
+
+- (void)setPublicationExpiryInterval:(NSNumber *)publicationExpiryInterval {
+    if ([NSThread isMainThread]) {
+        object.publicationExpiryInterval = publicationExpiryInterval;
+    } else {
+        [context performBlockAndWait:^{
+            object.publicationExpiryInterval = publicationExpiryInterval;
+        }];
+    }
+}
+
+- (NSNumber *)topicAlias {
+    __block NSNumber *_topicAlias;
+    if ([NSThread isMainThread]) {
+        _topicAlias = object.topicAlias;
+    } else {
+        [context performBlockAndWait:^{
+            _topicAlias = object.topicAlias;
+        }];
+    }
+    return _topicAlias;
+}
+
+- (void)setTopicAlias:(NSNumber *)topicAlias {
+    if ([NSThread isMainThread]) {
+        object.topicAlias = topicAlias;
+    } else {
+        [context performBlockAndWait:^{
+            object.topicAlias = topicAlias;
+        }];
+    }
+}
+
 @end
 
 @implementation MQTTCoreDataPersistence
@@ -291,7 +452,14 @@ static unsigned long long fileSystemFreeSize;
                                         msgId:(UInt16)msgId
                                  incomingFlag:(BOOL)incomingFlag
                                   commandType:(UInt8)commandType
-                                     deadline:(NSDate *)deadline {
+                                     deadline:(NSDate *)deadline
+                       payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
+                    publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+                                   topicAlias:(NSNumber *)topicAlias
+                                responseTopic:(NSString *)responseTopic
+                              correlationData:(NSData *)correlationData
+                               userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
+                                  contentType:(NSString *)contentType {
     if (([self allFlowsforClientId:clientId incomingFlag:incomingFlag].count <= self.maxMessages) &&
         (fileSize <= self.maxSize)) {
         MQTTCoreDataFlow *flow = [self createFlowforClientId:clientId
@@ -303,6 +471,15 @@ static unsigned long long fileSystemFreeSize;
         flow.qosLevel = @(qos);
         flow.commandType = [NSNumber numberWithUnsignedInteger:commandType];
         flow.deadline = deadline;
+        flow.payloadFormatIndicator = payloadFormatIndicator;
+        flow.publicationExpiryInterval = publicationExpiryInterval;
+        flow.topicAlias = topicAlias;
+        flow.correlationData = correlationData;
+        flow.userProperties = nil;
+        if (userProperties && [NSJSONSerialization isValidJSONObject:userProperties]) {
+            flow.userProperties = [NSJSONSerialization dataWithJSONObject:userProperties options:0 error:nil];
+        }
+        flow.contentType = contentType;
         return flow;
     } else {
         return nil;
@@ -618,6 +795,48 @@ static unsigned long long fileSystemFreeSize;
         attributeDescription.name = @"deadline";
         attributeDescription.attributeType = NSDateAttributeType;
         attributeDescription.attributeValueClassName = @"NSDate";
+        [properties addObject:attributeDescription];
+
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"payloadFormatIndicator";
+        attributeDescription.attributeType = NSDateAttributeType;
+        attributeDescription.attributeValueClassName = @"NSNumber";
+        [properties addObject:attributeDescription];
+
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"publicationExpiryInterval";
+        attributeDescription.attributeType = NSDateAttributeType;
+        attributeDescription.attributeValueClassName = @"NSNumber";
+        [properties addObject:attributeDescription];
+
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"topicAlias";
+        attributeDescription.attributeType = NSDateAttributeType;
+        attributeDescription.attributeValueClassName = @"NSNumber";
+        [properties addObject:attributeDescription];
+
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"correlationData";
+        attributeDescription.attributeType = NSDateAttributeType;
+        attributeDescription.attributeValueClassName = @"NSData";
+        [properties addObject:attributeDescription];
+
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"userProperties";
+        attributeDescription.attributeType = NSDateAttributeType;
+        attributeDescription.attributeValueClassName = @"NSData";
+        [properties addObject:attributeDescription];
+
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"responseTopic";
+        attributeDescription.attributeType = NSDateAttributeType;
+        attributeDescription.attributeValueClassName = @"NSString";
+        [properties addObject:attributeDescription];
+
+        attributeDescription = [[NSAttributeDescription alloc] init];
+        attributeDescription.name = @"contentType";
+        attributeDescription.attributeType = NSDateAttributeType;
+        attributeDescription.attributeValueClassName = @"NSString";
         [properties addObject:attributeDescription];
 
         NSEntityDescription *entityDescription = [[NSEntityDescription alloc] init];

@@ -51,7 +51,7 @@ class SwiftTests : MQTTTestHelpers {
                     RunLoop.current.run(until: Date(timeIntervalSinceNow: 1))
                 }
                 
-                session!.publishData("sent from Xcode 8.0 using Swift".data(using: String.Encoding.utf8, allowLossyConversion: false),
+                session!.publishData("sent from Xcode 8.0 using Swift".data(using: String.Encoding.utf8, allowLossyConversion: false)!,
                                      onTopic: TOPIC,
                                      retain: false,
                                      qos: .atMostOnce)
@@ -102,7 +102,7 @@ class SwiftTests : MQTTTestHelpers {
         }
     }
     
-    override func handleEvent(_ session: MQTTSession!, event eventCode: MQTTSessionEvent, error: Error!) {
+    override func handleEvent(_ session: MQTTSession, event eventCode: MQTTSessionEvent, error: Error!) {
         switch eventCode {
         case .connected:
             sessionConnected = true
@@ -113,12 +113,12 @@ class SwiftTests : MQTTTestHelpers {
         }
     }
     
-    override func newMessage(_ session: MQTTSession!, data: Data!, onTopic topic: String!, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
+    override func newMessage(_ session: MQTTSession, data: Data, onTopic topic: String, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
         print("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
         sessionReceived = true;
     }
     
-    override func subAckReceived(_ session: MQTTSession!, msgID: UInt16, grantedQoss qoss: [NSNumber]!) {
+    override func subAckReceived(_ session: MQTTSession, msgID: UInt16, grantedQoss qoss: [NSNumber]) {
         sessionSubAcked = true;
     }
     

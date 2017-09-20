@@ -259,7 +259,7 @@
                                                        requestResponseInformation:nil
                                                                    receiveMaximum:nil
                                                                 topicAliasMaximum:nil
-                                                                     userProperty:nil
+                                                                   userProperties:nil
                                                                 maximumPacketSize:nil];
             
             self.timedout = FALSE;

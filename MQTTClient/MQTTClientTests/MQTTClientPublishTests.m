@@ -738,7 +738,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
     [self.session closeWithReturnCode:MQTTSuccess
                 sessionExpiryInterval:nil
                          reasonString:nil
-                         userProperty:nil
+                       userProperties:nil
                     disconnectHandler:nil];
 
     while (self.event == -1 && !self.timedout) {
