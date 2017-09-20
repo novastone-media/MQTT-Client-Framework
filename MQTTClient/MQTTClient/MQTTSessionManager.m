@@ -334,6 +334,11 @@
     [self.reconnectTimer stop];
 }
 
+- (BOOL)requiresTearDown {
+    return (self.state != MQTTSessionManagerStateClosed &&
+            self.state != MQTTSessionManagerStateStarting);
+}
+
 - (void)updateState:(MQTTSessionManagerState)newState {
     self.state = newState;
 
@@ -454,7 +459,7 @@
 
 - (void)connectToLast {
     [self.reconnectTimer resetRetryInterval];
-    [self connectToInternal];
+    [self reconnect];
 }
 
 - (void)triggerDelayedReconnect {

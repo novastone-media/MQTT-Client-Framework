@@ -76,7 +76,7 @@
 }
 
 - (void)pub:(MQTTQosLevel)qos count:(NSInteger)count {
-    NSString *message = [NSString stringWithFormat:@"data %5ld", count];
+    NSString *message = [NSString stringWithFormat:@"data %5ld", (long)count];
     UInt16 msgID = [self.session publishData:[message dataUsingEncoding:NSUTF8StringEncoding] onTopic:@"MQTTClient" retain:NO qos:qos];
     if (qos == MQTTQosLevelAtMostOnce || msgID > 0) {
         self.publishedCounter++;
@@ -136,7 +136,7 @@
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
-    DDLogVerbose(@"handleEvent:%ld error:%@", eventCode, error);
+    DDLogVerbose(@"handleEvent:%ld error:%@", (long)eventCode, error);
     if (eventCode == MQTTSessionEventConnectionClosed || eventCode == MQTTSessionEventConnectionClosedByBroker) {
         self.closed = true;
     }

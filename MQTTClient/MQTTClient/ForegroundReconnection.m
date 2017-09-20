@@ -55,13 +55,15 @@
 }
 
 - (void)appDidEnterBackground {
-    __weak ForegroundReconnection *weakSelf = self;
+    if (!self.sessionManager.requiresTearDown) {
+        // we don't want to tear down session as it's already closed
+        return;
+    }
+    
+    __weak typeof(self) weakSelf = self;
     self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        __strong ForegroundReconnection *strongSelf = weakSelf;
-        if (strongSelf.backgroundTask) {
-            [[UIApplication sharedApplication] endBackgroundTask:strongSelf.backgroundTask];
-            strongSelf.backgroundTask = UIBackgroundTaskInvalid;
-        }
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf endBackgroundTask];
     }];
 }
 

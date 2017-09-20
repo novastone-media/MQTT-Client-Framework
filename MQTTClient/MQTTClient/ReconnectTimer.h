@@ -12,7 +12,7 @@
 
 - (instancetype)initWithRetryInterval:(NSTimeInterval)retryInterval
                      maxRetryInterval:(NSTimeInterval)maxRetryInterval
-                       reconnectBlock:(void (^)())block;
+                       reconnectBlock:(void (^)(void))block;
 - (void)schedule;
 - (void)stop;
 - (void)resetRetryInterval;

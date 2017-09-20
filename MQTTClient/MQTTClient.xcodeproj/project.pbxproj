@@ -1511,7 +1511,7 @@
 					};
 					840716311BBEF13A00FBB3CB = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0900;
 					};
 					841AA0801F5B4D9100E97CE1 = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -1520,6 +1520,10 @@
 					};
 					8425D7001BBE8D3D005AD733 = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0900;
+					};
+					846191391883E56800101409 = {
+						LastSwiftMigration = 0900;
 					};
 					846C35AC1F696B2C00F23552 = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -2226,7 +2230,8 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -2263,7 +2268,8 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -2391,7 +2397,8 @@
 				SDKROOT = appletvos;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
@@ -2426,7 +2433,8 @@
 				SDKROOT = appletvos;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
@@ -2554,7 +2562,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -2587,7 +2596,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.gmail.cky6201.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
