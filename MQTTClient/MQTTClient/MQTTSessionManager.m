@@ -207,6 +207,43 @@
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
+     certificates:(NSArray *)certificates
+protocolLevel:(MQTTProtocolVersion)protocolLevel {
+    [self connectTo:host
+               port:port
+                tls:tls
+          keepalive:keepalive
+              clean:clean
+               auth:auth
+               user:user
+               pass:pass
+               will:will
+          willTopic:willTopic
+            willMsg:willMsg
+            willQos:willQos
+     willRetainFlag:willRetainFlag
+       withClientId:clientId
+     securityPolicy:securityPolicy
+       certificates:certificates
+      protocolLevel:protocolLevel
+            runLoop:[NSRunLoop currentRunLoop]];
+}
+
+- (void)connectTo:(NSString *)host
+             port:(NSInteger)port
+              tls:(BOOL)tls
+        keepalive:(NSInteger)keepalive
+            clean:(BOOL)clean
+             auth:(BOOL)auth
+             user:(NSString *)user
+             pass:(NSString *)pass
+             will:(BOOL)will
+        willTopic:(NSString *)willTopic
+          willMsg:(NSData *)willMsg
+          willQos:(MQTTQosLevel)willQos
+   willRetainFlag:(BOOL)willRetainFlag
+     withClientId:(NSString *)clientId
+   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates {
     [self connectTo:host
                port:port
