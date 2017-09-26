@@ -1,6 +1,6 @@
 <!-- Before filing an issue, please search the existing issues (both open and closed) to see if your report might be duplicate -->
 <!-- Please don't file an issue when you have a support question, send support questions to the support@ckrey.de) We love to hear about your new projects -->
-<!-- We currently don't have a user forum, but we are working on it -->
+<!-- We have a mailing list for developers which you can join by sending a mail to mqttclient-dev-subscribe@ckrey.de -->
 
 <!-- Tell us what is issue is about -->
  - Part: MQTT Protocol, MQTTSession, MQTTSessionManager <!-- delete the ones that do not apply -->
