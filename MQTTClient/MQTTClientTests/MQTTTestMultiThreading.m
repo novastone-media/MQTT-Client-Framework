@@ -56,8 +56,6 @@
     self.event = -1;
     [self.session connect];
     DDLogVerbose(@"%@ connecting", self.session.clientId);
-
-
 }
 
 - (void)sub

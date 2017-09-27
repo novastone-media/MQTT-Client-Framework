@@ -7,15 +7,7 @@
 //
 
 #import "MQTTCoreDataPersistence.h"
-
 #import "MQTTLog.h"
-
-static NSRecursiveLock *lock;
-static NSManagedObjectContext *parentManagedObjectContext;
-static NSManagedObjectModel *managedObjectModel;
-static NSPersistentStoreCoordinator *persistentStoreCoordinator;
-static unsigned long long fileSize;
-static unsigned long long fileSystemFreeSize;
 
 @implementation MQTTFlow
 @dynamic clientId;
@@ -59,358 +51,236 @@ static unsigned long long fileSystemFreeSize;
 
 - (NSString *)clientId {
     __block NSString *_clientId;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _clientId = object.clientId;
-    } else {
-        [context performBlockAndWait:^{
-            _clientId = object.clientId;
-        }];
-    }
+    }];
     return _clientId;
 }
 
 - (void)setClientId:(NSString *)clientId {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.clientId = clientId;
-    } else {
-
-        [context performBlockAndWait:^{
-            object.clientId = clientId;
-        }];
-    }
+    }];
 }
 
 - (NSNumber *)incomingFlag {
     __block NSNumber *_incomingFlag;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _incomingFlag = object.incomingFlag;
-    } else {
-        [context performBlockAndWait:^{
-            _incomingFlag = object.incomingFlag;
-        }];
-    }
+    }];
     return _incomingFlag;
 }
 
 - (void)setIncomingFlag:(NSNumber *)incomingFlag {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.incomingFlag = incomingFlag;
-    } else {
-        [context performBlockAndWait:^{
-            object.incomingFlag = incomingFlag;
-        }];
-    }
+    }];
 }
 
 
 - (NSNumber *)retainedFlag {
     __block NSNumber *_retainedFlag;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _retainedFlag = object.retainedFlag;
-    } else {
-        [context performBlockAndWait:^{
-            _retainedFlag = object.retainedFlag;
-        }];
-    }
+    }];
     return _retainedFlag;
 }
 
 - (void)setRetainedFlag:(NSNumber *)retainedFlag {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.retainedFlag = retainedFlag;
-    } else {
-        [context performBlockAndWait:^{
-            object.retainedFlag = retainedFlag;
-        }];
-    }
+    }];
 }
 
 - (NSNumber *)commandType {
     __block NSNumber *_commandType;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _commandType = object.commandType;
-    } else {
-        [context performBlockAndWait:^{
-            _commandType = object.commandType;
-        }];
-    }
+    }];
     return _commandType;
 }
 
 - (void)setCommandType:(NSNumber *)commandType {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.commandType = commandType;
-    } else {
-
-        [context performBlockAndWait:^{
-            object.commandType = commandType;
-        }];
-    }
+    }];
 }
 
 - (NSNumber *)qosLevel {
     __block NSNumber *_qosLevel;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _qosLevel = object.qosLevel;
-    } else {
-        [context performBlockAndWait:^{
-            _qosLevel = object.qosLevel;
-        }];
-    }
+    }];
     return _qosLevel;
 }
 
 - (void)setQosLevel:(NSNumber *)qosLevel {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.qosLevel = qosLevel;
-    } else {
-        [context performBlockAndWait:^{
-            object.qosLevel = qosLevel;
-        }];
-    }
+    }];
 }
 
 - (NSNumber *)messageId {
     __block NSNumber *_messageId;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _messageId = object.messageId;
-    } else {
-        [context performBlockAndWait:^{
-            _messageId = object.messageId;
-        }];
-    }
+    }];
     return _messageId;
 }
 
 - (void)setMessageId:(NSNumber *)messageId {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.messageId = messageId;
-    } else {
-        [context performBlockAndWait:^{
-            object.messageId = messageId;
-        }];
-    }
+    }];
 }
 
 - (NSString *)topic {
     __block NSString *_topic;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _topic = object.topic;
-    } else {
-        [context performBlockAndWait:^{
-            _topic = object.topic;
-        }];
-    }
+    }];
     return _topic;
 }
 
 - (void)setTopic:(NSString *)topic {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.topic = topic;
-    } else {
-        [context performBlockAndWait:^{
-            object.topic = topic;
-        }];
-    }
+    }];
 }
 
 - (NSData *)data {
     __block NSData *_data;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _data = object.data;
-    } else {
-        [context performBlockAndWait:^{
-            _data = object.data;
-        }];
-    }
+    }];
     return _data;
 }
 
 - (void)setData:(NSData *)data {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.data = data;
-    } else {
-        [context performBlockAndWait:^{
-            object.data = data;
-        }];
-    }
+    }];
 }
 
 - (NSDate *)deadline {
     __block NSDate *_deadline;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _deadline = object.deadline;
-    } else {
-        [context performBlockAndWait:^{
-            _deadline = object.deadline;
-        }];
-    }
+    }];
     return _deadline;
 }
 
 - (void)setDeadline:(NSDate *)deadline {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.deadline = deadline;
-    } else {
-        [context performBlockAndWait:^{
-            object.deadline = deadline;
-        }];
-    }
+    }];
 }
 
 - (NSData *)correlationData {
     __block NSData *_correlationData;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _correlationData = object.correlationData;
-    } else {
-        [context performBlockAndWait:^{
-            _correlationData = object.correlationData;
-        }];
-    }
+    }];
     return _correlationData;
 }
 
 - (void)setCorrelationData:(NSData *)correlationData {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.correlationData = correlationData;
-    } else {
-        [context performBlockAndWait:^{
-            object.correlationData = correlationData;
-        }];
-    }
+    }];
 }
 
 - (NSString *)responseTopic {
     __block NSString *_responseTopic;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _responseTopic = object.responseTopic;
-    } else {
-        [context performBlockAndWait:^{
-            _responseTopic = object.responseTopic;
-        }];
-    }
+    }];
     return _responseTopic;
 }
 
 - (void)setResponseTopic:(NSString *)responseTopic {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.responseTopic = responseTopic;
-    } else {
-        [context performBlockAndWait:^{
-            object.responseTopic = responseTopic;
-        }];
-    }
+    }];
 }
 
 - (NSString *)contentType {
     __block NSString *_contentType;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _contentType = object.contentType;
-    } else {
-        [context performBlockAndWait:^{
-            _contentType = object.contentType;
-        }];
-    }
+    }];
     return _contentType;
 }
 
 - (void)setContentType:(NSString *)contentType {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.contentType = contentType;
-    } else {
-        [context performBlockAndWait:^{
-            object.contentType = contentType;
-        }];
-    }
+    }];
 }
 
 - (NSData *)userProperties {
     __block NSData *_userProperties;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _userProperties = object.userProperties;
-    } else {
-        [context performBlockAndWait:^{
-            _userProperties = object.userProperties;
-        }];
-    }
+    }];
     return _userProperties;
 }
 
 - (void)setUserProperties:(NSData *)userProperties {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.userProperties = userProperties;
-    } else {
-        [context performBlockAndWait:^{
-            object.userProperties = userProperties;
-        }];
-    }
+    }];
 }
 
 - (NSNumber *)payloadFormatIndicator {
     __block NSNumber *_payloadFormatIndicator;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _payloadFormatIndicator = object.payloadFormatIndicator;
-    } else {
-        [context performBlockAndWait:^{
-            _payloadFormatIndicator = object.payloadFormatIndicator;
-        }];
-    }
+    }];
     return _payloadFormatIndicator;
 }
 
 - (void)setPayloadFormatIndicator:(NSNumber *)payloadFormatIndicator {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.payloadFormatIndicator = payloadFormatIndicator;
-    } else {
-        [context performBlockAndWait:^{
-            object.payloadFormatIndicator = payloadFormatIndicator;
-        }];
-    }
+    }];
 }
 
 - (NSNumber *)publicationExpiryInterval {
     __block NSNumber *_publicationExpiryInterval;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _publicationExpiryInterval = object.publicationExpiryInterval;
-    } else {
-        [context performBlockAndWait:^{
-            _publicationExpiryInterval = object.publicationExpiryInterval;
-        }];
-    }
+    }];
     return _publicationExpiryInterval;
 }
 
 - (void)setPublicationExpiryInterval:(NSNumber *)publicationExpiryInterval {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.publicationExpiryInterval = publicationExpiryInterval;
-    } else {
-        [context performBlockAndWait:^{
-            object.publicationExpiryInterval = publicationExpiryInterval;
-        }];
-    }
+    }];
 }
 
 - (NSNumber *)topicAlias {
     __block NSNumber *_topicAlias;
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         _topicAlias = object.topicAlias;
-    } else {
-        [context performBlockAndWait:^{
-            _topicAlias = object.topicAlias;
-        }];
-    }
+    }];
     return _topicAlias;
 }
 
 - (void)setTopicAlias:(NSNumber *)topicAlias {
-    if ([NSThread isMainThread]) {
+    [context performBlockAndWait:^{
         object.topicAlias = topicAlias;
-    } else {
-        [context performBlockAndWait:^{
-            object.topicAlias = topicAlias;
-        }];
-    }
+    }];
 }
+
+@end
+
+@interface MQTTCoreDataPersistence ()
+
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (assign, nonatomic) unsigned long long fileSize;
+@property (assign, nonatomic) unsigned long long fileSystemFreeSize;
 
 @end
 
@@ -426,9 +296,11 @@ static unsigned long long fileSystemFreeSize;
     self.maxSize = MQTT_MAX_SIZE;
     self.maxMessages = MQTT_MAX_MESSAGES;
     self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
-    if (!lock) {
-        lock = [[NSRecursiveLock alloc] init];
-    }
+    
+    NSPersistentStoreCoordinator *coordinator = [self createPersistentStoreCoordinator];
+    self.managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    self.managedObjectContext.persistentStoreCoordinator = coordinator;
+    
     return self;
 }
 
@@ -461,7 +333,7 @@ static unsigned long long fileSystemFreeSize;
                                userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
                                   contentType:(NSString *)contentType {
     if (([self allFlowsforClientId:clientId incomingFlag:incomingFlag].count <= self.maxMessages) &&
-        (fileSize <= self.maxSize)) {
+        (self.fileSize <= self.maxSize)) {
         MQTTCoreDataFlow *flow = [self createFlowforClientId:clientId
                                                 incomingFlag:incomingFlag
                                                    messageId:msgId];
@@ -487,58 +359,28 @@ static unsigned long long fileSystemFreeSize;
 }
 
 - (void)deleteFlow:(MQTTCoreDataFlow *)flow {
-    if ([NSThread isMainThread]) {
+    [self.managedObjectContext performBlockAndWait:^{
         [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
-    } else {
-        [self.managedObjectContext performBlockAndWait:^{
-            [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
-        }];
-    }
+    }];
     [self sync];
 }
 
 - (void)deleteAllFlowsForClientId:(NSString *)clientId {
-    if ([NSThread isMainThread]) {
+    [self.managedObjectContext performBlockAndWait:^{
         for (MQTTCoreDataFlow *flow in [self allFlowsforClientId:clientId incomingFlag:TRUE]) {
             [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
         }
         for (MQTTCoreDataFlow *flow in [self allFlowsforClientId:clientId incomingFlag:FALSE]) {
             [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
         }
-    } else {
-        [self.managedObjectContext performBlockAndWait:^{
-            for (MQTTCoreDataFlow *flow in [self allFlowsforClientId:clientId incomingFlag:TRUE]) {
-                [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
-            }
-            for (MQTTCoreDataFlow *flow in [self allFlowsforClientId:clientId incomingFlag:FALSE]) {
-                [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
-            }
-        }];
-    }
+    }];
     [self sync];
 }
 
 - (void)sync {
-    DDLogVerbose(@"lock sync %d", [NSThread isMainThread]);
-    @synchronized (lock) {
-        DDLogVerbose(@"locked sync %d", [NSThread isMainThread]);
-        if ([NSThread isMainThread]) {
-            [self internalSync];
-        } else {
-            //Changed to block and wait because sometime it was executed before internal parent sync
-            [self.managedObjectContext performBlockAndWait:^{
-                [self internalSync];
-            }];
-        }
-        if ([NSThread isMainThread]) {
-            [self internalParentSync];
-        } else {
-            [self.managedObjectContext.parentContext performBlock:^{
-                [self internalParentSync];
-            }];
-        }
-        DDLogVerbose(@"unlocked sync %d", [NSThread isMainThread]);
-    }
+    [self.managedObjectContext performBlockAndWait:^{
+        [self internalSync];
+    }];
 }
 
 - (void)internalSync {
@@ -564,20 +406,12 @@ static unsigned long long fileSystemFreeSize;
     }
 }
 
-- (void)internalParentSync {
-    if (self.managedObjectContext.parentContext && self.managedObjectContext.parentContext.hasChanges) {
-        NSError *error = nil;
-        if (![self.managedObjectContext.parentContext save:&error]) {
-            DDLogError(@"[MQTTPersistence] parentContext sync error %@", error);
-        }
-    }
-}
-
 - (NSArray *)allFlowsforClientId:(NSString *)clientId
                     incomingFlag:(BOOL)incomingFlag {
     NSMutableArray *flows = [NSMutableArray array];
     __block NSArray *rows;
-    if ([NSThread isMainThread]) {
+    [self.managedObjectContext performBlockAndWait:^{
+        
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:
                                   @"clientId = %@ and incomingFlag = %@",
@@ -590,23 +424,7 @@ static unsigned long long fileSystemFreeSize;
         if (!rows) {
             DDLogError(@"[MQTTPersistence] allFlowsforClientId %@", error);
         }
-    } else {
-        [self.managedObjectContext performBlockAndWait:^{
-
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
-            fetchRequest.predicate = [NSPredicate predicateWithFormat:
-                                      @"clientId = %@ and incomingFlag = %@",
-                                      clientId,
-                                      @(incomingFlag)
-                                      ];
-            fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"deadline" ascending:YES]];
-            NSError *error = nil;
-            rows = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-            if (!rows) {
-                DDLogError(@"[MQTTPersistence] allFlowsforClientId %@", error);
-            }
-        }];
-    }
+    }];
     for (id<MQTTFlow>row in rows) {
         [flows addObject:[[MQTTCoreDataFlow alloc] initWithContext:self.managedObjectContext andObject:row]];
     }
@@ -617,19 +435,13 @@ static unsigned long long fileSystemFreeSize;
                          incomingFlag:(BOOL)incomingFlag
                             messageId:(UInt16)messageId {
     __block MQTTCoreDataFlow *flow = nil;
-
+    
     DDLogVerbose(@"flowforClientId requestingPerform");
-    if ([NSThread isMainThread]) {
+    [self.managedObjectContext performBlockAndWait:^{
         flow = [self internalFlowForClientId:clientId
                                 incomingFlag:incomingFlag
                                    messageId:messageId];
-    } else {
-        [self.managedObjectContext performBlockAndWait:^{
-            flow = [self internalFlowForClientId:clientId
-                                    incomingFlag:incomingFlag
-                                       messageId:messageId];
-        }];
-    }
+    }];
     DDLogVerbose(@"flowforClientId performed");
     return flow;
 }
@@ -638,9 +450,9 @@ static unsigned long long fileSystemFreeSize;
                                  incomingFlag:(BOOL)incomingFlag
                                     messageId:(UInt16)messageId {
     MQTTCoreDataFlow *flow = nil;
-
+    
     DDLogVerbose(@"flowforClientId performing");
-
+    
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:
                               @"clientId = %@ and incomingFlag = %@ and messageId = %@",
@@ -669,224 +481,162 @@ static unsigned long long fileSystemFreeSize;
                                                              messageId:messageId];
     if (!flow) {
         __block id<MQTTFlow> row;
-        if ([NSThread isMainThread]) {
+        [self.managedObjectContext performBlockAndWait:^{
             row = [NSEntityDescription insertNewObjectForEntityForName:@"MQTTFlow"
                                                 inManagedObjectContext:self.managedObjectContext];
-
+            
             row.clientId = clientId;
             row.incomingFlag = @(incomingFlag);
             row.messageId = @(messageId);
-        } else {
-            [self.managedObjectContext performBlockAndWait:^{
-                row = [NSEntityDescription insertNewObjectForEntityForName:@"MQTTFlow"
-                                                    inManagedObjectContext:self.managedObjectContext];
-
-                row.clientId = clientId;
-                row.incomingFlag = @(incomingFlag);
-                row.messageId = @(messageId);
-            }];
-        }
+        }];
         flow = [[MQTTCoreDataFlow alloc] initWithContext:self.managedObjectContext andObject:row];
     }
-
+    
     return flow;
 }
 
 #pragma mark - Core Data stack
 
-- (NSManagedObjectContext *)managedObjectContext {
-    NSManagedObjectContext *managedObjectContext = [[NSThread currentThread].threadDictionary valueForKey:@"MQTTClient"];
-    if (managedObjectContext != nil) {
-        return managedObjectContext;
-    }
-
-    DDLogVerbose(@"lock managedObjectcontext %d", [NSThread isMainThread]);
-    @synchronized (lock) {
-        DDLogVerbose(@"locked managedObjectcontext %d", [NSThread isMainThread]);
-        if (parentManagedObjectContext == nil) {
-            NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-            if (coordinator != nil) {
-                parentManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-                parentManagedObjectContext.persistentStoreCoordinator = coordinator;
-            }
-        }
-        
-        if ([NSThread currentThread].isMainThread) {
-            // The main MOC is already associated to the main thread
-            ([NSThread currentThread].threadDictionary)[@"MQTTClient"] = parentManagedObjectContext;
-            DDLogVerbose(@"unlocked managedObjectcontext %d", [NSThread isMainThread]);
-            return parentManagedObjectContext;
-        } else {
-            // Only create a new managed object context if in a background thread
-            managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-            managedObjectContext.parentContext = parentManagedObjectContext;
-            
-            ([NSThread currentThread].threadDictionary)[@"MQTTClient"] = managedObjectContext;
-            DDLogVerbose(@"unlocked managedObjectcontext %d", [NSThread isMainThread]);
-            return managedObjectContext;
-        }
-    }
+- (NSManagedObjectModel *)createManagedObjectModel {
+    NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] init];
+    NSMutableArray *entities = [[NSMutableArray alloc] init];
+    NSMutableArray *properties = [[NSMutableArray alloc] init];
+    
+    NSAttributeDescription *attributeDescription;
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"clientId";
+    attributeDescription.attributeType = NSStringAttributeType;
+    attributeDescription.attributeValueClassName = @"NSString";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"incomingFlag";
+    attributeDescription.attributeType = NSBooleanAttributeType;
+    attributeDescription.attributeValueClassName = @"NSNumber";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"retainedFlag";
+    attributeDescription.attributeType = NSBooleanAttributeType;
+    attributeDescription.attributeValueClassName = @"NSNumber";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"commandType";
+    attributeDescription.attributeType = NSInteger16AttributeType;
+    attributeDescription.attributeValueClassName = @"NSNumber";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"qosLevel";
+    attributeDescription.attributeType = NSInteger16AttributeType;
+    attributeDescription.attributeValueClassName = @"NSNumber";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"messageId";
+    attributeDescription.attributeType = NSInteger32AttributeType;
+    attributeDescription.attributeValueClassName = @"NSNumber";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"topic";
+    attributeDescription.attributeType = NSStringAttributeType;
+    attributeDescription.attributeValueClassName = @"NSString";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"data";
+    attributeDescription.attributeType = NSBinaryDataAttributeType;
+    attributeDescription.attributeValueClassName = @"NSData";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"deadline";
+    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeValueClassName = @"NSDate";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"payloadFormatIndicator";
+    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeValueClassName = @"NSNumber";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"publicationExpiryInterval";
+    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeValueClassName = @"NSNumber";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"topicAlias";
+    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeValueClassName = @"NSNumber";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"correlationData";
+    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeValueClassName = @"NSData";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"userProperties";
+    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeValueClassName = @"NSData";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"responseTopic";
+    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeValueClassName = @"NSString";
+    [properties addObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"contentType";
+    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeValueClassName = @"NSString";
+    [properties addObject:attributeDescription];
+    
+    NSEntityDescription *entityDescription = [[NSEntityDescription alloc] init];
+    entityDescription.name = @"MQTTFlow";
+    entityDescription.managedObjectClassName = @"MQTTFlow";
+    entityDescription.abstract = FALSE;
+    entityDescription.properties = properties;
+    
+    [entities addObject:entityDescription];
+    managedObjectModel.entities = entities;
+    
+    return managedObjectModel;
 }
 
-- (NSManagedObjectModel *)managedObjectModel {
-    DDLogVerbose(@"lock managedObjectModel %d", [NSThread isMainThread]);
-    @synchronized (lock) {
-        DDLogVerbose(@"locked managedObjectModel %d", [NSThread isMainThread]);
-        if (managedObjectModel != nil) {
-            DDLogVerbose(@"unlocked managedObjectModel %d", [NSThread isMainThread]);
-            return managedObjectModel;
-        }
-
-        managedObjectModel = [[NSManagedObjectModel alloc] init];
-        NSMutableArray *entities = [[NSMutableArray alloc] init];
-        NSMutableArray *properties = [[NSMutableArray alloc] init];
-
-        NSAttributeDescription *attributeDescription;
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"clientId";
-        attributeDescription.attributeType = NSStringAttributeType;
-        attributeDescription.attributeValueClassName = @"NSString";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"incomingFlag";
-        attributeDescription.attributeType = NSBooleanAttributeType;
-        attributeDescription.attributeValueClassName = @"NSNumber";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"retainedFlag";
-        attributeDescription.attributeType = NSBooleanAttributeType;
-        attributeDescription.attributeValueClassName = @"NSNumber";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"commandType";
-        attributeDescription.attributeType = NSInteger16AttributeType;
-        attributeDescription.attributeValueClassName = @"NSNumber";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"qosLevel";
-        attributeDescription.attributeType = NSInteger16AttributeType;
-        attributeDescription.attributeValueClassName = @"NSNumber";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"messageId";
-        attributeDescription.attributeType = NSInteger32AttributeType;
-        attributeDescription.attributeValueClassName = @"NSNumber";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"topic";
-        attributeDescription.attributeType = NSStringAttributeType;
-        attributeDescription.attributeValueClassName = @"NSString";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"data";
-        attributeDescription.attributeType = NSBinaryDataAttributeType;
-        attributeDescription.attributeValueClassName = @"NSData";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"deadline";
-        attributeDescription.attributeType = NSDateAttributeType;
-        attributeDescription.attributeValueClassName = @"NSDate";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"payloadFormatIndicator";
-        attributeDescription.attributeType = NSDateAttributeType;
-        attributeDescription.attributeValueClassName = @"NSNumber";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"publicationExpiryInterval";
-        attributeDescription.attributeType = NSDateAttributeType;
-        attributeDescription.attributeValueClassName = @"NSNumber";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"topicAlias";
-        attributeDescription.attributeType = NSDateAttributeType;
-        attributeDescription.attributeValueClassName = @"NSNumber";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"correlationData";
-        attributeDescription.attributeType = NSDateAttributeType;
-        attributeDescription.attributeValueClassName = @"NSData";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"userProperties";
-        attributeDescription.attributeType = NSDateAttributeType;
-        attributeDescription.attributeValueClassName = @"NSData";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"responseTopic";
-        attributeDescription.attributeType = NSDateAttributeType;
-        attributeDescription.attributeValueClassName = @"NSString";
-        [properties addObject:attributeDescription];
-
-        attributeDescription = [[NSAttributeDescription alloc] init];
-        attributeDescription.name = @"contentType";
-        attributeDescription.attributeType = NSDateAttributeType;
-        attributeDescription.attributeValueClassName = @"NSString";
-        [properties addObject:attributeDescription];
-
-        NSEntityDescription *entityDescription = [[NSEntityDescription alloc] init];
-        entityDescription.name = @"MQTTFlow";
-        entityDescription.managedObjectClassName = @"MQTTFlow";
-        entityDescription.abstract = FALSE;
-        entityDescription.properties = properties;
-
-        [entities addObject:entityDescription];
-        managedObjectModel.entities = entities;
-
-        DDLogVerbose(@"unlocked managedObjectModel %d", [NSThread isMainThread]);
-        return managedObjectModel;
+- (NSPersistentStoreCoordinator *)createPersistentStoreCoordinator {
+    NSURL *persistentStoreURL = [[self applicationDocumentsDirectory]
+                                 URLByAppendingPathComponent:@"MQTTClient"];
+    DDLogInfo(@"[MQTTPersistence] Persistent store: %@", persistentStoreURL.path);
+    
+    
+    NSError *error = nil;
+    NSManagedObjectModel *model = [self createManagedObjectModel];
+    NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]
+                                                                initWithManagedObjectModel:model];
+    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
+                              NSInferMappingModelAutomaticallyOption: @YES,
+                              NSSQLiteAnalyzeOption: @YES,
+                              NSSQLiteManualVacuumOption: @YES
+                              };
+    
+    if (![persistentStoreCoordinator addPersistentStoreWithType:self.persistent ? NSSQLiteStoreType : NSInMemoryStoreType
+                                                  configuration:nil
+                                                            URL:self.persistent ? persistentStoreURL : nil
+                                                        options:options
+                                                          error:&error]) {
+        DDLogError(@"[MQTTPersistence] managedObjectContext save: %@", error);
+        persistentStoreCoordinator = nil;
     }
-}
-
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-    DDLogVerbose(@"lock persistentStoreCoordinator %d", [NSThread isMainThread]);
-    @synchronized (lock) {
-        DDLogVerbose(@"locked persistentStoreCoordinator %d", [NSThread isMainThread]);
-        if (persistentStoreCoordinator != nil) {
-            DDLogVerbose(@"unlocked persistentStoreCoordinator %d", [NSThread isMainThread]);
-            return persistentStoreCoordinator;
-        }
-
-        NSURL *persistentStoreURL = [[self applicationDocumentsDirectory]
-                                     URLByAppendingPathComponent:@"MQTTClient"];
-        DDLogInfo(@"[MQTTPersistence] Persistent store: %@", persistentStoreURL.path);
-
-
-        NSError *error = nil;
-        persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]
-                                      initWithManagedObjectModel:[self managedObjectModel]];
-        NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
-                                  NSInferMappingModelAutomaticallyOption: @YES,
-                                  NSSQLiteAnalyzeOption: @YES,
-                                  NSSQLiteManualVacuumOption: @YES
-                                  };
-
-        if (![persistentStoreCoordinator addPersistentStoreWithType:self.persistent ? NSSQLiteStoreType : NSInMemoryStoreType
-                                                      configuration:nil
-                                                                URL:self.persistent ? persistentStoreURL : nil
-                                                            options:options
-                                                              error:&error]) {
-            DDLogError(@"[MQTTPersistence] managedObjectContext save: %@", error);
-            persistentStoreCoordinator = nil;
-        }
-        DDLogVerbose(@"unlocked persistentStoreCoordinator %d", [NSThread isMainThread]);
-        return persistentStoreCoordinator;
-    }
+    return persistentStoreCoordinator;
 }
 
 #pragma mark - Application's Documents directory
@@ -901,19 +651,19 @@ static unsigned long long fileSystemFreeSize;
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = paths[0];
         NSString *persistentStorePath = [documentsDirectory stringByAppendingPathComponent:@"MQTTClient"];
-
+        
         NSError *error = nil;
         NSDictionary *fileAttributes = [[NSFileManager defaultManager]
                                         attributesOfItemAtPath:persistentStorePath error:&error];
         NSDictionary *fileSystemAttributes = [[NSFileManager defaultManager]
                                               attributesOfFileSystemForPath:persistentStorePath
                                               error:&error];
-        fileSize = [fileAttributes[NSFileSize] unsignedLongLongValue];
-        fileSystemFreeSize = [fileSystemAttributes[NSFileSystemFreeSize] unsignedLongLongValue];
+        self.fileSize = [fileAttributes[NSFileSize] unsignedLongLongValue];
+        self.fileSystemFreeSize = [fileSystemAttributes[NSFileSystemFreeSize] unsignedLongLongValue];
     } else {
-        fileSize = 0;
-        fileSystemFreeSize = 0;
+        self.fileSize = 0;
+        self.fileSystemFreeSize = 0;
     }
-    DDLogVerbose(@"[MQTTPersistence] sizes %llu/%llu", fileSize, fileSystemFreeSize);
+    DDLogVerbose(@"[MQTTPersistence] sizes %llu/%llu", self.fileSize, self.fileSystemFreeSize);
 }
 @end

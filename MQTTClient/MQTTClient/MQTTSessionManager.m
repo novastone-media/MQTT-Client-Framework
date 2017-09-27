@@ -36,6 +36,7 @@
 @property (nonatomic) NSInteger willQos;
 @property (nonatomic) BOOL willRetainFlag;
 @property (strong, nonatomic) NSString *clientId;
+@property (strong, nonatomic) NSRunLoop *runLoop;
 @property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
 @property (strong, nonatomic) NSArray *certificates;
 @property (nonatomic) MQTTProtocolVersion protocolLevel;
@@ -206,6 +207,43 @@
    willRetainFlag:(BOOL)willRetainFlag
      withClientId:(NSString *)clientId
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
+     certificates:(NSArray *)certificates
+protocolLevel:(MQTTProtocolVersion)protocolLevel {
+    [self connectTo:host
+               port:port
+                tls:tls
+          keepalive:keepalive
+              clean:clean
+               auth:auth
+               user:user
+               pass:pass
+               will:will
+          willTopic:willTopic
+            willMsg:willMsg
+            willQos:willQos
+     willRetainFlag:willRetainFlag
+       withClientId:clientId
+     securityPolicy:securityPolicy
+       certificates:certificates
+      protocolLevel:protocolLevel
+            runLoop:[NSRunLoop currentRunLoop]];
+}
+
+- (void)connectTo:(NSString *)host
+             port:(NSInteger)port
+              tls:(BOOL)tls
+        keepalive:(NSInteger)keepalive
+            clean:(BOOL)clean
+             auth:(BOOL)auth
+             user:(NSString *)user
+             pass:(NSString *)pass
+             will:(BOOL)will
+        willTopic:(NSString *)willTopic
+          willMsg:(NSData *)willMsg
+          willQos:(MQTTQosLevel)willQos
+   willRetainFlag:(BOOL)willRetainFlag
+     withClientId:(NSString *)clientId
+   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates {
     [self connectTo:host
                port:port
@@ -223,7 +261,8 @@
        withClientId:clientId
      securityPolicy:securityPolicy
        certificates:certificates
-      protocolLevel:MQTTProtocolVersion311]; // use this level as default, keeps it backwards compatible
+      protocolLevel:MQTTProtocolVersion311 // use this level as default, keeps it backwards compatible
+            runLoop:[NSRunLoop currentRunLoop]];
 }
 
 - (void)connectTo:(NSString *)host
@@ -242,7 +281,8 @@
      withClientId:(NSString *)clientId
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates
-    protocolLevel:(MQTTProtocolVersion)protocolLevel {
+    protocolLevel:(MQTTProtocolVersion)protocolLevel
+          runLoop:(NSRunLoop *)runLoop {
     DDLogVerbose(@"MQTTSessionManager connectTo:%@", host);
     BOOL shouldReconnect = self.session != nil;
     if (!self.session ||
@@ -260,7 +300,8 @@
         willRetainFlag != self.willRetainFlag ||
         ![clientId isEqualToString:self.clientId] ||
         securityPolicy != self.securityPolicy ||
-        certificates != self.certificates) {
+        certificates != self.certificates ||
+        runLoop != self.runLoop) {
         self.host = host;
         self.port = (int)port;
         self.tls = tls;
@@ -278,7 +319,8 @@
         self.securityPolicy = securityPolicy;
         self.certificates = certificates;
         self.protocolLevel = protocolLevel;
-
+        self.runLoop = runLoop;
+        
         self.session = [[MQTTSession alloc] initWithClientId:clientId
                                                     userName:auth ? user : nil
                                                     password:auth ? pass : nil
@@ -290,7 +332,7 @@
                                                      willQoS:willQos
                                               willRetainFlag:willRetainFlag
                                                protocolLevel:protocolLevel
-                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     runLoop:runLoop
                                                      forMode:NSDefaultRunLoopMode
                                               securityPolicy:securityPolicy
                                                 certificates:certificates];
@@ -458,6 +500,9 @@
 }
 
 - (void)connectToLast {
+    if (self.state == MQTTSessionManagerStateConnected) {
+        return;
+    }
     [self.reconnectTimer resetRetryInterval];
     [self reconnect];
 }
