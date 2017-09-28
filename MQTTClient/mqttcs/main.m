@@ -11,6 +11,7 @@
 #import "MQTTSession.h"
 #import "MQTTCFSocketTransport.h"
 #import "MQTTLog.h"
+#import "MQTTStrict.h"
 
 #import "stdio.h"
 
@@ -248,374 +249,481 @@ int main(int argc, const char * argv[]) {
 
             BOOL __block busy = false;
             for (id rowJSON in processJSON) {
-                if ([rowJSON isKindOfClass:[NSDictionary class]]) {
-                    NSDictionary *dictJSON = (NSDictionary *)rowJSON;
-                    NSString *cmd = dictJSON[@"cmd"];
-                    if (cmd && [cmd isKindOfClass:[NSString class]]) {
+                @try {
+                    if ([rowJSON isKindOfClass:[NSDictionary class]]) {
+                        NSDictionary *dictJSON = (NSDictionary *)rowJSON;
+                        NSString *cmd = dictJSON[@"cmd"];
+                        if (cmd && [cmd isKindOfClass:[NSString class]]) {
 
-                        /*                                        _
-                         *   ___  ___   _ __   _ __    ___   ___ | |_
-                         *  / __|/ _ \ | '_ \ | '_ \  / _ \ / __|| __|
-                         * | (__| (_) || | | || | | ||  __/| (__ | |_
-                         *  \___|\___/ |_| |_||_| |_| \___| \___| \__|              _                       _  _
-                         */
+                            /*                                        _
+                             *   ___  ___   _ __   _ __    ___   ___ | |_
+                             *  / __|/ _ \ | '_ \ | '_ \  / _ \ / __|| __|
+                             * | (__| (_) || | | || | | ||  __/| (__ | |_
+                             *  \___|\___/ |_| |_||_| |_| \___| \___| \__|              _                       _  _
+                             */
 
-                        if ([cmd isEqualToString:@"connect"]) {
+                            if ([cmd isEqualToString:@"connect"]) {
 
-                            NSString *host = dictJSON[@"host"];
-                            if (host) {
-                                t.host = host;
-                            }
-
-                            NSNumber *port = dictJSON[@"port"];
-                            if (port) {
-                                t.port = port.unsignedShortValue;
-                            }
-
-                            NSNumber *mqttProtocolLevel = dictJSON[@"mqttProtocolLevel"];
-                            if (mqttProtocolLevel) {
-                                s.protocolLevel = mqttProtocolLevel.unsignedShortValue;
-                            }
-
-                            [[NSFileHandle fileHandleWithStandardOutput] prints:
-                             [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"connecting to %@:%d (%d)\"}\n",
-                              s.transport.host, s.transport.port, s.protocolLevel]
-                             ];
-
-                            busy = true;
-                            [s connectWithConnectHandler:^(NSError *e){
-                                busy = false;
-                                if (e) {
-                                    [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                     [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"not connected to %@:%d\"}\n",
-                                      s.transport.host, s.transport.port]
-                                     ];
-                                    exit(1);
-                                } else {
-                                    [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                     [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"connected to %@:%d\"}\n",
-                                      s.transport.host, s.transport.port]
-                                     ];
+                                NSString *host = dictJSON[@"host"];
+                                if (host) {
+                                    t.host = host;
                                 }
-                            }];
 
-                            /*      _  _                                             _
-                             *   __| |(_) ___   ___  ___   _ __   _ __    ___   ___ | |_
-                             *  / _` || |/ __| / __|/ _ \ | '_ \ | '_ \  / _ \ / __|| __|
-                             * | (_| || |\__ \| (__| (_) || | | || | | ||  __/| (__ | |_
-                             *  \__,_||_||___/ \___|\___/ |_| |_||_| |_| \___| \___| \__|                                        _
-                             */
+                                NSNumber *port = dictJSON[@"port"];
+                                if (port) {
+                                    t.port = port.unsignedShortValue;
+                                }
 
-                        } else if ([cmd isEqualToString:@"disconnect"]) {
+                                NSNumber *mqttProtocolLevel = dictJSON[@"mqttProtocolLevel"];
+                                if (mqttProtocolLevel) {
+                                    s.protocolLevel = mqttProtocolLevel.unsignedShortValue;
+                                }
 
-                            NSNumber *returnCode = dictJSON[@"returnCode"];
-                            if (!returnCode) {
-                                returnCode = @(0);
-                            }
+                                NSNumber *keepAlive = dictJSON[@"keepAlive"];
+                                if (keepAlive) {
+                                    s.keepAliveInterval = keepAlive.unsignedShortValue;
+                                }
 
-                            NSNumber *sessionExpiryInterval = dictJSON[@"sessionExpiryInterval"];
-                            NSString *reasonString = dictJSON[@"reasonString"];
-                            NSArray <NSDictionary <NSString *, NSString *> *> *userProperties = dictJSON[@"userProperties"];
+                                NSNumber *cleanStart = dictJSON[@"cleanStart"];
+                                if (cleanStart) {
+                                    s.cleanSessionFlag = cleanStart.boolValue;
+                                }
 
-                            [[NSFileHandle fileHandleWithStandardOutput] prints:
-                             [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"disconnecting from %@:%d rC=%d sEI=%@ rS=%@ uP=%@\"}\n",
-                              s.transport.host, s.transport.port,
-                              returnCode.unsignedCharValue,
-                              sessionExpiryInterval,
-                              reasonString,
-                              userProperties.escapedJsonString
-                              ]
-                             ];
+                                NSNumber *willFlag = dictJSON[@"willFlag"];
+                                if (willFlag) {
+                                    s.willFlag = willFlag.boolValue;
+                                }
 
-                            busy = true;
-                            [s closeWithReturnCode:returnCode.unsignedCharValue
-                             sessionExpiryInterval:sessionExpiryInterval
-                                      reasonString:reasonString
-                                    userProperties:userProperties
-                                 disconnectHandler:^(NSError *e){
-                                     busy = false;
-                                     if (e) {
-                                         [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                          [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"not disconnected from %@:%d\"}\n",
-                                           s.transport.host, s.transport.port]
-                                          ];
-                                         exit(1);
-                                     } else {
-                                         [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                          [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"disconnected from %@:%d\"}\n",
-                                           s.transport.host, s.transport.port]
-                                          ];
-                                     }
-                                 }];
+                                NSNumber *willQoS = dictJSON[@"willQoS"];
+                                if (willQoS) {
+                                    s.willQoS = willQoS.unsignedCharValue;
+                                }
 
-                            /*              _                       _  _
-                             *  ___  _   _ | |__   ___   ___  _ __ (_)| |__    ___
-                             * / __|| | | || '_ \ / __| / __|| '__|| || '_ \  / _ \
-                             * \__ \| |_| || |_) |\__ \| (__ | |   | || |_) ||  __/
-                             * |___/ \__,_||_.__/ |___/ \___||_|   |_||_.__/  \___|
-                             */
-                        } else if ([cmd isEqualToString:@"subscribe"]) {
+                                NSNumber *willRetain = dictJSON[@"willRetain"];
+                                if (willRetain) {
+                                    s.willRetainFlag = willRetain.boolValue;
+                                }
 
-                            NSNumber *qos = dictJSON[@"qos"];
-                            if (!qos) {
-                                qos = @(MQTTQosLevelAtMostOnce);
-                            }
+                                NSString *willMessageString = dictJSON[@"willMessage"];
+                                if (willMessageString) {
+                                    s.willMsg = [willMessageString dataUsingEncoding:NSUTF8StringEncoding];
+                                }
 
-                            NSNumber *retainHandling = dictJSON[@"retainHandling"];
-                            if (!retainHandling) {
-                                retainHandling = @(MQTTSendRetained);
-                            }
+                                s.willDelayInterval = dictJSON[@"willDelayInterval"];
+                                s.sessionExpiryInterval = dictJSON[@"sessionExpiryInterval"];
 
-                            NSNumber *retainAsPublished = dictJSON[@"retainAsPublished"];
-                            if (!retainAsPublished) {
-                                retainAsPublished = @(false);
-                            }
+                                s.willTopic = dictJSON[@"willTopic"];
+                                s.userName = dictJSON[@"userName"];
+                                s.password = dictJSON[@"password"];
+                                s.maximumPacketSize = dictJSON[@"maximumPacketSize"];
+                                s.receiveMaximum = dictJSON[@"receiveMaximum"];
+                                s.clientId = dictJSON[@"clientIdentifier"];
 
-                            NSNumber *noLocal = dictJSON[@"noLocal"];
-                            if (!noLocal) {
-                                noLocal = @(false);
-                            }
+                                NSString *authenticationData = dictJSON[@"authenticationData"];
+                                if (authenticationData) {
+                                    s.authData = [authenticationData dataUsingEncoding:NSUTF8StringEncoding];
+                                }
+                                s.authMethod = dictJSON[@"authenticationMethod"];
+                                s.userProperties = dictJSON[@"userProperties"];
+                                s.requestProblemInformation = dictJSON[@"requestProblemInformation"];
+                                s.requestResponseInformation = dictJSON[@"requestResponseInformation"];
+                                s.topicAliasMaximum = dictJSON[@"topicAliasMaximum"];
 
-                            NSNumber *subscribeOptions = @(
-                            qos.intValue |
-                            noLocal.intValue << 2 |
-                            retainAsPublished.intValue << 3 |
-                            retainHandling.intValue << 4
-                            );
 
-                            NSNumber *subscriptionIdentifier = dictJSON[@"subscriptionIdentifier"];
+                                [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"connecting to %@:%d (%d) mPS=%@\"}\n",
+                                  s.transport.host,
+                                  s.transport.port,
+                                  s.protocolLevel,
+                                  s.maximumPacketSize]
+                                 ];
 
-                            NSString *topic = dictJSON[@"topic"];
-                            NSMutableDictionary *subs = [[NSMutableDictionary alloc] init];
-                            if (topic) {
-                                subs[topic] = subscribeOptions;
-                            }
+                                busy = true;
+                                [s connectWithConnectHandler:^(NSError *e){
+                                    busy = false;
+                                    if (e) {
+                                        [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                         [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"not connected to %@:%d\"}\n",
+                                          s.transport.host,
+                                          s.transport.port
+                                          ]
+                                         ];
+                                    } else {
+                                        [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                         [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"connected to %@:%d\", "
+                                          "\"sP\":%d, "
+                                          "\"bMPS\":%@, "
+                                          "\"kA\":%d, "
+                                          "\"sKA\":%@, "
+                                          "\"eKA\":%d, "
+                                          "\"bAM\":%@, "
+                                          "\"bAD\":%@, "
+                                          "\"bRI\":%@, "
+                                          "\"sR\":%@, "
+                                          "\"rS\":%@, "
+                                          "\"bRM\":%@, "
+                                          "\"bTAM\":%@, "
+                                          "\"mQ\":%@, "
+                                          "\"rA\":%@, "
+                                          "\"bUP\":%@, "
+                                          "\"wSA\":%@, "
+                                          "\"sIA\":%@, "
+                                          "\"sSA\":%@"
+                                          "}\n",
+                                          s.transport.host,
+                                          s.transport.port,
+                                          s.sessionPresent,
+                                          s.brokerMaximumPacketSize,
+                                          s.keepAliveInterval,
+                                          s.serverKeepAlive,
+                                          s.effectiveKeepAlive,
+                                          s.brokerAuthMethod,
+                                          s.brokerAuthData,
+                                          s.brokerResponseInformation,
+                                          s.serverReference,
+                                          s.reasonString,
+                                          s.brokerReceiveMaximum,
+                                          s.brokerTopicAliasMaximum,
+                                          s.maximumQoS,
+                                          s.retainAvailable,
+                                          s.brokerUserProperties.jsonString,
+                                          s.wildcardSubscriptionAvailable,
+                                          s.subscriptionIdentifiersAvailable,
+                                          s.sharedSubscriptionAvailable
+                                          ]];
+                                    }
+                                }];
 
-                            [[NSFileHandle fileHandleWithStandardOutput] prints:
-                             [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"subscribing \", \"subs\": %@}\n",
-                              subs.jsonString]
-                             ];
+                                /*      _  _                                             _
+                                 *   __| |(_) ___   ___  ___   _ __   _ __    ___   ___ | |_
+                                 *  / _` || |/ __| / __|/ _ \ | '_ \ | '_ \  / _ \ / __|| __|
+                                 * | (_| || |\__ \| (__| (_) || | | || | | ||  __/| (__ | |_
+                                 *  \__,_||_||___/ \___|\___/ |_| |_||_| |_| \___| \___| \__|                                        _
+                                 */
 
-                            busy = true;
-                            [s subscribeToTopics:subs
-                          subscriptionIdentifier:subscriptionIdentifier.intValue
-                                subscribeHandler:^(NSError *error,
-                                                   NSString *reasonString,
-                                                   NSArray <NSDictionary <NSString *, NSString*> *> *userProperties,
-                                                   NSArray <NSNumber *> *reasonCodes) {
+                            } else if ([cmd isEqualToString:@"disconnect"]) {
+
+                                NSNumber *returnCode = dictJSON[@"returnCode"];
+                                if (!returnCode) {
+                                    returnCode = @(0);
+                                }
+
+                                NSNumber *sessionExpiryInterval = dictJSON[@"sessionExpiryInterval"];
+                                NSString *reasonString = dictJSON[@"reasonString"];
+                                NSArray <NSDictionary <NSString *, NSString *> *> *userProperties = dictJSON[@"userProperties"];
+
+                                [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"disconnecting from %@:%d rC=%d sEI=%@ rS=%@ uP=%@\"}\n",
+                                  s.transport.host, s.transport.port,
+                                  returnCode.unsignedCharValue,
+                                  sessionExpiryInterval,
+                                  reasonString,
+                                  userProperties.escapedJsonString
+                                  ]
+                                 ];
+
+                                busy = true;
+                                [s closeWithReturnCode:returnCode.unsignedCharValue
+                                 sessionExpiryInterval:sessionExpiryInterval
+                                          reasonString:reasonString
+                                        userProperties:userProperties
+                                     disconnectHandler:^(NSError *e){
+                                         busy = false;
+                                         if (e) {
+                                             [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                              [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"not disconnected from %@:%d\"}\n",
+                                               s.transport.host, s.transport.port]
+                                              ];
+                                         } else {
+                                             [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                              [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"disconnected from %@:%d\"}\n",
+                                               s.transport.host, s.transport.port]
+                                              ];
+                                         }
+                                     }];
+
+                                /*              _                       _  _
+                                 *  ___  _   _ | |__   ___   ___  _ __ (_)| |__    ___
+                                 * / __|| | | || '_ \ / __| / __|| '__|| || '_ \  / _ \
+                                 * \__ \| |_| || |_) |\__ \| (__ | |   | || |_) ||  __/
+                                 * |___/ \__,_||_.__/ |___/ \___||_|   |_||_.__/  \___|
+                                 */
+                            } else if ([cmd isEqualToString:@"subscribe"]) {
+
+                                NSNumber *qos = dictJSON[@"qos"];
+                                if (!qos) {
+                                    qos = @(MQTTQosLevelAtMostOnce);
+                                }
+
+                                NSNumber *retainHandling = dictJSON[@"retainHandling"];
+                                if (!retainHandling) {
+                                    retainHandling = @(MQTTSendRetained);
+                                }
+
+                                NSNumber *retainAsPublished = dictJSON[@"retainAsPublished"];
+                                if (!retainAsPublished) {
+                                    retainAsPublished = @(false);
+                                }
+
+                                NSNumber *noLocal = dictJSON[@"noLocal"];
+                                if (!noLocal) {
+                                    noLocal = @(false);
+                                }
+
+                                NSNumber *subscribeOptions = @(
+                                qos.intValue |
+                                noLocal.intValue << 2 |
+                                retainAsPublished.intValue << 3 |
+                                retainHandling.intValue << 4
+                                );
+
+                                NSNumber *subscriptionIdentifier = dictJSON[@"subscriptionIdentifier"];
+
+                                NSString *topic = dictJSON[@"topic"];
+                                NSMutableDictionary *subs = [[NSMutableDictionary alloc] init];
+                                if (topic) {
+                                    subs[topic] = subscribeOptions;
+                                }
+
+                                [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"subscribing \", \"subs\": %@}\n",
+                                  subs.jsonString]
+                                 ];
+
+                                busy = true;
+                                [s subscribeToTopics:subs
+                              subscriptionIdentifier:subscriptionIdentifier.intValue
+                                    subscribeHandler:^(NSError *error,
+                                                       NSString *reasonString,
+                                                       NSArray <NSDictionary <NSString *, NSString*> *> *userProperties,
+                                                       NSArray <NSNumber *> *reasonCodes) {
+                                        busy = false;
+                                        if (error) {
+                                            [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                             [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"subscribe error %@ %@ %@\"}\n",
+                                              error, reasonString, userProperties]
+                                             ];
+                                            exit(1);
+                                        } else {
+                                            [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                             [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"subscribed %@ %@ %@\"}\n",
+                                              reasonCodes.escapedJsonString, reasonString, userProperties.escapedJsonString]
+                                             ];
+                                        }
+                                    }];
+
+                                /*                            _                       _  _
+                                 *  _   _  _ __   ___  _   _ | |__   ___   ___  _ __ (_)| |__    ___
+                                 * | | | || '_ \ / __|| | | || '_ \ / __| / __|| '__|| || '_ \  / _ \
+                                 * | |_| || | | |\__ \| |_| || |_) |\__ \| (__ | |   | || |_) ||  __/
+                                 *  \__,_||_| |_||___/ \__,_||_.__/ |___/ \___||_|   |_||_.__/  \___|             _                       _  _
+                                 */
+                            } else if ([cmd isEqualToString:@"unsubscribe"]) {
+
+                                NSString *topic = dictJSON[@"topic"];
+                                NSMutableArray *unsubs = [[NSMutableArray alloc] init];
+                                if (topic) {
+                                    [unsubs addObject:topic];
+                                }
+
+                                [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"unsubscribing \", \"unsubs\": %@}\n",
+                                  unsubs.jsonString]
+                                 ];
+
+                                busy = true;
+                                [s unsubscribeTopicsV5:unsubs unsubscribeHandler:^(NSError *error,
+                                                                                   NSString *reasonString,
+                                                                                   NSArray <NSDictionary <NSString *, NSString*> *> *userProperties,
+                                                                                   NSArray <NSNumber *> *reasonCodes) {
                                     busy = false;
                                     if (error) {
                                         [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                         [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"subscribe error %@ %@ %@\"}\n",
+                                         [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"unsubscribe error %@ %@ %@\"}\n",
                                           error, reasonString, userProperties]
                                          ];
                                         exit(1);
                                     } else {
                                         [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                         [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"subscribed %@ %@ %@\"}\n",
+                                         [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"unsubscribed %@ %@ %@\"}\n",
                                           reasonCodes.escapedJsonString, reasonString, userProperties.escapedJsonString]
                                          ];
                                     }
                                 }];
 
-                            /*                            _                       _  _
-                             *  _   _  _ __   ___  _   _ | |__   ___   ___  _ __ (_)| |__    ___
-                             * | | | || '_ \ / __|| | | || '_ \ / __| / __|| '__|| || '_ \  / _ \
-                             * | |_| || | | |\__ \| |_| || |_) |\__ \| (__ | |   | || |_) ||  __/
-                             *  \__,_||_| |_||___/ \__,_||_.__/ |___/ \___||_|   |_||_.__/  \___|             _                       _  _
-                             */
-                        } else if ([cmd isEqualToString:@"unsubscribe"]) {
+                                /*                _      _  _       _
+                                 *  _ __   _   _ | |__  | |(_) ___ | |__
+                                 * | '_ \ | | | || '_ \ | || |/ __|| '_ \
+                                 * | |_) || |_| || |_) || || |\__ \| | | |
+                                 * | .__/  \__,_||_.__/ |_||_||___/|_| |_|
+                                 * |_|
+                                 */
+                            } else if ([cmd isEqualToString:@"publish"]) {
 
-                            NSString *topic = dictJSON[@"topic"];
-                            NSMutableArray *unsubs = [[NSMutableArray alloc] init];
-                            if (topic) {
-                                [unsubs addObject:topic];
-                            }
-
-                            [[NSFileHandle fileHandleWithStandardOutput] prints:
-                             [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"unsubscribing \", \"unsubs\": %@}\n",
-                              unsubs.jsonString]
-                             ];
-
-                            busy = true;
-                            [s unsubscribeTopicsV5:unsubs unsubscribeHandler:^(NSError *error,
-                                                                               NSString *reasonString,
-                                                                               NSArray <NSDictionary <NSString *, NSString*> *> *userProperties,
-                                                                               NSArray <NSNumber *> *reasonCodes) {
-                                busy = false;
-                                if (error) {
-                                    [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                     [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"unsubscribe error %@ %@ %@\"}\n",
-                                      error, reasonString, userProperties]
-                                     ];
-                                    exit(1);
-                                } else {
-                                    [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                     [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"unsubscribed %@ %@ %@\"}\n",
-                                      reasonCodes.escapedJsonString, reasonString, userProperties.escapedJsonString]
-                                     ];
+                                NSNumber *qos = dictJSON[@"qos"];
+                                if (!qos) {
+                                    qos = @(MQTTQosLevelAtMostOnce);
                                 }
-                            }];
 
-                            /*                _      _  _       _
-                             *  _ __   _   _ | |__  | |(_) ___ | |__
-                             * | '_ \ | | | || '_ \ | || |/ __|| '_ \
-                             * | |_) || |_| || |_) || || |\__ \| | | |
-                             * | .__/  \__,_||_.__/ |_||_||___/|_| |_|
-                             * |_|
-                             */
-                        } else if ([cmd isEqualToString:@"publish"]) {
+                                NSNumber *retain = dictJSON[@"retain"];
+                                if (!retain) {
+                                    retain = @(0);
+                                }
 
-                            NSNumber *qos = dictJSON[@"qos"];
-                            if (!qos) {
-                                qos = @(MQTTQosLevelAtMostOnce);
+                                NSNumber *topicAlias = dictJSON[@"topicAlias"];
+                                NSNumber *payloadFormatIndicator = dictJSON[@"payloadFormatIndicator"];
+                                NSNumber *publicationExpiryInterval = dictJSON[@"publicationExpiryInterval"];
+                                NSString *responseTopic = dictJSON[@"responseTopic"];
+                                NSString *dataString = dictJSON[@"data"];
+                                NSString *correlationDataString = dictJSON[@"correlationData"];
+                                NSArray <NSDictionary <NSString *, NSString *> *> *userProperties = dictJSON[@"userProperties"];
+                                NSString *contentType = dictJSON[@"contentType"];
+                                NSString *topic = dictJSON[@"topic"];
+
+                                [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"publishing %@: %@ r%u q%u pFI=%@ pEI=%@ tA=%@ rT=%@ cD=%@ uP=%@ cT=%@\"}\n",
+                                  topic,
+                                  dataString,
+                                  retain.boolValue,
+                                  qos.unsignedCharValue,
+                                  payloadFormatIndicator,
+                                  publicationExpiryInterval,
+                                  topicAlias,
+                                  responseTopic,
+                                  correlationDataString,
+                                  userProperties.jsonString,
+                                  contentType]
+                                 ];
+
+                                UInt16 __block mid = [s publishDataV5:[dataString dataUsingEncoding:NSUTF8StringEncoding]
+                                                              onTopic:topic
+                                                               retain:retain.boolValue
+                                                                  qos:qos.unsignedCharValue
+                                               payloadFormatIndicator:payloadFormatIndicator
+                                            publicationExpiryInterval:publicationExpiryInterval
+                                                           topicAlias:topicAlias
+                                                        responseTopic:responseTopic
+                                                      correlationData:[correlationDataString dataUsingEncoding:NSUTF8StringEncoding]
+                                                       userProperties:userProperties
+                                                          contentType:contentType
+                                                       publishHandler:^(NSError *error) {
+                                                           if (error) {
+                                                               [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                                                [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"publish error %@\"}\n",
+                                                                 error]
+                                                                ];
+                                                               exit(1);
+                                                           } else {
+                                                               [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                                                [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"published mid %u\"}\n",
+                                                                 mid]
+                                                                ];
+                                                           }
+                                                       }];
+
+                                /*                  _  _
+                                 * __      __ __ _ (_)| |_
+                                 * \ \ /\ / // _` || || __|
+                                 *  \ V  V /| (_| || || |_
+                                 *   \_/\_/  \__,_||_| \__|
+                                 */
+
+                            } else if ([cmd isEqualToString:@"wait"]) {
+
+                                NSNumber *seconds = dictJSON[@"seconds"];
+                                if (!seconds) {
+                                    seconds = @(5);
+                                }
+
+                                [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"waiting for %@ seconds\"}\n",
+                                  seconds]
+                                 ];
+
+                                busy = true;
+                                [r runUntilDate:[NSDate dateWithTimeIntervalSinceNow:seconds.doubleValue]];
+                                busy = false;
+
+                                /*                      __  _
+                                 *   ___  ___   _ __   / _|(_)  __ _
+                                 *  / __|/ _ \ | '_ \ | |_ | | / _` |
+                                 * | (__| (_) || | | ||  _|| || (_| |
+                                 *  \___|\___/ |_| |_||_|  |_| \__, |
+                                 *                             |___/
+                                 */
+                            } else if ([cmd isEqualToString:@"config"]) {
+
+                                NSNumber *logLevel = dictJSON[@"logLevel"];
+                                if (!logLevel) {
+                                    logLevel = @(DDLogLevelWarning);
+                                }
+
+                                NSNumber *debug = dictJSON[@"debug"];
+                                if (!debug) {
+                                    debug = @(false);
+                                }
+
+                                NSNumber *strict = dictJSON[@"strict"];
+                                if (!strict) {
+                                    strict = @(false);
+                                }
+
+                                [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                 [NSString stringWithFormat:@"{\"cmd\": \"config\", \"config\": \"logLevel is now %@, debug is now %@, strict is now %@\"}\n",
+                                  logLevel,
+                                  debug,
+                                  strict]
+                                 ];
+
+                                busy = true;
+                                [MQTTLog setLogLevel:logLevel.intValue];
+                                d.debug = debug.intValue;
+                                MQTTStrict.strict = strict.boolValue;
+                                busy = false;
+
+                                /*            _  _
+                                 *  ___ __  __(_)| |_
+                                 * / _ \\ \/ /| || __|
+                                 *|  __/ >  < | || |_
+                                 * \___|/_/\_\|_| \__|
+                                 */
+                            } else if ([cmd isEqualToString:@"exit"]) {
+                                [[NSFileHandle fileHandleWithStandardOutput] prints:@"{\"cmd\": \"info\", \"info\": \"exit\"}\n"];
+
+                                exit(0);
+
+                            } else {
+                                [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                 [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"unkown cmd %@\"}\n",
+                                  cmd]
+                                 ];
                             }
-
-                            NSNumber *retain = dictJSON[@"retain"];
-                            if (!retain) {
-                                retain = @(0);
-                            }
-
-                            NSNumber *topicAlias = dictJSON[@"topicAlias"];
-                            NSNumber *payloadFormatIndicator = dictJSON[@"payloadFormatIndicator"];
-                            NSNumber *publicationExpiryInterval = dictJSON[@"publicationExpiryInterval"];
-                            NSString *responseTopic = dictJSON[@"responseTopic"];
-                            NSString *dataString = dictJSON[@"data"];
-                            NSString *correlationDataString = dictJSON[@"correlationData"];
-                            NSArray <NSDictionary <NSString *, NSString *> *> *userProperties = dictJSON[@"userProperties"];
-                            NSString *contentType = dictJSON[@"contentType"];
-                            NSString *topic = dictJSON[@"topic"];
-
-                            [[NSFileHandle fileHandleWithStandardOutput] prints:
-                             [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"publishing %@: %@ r%u q%u pFI=%@ pEI=%@ tA=%@ rT=%@ cD=%@ uP=%@ cT=%@\"}\n",
-                              topic,
-                              dataString,
-                              retain.boolValue,
-                              qos.unsignedCharValue,
-                              payloadFormatIndicator,
-                              publicationExpiryInterval,
-                              topicAlias,
-                              responseTopic,
-                              correlationDataString,
-                              userProperties.jsonString,
-                              contentType]
-                             ];
-
-                            UInt16 __block mid = [s publishDataV5:[dataString dataUsingEncoding:NSUTF8StringEncoding]
-                                                          onTopic:topic
-                                                           retain:retain.boolValue
-                                                              qos:qos.unsignedCharValue
-                                           payloadFormatIndicator:payloadFormatIndicator
-                                        publicationExpiryInterval:publicationExpiryInterval
-                                                       topicAlias:topicAlias
-                                                    responseTopic:responseTopic
-                                                  correlationData:[correlationDataString dataUsingEncoding:NSUTF8StringEncoding]
-                                                   userProperties:userProperties
-                                                      contentType:contentType
-                                                   publishHandler:^(NSError *error) {
-                                                       if (error) {
-                                                           [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                                            [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"publish error %@\"}\n",
-                                                             error]
-                                                            ];
-                                                           exit(1);
-                                                       } else {
-                                                           [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                                            [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"published mid %u\"}\n",
-                                                             mid]
-                                                            ];
-                                                       }
-                                                   }];
-
-                            /*                  _  _
-                             * __      __ __ _ (_)| |_
-                             * \ \ /\ / // _` || || __|
-                             *  \ V  V /| (_| || || |_
-                             *   \_/\_/  \__,_||_| \__|
-                             */
-
-                        } else if ([cmd isEqualToString:@"wait"]) {
-
-                            NSNumber *seconds = dictJSON[@"seconds"];
-                            if (!seconds) {
-                                seconds = @(5);
-                            }
-
-                            [[NSFileHandle fileHandleWithStandardOutput] prints:
-                             [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"waiting for %@ seconds\"}\n",
-                              seconds]
-                             ];
-
-                            busy = true;
-                            [r runUntilDate:[NSDate dateWithTimeIntervalSinceNow:seconds.doubleValue]];
-                            busy = false;
-
-                            /*                      __  _
-                             *   ___  ___   _ __   / _|(_)  __ _
-                             *  / __|/ _ \ | '_ \ | |_ | | / _` |
-                             * | (__| (_) || | | ||  _|| || (_| |
-                             *  \___|\___/ |_| |_||_|  |_| \__, |
-                             *                             |___/
-                             */
-                        } else if ([cmd isEqualToString:@"config"]) {
-
-                            NSNumber *logLevel = dictJSON[@"logLevel"];
-                            if (!logLevel) {
-                                logLevel = @(DDLogLevelWarning);
-                            }
-
-                            NSNumber *debug = dictJSON[@"debug"];
-                            if (!debug) {
-                                debug = @(false);
-                            }
-
-                            [[NSFileHandle fileHandleWithStandardOutput] prints:
-                             [NSString stringWithFormat:@"{\"cmd\": \"config\", \"config\": \"logLevel is now %@, debug is %@\"}\n",
-                              logLevel, debug]
-                             ];
-
-                            busy = true;
-                            [MQTTLog setLogLevel:logLevel.intValue];
-                            d.debug = debug.intValue;
-                            busy = false;
-
-                            /*            _  _
-                             *  ___ __  __(_)| |_
-                             * / _ \\ \/ /| || __|
-                             *|  __/ >  < | || |_
-                             * \___|/_/\_\|_| \__|
-                             */
-                        } else if ([cmd isEqualToString:@"exit"]) {
-                            [[NSFileHandle fileHandleWithStandardOutput] prints:@"{\"cmd\": \"info\", \"info\": \"exit\"}\n"];
-
-                            exit(0);
 
                         } else {
                             [[NSFileHandle fileHandleWithStandardOutput] prints:
-                             [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"unkown cmd %@\"}\n",
-                              cmd]
+                             [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"no cmd in %@\"}\n",
+                              ((NSObject *)dictJSON).escapedJsonString]
                              ];
+                        }
+
+                        while (busy) {
+                            [r runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
                         }
 
                     } else {
                         [[NSFileHandle fileHandleWithStandardOutput] prints:
-                         [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"no cmd in %@\"}\n",
-                          ((NSObject *)dictJSON).escapedJsonString]
+                         [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"skipping %@\"}\n",
+                          ((NSObject *)rowJSON).escapedJsonString]
                          ];
                     }
-                    
-                    while (busy) {
-                        [r runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
-                    }
-                    
-                } else {
+                } @catch (NSException *exception) {
                     [[NSFileHandle fileHandleWithStandardOutput] prints:
-                     [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"skipping %@\"}\n",
-                      ((NSObject *)rowJSON).escapedJsonString]
+                     [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"caught exception %@ %@\"}\n",
+                      exception.name, exception.reason]
                      ];
                 }
             }
-            
+
         } else {
             NSString *inputDataString = [[NSString alloc] initWithData:inputData encoding:NSUTF8StringEncoding];
             [[NSFileHandle fileHandleWithStandardOutput] prints:
@@ -625,7 +733,7 @@ int main(int argc, const char * argv[]) {
              ];
             
         }
-        
+
         while (true) {
             [r runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
         }

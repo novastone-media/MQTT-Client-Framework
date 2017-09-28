@@ -210,7 +210,9 @@ typedef NS_ENUM(NSUInteger, MQTTReturnCode) {
                                 reasonString:(NSString *)reasonString
                               userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties;
 
-+ (MQTTMessage *)messageFromData:(NSData *)data protocolLevel:(MQTTProtocolVersion)protocolLevel;
++ (MQTTMessage *)messageFromData:(NSData *)data
+                   protocolLevel:(MQTTProtocolVersion)protocolLevel
+             maximumPacketLength:(NSNumber *)maximumPacketLength;
 
 // instance methods
 - (instancetype)initWithType:(MQTTCommandType)type;

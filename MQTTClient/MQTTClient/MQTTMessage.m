@@ -528,7 +528,9 @@
     return buffer;
 }
 
-+ (MQTTMessage *)messageFromData:(NSData *)data protocolLevel:(MQTTProtocolVersion)protocolLevel {
++ (MQTTMessage *)messageFromData:(NSData *)data
+                   protocolLevel:(MQTTProtocolVersion)protocolLevel
+             maximumPacketLength:(NSNumber *)maximumPacketLength {
     MQTTMessage *message = nil;
     if (data.length >= 2) {
         UInt8 header;
@@ -557,6 +559,13 @@
                 break;
             }
         } while ((digit & 0x80) != 0);
+
+        if (maximumPacketLength && remainingLength + offset > maximumPacketLength.unsignedLongValue) {
+            DDLogWarn(@"[MQTTMessage] Maximum Packet Size exceeded %ul/%@",
+                      remainingLength,
+                      maximumPacketLength);
+            offset = -1;
+        }
 
         if (type >= MQTTConnect &&
             type <= MQTTDisconnect) {

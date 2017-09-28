@@ -1017,7 +1017,9 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
 }
 
 - (void)decoder:(MQTTDecoder*)sender didReceiveMessage:(NSData *)data {
-    MQTTMessage *message = [MQTTMessage messageFromData:data protocolLevel:self.protocolLevel];
+    MQTTMessage *message = [MQTTMessage messageFromData:data
+                                          protocolLevel:self.protocolLevel
+                                    maximumPacketLength:self.maximumPacketSize];
     if (!message) {
         DDLogError(@"[MQTTSession] MQTT illegal message received");
         NSError * error = [NSError errorWithDomain:MQTTSessionErrorDomain
@@ -2004,7 +2006,8 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
 
     if (MQTTStrict.strict &&
         self.password &&
-        !self.userName) {
+        !self.userName &&
+        self.protocolLevel != MQTTProtocolVersion50) {
         NSException* myException = [NSException
                                     exceptionWithName:@"password specified without userName"
                                     reason:[NSString stringWithFormat:@"password = %@", self.password]
@@ -2136,6 +2139,17 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
         @throw myException;
     }
 
+    if (MQTTStrict.strict &&
+        self.maximumPacketSize &&
+        (self.maximumPacketSize.unsignedLongValue == 0 ||
+         self.maximumPacketSize.unsignedLongValue >  2684354565)) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"Maximum Packet Size must not be zero or greater than 2,684,354,565"
+                                    reason:[NSString stringWithFormat:@"%@", self.maximumPacketSize]
+                                    userInfo:nil];
+        @throw myException;
+    }
+
     DDLogVerbose(@"[MQTTSession] connecting");
     if (self.cleanSessionFlag) {
         [self.persistence deleteAllFlowsForClientId:self.clientId];
@@ -2169,6 +2183,18 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     if (message) {
         NSData *wireFormat = message.wireFormat;
         if (wireFormat) {
+            if (MQTTStrict.strict &&
+                self.brokerMaximumPacketSize &&
+                self.brokerMaximumPacketSize.unsignedLongValue < wireFormat.length) {
+                NSException* myException = [NSException
+                                            exceptionWithName:@"The Client MUST NOT send packets exceeding Maximum Packet Size to the Server [MQTT-3.2.2-15]"
+                                            reason:[NSString stringWithFormat:@"%lu/%@",
+                                                    (unsigned long)wireFormat.length,
+                                                    self.brokerMaximumPacketSize]
+                                            userInfo:nil];
+                @throw myException;
+            }
+
             if (self.delegate) {
                 if ([self.delegate respondsToSelector:@selector(sending:type:qos:retained:duped:mid:data:)]) {
                     [self.delegate sending:self
