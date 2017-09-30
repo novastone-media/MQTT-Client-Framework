@@ -27,6 +27,7 @@
 @dynamic correlationData;
 @dynamic userProperties;
 @dynamic contentType;
+@dynamic subscriptionIdentifiers;
 
 @end
 
@@ -80,7 +81,8 @@ static NSMutableDictionary *clientIds;
                                 responseTopic:(NSString *)responseTopic
                               correlationData:(NSData *)correlationData
                                userProperties:(NSData *)userProperties
-                                  contentType:(NSString *)contentType{
+                                  contentType:(NSString *)contentType
+                      subscriptionIdentifiers:(NSData *)subscriptionIdentifers {
     @synchronized(clientIds) {
         
         if (([self allFlowsforClientId:clientId incomingFlag:incomingFlag].count <= self.maxMessages)) {
@@ -99,6 +101,8 @@ static NSMutableDictionary *clientIds;
             flow.correlationData = correlationData;
             flow.userProperties = userProperties;
             flow.contentType = contentType;
+            flow.subscriptionIdentifiers = subscriptionIdentifers;
+
             return flow;
         } else {
             return nil;

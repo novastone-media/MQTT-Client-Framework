@@ -691,7 +691,8 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                    responseTopic:responseTopic
                                                  correlationData:correlationData
                                                   userProperties:userPropertiesAsData
-                                                     contentType:contentType];
+                                                     contentType:contentType
+                                         subscriptionIdentifiers:nil];
             }
         }
         if (!msg) {
@@ -710,7 +711,8 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                responseTopic:responseTopic
                                              correlationData:correlationData
                                               userProperties:userPropertiesAsData
-                                                 contentType:contentType];
+                                                 contentType:contentType
+                                     subscriptionIdentifiers:nil];
         }
         if (!flow) {
             DDLogWarn(@"[MQTTSession] dropping outgoing message %d", msgId);
@@ -1379,7 +1381,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                         subscriptionIdentifiers:msg.properties.subscriptionIdentifiers];
                 }
 
-
                 if ([self.delegate respondsToSelector:@selector(newMessageWithFeedback:data:onTopic:qos:retained:mid:)]) {
                     processed = [self.delegate newMessageWithFeedback:self
                                                                  data:data
@@ -1426,13 +1427,18 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                   incomingFlag:YES
                                                    commandType:MQTTPubrec
                                                       deadline:[NSDate dateWithTimeIntervalSinceNow:self.dupTimeout]
-                                        payloadFormatIndicator:0
-                                     publicationExpiryInterval:0
-                                                    topicAlias:0
-                                                 responseTopic:nil
-                                               correlationData:nil
-                                                userProperties:nil
-                                                   contentType:nil]) {
+                                        payloadFormatIndicator:msg.properties.payloadFormatIndicator
+                                     publicationExpiryInterval:msg.properties.publicationExpiryInterval
+                                                    topicAlias:msg.properties.publicationExpiryInterval
+                                                 responseTopic:msg.properties.responseTopic
+                                               correlationData:msg.properties.correlationData
+                                                userProperties:[NSJSONSerialization dataWithJSONObject:msg.properties.userProperties
+                                                                                               options:0
+                                                                                                 error:nil]
+                                                   contentType:msg.properties.contentType
+                                       subscriptionIdentifiers:[NSJSONSerialization dataWithJSONObject:msg.properties.subscriptionIdentifiers
+                                                                                               options:0
+                                                                                                 error:nil]]) {
                     DDLogWarn(@"[MQTTSession] dropping incoming messages");
                 } else {
                     [self.persistence sync];
@@ -1467,7 +1473,9 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
             }
             if ([self.delegate respondsToSelector:@selector(messageDeliveredV5:msgID:topic:data:qos:retainFlag:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:)]) {
                 NSArray <NSDictionary <NSString *, NSString *> *> *userProperties;
-                userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:nil];
+                if (flow.userProperties) {
+                    userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:nil];
+                }
 
                 [self.delegate messageDeliveredV5:self
                                             msgID:msg.mid
@@ -1640,6 +1648,32 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                   mid:(flow.messageId).intValue
              ];
         }
+
+        if ([self.delegate respondsToSelector:@selector(newMessageV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
+            NSArray <NSDictionary <NSString *, NSString *> *> *userProperties;
+            if (flow.userProperties) {
+                userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:0];
+            }
+            NSArray <NSNumber *> *subscriptionIdentifiers;
+            if (flow.subscriptionIdentifiers) {
+                subscriptionIdentifiers = [NSJSONSerialization JSONObjectWithData:flow.subscriptionIdentifiers options:0 error:0];
+            }
+            [self.delegate newMessageV5:self
+                                   data:data
+                                onTopic:flow.topic
+                                    qos:(flow.qosLevel).intValue
+                               retained:(flow.retainedFlag).boolValue
+                                    mid:(flow.messageId).intValue
+                 payloadFormatIndicator:flow.payloadFormatIndicator
+              publicationExpiryInterval:flow.publicationExpiryInterval
+                             topicAlias:flow.topicAlias
+                          responseTopic:flow.responseTopic
+                        correlationData:flow.correlationData
+                         userProperties:userProperties
+                            contentType:flow.contentType
+                subscriptionIdentifiers:subscriptionIdentifiers];
+        }
+
         if ([self.delegate respondsToSelector:@selector(newMessageWithFeedback:data:onTopic:qos:retained:mid:)]) {
             processed = [self.delegate newMessageWithFeedback:self
                                                          data:data
@@ -1649,6 +1683,34 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                           mid:(flow.messageId).intValue
                          ];
         }
+
+        if ([self.delegate respondsToSelector:@selector(newMessageWithFeedbackV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
+            NSArray <NSDictionary <NSString *, NSString *> *> *userProperties;
+            if (flow.userProperties) {
+                userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:0];
+            }
+            NSArray <NSNumber *> *subscriptionIdentifiers;
+            if (flow.subscriptionIdentifiers) {
+                subscriptionIdentifiers = [NSJSONSerialization JSONObjectWithData:flow.subscriptionIdentifiers options:0 error:0];
+            }
+
+            processed = [self.delegate newMessageWithFeedbackV5:self
+                                                           data:data
+                                                        onTopic:flow.topic
+                                                            qos:(flow.qosLevel).intValue
+                                                       retained:(flow.retainedFlag).boolValue
+                                                            mid:(flow.messageId).intValue
+                                         payloadFormatIndicator:flow.payloadFormatIndicator
+                                      publicationExpiryInterval:flow.publicationExpiryInterval
+                                                     topicAlias:flow.topicAlias
+                                                  responseTopic:flow.responseTopic
+                                                correlationData:flow.correlationData
+                                                 userProperties:userProperties
+                                                    contentType:flow.contentType
+                                        subscriptionIdentifiers:subscriptionIdentifiers];
+        }
+
+
 
         if(self.messageHandler){
             self.messageHandler(flow.data, flow.topic);
@@ -1670,6 +1732,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     id<MQTTFlow> flow = [self.persistence flowforClientId:self.clientId
                                              incomingFlag:NO
                                                 messageId:message.mid];
+    DDLogVerbose(@"flow %@", flow);
     if (flow && (flow.commandType).intValue == MQTTPubrel) {
         if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
             [self.delegate messageDelivered:self msgID:message.mid];
@@ -1684,7 +1747,9 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
         }
         if ([self.delegate respondsToSelector:@selector(messageDeliveredV5:msgID:topic:data:qos:retainFlag:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:)]) {
             NSArray <NSDictionary <NSString *, NSString *> *> *userProperties;
-            userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:nil];
+            if (flow.userProperties) {
+                userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:nil];
+            }
 
             [self.delegate messageDeliveredV5:self
                                         msgID:message.mid

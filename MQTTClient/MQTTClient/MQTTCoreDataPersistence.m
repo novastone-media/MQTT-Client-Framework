@@ -26,6 +26,7 @@
 @dynamic userProperties;
 @dynamic correlationData;
 @dynamic contentType;
+@dynamic subscriptionIdentifiers;
 
 @end
 
@@ -232,6 +233,21 @@
     }];
 }
 
+- (NSData *)subscriptionIdentifiers {
+    __block NSData *_subscriptionIdentifiers;
+    [context performBlockAndWait:^{
+        _subscriptionIdentifiers = object.subscriptionIdentifiers;
+    }];
+    return _subscriptionIdentifiers;
+}
+
+- (void)setSubscriptionIdentifiers:(NSData *)subscriptionIdentifiers {
+    [context performBlockAndWait:^{
+        object.subscriptionIdentifiers = subscriptionIdentifiers;
+    }];
+}
+
+
 - (NSNumber *)payloadFormatIndicator {
     __block NSNumber *_payloadFormatIndicator;
     [context performBlockAndWait:^{
@@ -331,7 +347,8 @@
                                 responseTopic:(NSString *)responseTopic
                               correlationData:(NSData *)correlationData
                                userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
-                                  contentType:(NSString *)contentType {
+                                  contentType:(NSString *)contentType
+                      subscriptionIdentifiers:(NSData *)subscriptionIdentifers {
     if (([self allFlowsforClientId:clientId incomingFlag:incomingFlag].count <= self.maxMessages) &&
         (self.fileSize <= self.maxSize)) {
         MQTTCoreDataFlow *flow = [self createFlowforClientId:clientId
@@ -352,6 +369,10 @@
             flow.userProperties = [NSJSONSerialization dataWithJSONObject:userProperties options:0 error:nil];
         }
         flow.contentType = contentType;
+        flow.subscriptionIdentifiers = nil;
+        if (subscriptionIdentifers && [NSJSONSerialization isValidJSONObject:subscriptionIdentifers]) {
+            flow.subscriptionIdentifiers = [NSJSONSerialization dataWithJSONObject:subscriptionIdentifers options:0 error:nil];
+        }
         return flow;
     } else {
         return nil;
@@ -599,7 +620,13 @@
     attributeDescription.attributeType = NSDateAttributeType;
     attributeDescription.attributeValueClassName = @"NSString";
     [properties addObject:attributeDescription];
-    
+
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = @"subscriptionIdentifiers";
+    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeValueClassName = @"NSData";
+    [properties addObject:attributeDescription];
+
     NSEntityDescription *entityDescription = [[NSEntityDescription alloc] init];
     entityDescription.name = @"MQTTFlow";
     entityDescription.managedObjectClassName = @"MQTTFlow";

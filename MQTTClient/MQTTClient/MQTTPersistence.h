@@ -51,6 +51,7 @@ static NSInteger const MQTT_MAX_MESSAGES = 1024;
 @property (strong, nonatomic) NSData *correlationData;
 @property (strong, nonatomic) NSData *userProperties;
 @property (strong, nonatomic) NSString *contentType;
+@property (strong, nonatomic) NSData *subscriptionIdentifiers;
 
 @end
 
@@ -103,7 +104,8 @@ static NSInteger const MQTT_MAX_MESSAGES = 1024;
                           responseTopic:(NSString *)responseTopic
                         correlationData:(NSData *)correlationData
                          userProperties:(NSData *)userProperties
-                            contentType:(NSString *)contentType;
+                            contentType:(NSString *)contentType
+                subscriptionIdentifiers:(NSData *)subscriptionIdentifers;
 
 /** Deletes an MQTTFlow element
  * @param flow the MQTTFlow to delete

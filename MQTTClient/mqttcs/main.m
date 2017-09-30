@@ -127,6 +127,38 @@
     }
 }
 
+- (void)messageDeliveredV5:(MQTTSession *)session
+                     msgID:(UInt16)msgID
+                     topic:(NSString *)topic
+                      data:(NSData *)data
+                       qos:(MQTTQosLevel)qos
+                retainFlag:(BOOL)retainFlag
+    payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
+ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+                topicAlias:(NSNumber *)topicAlias
+             responseTopic:(NSString *)responseTopic
+           correlationData:(NSData *)correlationData
+            userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
+               contentType:(NSString *)contentType {
+    if (self.debug) {
+        [[NSFileHandle fileHandleWithStandardOutput] prints:
+         [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"messageDeliveredV5 %@: %@ r%u q%u pFI=%@ pEI=%@ tA=%@ rT=%@ cD=%@ uP=%@ cT=%@\"}\n",
+          topic,
+          data,
+          retainFlag,
+          qos,
+          payloadFormatIndicator,
+          publicationExpiryInterval,
+          topicAlias,
+          responseTopic,
+          correlationData,
+          userProperties.jsonString,
+          contentType]
+         ];
+    }
+
+}
+
 -(void)newMessageV5:(MQTTSession *)session
                data:(NSData *)data
             onTopic:(NSString *)topic
@@ -141,7 +173,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
      userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
         contentType:(NSString *)contentType
 subscriptionIdentifiers:(NSArray<NSNumber *> * _Nullable)subscriptionIdentifiers {
-
     NSMutableDictionary *newMessageV5 = [[NSMutableDictionary alloc] init];
     newMessageV5[@"cmd"] = @"callback";
     newMessageV5[@"callback"] = @"newMessageV5";
