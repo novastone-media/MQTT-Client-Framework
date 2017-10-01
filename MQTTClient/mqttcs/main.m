@@ -12,6 +12,7 @@
 #import "MQTTCFSocketTransport.h"
 #import "MQTTLog.h"
 #import "MQTTStrict.h"
+#import "MQTTWill.h"
 
 #import "stdio.h"
 
@@ -320,30 +321,21 @@ int main(int argc, const char * argv[]) {
                                     s.cleanSessionFlag = cleanStart.boolValue;
                                 }
 
-                                NSNumber *willFlag = dictJSON[@"willFlag"];
-                                if (willFlag) {
-                                    s.willFlag = willFlag.boolValue;
-                                }
-
-                                NSNumber *willQoS = dictJSON[@"willQoS"];
-                                if (willQoS) {
-                                    s.willQoS = willQoS.unsignedCharValue;
-                                }
-
-                                NSNumber *willRetain = dictJSON[@"willRetain"];
-                                if (willRetain) {
-                                    s.willRetainFlag = willRetain.boolValue;
-                                }
-
+                                NSString *willTopic = dictJSON[@"willTopic"];
                                 NSString *willMessageString = dictJSON[@"willMessage"];
-                                if (willMessageString) {
-                                    s.willMsg = [willMessageString dataUsingEncoding:NSUTF8StringEncoding];
+                                NSNumber *willQoS = dictJSON[@"willQoS"];
+                                NSNumber *willRetain = dictJSON[@"willRetain"];
+                                if (willTopic) {
+                                    s.will = [[MQTTWill alloc]
+                                              initWithTopic:willTopic
+                                              data:willMessageString ? [willMessageString dataUsingEncoding:NSUTF8StringEncoding] : [[NSData alloc] init]
+                                              retainFlag:willRetain ? willRetain.boolValue : false
+                                              qos:willQoS ? willQoS.unsignedCharValue : MQTTQosLevelAtMostOnce];
                                 }
 
                                 s.willDelayInterval = dictJSON[@"willDelayInterval"];
                                 s.sessionExpiryInterval = dictJSON[@"sessionExpiryInterval"];
 
-                                s.willTopic = dictJSON[@"willTopic"];
                                 s.userName = dictJSON[@"userName"];
                                 s.password = dictJSON[@"password"];
                                 s.maximumPacketSize = dictJSON[@"maximumPacketSize"];
@@ -522,26 +514,26 @@ int main(int argc, const char * argv[]) {
                                  ];
 
                                 busy = true;
-                                [s subscribeToTopics:subs
-                              subscriptionIdentifier:subscriptionIdentifier.intValue
-                                    subscribeHandler:^(NSError *error,
-                                                       NSString *reasonString,
-                                                       NSArray <NSDictionary <NSString *, NSString*> *> *userProperties,
-                                                       NSArray <NSNumber *> *reasonCodes) {
-                                        busy = false;
-                                        if (error) {
-                                            [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                             [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"subscribe error %@ %@ %@\"}\n",
-                                              error, reasonString, userProperties]
-                                             ];
-                                            exit(1);
-                                        } else {
-                                            [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                             [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"subscribed %@ %@ %@\"}\n",
-                                              reasonCodes.escapedJsonString, reasonString, userProperties.escapedJsonString]
-                                             ];
-                                        }
-                                    }];
+                                [s subscribeToTopicsV5:subs
+                                subscriptionIdentifier:subscriptionIdentifier.intValue
+                                      subscribeHandler:^(NSError *error,
+                                                         NSString *reasonString,
+                                                         NSArray <NSDictionary <NSString *, NSString*> *> *userProperties,
+                                                         NSArray <NSNumber *> *reasonCodes) {
+                                          busy = false;
+                                          if (error) {
+                                              [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                               [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"subscribe error %@ %@ %@\"}\n",
+                                                error, reasonString, userProperties]
+                                               ];
+                                              exit(1);
+                                          } else {
+                                              [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                               [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"subscribed %@ %@ %@\"}\n",
+                                                reasonCodes.escapedJsonString, reasonString, userProperties.escapedJsonString]
+                                               ];
+                                          }
+                                      }];
 
                                 /*                            _                       _  _
                                  *  _   _  _ __   ___  _   _ | |__   ___   ___  _ __ (_)| |__    ___

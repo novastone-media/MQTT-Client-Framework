@@ -3,27 +3,10 @@
 // MQTTClient.framework
 //
 
-/**
- Using MQTT in your Objective-C application
- This file contains definitions for mqttio-OBJC backward compatibility
- 
- @author Christoph Krey c@ckrey.de
- @copyright Copyright © 2013-2017, Christoph Krey. All rights reserved.
- 
- based on Copyright (c) 2011, 2013, 2lemetry LLC
-    All rights reserved. This program and the accompanying materials
-    are made available under the terms of the Eclipse Public License v1.0
-    which accompanies this distribution, and is available at
-    http://www.eclipse.org/legal/epl-v10.html
- 
- @see http://mqtt.org
- */
-
-
 #import <Foundation/Foundation.h>
 #import "MQTTSession.h"
 
-@interface MQTTSession(Create)
+@interface MQTTSession (legacy)
 
 /** convenience initializer
  @param clientId see clientId for description.
@@ -53,7 +36,8 @@
                    willRetainFlag:(BOOL)willRetainFlag
                     protocolLevel:(UInt8)protocolLevel
                           runLoop:(NSRunLoop *)runLoop
-                          forMode:(NSString *)runLoopMode;
+                          forMode:(NSString *)runLoopMode
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** alternative initializer
  @param clientId see initWithClientId for description.
@@ -85,7 +69,8 @@
                     protocolLevel:(UInt8)protocolLevel
                           runLoop:(NSRunLoop *)runLoop
                           forMode:(NSString *)runLoopMode
-                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy;
+                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** initialises the MQTT session
  *
@@ -165,7 +150,8 @@
                           runLoop:(NSRunLoop *)runLoop
                           forMode:(NSString *)runLoopMode
                    securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
-                     certificates:(NSArray *)certificates;
+                     certificates:(NSArray *)certificates
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /**
 * for mqttio-OBJC backward compatibility
@@ -173,7 +159,8 @@
 * @return the initialised MQTTSession object
 * All other parameters are set to defaults
 */
-- (instancetype)initWithClientId:(NSString *)theClientId;
+- (instancetype)initWithClientId:(NSString *)theClientId
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.
@@ -184,7 +171,9 @@
  */
 - (instancetype)initWithClientId:(NSString*)theClientId
                runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode;
+                         forMode:(NSString*)theRunLoopMode
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
+
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.
@@ -195,7 +184,8 @@
  */
 - (instancetype)initWithClientId:(NSString*)theClientId
               userName:(NSString*)theUsername
-              password:(NSString*)thePassword;
+              password:(NSString*)thePassword
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.
@@ -210,7 +200,8 @@
               userName:(NSString*)theUserName
               password:(NSString*)thePassword
                runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode;
+               forMode:(NSString*)theRunLoopMode
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.
@@ -225,7 +216,8 @@
               userName:(NSString*)theUsername
               password:(NSString*)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
-          cleanSession:(BOOL)cleanSessionFlag;
+          cleanSession:(BOOL)cleanSessionFlag
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.
@@ -244,7 +236,8 @@
              keepAlive:(UInt16)theKeepAlive
           cleanSession:(BOOL)theCleanSessionFlag
                runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theMode;
+               forMode:(NSString*)theMode
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.
@@ -267,7 +260,8 @@
              willTopic:(NSString*)willTopic
                willMsg:(NSData*)willMsg
                willQoS:(UInt8)willQoS
-        willRetainFlag:(BOOL)willRetainFlag;
+        willRetainFlag:(BOOL)willRetainFlag
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.
@@ -294,7 +288,8 @@
                willQoS:(UInt8)willQoS
         willRetainFlag:(BOOL)willRetainFlag
                runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode;
+               forMode:(NSString*)theRunLoopMode
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** for mqttio-OBJC backward compatibility
  @param theClientId see initWithClientId for description.
@@ -309,7 +304,8 @@
              keepAlive:(UInt16)theKeepAliveInterval
         connectMessage:(MQTTMessage*)theConnectMessage
                runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode;
+               forMode:(NSString*)theRunLoopMode
+__attribute__((deprecated("Replaced by -init and setters for the individual properties")));
 
 /** connects to the specified MQTT server
  
@@ -344,7 +340,9 @@
 - (void)connectToHost:(NSString *)host
                  port:(UInt32)port
              usingSSL:(BOOL)usingSSL
-       connectHandler:(MQTTConnectHandler)connectHandler;
+       connectHandler:(MQTTConnectHandler)connectHandler
+__attribute__((deprecated("Replaced by -connectWithConnectHandler:")));
+
 
 /** connects to the specified MQTT server
  
@@ -354,7 +352,8 @@
  returns see connectToHost for description
 
  */
-- (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
+- (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL
+__attribute__((deprecated("Replaced by -connectWithConnectHandler:")));
 
 
 /** for mqttio-OBJC backward compatibility
@@ -362,7 +361,8 @@
  @param port see connectToHost for description
  @deprecated as not all connection parameters are supported, use connect
  */
-- (void)connectToHost:(NSString*)ip port:(UInt32)port __attribute__((deprecated));
+- (void)connectToHost:(NSString*)ip port:(UInt32)port
+__attribute__((deprecated("Replaced by -connectWithConnectHandler:")));
 
 /** for mqttio-OBJC backward compatibility
  @param ip see connectToHost for description
@@ -376,7 +376,7 @@
                  port:(UInt32)port
 withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
        messageHandler:(void (^)(NSData* data, NSString* topic))messHandler
-__attribute__((deprecated));
+__attribute__((deprecated("Replaced by -connectWithConnectHandler:")));
 
 /** for mqttio-OBJC backward compatibility
  @param ip see connectToHost for description
@@ -389,62 +389,72 @@ __attribute__((deprecated));
                  port:(UInt32)port
              usingSSL:(BOOL)usingSSL
 withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
-       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
+       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler
+__attribute__((deprecated("Replaced by -connectWithConnectHandler:")));
 
 /** for mqttio-OBJC backward compatibility
  @param theTopic see subscribeToTopic for description
  */
-- (void)subscribeTopic:(NSString*)theTopic;
+- (void)subscribeTopic:(NSString*)theTopic
+__attribute__((deprecated("Replaced by -subscribeToTopicV5:")));
 
 /** for mqttio-OBJC backward compatibility
  @param theData see publishData for description
  @param theTopic see publishData for description
   */
-- (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic;
+- (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic
+__attribute__((deprecated("Replaced by -publishDataV5:")));
 
 /** for mqttio-OBJC backward compatibility
  @param theData see publishData for description
  @param theTopic see publishData for description
  */
-- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic;
-
-/** for mqttio-OBJC backward compatibility
- @param theData see publishData for description
- @param theTopic see publishData for description
- @param retainFlag see publishData for description
- */
-- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
-
-/** for mqttio-OBJC backward compatibility
- @param theData see publishData for description
- @param theTopic see publishData for description
- */
-- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic;
+- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic
+__attribute__((deprecated("Replaced by -publishDataV5:")));
 
 /** for mqttio-OBJC backward compatibility
  @param theData see publishData for description
  @param theTopic see publishData for description
  @param retainFlag see publishData for description
  */
-- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
+- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag
+__attribute__((deprecated("Replaced by -publishDataV5:")));
 
 /** for mqttio-OBJC backward compatibility
  @param theData see publishData for description
  @param theTopic see publishData for description
  */
-- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic;
+- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic
+__attribute__((deprecated("Replaced by -publishDataV5:")));
 
 /** for mqttio-OBJC backward compatibility
  @param theData see publishData for description
  @param theTopic see publishData for description
  @param retainFlag see publishData for description
  */
-- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
+- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag
+__attribute__((deprecated("Replaced by -publishDataV5:")));
+
+/** for mqttio-OBJC backward compatibility
+ @param theData see publishData for description
+ @param theTopic see publishData for description
+ */
+- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic
+__attribute__((deprecated("Replaced by -publishDataV5:")));
+
+/** for mqttio-OBJC backward compatibility
+ @param theData see publishData for description
+ @param theTopic see publishData for description
+ @param retainFlag see publishData for description
+ */
+- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag
+__attribute__((deprecated("Replaced by -publishDataV5:")));
 
 /** for mqttio-OBJC backward compatibility
  @param payload JSON payload is converted to NSData and then send. See publishData for description
  @param theTopic see publishData for description
  */
-- (void)publishJson:(id)payload onTopic:(NSString*)theTopic;
+- (void)publishJson:(id)payload onTopic:(NSString*)theTopic
+__attribute__((deprecated("Replaced by -publishDataV5:")));
 
 @end

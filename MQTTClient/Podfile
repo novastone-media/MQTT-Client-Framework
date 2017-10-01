@@ -2,7 +2,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
 target 'MQTTClientTests' do
-	platform :ios, '6.1'
+	platform :ios, '8.0'
 	pod 'CocoaLumberjack'
 	pod 'MQTTClient/MinL', :path => '..'
 	pod 'MQTTClient/ManagerL', :path => '..'

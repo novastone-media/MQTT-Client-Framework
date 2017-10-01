@@ -4,18 +4,18 @@
 //
 
 /**
- Using MQTT in your Objective-C application
- 
- @author Christoph Krey c@ckrey.de
- @copyright Copyright © 2013-2017, Christoph Krey. All rights reserved.
- 
- based on Copyright (c) 2011, 2013, 2lemetry LLC
-    All rights reserved. This program and the accompanying materials
-    are made available under the terms of the Eclipse Public License v1.0
-    which accompanies this distribution, and is available at
-    http://www.eclipse.org/legal/epl-v10.html
- 
- @see http://mqtt.org
+ * Using MQTT in your Objective-C application
+ *
+ * @author Christoph Krey c@ckrey.de
+ * @copyright Copyright © 2013-2017, Christoph Krey. All rights reserved.
+ *
+ * based on Copyright (c) 2011, 2013, 2lemetry LLC
+ *    All rights reserved. This program and the accompanying materials
+ *    are made available under the terms of the Eclipse Public License v1.0
+ *    which accompanies this distribution, and is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ *
+ * @see http://mqtt.org
  */
 
 
@@ -24,12 +24,13 @@
 #import "MQTTMessage.h"
 #import "MQTTPersistence.h"
 #import "MQTTTransport.h"
+#import "MQTTWill.h"
 
 @class MQTTSession;
 @class MQTTSSLSecurityPolicy;
 
 /**
- Enumeration of MQTTSession states
+ * Enumeration of MQTTSession states
  */
 typedef NS_ENUM(NSInteger, MQTTSessionStatus) {
     MQTTSessionStatusCreated,
@@ -41,7 +42,7 @@ typedef NS_ENUM(NSInteger, MQTTSessionStatus) {
 };
 
 /**
- Enumeration of MQTTSession events
+ * Enumeration of MQTTSession events
  */
 typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
     MQTTSessionEventConnected,
@@ -53,12 +54,12 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
 };
 
 /**
- The error domain used for all errors created by MQTTSession
+ * The error domain used for all errors created by MQTTSession
  */
 extern NSString * _Nonnull const MQTTSessionErrorDomain;
 
 /**
- The error codes used for all errors created by MQTTSession
+ * The error codes used for all errors created by MQTTSession
  */
 typedef NS_ENUM(NSInteger, MQTTSessionError) {
     MQTTSessionErrorConnectionRefused = -8, // Sent if the server closes the connection without sending an appropriate error CONNACK
@@ -77,12 +78,12 @@ typedef NS_ENUM(NSInteger, MQTTSessionError) {
     MQTTSessionErrorConnackReserved = 6, // Should be value 6-255, as defined by MQTT Protocol
 };
 
-/** Session delegate gives your application control over the MQTTSession
- @note all callback methods are optional
+/**
+ * Session delegate gives your application control over the MQTTSession
+ * @note all callback methods are optional
  */
 
 @protocol MQTTSessionDelegate <NSObject>
-
 @optional
 
 /** gets called when a new message was received
@@ -92,13 +93,15 @@ typedef NS_ENUM(NSInteger, MQTTSessionError) {
  @param qos the qos of the message
  @param retained indicates if the data retransmitted from server storage
  @param mid the Message Identifier of the message if qos = 1 or 2, zero otherwise
+ @param payloadFormatIndicator and optional indicator
+ @param publicationExpiryInterval an optional interval
+ @param topicAlias an optional alias used
+ @param responseTopic an optional topic for responses
+ @param correlationData optional data to be returned in responses
+ @param userProperties an optional array of key value pairs
+ @param contentType an optional type for the content
+ @param subscriptionIdentifiers an optional array indicating the identifiers used when subscribing
  */
-- (void)newMessage:(MQTTSession *_Nonnull)session
-              data:(NSData *_Nonnull)data
-           onTopic:(NSString *_Nonnull)topic
-               qos:(MQTTQosLevel)qos
-          retained:(BOOL)retained
-               mid:(unsigned int)mid;
 
 - (void)newMessageV5:(MQTTSession *_Nonnull)session
                 data:(NSData *_Nonnull)data
@@ -122,14 +125,16 @@ subscriptionIdentifiers:(NSArray <NSNumber *> * _Nullable)subscriptionIdentifier
  @param qos the qos of the message
  @param retained indicates if the data retransmitted from server storage
  @param mid the Message Identifier of the message if qos = 1 or 2, zero otherwise
+ @param payloadFormatIndicator and optional indicator
+ @param publicationExpiryInterval an optional interval
+ @param topicAlias an optional alias used
+ @param responseTopic an optional topic for responses
+ @param correlationData optional data to be returned in responses
+ @param userProperties an optional array of key value pairs
+ @param contentType an optional type for the content
+ @param subscriptionIdentifiers an optional array indicating the identifiers used when subscribing
  @return true if the message was or will be processed, false if the message shall not be ack-ed
  */
-- (BOOL)newMessageWithFeedback:(MQTTSession *_Nonnull)session
-                          data:(NSData *_Nonnull)data
-                       onTopic:(NSString *_Nonnull)topic
-                           qos:(MQTTQosLevel)qos
-                      retained:(BOOL)retained
-                           mid:(unsigned int)mid;
 
 - (BOOL)newMessageWithFeedbackV5:(MQTTSession *_Nonnull)session
                             data:(NSData *_Nonnull)data
@@ -147,15 +152,6 @@ subscriptionIdentifiers:(NSArray <NSNumber *> * _Nullable)subscriptionIdentifier
          subscriptionIdentifiers:(NSArray <NSNumber *> * _Nullable)subscriptionIdentifiers;
 
 
-/** for mqttio-OBJC backward compatibility
- @param session see newMessage for description
- @param data see newMessage for description
- @param topic see newMessage for description
- */
-- (void)session:(MQTTSession * _Nonnull)session
-     newMessage:(NSData * _Nonnull)data
-        onTopic:(NSString * _Nonnull)topic;
-
 /** gets called when a connection is established, closed or a problem occurred
  @param session the MQTTSession reporting the event
  @param eventCode the code of the event
@@ -165,22 +161,9 @@ subscriptionIdentifiers:(NSArray <NSNumber *> * _Nullable)subscriptionIdentifier
               event:(MQTTSessionEvent)eventCode
               error:(NSError * _Nullable)error;
 
-/** for mqttio-OBJC backward compatibility
- @param session the MQTTSession reporting the event
- @param eventCode the code of the event
- */
-- (void)session:(MQTTSession * _Nonnull)session handleEvent:(MQTTSessionEvent)eventCode;
-
 /** gets called when a connection has been successfully established
- @param session the MQTTSession reporting the connect
- 
- */
-- (void)connected:(MQTTSession * _Nonnull)session;
-
-/** gets called when a connection has been successfully established
- @param session the MQTTSession reporting the connect
- @param sessionPresent represents the Session Present flag sent by the broker
- 
+ * @param session the MQTTSession reporting the connect
+ * @param sessionPresent represents the Session Present flag sent by the broker
  */
 - (void)connected:(MQTTSession * _Nonnull)session
    sessionPresent:(BOOL)sessionPresent;
@@ -215,26 +198,19 @@ subscriptionIdentifiers:(NSArray <NSNumber *> * _Nullable)subscriptionIdentifier
 /** gets called when a published message was actually delivered
  @param session the MQTTSession reporting the delivery
  @param msgID the Message Identifier of the delivered message
- @note this method is called after a publish with qos 1 or 2 only
- */
-- (void)messageDelivered:(MQTTSession * _Nonnull)session
-                   msgID:(UInt16)msgID;
-
-/** gets called when a published message was actually delivered
- @param session the MQTTSession reporting the delivery
- @param msgID the Message Identifier of the delivered message
  @param topic the topic of the delivered message
  @param data the data Identifier of the delivered message
  @param qos the QoS level of the delivered message
  @param retainFlag the retain Flag of the delivered message
+ @param payloadFormatIndicator and optional indicator
+ @param publicationExpiryInterval an optional interval
+ @param topicAlias an optional alias used
+ @param responseTopic an optional topic for responses
+ @param correlationData optional data to be returned in responses
+ @param userProperties an optional array of key value pairs
+ @param contentType an optional type for the content
  @note this method is called after a publish with qos 1 or 2 only
  */
-- (void)messageDelivered:(MQTTSession *_Nonnull)session
-                   msgID:(UInt16)msgID
-                   topic:(NSString * _Nonnull)topic
-                    data:(NSData * _Nonnull)data
-                     qos:(MQTTQosLevel)qos
-              retainFlag:(BOOL)retainFlag;
 
 - (void)messageDeliveredV5:(MQTTSession *_Nonnull)session
                    msgID:(UInt16)msgID
@@ -250,33 +226,18 @@ subscriptionIdentifiers:(NSArray <NSNumber *> * _Nullable)subscriptionIdentifier
             userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
                contentType:(NSString * _Nullable)contentType;
 
-/** gets called when a subscription is acknowledged by the MQTT broker
- @param session the MQTTSession reporting the acknowledge
- @param msgID the Message Identifier of the SUBSCRIBE message
- @param qoss an array containing the granted QoS(s) related to the SUBSCRIBE message
-    (see subscribeTopic, subscribeTopics)
- */
-- (void)subAckReceived:(MQTTSession * _Nonnull)session
-                 msgID:(UInt16)msgID
-           grantedQoss:(NSArray<NSNumber *> * _Nonnull)qoss;
-
-/** subAckReceived V5 gets called when a subscribe is acknowledged by the MQTT broker
+/** subAckReceivedV5 gets called when a subscribe is acknowledged by the MQTT broker
  @param session the MQTTSession reporting the acknowledge
  @param msgID the Message Identifier of the UNSUBSCRIBE message
+ @param reasonString an optional textual explanation of the reason codes
+ @param userProperties an optional array of key value pairs
+ @param reasonCodes an optional array of reason codes per requested topic filter
  */
 - (void)subAckReceivedV5:(MQTTSession * _Nonnull)session
                  msgID:(UInt16)msgID
           reasonString:(NSString * _Nullable)reasonString
         userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
            reasonCodes:(NSArray <NSNumber *> * _Nullable)reasonCodes;
-
-
-/** gets called when an unsubscribe is acknowledged by the MQTT broker
- @param session the MQTTSession reporting the acknowledge
- @param msgID the Message Identifier of the UNSUBSCRIBE message
- */
-- (void)unsubAckReceived:(MQTTSession * _Nonnull)session
-                   msgID:(UInt16)msgID;
 
 /** unsubAckReceived V5 gets called when an unsubscribe is acknowledged by the MQTT broker
  @param session the MQTTSession reporting the acknowledge
@@ -349,6 +310,131 @@ subscriptionIdentifiers:(NSArray <NSNumber *> * _Nullable)subscriptionIdentifier
 /** gets called when the content of MQTTClients internal buffers change
  use for monitoring the completion of transmitted and received messages
  @param session the MQTTSession reporting the change
+ @param flowingIn the number of incoming messages not acknowledged by the MQTTClient yet
+ @param flowingOut the number of outgoing messages not yet acknowledged by the MQTT broker
+ */
+- (void)buffered:(MQTTSession * _Nonnull)session
+       flowingIn:(NSUInteger)flowingIn
+      flowingOut:(NSUInteger)flowingOut;
+
+/*
+ *      _                                               _                _
+ *   __| |   ___   _ __    _ __    ___    ___    __ _  | |_    ___    __| |
+ *  / _` |  / _ \ | '_ \  | '__|  / _ \  / __|  / _` | | __|  / _ \  / _` |
+ * | (_| | |  __/ | |_) | | |    |  __/ | (__  | (_| | | |_  |  __/ | (_| |
+ *  \__,_|  \___| | .__/  |_|     \___|  \___|  \__,_|  \__|  \___|  \__,_|
+ *                |_|
+ */
+
+/**
+ * gets called when a new message was received
+ * @param session the MQTTSession reporting the new message
+ * @param data the data received, might be zero length
+ * @param topic the topic the data was published to
+ * @param qos the qos of the message
+ * @param retained indicates if the data retransmitted from server storage
+ * @param mid the Message Identifier of the message if qos = 1 or 2, zero otherwise
+ */
+- (void)newMessage:(MQTTSession *_Nonnull)session
+              data:(NSData *_Nonnull)data
+           onTopic:(NSString *_Nonnull)topic
+               qos:(MQTTQosLevel)qos
+          retained:(BOOL)retained
+               mid:(unsigned int)mid
+__attribute__((deprecated("Replaced by -newMessageV5:")));
+
+/** gets called when a new message was received
+ @param session the MQTTSession reporting the new message
+ @param data the data received, might be zero length
+ @param topic the topic the data was published to
+ @param qos the qos of the message
+ @param retained indicates if the data retransmitted from server storage
+ @param mid the Message Identifier of the message if qos = 1 or 2, zero otherwise
+ @return true if the message was or will be processed, false if the message shall not be ack-ed
+ @deprecated Replace by newMessageWithFeedbackV5
+ */
+- (BOOL)newMessageWithFeedback:(MQTTSession *_Nonnull)session
+                          data:(NSData *_Nonnull)data
+                       onTopic:(NSString *_Nonnull)topic
+                           qos:(MQTTQosLevel)qos
+                      retained:(BOOL)retained
+                           mid:(unsigned int)mid
+__attribute__((deprecated("Replaced by -newMessageWithFeedbackV5:")));
+
+/** for mqttio-OBJC backward compatibility
+ @param session see newMessage for description
+ @param data see newMessage for description
+ @param topic see newMessage for description
+ */
+- (void)session:(MQTTSession * _Nonnull)session
+     newMessage:(NSData * _Nonnull)data
+        onTopic:(NSString * _Nonnull)topic
+__attribute__((deprecated("Replaced by -newMessageV5:")));
+
+/** for mqttio-OBJC backward compatibility
+ @param session the MQTTSession reporting the event
+ @param eventCode the code of the event
+ */
+- (void)session:(MQTTSession * _Nonnull)session
+    handleEvent:(MQTTSessionEvent)eventCode
+__attribute__((deprecated("Replaced by -handleEvent:event:error:")));
+
+/** gets called when a published message was actually delivered
+ @param session the MQTTSession reporting the delivery
+ @param msgID the Message Identifier of the delivered message
+ @note this method is called after a publish with qos 1 or 2 only
+ */
+- (void)messageDelivered:(MQTTSession * _Nonnull)session
+                   msgID:(UInt16)msgID
+__attribute__((deprecated("Replaced by -messageDeliveredV5:")));
+
+
+/** gets called when a published message was actually delivered
+ @param session the MQTTSession reporting the delivery
+ @param msgID the Message Identifier of the delivered message
+ @param topic the topic of the delivered message
+ @param data the data Identifier of the delivered message
+ @param qos the QoS level of the delivered message
+ @param retainFlag the retain Flag of the delivered message
+ @note this method is called after a publish with qos 1 or 2 only
+ */
+- (void)messageDelivered:(MQTTSession *_Nonnull)session
+                   msgID:(UInt16)msgID
+                   topic:(NSString * _Nonnull)topic
+                    data:(NSData * _Nonnull)data
+                     qos:(MQTTQosLevel)qos
+              retainFlag:(BOOL)retainFlag
+__attribute__((deprecated("Replaced by -messageDeliveredV5:")));
+
+/** gets called when a subscription is acknowledged by the MQTT broker
+ @param session the MQTTSession reporting the acknowledge
+ @param msgID the Message Identifier of the SUBSCRIBE message
+ @param qoss an array containing the granted QoS(s) related to the SUBSCRIBE message
+ (see subscribeTopic, subscribeTopics)
+ */
+- (void)subAckReceived:(MQTTSession * _Nonnull)session
+                 msgID:(UInt16)msgID
+           grantedQoss:(NSArray<NSNumber *> * _Nonnull)qoss
+__attribute__((deprecated("Replaced by -subAckReceivedV5:")));
+
+
+/** gets called when an unsubscribe is acknowledged by the MQTT broker
+ @param session the MQTTSession reporting the acknowledge
+ @param msgID the Message Identifier of the UNSUBSCRIBE message
+ */
+- (void)unsubAckReceived:(MQTTSession * _Nonnull)session
+                   msgID:(UInt16)msgID
+__attribute__((deprecated("Replaced by -unsubAckReceivedV5:")));
+
+/** gets called when a connection has been successfully established
+ * @param session the MQTTSession reporting the connect
+ */
+- (void)connected:(MQTTSession * _Nonnull)session
+__attribute__((deprecated("Replaced by -connected:sessionPresent:")));
+
+/** gets called when the content of MQTTClients internal buffers change
+ use for monitoring the completion of transmitted and received messages
+ @param session the MQTTSession reporting the change
  @param queued for backward compatibility only: MQTTClient does not queue messages anymore except during QoS protocol
  @param flowingIn the number of incoming messages not acknowledged by the MQTTClient yet
  @param flowingOut the number of outgoing messages not yet acknowledged by the MQTT broker
@@ -356,17 +442,8 @@ subscriptionIdentifiers:(NSArray <NSNumber *> * _Nullable)subscriptionIdentifier
 - (void)buffered:(MQTTSession * _Nonnull)session
           queued:(NSUInteger)queued
        flowingIn:(NSUInteger)flowingIn
-      flowingOut:(NSUInteger)flowingOut;
-
-/** gets called when the content of MQTTClients internal buffers change
- use for monitoring the completion of transmitted and received messages
- @param session the MQTTSession reporting the change
- @param flowingIn the number of incoming messages not acknowledged by the MQTTClient yet
- @param flowingOut the number of outgoing messages not yet acknowledged by the MQTT broker
- */
-- (void)buffered:(MQTTSession * _Nonnull)session
-       flowingIn:(NSUInteger)flowingIn
-      flowingOut:(NSUInteger)flowingOut;
+      flowingOut:(NSUInteger)flowingOut
+__attribute__((deprecated("Replaced by -buffered:flowingIn:flowingOut:")));
 
 @end
 
@@ -434,18 +511,6 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 */
 @property (strong, nonatomic) id<MQTTPersistence> _Nullable persistence;
 
-/** block called once when connection is established
- */
-@property (copy, nonatomic) MQTTConnectHandler _Nullable connectHandler;
-
-/** block called when connection is established
- */
-@property (strong) void (^ _Nullable connectionHandler)(MQTTSessionEvent event);
-
-/** block called when message is received
- */
-@property (strong) void (^ _Nullable messageHandler)(NSData * _Nonnull message, NSString * _Nonnull topic);
-
 /** Session status
  */
 @property (nonatomic, readonly) MQTTSessionStatus status;
@@ -495,7 +560,6 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
  */
 @property (readonly, nonatomic) UInt16 effectiveKeepAlive;
 
-
 @property (readonly, strong, nonatomic) NSString * _Nullable brokerAuthMethod;
 @property (readonly, strong, nonatomic) NSData * _Nullable brokerAuthData;
 @property (readonly, strong, nonatomic) NSString * _Nullable brokerResponseInformation;
@@ -520,31 +584,10 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 /** leanSessionFlag specifies if the server should discard previous session information. */
 @property (nonatomic) BOOL cleanSessionFlag;
 
-/** willFlag If the Will Flag is set to YES this indicates that
- * a Will Message MUST be published by the Server when the Server detects
+/** will If set the server publishes the will data to the will topic  when the Server detects
  * that the Client is disconnected for any reason other than the Client flowing a DISCONNECT Packet.
  */
-@property (nonatomic) BOOL willFlag;
-
-/** willTopic If the Will Flag is set to YES, the Will Topic is a string, nil otherwise. */
-@property (strong, nonatomic) NSString * _Nullable willTopic;
-
-/** willMsg If the Will Flag is set to YES the Will Message must be specified, nil otherwise. */
-@property (strong, nonatomic) NSData * _Nullable willMsg;
-
-/** willQoS specifies the QoS level to be used when publishing the Will Message.
- * If the Will Flag is set to NO, then the Will QoS MUST be set to 0.
- * If the Will Flag is set to YES, the Will QoS MUST be a valid MQTTQosLevel.
- */
-@property (nonatomic) MQTTQosLevel willQoS;
-
-/** willRetainFlag indicates if the server should publish the Will Messages with retainFlag.
- * If the Will Flag is set to NO, then the Will Retain Flag MUST be set to NO .
- * If the Will Flag is set to YES: If Will Retain is set to NO, the Serve
- * MUST publish the Will Message as a non-retained publication [MQTT-3.1.2-14].
- * If Will Retain is set to YES, the Server MUST publish the Will Message as a retained publication [MQTT-3.1.2-15].
- */
-@property (nonatomic) BOOL willRetainFlag;
+@property (strong, nonatomic, nullable) MQTTWill *will;
 
 /** protocolLevel specifies the protocol to be used */
 @property (nonatomic) MQTTProtocolVersion protocolLevel;
@@ -586,11 +629,6 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 @property (strong, nonatomic) NSString * _Nullable runLoopMode;
 
 
-/** for mqttio-OBJC backward compatibility
- the connect message used is stored here
- */
-@property (strong, nonatomic) MQTTMessage * _Nullable connectMessage;
-
 /** the transport provider for MQTTClient
  *
  * assign an in instance of a class implementing the MQTTTransport protocol e.g.
@@ -606,13 +644,15 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
  */
 @property (nonatomic) BOOL voip;
 
-/** connect to the given host through the given transport with the given
- *  MQTT session parameters asynchronously
- *
+/** initialises the MQTT session with default values
+ @return the initialised MQTTSession object
+ @code
+ #import "MQTTClient.h"
+
+ MQTTSession *session = [[MQTTSession alloc] init];
+ @endcode
  */
-
-
-- (void)connect;
+- (MQTTSession * _Nonnull)init;
 
 /** connects to the specified MQTT server
  
@@ -643,204 +683,369 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 
 - (void)connectWithConnectHandler:(MQTTConnectHandler _Nullable)connectHandler;
 
-
-/** disconnect gracefully
- *
- */
-- (void)disconnect;
-
-/** disconnect V5
- *  @param returnCode the returncode send to the broker
- *  @param sessionExpiryInterval the time in seconds before the session can be deleted
- *  @param reasonString a string explaining the reason
- *  @param userProperties additional dictionary of user key/value combinations
- */
-- (void)disconnectWithReturnCode:(MQTTReturnCode)returnCode
-           sessionExpiryInterval:(NSNumber * _Nullable)sessionExpiryInterval
-                    reasonString:(NSString * _Nullable)reasonString
-                  userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties;
-
-
-/** initialises the MQTT session with default values
- @return the initialised MQTTSession object
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc] init];
- @endcode
- */
-- (MQTTSession * _Nonnull)init;
-
-
-
 /** subscribes to a topic at a specific QoS level
- 
- @param topic see subscribeToTopic:atLevel:subscribeHandler: for description
- @param qosLevel  see subscribeToTopic:atLevel:subscribeHandler: for description
- @return the Message Identifier of the SUBSCRIBE message.
- 
- @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
- 
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc] init];
- ...
- [session connect];
- ...
- [session subscribeToTopic:@"example/#" atLevel:2];
- 
- @endcode
- 
- */
 
-- (UInt16)subscribeToTopic:(NSString * _Nonnull)topic
-                   atLevel:(MQTTQosLevel)qosLevel;
-- (UInt16)subscribeToTopic:(NSString * _Nonnull)topic
-                   atLevel:(MQTTQosLevel)qosLevel
-                   noLocal:(BOOL)noLocal
-         retainAsPublished:(BOOL)retainAsPublished
-            retainHandling:(MQTTRetainHandling)retainHandling
-    subscriptionIdentifier:(UInt32)subscriptionIdentifier;
-
-/** subscribes to a topic at a specific QoS level
- 
  @param topic the Topic Filter to subscribe to.
- 
+
  @param qosLevel specifies the QoS Level of the subscription.
  qosLevel can be 0, 1, or 2.
  @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
  Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
  array of grantes Qos
- 
- 
+
+
  @return the Message Identifier of the SUBSCRIBE message.
- 
+
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
- 
+
  @code
  #import "MQTTClient.h"
- 
+
  MQTTSession *session = [[MQTTSession alloc] init];
  ...
  [session connect];
  ...
  [session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
-    if (error) {
-        NSLog(@"Subscription failed %@", error.localizedDescription);
-    } else {
-        NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
-    }
+ if (error) {
+ NSLog(@"Subscription failed %@", error.localizedDescription);
+ } else {
+ NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
+ }
  }];
- 
+
  @endcode
- 
+
+ */
+
+
+- (UInt16)subscribeToTopicV5:(NSString * _Nonnull)topic
+                     atLevel:(MQTTQosLevel)qosLevel
+                     noLocal:(BOOL)noLocal
+           retainAsPublished:(BOOL)retainAsPublished
+              retainHandling:(MQTTRetainHandling)retainHandling
+      subscriptionIdentifier:(UInt32)subscriptionIdentifier
+            subscribeHandler:(MQTTSubscribeHandlerV5 _Nullable)subscribeHandler;
+
+/** subscribes a number of topics
+
+ @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
+ the corresponding QoS as NSNumber values
+ @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
+ Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+ array of grantes Qos
+
+ @return the Message Identifier of the SUBSCRIBE message.
+
+ @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
+
+ @code
+ #import "MQTTClient.h"
+
+ MQTTSession *session = [[MQTTSession alloc] init];
+ ...
+ [session connect];
+
+ [session subscribeToTopics:@{
+ @"example/#": @(0),
+ @"example/status": @(2),
+ @"other/#": @(1)
+ } subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
+ if (error) {
+ NSLog(@"Subscription failed %@", error.localizedDescription);
+ } else {
+ NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
+ }
+ }];
+
+
+ @endcode
+ */
+
+
+- (UInt16)subscribeToTopicsV5:(NSDictionary<NSString *, NSNumber *> * _Nonnull)topics
+       subscriptionIdentifier:(UInt32)subscriptionIdentifier
+             subscribeHandler:(MQTTSubscribeHandlerV5 _Nullable)subscribeHandler;
+
+/** unsubscribes from a number of topic
+
+ @param topics an NSArray<NSString *> of topics to unsubscribe from
+
+ @param unsubscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
+ Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+ array of grantes Qos
+
+ @return the Message Identifier of the UNSUBSCRIBE message.
+
+ @note returns immediately.
+
+ */
+- (UInt16)unsubscribeTopicsV5:(NSArray<NSString *> * _Nonnull)topics
+           unsubscribeHandler:(MQTTUnsubscribeHandlerV5 _Nullable)unsubscribeHandler;
+
+/** publishes data on a given topic at a specified QoS level and retain flag
+
+ @param data the data to be sent. length may range from 0 to 268,435,455 - 4 - _lengthof-topic_ bytes. Defaults to length 0.
+ @param topic the Topic to identify the data
+ @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
+ @param qos specifies the Quality of Service for the publish
+ qos can be 0, 1, or 2.
+ @return the packet identifier
+ */
+- (UInt16)publishDataV5:(NSData * _Nonnull)data
+                onTopic:(NSString * _Nonnull)topic
+                 retain:(BOOL)retainFlag
+                    qos:(MQTTQosLevel)qos
+ payloadFormatIndicator:(NSNumber * _Nullable)payloadFormatIndicator
+publicationExpiryInterval:(NSNumber *  _Nullable)publicationExpiryInterval
+             topicAlias:(NSNumber * _Nullable)topicAlias
+          responseTopic:(NSString * _Nullable)responseTopic
+        correlationData:(NSData * _Nullable)correlationData
+         userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
+            contentType:(NSString * _Nullable)contentType
+         publishHandler:(MQTTPublishHandler _Nullable)publishHandler;
+
+/** closeWithReturnCode
+ *  @param returnCode the returncode send to the broker
+ *  @param sessionExpiryInterval the time in seconds before the session can be deleted
+ *  @param reasonString a string explaining the reason
+ *  @param userProperties additional dictionary of user key/value combinations
+ *  @param disconnectHandler will be called when the disconnect finished
+ */
+- (void)closeWithReturnCode:(MQTTReturnCode)returnCode
+      sessionExpiryInterval:(NSNumber * _Nullable)sessionExpiryInterval
+               reasonString:(NSString * _Nullable)reasonString
+             userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
+          disconnectHandler:(MQTTDisconnectHandler _Nullable)disconnectHandler;
+
+/*
+ *      _                                               _                _
+ *   __| |   ___   _ __    _ __    ___    ___    __ _  | |_    ___    __| |
+ *  / _` |  / _ \ | '_ \  | '__|  / _ \  / __|  / _` | | __|  / _ \  / _` |
+ * | (_| | |  __/ | |_) | | |    |  __/ | (__  | (_| | | |_  |  __/ | (_| |
+ *  \__,_|  \___| | .__/  |_|     \___|  \___|  \__,_|  \__|  \___|  \__,_|
+ *                |_|
+ */
+
+/** block called once when connection is established
+ */
+@property (copy, nonatomic) MQTTConnectHandler _Nullable connectHandler
+__attribute__((deprecated("Replaced by -connectWithConnectHandler:")));
+
+/** block called when connection is established
+ */
+@property (strong) void (^ _Nullable connectionHandler)(MQTTSessionEvent event)
+__attribute__((deprecated("Replaced by -connectWithConnectHandler:")));
+
+/** block called when message is received
+ */
+@property (strong) void (^ _Nullable messageHandler)(NSData * _Nonnull message, NSString * _Nonnull topic)
+__attribute__((deprecated()));
+
+/** for mqttio-OBJC backward compatibility
+ the connect message used is stored here
+ */
+@property (strong, nonatomic) MQTTMessage * _Nullable connectMessage
+__attribute__((deprecated()));
+;
+
+/** willFlag If the Will Flag is set to YES this indicates that
+ * a Will Message MUST be published by the Server when the Server detects
+ * that the Client is disconnected for any reason other than the Client flowing a DISCONNECT Packet.
+ */
+@property (nonatomic) BOOL willFlag
+__attribute__((deprecated("Replaced by will property")));
+
+/** willTopic If the Will Flag is set to YES, the Will Topic is a string, nil otherwise. */
+@property (strong, nonatomic) NSString * _Nullable willTopic
+__attribute__((deprecated("Replaced by will property")));
+
+/** willMsg If the Will Flag is set to YES the Will Message must be specified, nil otherwise. */
+@property (strong, nonatomic) NSData * _Nullable willMsg
+__attribute__((deprecated("Replaced by will property")));
+
+/** willQoS specifies the QoS level to be used when publishing the Will Message.
+ * If the Will Flag is set to NO, then the Will QoS MUST be set to 0.
+ * If the Will Flag is set to YES, the Will QoS MUST be a valid MQTTQosLevel.
+ */
+@property (nonatomic) MQTTQosLevel willQoS
+__attribute__((deprecated("Replaced by will property")));
+
+/** willRetainFlag indicates if the server should publish the Will Messages with retainFlag.
+ * If the Will Flag is set to NO, then the Will Retain Flag MUST be set to NO .
+ * If the Will Flag is set to YES: If Will Retain is set to NO, the Serve
+ * MUST publish the Will Message as a non-retained publication [MQTT-3.1.2-14].
+ * If Will Retain is set to YES, the Server MUST publish the Will Message as a retained publication [MQTT-3.1.2-15].
+ */
+@property (nonatomic) BOOL willRetainFlag
+__attribute__((deprecated("Replaced by will property")));
+
+/** connect to the given host through the given transport with the given
+ *  MQTT session parameters asynchronously
+ *
+ */
+
+- (void)connect
+__attribute__((deprecated("Replaced by -connectWithConnectHandler:")));
+
+
+/** subscribes to a topic at a specific QoS level
+
+ @param topic see subscribeToTopic:atLevel:subscribeHandler: for description
+ @param qosLevel  see subscribeToTopic:atLevel:subscribeHandler: for description
+ @return the Message Identifier of the SUBSCRIBE message.
+
+ @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
+
+ @code
+ #import "MQTTClient.h"
+
+ MQTTSession *session = [[MQTTSession alloc] init];
+ ...
+ [session connect];
+ ...
+ [session subscribeToTopic:@"example/#" atLevel:2];
+
+ @endcode
+
  */
 
 - (UInt16)subscribeToTopic:(NSString * _Nonnull)topic
                    atLevel:(MQTTQosLevel)qosLevel
-          subscribeHandler:(MQTTSubscribeHandler _Nullable)subscribeHandler;
-- (UInt16)subscribeToTopic:(NSString * _Nonnull)topic
-                   atLevel:(MQTTQosLevel)qosLevel
-                   noLocal:(BOOL)noLocal
-         retainAsPublished:(BOOL)retainAsPublished
-            retainHandling:(MQTTRetainHandling)retainHandling
-    subscriptionIdentifier:(UInt32)subscriptionIdentifier
-          subscribeHandler:(MQTTSubscribeHandlerV5 _Nullable)subscribeHandler;
+__attribute__((deprecated("Replaced by -subscribeToTopicV5:")));
 
-/** subscribes a number of topics
- 
- @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
-    the corresponding QoS as NSNumber values
- 
+/** subscribes to a topic at a specific QoS level
+
+ @param topic the Topic Filter to subscribe to.
+
+ @param qosLevel specifies the QoS Level of the subscription.
+ qosLevel can be 0, 1, or 2.
+ @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
+ Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+ array of grantes Qos
+
+
  @return the Message Identifier of the SUBSCRIBE message.
- 
+
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
- 
+
  @code
  #import "MQTTClient.h"
- 
+
  MQTTSession *session = [[MQTTSession alloc] init];
  ...
  [session connect];
- 
+ ...
+ [session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
+ if (error) {
+ NSLog(@"Subscription failed %@", error.localizedDescription);
+ } else {
+ NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
+ }
+ }];
+
+ @endcode
+
+ */
+
+- (UInt16)subscribeToTopic:(NSString * _Nonnull)topic
+                   atLevel:(MQTTQosLevel)qosLevel
+          subscribeHandler:(MQTTSubscribeHandler _Nullable)subscribeHandler
+__attribute__((deprecated("Replaced by -subscribeToTopicV5:")));
+
+
+
+/** unsubscribes from a topic
+
+ @param topic the Topic Filter to unsubscribe from.
+
+ @return the Message Identifier of the UNSUBSCRIBE message.
+
+ @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
+
+ @code
+ #import "MQTTClient.h"
+
+ MQTTSession *session = [[MQTTSession alloc] init];
+ ...
+ [session connect];
+
+ [session unsubscribeTopic:@"example/#"];
+
+ @endcode
+ */
+
+/** subscribes a number of topics
+
+ @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
+ the corresponding QoS as NSNumber values
+
+ @return the Message Identifier of the SUBSCRIBE message.
+
+ @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
+
+ @code
+ #import "MQTTClient.h"
+
+ MQTTSession *session = [[MQTTSession alloc] init];
+ ...
+ [session connect];
+
  [session subscribeToTopics:@{
  @"example/#": @(0),
  @"example/status": @(2),
  @"other/#": @(1)
  }];
- 
+
  @endcode
  */
 
 
-- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> * _Nonnull)topics;
 - (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> * _Nonnull)topics
-     subscriptionIdentifier:(UInt32)subscriptionIdentifier;
+__attribute__((deprecated("Replaced by -subscribeToTopicsV5:")));
 
 /** subscribes a number of topics
- 
+
  @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
-    the corresponding QoS as NSNumber values
+ the corresponding QoS as NSNumber values
  @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
-    Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
-    array of grantes Qos
- 
+ Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+ array of grantes Qos
+
  @return the Message Identifier of the SUBSCRIBE message.
- 
+
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
- 
+
  @code
  #import "MQTTClient.h"
- 
+
  MQTTSession *session = [[MQTTSession alloc] init];
  ...
  [session connect];
- 
+
  [session subscribeToTopics:@{
-    @"example/#": @(0),
-    @"example/status": @(2),
-    @"other/#": @(1)
+ @"example/#": @(0),
+ @"example/status": @(2),
+ @"other/#": @(1)
  } subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
-    if (error) {
-        NSLog(@"Subscription failed %@", error.localizedDescription);
-    } else {
-        NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
-    }
+ if (error) {
+ NSLog(@"Subscription failed %@", error.localizedDescription);
+ } else {
+ NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
+ }
  }];
 
- 
+
  @endcode
  */
 
 
 - (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> * _Nonnull)topics
-           subscribeHandler:(MQTTSubscribeHandler _Nullable)subscribeHandler;
-- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> * _Nonnull)topics
-     subscriptionIdentifier:(UInt32)subscriptionIdentifier
-           subscribeHandler:(MQTTSubscribeHandlerV5 _Nullable)subscribeHandler;
+           subscribeHandler:(MQTTSubscribeHandler _Nullable)subscribeHandler
+__attribute__((deprecated("Replaced by -subscribeToTopicsV5:")));
 
-/** unsubscribes from a topic
- 
- @param topic the Topic Filter to unsubscribe from.
 
- @return the Message Identifier of the UNSUBSCRIBE message.
- 
- @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
- 
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc] init];
- ...
- [session connect];
- 
- [session unsubscribeTopic:@"example/#"];
- 
- @endcode
- */
-
-- (UInt16)unsubscribeTopic:(NSString * _Nonnull)topic;
+- (UInt16)unsubscribeTopic:(NSString * _Nonnull)topic
+__attribute__((deprecated("Replaced by -unsubscribeTopicsV5:")));
 
 /** unsubscribes from a topic
 
@@ -857,123 +1062,113 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 
 
 - (UInt16)unsubscribeTopic:(NSString * _Nonnull)topic
-        unsubscribeHandler:(MQTTUnsubscribeHandler _Nullable)unsubscribeHandler;
-- (UInt16)unsubscribeTopicV5:(NSString * _Nonnull)topic
-        unsubscribeHandler:(MQTTUnsubscribeHandlerV5 _Nullable)unsubscribeHandler;
+        unsubscribeHandler:(MQTTUnsubscribeHandler _Nullable)unsubscribeHandler
+__attribute__((deprecated("Replaced by -unsubscribeTopicsV5:")));
 
 /** unsubscribes from a number of topics
- 
+
  @param topics an NSArray<NSString *> of topics to unsubscribe from
- 
+
  @return the Message Identifier of the UNSUBSCRIBE message.
- 
+
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
- 
+
  @code
  #import "MQTTClient.h"
- 
+
  MQTTSession *session = [[MQTTSession alloc] init];
  ...
  [session connect];
- 
+
  [session unsubscribeTopics:@[
  @"example/#",
  @"example/status",
  @"other/#"
  ]];
- 
+
  @endcode
- 
+
  */
 
-- (UInt16)unsubscribeTopics:(NSArray<NSString *> * _Nonnull)topics;
+- (UInt16)unsubscribeTopics:(NSArray<NSString *> * _Nonnull)topics
+__attribute__((deprecated("Replaced by -unsubscribeTopicsV5:")));
 
 /** unsubscribes from a number of topics
- 
+
  @param topics an NSArray<NSString *> of topics to unsubscribe from
- 
+
  @param unsubscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
-    Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
-    array of grantes Qos
- 
+ Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+ array of grantes Qos
+
  @return the Message Identifier of the UNSUBSCRIBE message.
- 
+
  @note returns immediately.
- 
+
  */
 - (UInt16)unsubscribeTopics:(NSArray<NSString *> * _Nonnull)topics
-         unsubscribeHandler:(MQTTUnsubscribeHandler _Nullable)unsubscribeHandler;
-- (UInt16)unsubscribeTopicsV5:(NSArray<NSString *> * _Nonnull)topics
-         unsubscribeHandler:(MQTTUnsubscribeHandlerV5 _Nullable)unsubscribeHandler;
+         unsubscribeHandler:(MQTTUnsubscribeHandler _Nullable)unsubscribeHandler
+__attribute__((deprecated("Replaced by -unsubscribeTopicsV5:")));
+
+
 
 /** publishes data on a given topic at a specified QoS level and retain flag
- 
+
  @param data the data to be sent. length may range from 0 to 268,435,455 - 4 - _lengthof-topic_ bytes. Defaults to length 0.
  @param topic the Topic to identify the data
  @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
  @param qos specifies the Quality of Service for the publish
  qos can be 0, 1, or 2.
  @return the Message Identifier of the PUBLISH message. Zero if qos 0. If qos 1 or 2, zero if message was dropped
- 
+
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
- 
+
  @code
  #import "MQTTClient.h"
- 
+
  MQTTSession *session = [[MQTTSession alloc] init];
  ...
  [session connect];
- 
+
  [session publishData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
  topic:@"example/data"
  retain:YES
  qos:1];
  @endcode
- 
+
  */
 
 - (UInt16)publishData:(NSData * _Nonnull)data
               onTopic:(NSString * _Nonnull)topic
                retain:(BOOL)retainFlag
-                  qos:(MQTTQosLevel)qos;
-
-- (UInt16)publishDataV5:(NSData * _Nonnull)data
-                onTopic:(NSString * _Nonnull)topic
-                 retain:(BOOL)retainFlag
-                    qos:(MQTTQosLevel)qos
- payloadFormatIndicator:(NSNumber * _Nullable)payloadFormatIndicator
-publicationExpiryInterval:(NSNumber *  _Nullable)publicationExpiryInterval
-             topicAlias:(NSNumber * _Nullable)topicAlias
-          responseTopic:(NSString * _Nullable)responseTopic
-        correlationData:(NSData * _Nullable)correlationData
-         userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
-            contentType:(NSString * _Nullable)contentType;
+                  qos:(MQTTQosLevel)qos
+__attribute__((deprecated("Replaced by -publishDataV5:")));
 
 /** publishes data on a given topic at a specified QoS level and retain flag
- 
+
  @param data the data to be sent. length may range from 0 to 268,435,455 - 4 - _lengthof-topic_ bytes. Defaults to length 0.
  @param topic the Topic to identify the data
  @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
  @param qos specifies the Quality of Service for the publish
  qos can be 0, 1, or 2.
- 
- 
+
+
  @param publishHandler identifies a block which is executed on successfull or unsuccessfull publsh. Might be nil
  error is nil in the case of a successful connect
  sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
- 
+
 
  @return the Message Identifier of the PUBLISH message. Zero if qos 0. If qos 1 or 2, zero if message was dropped
- 
+
  @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
- 
+
  @code
  #import "MQTTClient.h"
- 
+
  MQTTSession *session = [[MQTTSession alloc] init];
  ...
  [session connect];
- 
+
  [session publishData:[@"Sample Data" dataUsingEncoding:NSUTF8StringEncoding]
  topic:@"example/data"
  retain:YES
@@ -987,72 +1182,71 @@ publicationExpiryInterval:(NSNumber *  _Nullable)publicationExpiryInterval
  }
  }];
  @endcode
- 
+
  */
 
 - (UInt16)publishData:(NSData * _Nonnull)data
               onTopic:(NSString * _Nonnull)topic
                retain:(BOOL)retainFlag
                   qos:(MQTTQosLevel)qos
-       publishHandler:(MQTTPublishHandler _Nullable)publishHandler;
-
-- (UInt16)publishDataV5:(NSData * _Nonnull)data
-                onTopic:(NSString * _Nonnull)topic
-                 retain:(BOOL)retainFlag
-                    qos:(MQTTQosLevel)qos
- payloadFormatIndicator:(NSNumber * _Nullable)payloadFormatIndicator
-publicationExpiryInterval:(NSNumber *  _Nullable)publicationExpiryInterval
-             topicAlias:(NSNumber * _Nullable)topicAlias
-          responseTopic:(NSString * _Nullable)responseTopic
-        correlationData:(NSData * _Nullable)correlationData
-         userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
-            contentType:(NSString * _Nullable)contentType
-         publishHandler:(MQTTPublishHandler _Nullable)publishHandler;
+       publishHandler:(MQTTPublishHandler _Nullable)publishHandler
+__attribute__((deprecated("Replaced by -publishDataV5:")));
 
 
 /** closes an MQTTSession gracefully
 
  If the connection was successfully established before, a DISCONNECT is sent.
- 
+
  @param disconnectHandler identifies a block which is executed on successfull or unsuccessfull disconnect. Might be nil. error is nil in the case of a successful disconnect
 
  @code
  #import "MQTTClient.h"
- 
+
  MQTTSession *session = [[MQTTSession alloc] init];
  ...
  [session connect];
- 
+
  ...
- 
+
  [session closeWithDisconnectHandler^(NSError *error) {
-    if (error) {
-        NSLog(@"Error Disconnect %@", error.localizedDescription);
-    }
-    NSLog(@"Session closed");
+ if (error) {
+ NSLog(@"Error Disconnect %@", error.localizedDescription);
+ }
+ NSLog(@"Session closed");
  }];
 
- 
- @endcode
- 
- */
-- (void)closeWithDisconnectHandler:(MQTTDisconnectHandler _Nullable)disconnectHandler;
 
-/** close V5
+ @endcode
+
+ */
+- (void)closeWithDisconnectHandler:(MQTTDisconnectHandler _Nullable)disconnectHandler
+__attribute__((deprecated("Replaced by -closeWithReturnCode:")));
+
+/** closes an MQTTSession gracefully
+ */
+- (void)close
+__attribute__((deprecated("Replaced by -closeWithReturnCode:")));
+
+/** disconnect gracefully
+ *
+ */
+- (void)disconnect
+__attribute__((deprecated("Replaced by -subscribeToTopicV5:")));
+;
+
+/** disconnect V5
  *  @param returnCode the returncode send to the broker
  *  @param sessionExpiryInterval the time in seconds before the session can be deleted
  *  @param reasonString a string explaining the reason
  *  @param userProperties additional dictionary of user key/value combinations
- *  @param disconnectHandler will be called when the disconnect finished
  */
-- (void)closeWithReturnCode:(MQTTReturnCode)returnCode
-      sessionExpiryInterval:(NSNumber * _Nullable)sessionExpiryInterval
-               reasonString:(NSString * _Nullable)reasonString
-             userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
-          disconnectHandler:(MQTTDisconnectHandler _Nullable)disconnectHandler;
+- (void)disconnectWithReturnCode:(MQTTReturnCode)returnCode
+           sessionExpiryInterval:(NSNumber * _Nullable)sessionExpiryInterval
+                    reasonString:(NSString * _Nullable)reasonString
+                  userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
+__attribute__((deprecated("Replaced by -closeWithReturnCode")));
+;
 
-/** closes an MQTTSession gracefully
-  */
-- (void)close;
+
 
 @end

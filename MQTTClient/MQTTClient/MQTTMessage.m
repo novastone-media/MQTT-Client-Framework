@@ -595,8 +595,29 @@
                     if ((type == MQTTPublish &&
                          (qos == MQTTQosLevelAtLeastOnce ||
                           qos == MQTTQosLevelExactlyOnce)
-                         ) ||
-                        type == MQTTPuback ||
+                         )) {
+                        
+                        if (message.data.length >= 2) {
+                            [message.data getBytes:&digit range:NSMakeRange(0, 1)];
+                            UInt16 topicLength = digit * 256;
+                            [message.data getBytes:&digit range:NSMakeRange(1, 1)];
+                            topicLength += digit;
+
+                            if (message.data.length >= 2 + topicLength + 2) {
+                                [message.data getBytes:&digit range:NSMakeRange(2 + topicLength, 1)];
+                                message.mid = digit * 256;
+                                [message.data getBytes:&digit range:NSMakeRange(2 + topicLength + 1, 1)];
+                                message.mid += digit;
+                            } else {
+                                DDLogWarn(@"[MQTTMessage] missing packet identifier in PUBLISH");
+                                message = nil;
+                            }
+                        } else {
+                            DDLogWarn(@"[MQTTMessage] missing packet identifier");
+                            message = nil;
+                        }
+                    }
+                    if (type == MQTTPuback ||
                         type == MQTTPubrec ||
                         type == MQTTPubrel ||
                         type == MQTTPubcomp ||

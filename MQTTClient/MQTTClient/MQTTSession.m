@@ -100,6 +100,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.keepAliveInterval = 60;
     self.dupTimeout = 20.0;
     self.cleanSessionFlag = true;
+    self.will = nil;
     self.willFlag = false;
     self.willTopic = nil;
     self.willMsg = nil;
@@ -407,7 +408,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 }
 
 - (UInt16)unsubscribeTopicsV5:(NSArray<NSString *> *)topics {
-    return [self unsubscribeTopics:topics unsubscribeHandler:nil];
+    return [self unsubscribeTopicsV5:topics unsubscribeHandler:nil];
 }
 
 - (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics
@@ -591,13 +592,13 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     }
 
     if (MQTTStrict.strict &&
-        self.willTopic &&
-        ([self.willTopic containsString:@"+"] ||
-         [self.willTopic containsString:@"#"])
+        topic &&
+        ([topic containsString:@"+"] ||
+         [topic containsString:@"#"])
         ) {
         NSException* myException = [NSException
-                                    exceptionWithName:@"willTopic must not contain wildcards"
-                                    reason:[NSString stringWithFormat:@"willTopic = %@", self.willTopic]
+                                    exceptionWithName:@"topic must not contain wildcards"
+                                    reason:[NSString stringWithFormat:@"topic = %@", topic]
                                     userInfo:nil];
         @throw myException;
     }
@@ -1432,13 +1433,16 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                     topicAlias:msg.properties.publicationExpiryInterval
                                                  responseTopic:msg.properties.responseTopic
                                                correlationData:msg.properties.correlationData
-                                                userProperties:[NSJSONSerialization dataWithJSONObject:msg.properties.userProperties
-                                                                                               options:0
-                                                                                                 error:nil]
+                                                userProperties:msg.properties.userProperties ?
+                      [NSJSONSerialization dataWithJSONObject:msg.properties.userProperties
+                                                      options:0
+                                                        error:nil] : nil
                                                    contentType:msg.properties.contentType
-                                       subscriptionIdentifiers:[NSJSONSerialization dataWithJSONObject:msg.properties.subscriptionIdentifiers
-                                                                                               options:0
-                                                                                                 error:nil]]) {
+                                       subscriptionIdentifiers:msg.properties.subscriptionIdentifiers ?
+                      [NSJSONSerialization dataWithJSONObject:msg.properties.subscriptionIdentifiers
+                                                      options:0
+                                                        error:nil] : nil
+                      ]) {
                     DDLogWarn(@"[MQTTSession] dropping incoming messages");
                 } else {
                     [self.persistence sync];
@@ -2010,6 +2014,15 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
 
 - (void)connect {
 
+    if (!self.will) {
+        if (self.willFlag) {
+            self.will = [[MQTTWill alloc] initWithTopic:self.willTopic
+                                                   data:self.willMsg
+                                             retainFlag:self.willRetainFlag
+                                                    qos:self.willQoS];
+        }
+    }
+
     if (MQTTStrict.strict &&
         self.clientId && self.clientId.length < 1 &&
         !self.cleanSessionFlag) {
@@ -2092,114 +2105,75 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     }
 
     if (MQTTStrict.strict &&
-        !self.willFlag &&
-        self.willTopic) {
-        NSException* myException = [NSException
-                                    exceptionWithName:@"Will topic must be nil if willFlag is false"
-                                    reason:[NSString stringWithFormat:@"%@", self.willTopic]
-                                    userInfo:nil];
-        @throw myException;
-    }
-
-    if (MQTTStrict.strict &&
-        !self.willFlag &&
-        self.willMsg) {
-        NSException* myException = [NSException
-                                    exceptionWithName:@"Will message must be nil if willFlag is false"
-                                    reason:[NSString stringWithFormat:@"%@", self.willMsg]
-                                    userInfo:nil];
-        @throw myException;
-    }
-
-    if (MQTTStrict.strict &&
-        !self.willFlag &&
-        self.willRetainFlag) {
-        NSException* myException = [NSException
-                                    exceptionWithName:@"Will retain must be false if willFlag is false"
-                                    reason:[NSString stringWithFormat:@"%d", self.willRetainFlag]
-                                    userInfo:nil];
-        @throw myException;
-    }
-
-    if (MQTTStrict.strict &&
-        !self.willFlag &&
-        self.willQoS != MQTTQosLevelAtMostOnce) {
-        NSException* myException = [NSException
-                                    exceptionWithName:@"Will QoS Level must be 0 if willFlag is false"
-                                    reason:[NSString stringWithFormat:@"%d", self.willQoS]
-                                    userInfo:nil];
-        @throw myException;
-    }
-
-    if (MQTTStrict.strict &&
-        self.willQoS != MQTTQosLevelAtMostOnce &&
-        self.willQoS != MQTTQosLevelAtLeastOnce &&
-        self.willQoS != MQTTQosLevelExactlyOnce) {
+        self.will &&
+        self.will.qos != MQTTQosLevelAtMostOnce &&
+        self.will.qos != MQTTQosLevelAtLeastOnce &&
+        self.will.qos != MQTTQosLevelExactlyOnce) {
         NSException* myException = [NSException
                                     exceptionWithName:@"Illegal will QoS level"
-                                    reason:[NSString stringWithFormat:@"%d is not 0, 1, or 2", self.willQoS]
+                                    reason:[NSString stringWithFormat:@"%d is not 0, 1, or 2", self.will.qos]
                                     userInfo:nil];
         @throw myException;
     }
 
     if (MQTTStrict.strict &&
-        self.willFlag &&
-        !self.willTopic) {
+        self.will &&
+        !self.will.topic) {
         NSException* myException = [NSException
                                     exceptionWithName:@"Will topic must not be nil if willFlag is true"
-                                    reason:[NSString stringWithFormat:@"%@", self.willTopic]
+                                    reason:[NSString stringWithFormat:@"%@", self.will.topic]
                                     userInfo:nil];
         @throw myException;
     }
 
     if (MQTTStrict.strict &&
-        self.willTopic &&
-        self.willTopic.length < 1) {
+        self.will &&
+        self.will.topic.length < 1) {
         NSException* myException = [NSException
                                     exceptionWithName:@"Will topic must be at least 1 character long"
-                                    reason:[NSString stringWithFormat:@"%@", self.willTopic]
+                                    reason:[NSString stringWithFormat:@"%@", self.will.topic]
                                     userInfo:nil];
         @throw myException;
     }
 
     if (MQTTStrict.strict &&
-        self.willTopic &&
-        [self.willTopic dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
+        self.will &&
+        [self.will.topic dataUsingEncoding:NSUTF8StringEncoding].length > 65535L) {
         NSException* myException = [NSException
                                     exceptionWithName:@"willTopic may not be longer than 65535 bytes in UTF8 representation"
-                                    reason:[NSString stringWithFormat:@"willTopic length = %lu", (unsigned long)[self.willTopic dataUsingEncoding:NSUTF8StringEncoding].length]
+                                    reason:[NSString stringWithFormat:@"willTopic length = %lu", (unsigned long)[self.will.topic dataUsingEncoding:NSUTF8StringEncoding].length]
                                     userInfo:nil];
         @throw myException;
     }
 
     if (MQTTStrict.strict &&
-        self.willTopic &&
-        ![self.willTopic dataUsingEncoding:NSUTF8StringEncoding]) {
+        self.will &&
+        ![self.will.topic dataUsingEncoding:NSUTF8StringEncoding]) {
         NSException* myException = [NSException
                                     exceptionWithName:@"willTopic must not contain non-UTF8 characters"
-                                    reason:[NSString stringWithFormat:@"willTopic = %@", self.willTopic]
+                                    reason:[NSString stringWithFormat:@"willTopic = %@", self.will.topic]
                                     userInfo:nil];
         @throw myException;
     }
 
     if (MQTTStrict.strict &&
-        self.willTopic &&
-        ([self.willTopic containsString:@"+"] ||
-         [self.willTopic containsString:@"#"])
+        self.will &&
+        ([self.will.topic containsString:@"+"] ||
+         [self.will.topic containsString:@"#"])
         ) {
         NSException* myException = [NSException
                                     exceptionWithName:@"willTopic must not contain wildcards"
-                                    reason:[NSString stringWithFormat:@"willTopic = %@", self.self.willTopic]
+                                    reason:[NSString stringWithFormat:@"willTopic = %@", self.self.will.topic]
                                     userInfo:nil];
         @throw myException;
     }
 
     if (MQTTStrict.strict &&
-        self.willFlag &&
-        !self.willMsg) {
+        self.will &&
+        !self.will.data) {
         NSException* myException = [NSException
                                     exceptionWithName:@"Will message must not be nil if willFlag is true"
-                                    reason:[NSString stringWithFormat:@"%@", self.willMsg]
+                                    reason:[NSString stringWithFormat:@"%@", self.will.data]
                                     userInfo:nil];
         @throw myException;
     }
@@ -2309,11 +2283,11 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                           password:self.password
                                                          keepAlive:self.keepAliveInterval
                                                       cleanSession:self.cleanSessionFlag
-                                                              will:self.willFlag
-                                                         willTopic:self.willTopic
-                                                           willMsg:self.willMsg
-                                                           willQoS:self.willQoS
-                                                        willRetain:self.willRetainFlag
+                                                              will:self.will != nil
+                                                         willTopic:self.will ? self.will.topic : nil
+                                                           willMsg:self.will ? self.will.data : nil
+                                                           willQoS:self.will ? self.will.qos : MQTTQosLevelAtMostOnce
+                                                        willRetain:self.will ? self.will.retainFlag: false
                                                      protocolLevel:self.protocolLevel
                                              sessionExpiryInterval:self.sessionExpiryInterval
                                                         authMethod:self.authMethod

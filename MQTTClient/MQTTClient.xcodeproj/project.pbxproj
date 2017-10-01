@@ -275,6 +275,18 @@
 		84998C8D1C0EE26600119061 /* MQTTSessionSynchron.h in Headers */ = {isa = PBXBuildFile; fileRef = 84998C871C0EDBAA00119061 /* MQTTSessionSynchron.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		84998C941C0EE3D600119061 /* MQTTSessionSynchron.m in Sources */ = {isa = PBXBuildFile; fileRef = 84998C881C0EDBAA00119061 /* MQTTSessionSynchron.m */; };
 		84998C951C0EE3D600119061 /* MQTTSessionLegacy.m in Sources */ = {isa = PBXBuildFile; fileRef = 84998C811C0ED09700119061 /* MQTTSessionLegacy.m */; };
+		849C12B51F814F0700308ED2 /* MQTTWill.m in Sources */ = {isa = PBXBuildFile; fileRef = 849C12B21F81485B00308ED2 /* MQTTWill.m */; };
+		849C12B61F814F0800308ED2 /* MQTTWill.m in Sources */ = {isa = PBXBuildFile; fileRef = 849C12B21F81485B00308ED2 /* MQTTWill.m */; };
+		849C12B71F814F0800308ED2 /* MQTTWill.m in Sources */ = {isa = PBXBuildFile; fileRef = 849C12B21F81485B00308ED2 /* MQTTWill.m */; };
+		849C12B81F814F0900308ED2 /* MQTTWill.m in Sources */ = {isa = PBXBuildFile; fileRef = 849C12B21F81485B00308ED2 /* MQTTWill.m */; };
+		849C12B91F814F1C00308ED2 /* MQTTWill.h in Headers */ = {isa = PBXBuildFile; fileRef = 849C12B11F81485B00308ED2 /* MQTTWill.h */; };
+		849C12BA1F814F1D00308ED2 /* MQTTWill.h in Headers */ = {isa = PBXBuildFile; fileRef = 849C12B11F81485B00308ED2 /* MQTTWill.h */; };
+		849C12BB1F814F1E00308ED2 /* MQTTWill.h in Headers */ = {isa = PBXBuildFile; fileRef = 849C12B11F81485B00308ED2 /* MQTTWill.h */; };
+		849C12BC1F814F1F00308ED2 /* MQTTWill.h in Headers */ = {isa = PBXBuildFile; fileRef = 849C12B11F81485B00308ED2 /* MQTTWill.h */; };
+		849C12BD1F814F2100308ED2 /* MQTTWill.h in Headers */ = {isa = PBXBuildFile; fileRef = 849C12B11F81485B00308ED2 /* MQTTWill.h */; };
+		849C12BE1F814F2200308ED2 /* MQTTWill.h in Headers */ = {isa = PBXBuildFile; fileRef = 849C12B11F81485B00308ED2 /* MQTTWill.h */; };
+		849C12BF1F814F2300308ED2 /* MQTTWill.h in Headers */ = {isa = PBXBuildFile; fileRef = 849C12B11F81485B00308ED2 /* MQTTWill.h */; };
+		849C12C01F814F2400308ED2 /* MQTTWill.h in Headers */ = {isa = PBXBuildFile; fileRef = 849C12B11F81485B00308ED2 /* MQTTWill.h */; };
 		84A592171C3C5343008C5199 /* MQTTTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A592131C3C5343008C5199 /* MQTTTransport.m */; };
 		84A592181C3C64A9008C5199 /* MQTTSSLSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 841D0A7A1C35876E006A82DC /* MQTTSSLSecurityPolicy.m */; };
 		84A592191C3C64A9008C5199 /* MQTTSSLSecurityPolicyDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 841D0A7C1C35876E006A82DC /* MQTTSSLSecurityPolicyDecoder.m */; };
@@ -551,6 +563,8 @@
 		84998C811C0ED09700119061 /* MQTTSessionLegacy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionLegacy.m; sourceTree = "<group>"; };
 		84998C871C0EDBAA00119061 /* MQTTSessionSynchron.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTSessionSynchron.h; sourceTree = "<group>"; };
 		84998C881C0EDBAA00119061 /* MQTTSessionSynchron.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionSynchron.m; sourceTree = "<group>"; };
+		849C12B11F81485B00308ED2 /* MQTTWill.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MQTTWill.h; sourceTree = "<group>"; };
+		849C12B21F81485B00308ED2 /* MQTTWill.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTWill.m; sourceTree = "<group>"; };
 		84A1AF7D1F32482300234C79 /* SocketRocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketRocket.framework; path = "Pods/../build/Debug-iphoneos/SocketRocket-iOS/SocketRocket.framework"; sourceTree = "<group>"; };
 		84A592131C3C5343008C5199 /* MQTTTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTTransport.m; sourceTree = "<group>"; };
 		84AA232D1C6B8BE5009B153A /* MQTTLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MQTTLog.h; sourceTree = "<group>"; };
@@ -986,6 +1000,8 @@
 				846191E81883E8B900101409 /* MQTTDecoder.m */,
 				8436B1731E93EBAA00E24A4E /* MQTTProperties.h */,
 				84E2C4561EC34E8500BC02CE /* MQTTProperties.m */,
+				849C12B11F81485B00308ED2 /* MQTTWill.h */,
+				849C12B21F81485B00308ED2 /* MQTTWill.m */,
 				846191FE1883E8FD00101409 /* MQTTMessage.h */,
 				846191EA1883E8B900101409 /* MQTTMessage.m */,
 				846191FF1883E8FD00101409 /* MQTTSession.h */,
@@ -1084,6 +1100,7 @@
 				C7515EC31F4C6BB60071CFFE /* ForegroundReconnection.h in Headers */,
 				840D3D291F28A7C20072019B /* MQTTLog.h in Headers */,
 				840D3D2A1F28A7C20072019B /* MQTTClient.h in Headers */,
+				849C12BC1F814F1F00308ED2 /* MQTTWill.h in Headers */,
 				840D3D2B1F28A7C20072019B /* MQTTSessionManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1095,6 +1112,7 @@
 				841D0A3E1C3585D4006A82DC /* MQTTTransport.h in Headers */,
 				841D0A431C3585D4006A82DC /* MQTTWebsocketTransport.h in Headers */,
 				841D0A441C3585D4006A82DC /* MQTTCFSocketEncoder.h in Headers */,
+				849C12B91F814F1C00308ED2 /* MQTTWill.h in Headers */,
 				841D0A451C3585D4006A82DC /* MQTTCFSocketDecoder.h in Headers */,
 				841D0A461C3585D4006A82DC /* MQTTCFSocketTransport.h in Headers */,
 				841D0A471C3585D4006A82DC /* MQTTDecoder.h in Headers */,
@@ -1145,6 +1163,7 @@
 				C7515EC51F4C6BB70071CFFE /* ForegroundReconnection.h in Headers */,
 				841D0A631C358601006A82DC /* MQTTClient.h in Headers */,
 				84AA232F1C6B910F009B153A /* MQTTLog.h in Headers */,
+				849C12BA1F814F1D00308ED2 /* MQTTWill.h in Headers */,
 				841D0A641C358601006A82DC /* MQTTSessionManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1175,6 +1194,7 @@
 				C7515EC41F4C6BB70071CFFE /* ForegroundReconnection.h in Headers */,
 				84AA23301C6B910F009B153A /* MQTTLog.h in Headers */,
 				841D0A771C35861E006A82DC /* MQTTClient.h in Headers */,
+				849C12BB1F814F1E00308ED2 /* MQTTWill.h in Headers */,
 				841D0A781C35861E006A82DC /* MQTTSessionManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1186,6 +1206,7 @@
 				846C35B11F696B2C00F23552 /* MQTTFramework.h in Headers */,
 				846C35C31F696C9F00F23552 /* MQTTTransport.h in Headers */,
 				846C35C41F696C9F00F23552 /* MQTTSSLSecurityPolicy.h in Headers */,
+				849C12C01F814F2400308ED2 /* MQTTWill.h in Headers */,
 				846C35C51F696C9F00F23552 /* MQTTSSLSecurityPolicyDecoder.h in Headers */,
 				846C35C61F696C9F00F23552 /* MQTTSSLSecurityPolicyEncoder.h in Headers */,
 				846C35C71F696C9F00F23552 /* MQTTSSLSecurityPolicyTransport.h in Headers */,
@@ -1217,6 +1238,7 @@
 				84B7E60C1C09A87C00FD087E /* MQTTFramework.h in Headers */,
 				DE9EF5D71C062907009EF667 /* MQTTDecoder.h in Headers */,
 				DE9EF5D91C062907009EF667 /* MQTTMessage.h in Headers */,
+				849C12BD1F814F2100308ED2 /* MQTTWill.h in Headers */,
 				DE9EF5DA1C062907009EF667 /* MQTTSession.h in Headers */,
 				845922A81C175AA400CCE27E /* MQTTCFSocketTransport.h in Headers */,
 				841D0AA31C358843006A82DC /* MQTTInMemoryPersistence.h in Headers */,
@@ -1248,6 +1270,7 @@
 				F6D08FCD1E535BF900CD2566 /* MQTTInMemoryPersistence.h in Headers */,
 				F6D08FC01E535BF900CD2566 /* MQTTSSLSecurityPolicyEncoder.h in Headers */,
 				F6D08FC41E535BF900CD2566 /* MQTTCFSocketDecoder.h in Headers */,
+				849C12BF1F814F2300308ED2 /* MQTTWill.h in Headers */,
 				F6D08FBD1E535BF900CD2566 /* MQTTTransport.h in Headers */,
 				F6D08FC71E535BF900CD2566 /* MQTTMessage.h in Headers */,
 				F6D08FC61E535BF900CD2566 /* MQTTDecoder.h in Headers */,
@@ -1298,6 +1321,7 @@
 				F6D08FF81E535F2A00CD2566 /* MQTTCFSocketTransport.h in Headers */,
 				842951DA1EA7947F0066C044 /* MQTTProperties.h in Headers */,
 				F6D090011E535F2A00CD2566 /* MQTTSessionManager.h in Headers */,
+				849C12BE1F814F2200308ED2 /* MQTTWill.h in Headers */,
 				F6D090021E535F2F00CD2566 /* MQTTClient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2044,6 +2068,7 @@
 				846C35E51F696CCB00F23552 /* MQTTSession.m in Sources */,
 				846C35E61F696CCB00F23552 /* MQTTSessionSynchron.m in Sources */,
 				846C35E71F696CCB00F23552 /* MQTTSessionLegacy.m in Sources */,
+				849C12B81F814F0900308ED2 /* MQTTWill.m in Sources */,
 				846C35E81F696CCB00F23552 /* MQTTCoreDataPersistence.m in Sources */,
 				846C35E91F696CCB00F23552 /* MQTTInMemoryPersistence.m in Sources */,
 				846C35EA1F696CCB00F23552 /* MQTTLog.m in Sources */,
@@ -2072,6 +2097,7 @@
 				845922A91C175AA400CCE27E /* MQTTCFSocketTransport.m in Sources */,
 				DE9EF5CF1C0628EB009EF667 /* MQTTCFSocketEncoder.m in Sources */,
 				84A592171C3C5343008C5199 /* MQTTTransport.m in Sources */,
+				849C12B51F814F0700308ED2 /* MQTTWill.m in Sources */,
 				DE9EF5D01C0628EB009EF667 /* MQTTMessage.m in Sources */,
 				DE9EF5D31C0628EB009EF667 /* MQTTSessionManager.m in Sources */,
 				84998C941C0EE3D600119061 /* MQTTSessionSynchron.m in Sources */,
@@ -2100,6 +2126,7 @@
 				F6D08FB61E535BCB00CD2566 /* MQTTMessage.m in Sources */,
 				F6D08FB71E535BCB00CD2566 /* MQTTSession.m in Sources */,
 				F6D08FB81E535BCB00CD2566 /* MQTTSessionSynchron.m in Sources */,
+				849C12B71F814F0800308ED2 /* MQTTWill.m in Sources */,
 				F6D08FB91E535BCB00CD2566 /* MQTTSessionLegacy.m in Sources */,
 				F6D08FBA1E535BCB00CD2566 /* MQTTCoreDataPersistence.m in Sources */,
 				F6D08FBB1E535BCB00CD2566 /* MQTTInMemoryPersistence.m in Sources */,
@@ -2128,6 +2155,7 @@
 				F6D08FEA1E535F1000CD2566 /* MQTTMessage.m in Sources */,
 				F6D08FEB1E535F1000CD2566 /* MQTTSession.m in Sources */,
 				F6D08FEC1E535F1000CD2566 /* MQTTSessionSynchron.m in Sources */,
+				849C12B61F814F0800308ED2 /* MQTTWill.m in Sources */,
 				F6D08FED1E535F1000CD2566 /* MQTTSessionLegacy.m in Sources */,
 				F6D08FEE1E535F1000CD2566 /* MQTTCoreDataPersistence.m in Sources */,
 				F6D08FEF1E535F1000CD2566 /* MQTTInMemoryPersistence.m in Sources */,
@@ -2482,7 +2510,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2525,7 +2553,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

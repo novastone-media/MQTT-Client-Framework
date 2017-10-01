@@ -32,7 +32,8 @@
  @endcode
  
  */
-- (BOOL)connectAndWaitTimeout:(NSTimeInterval)timeout;
+- (BOOL)connectAndWaitTimeout:(NSTimeInterval)timeout
+__attribute__((deprecated("Replaced by -connectWithConnectHandler:")));
 
 
 /** connects to the specified MQTT server synchronously
@@ -107,7 +108,8 @@ __attribute__((deprecated));
  
  */
 - (BOOL)subscribeAndWaitToTopic:(NSString *)topic
-                        atLevel:(MQTTQosLevel)qosLevel;
+                        atLevel:(MQTTQosLevel)qosLevel
+__attribute__((deprecated("Replaced by -subscribeToTopicV5:")));
 
 /** subscribes to a topic at a specific QoS level synchronously
  
@@ -133,7 +135,8 @@ __attribute__((deprecated));
  */
 - (BOOL)subscribeAndWaitToTopic:(NSString *)topic
                         atLevel:(MQTTQosLevel)qosLevel
-                        timeout:(NSTimeInterval)timeout;
+                        timeout:(NSTimeInterval)timeout
+__attribute__((deprecated("Replaced by -subscribeToTopicV5:")));
 
 /** subscribes a number of topics
  
@@ -159,7 +162,8 @@ __attribute__((deprecated));
  
  @endcode
  */
-- (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics;
+- (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics
+__attribute__((deprecated("Replaced by -subscribeToTopicsV5:")));
 
 /** subscribes a number of topics
  
@@ -186,8 +190,8 @@ __attribute__((deprecated));
  @endcode
  */
 - (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics
-                         timeout:(NSTimeInterval)timeout;
-
+                         timeout:(NSTimeInterval)timeout
+__attribute__((deprecated("Replaced by -subscribeToTopicsV5:")));
 
 /** unsubscribes from a topic synchronously
  
@@ -208,7 +212,8 @@ __attribute__((deprecated));
  
  @endcode
  */
-- (BOOL)unsubscribeAndWaitTopic:(NSString *)topic;
+- (BOOL)unsubscribeAndWaitTopic:(NSString *)topic
+__attribute__((deprecated("Replaced by -unsubscribeTopicsV5:")));
 
 /** unsubscribes from a topic synchronously
  
@@ -231,8 +236,8 @@ __attribute__((deprecated));
  @endcode
  */
 - (BOOL)unsubscribeAndWaitTopic:(NSString *)topic
-                        timeout:(NSTimeInterval)timeout;
-
+                        timeout:(NSTimeInterval)timeout
+__attribute__((deprecated("Replaced by -unsubscribeTopicsV5:")));
 
 /** unsubscribes from a number of topics synchronously
  
@@ -258,7 +263,8 @@ __attribute__((deprecated));
  @endcode
  
  */
-- (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics;
+- (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics
+__attribute__((deprecated("Replaced by -unsubscribeTopicsV5:")));
 
 /** unsubscribes from a number of topics synchronously
  
@@ -287,7 +293,8 @@ __attribute__((deprecated));
  
  */
 - (BOOL)unsubscribeAndWaitTopics:(NSArray<NSString *> *)topics
-                         timeout:(NSTimeInterval)timeout;
+                         timeout:(NSTimeInterval)timeout
+__attribute__((deprecated("Replaced by -unsubscribeTopicsV5:")));
 
 
 /** publishes synchronously data
@@ -315,7 +322,9 @@ __attribute__((deprecated));
 - (BOOL)publishAndWaitData:(NSData *)data
                    onTopic:(NSString *)topic
                     retain:(BOOL)retainFlag
-                       qos:(MQTTQosLevel)qos;
+                       qos:(MQTTQosLevel)qos
+__attribute__((deprecated("Replaced by -publishDataV5:")));
+
 
 /** publishes synchronously data on a given topic at a specified QoS level and retain flag
  
@@ -346,7 +355,8 @@ __attribute__((deprecated));
                    onTopic:(NSString *)topic
                     retain:(BOOL)retainFlag
                        qos:(MQTTQosLevel)qos
-                   timeout:(NSTimeInterval)timeout;
+                   timeout:(NSTimeInterval)timeout
+__attribute__((deprecated("Replaced by -publishDataV5:")));
 
 /** closes an MQTTSession gracefully synchronously
  If the connection was successfully established before, a DISCONNECT is sent.
@@ -365,7 +375,9 @@ __attribute__((deprecated));
  @endcode
  
  */
-- (void)closeAndWait;
+- (void)closeAndWait
+__attribute__((deprecated("Replaced by -closeWithReturnCode:")));
+
 
 /** closes an MQTTSession gracefully synchronously
  @param timeout defines the maximum time to wait
@@ -386,6 +398,7 @@ __attribute__((deprecated));
  @endcode
  
  */
-- (void)closeAndWait:(NSTimeInterval)timeout;
+- (void)closeAndWait:(NSTimeInterval)timeout
+__attribute__((deprecated("Replaced by -closeWithReturnCode:")));
 
 @end
