@@ -364,14 +364,18 @@
         flow.publicationExpiryInterval = publicationExpiryInterval;
         flow.topicAlias = topicAlias;
         flow.correlationData = correlationData;
-        flow.userProperties = nil;
         if (userProperties && [NSJSONSerialization isValidJSONObject:userProperties]) {
-            flow.userProperties = [NSJSONSerialization dataWithJSONObject:userProperties options:0 error:nil];
+            NSData *uP = [NSJSONSerialization dataWithJSONObject:userProperties options:0 error:nil];
+            flow.userProperties = uP;
+        } else {
+            flow.userProperties = nil;
         }
         flow.contentType = contentType;
-        flow.subscriptionIdentifiers = nil;
         if (subscriptionIdentifers && [NSJSONSerialization isValidJSONObject:subscriptionIdentifers]) {
-            flow.subscriptionIdentifiers = [NSJSONSerialization dataWithJSONObject:subscriptionIdentifers options:0 error:nil];
+            NSData *sI = [NSJSONSerialization dataWithJSONObject:subscriptionIdentifers options:0 error:nil];
+            flow.subscriptionIdentifiers = sI;
+        } else {
+            flow.subscriptionIdentifiers = nil;
         }
         return flow;
     } else {
@@ -581,49 +585,49 @@
     
     attributeDescription = [[NSAttributeDescription alloc] init];
     attributeDescription.name = @"payloadFormatIndicator";
-    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeType = NSInteger16AttributeType;
     attributeDescription.attributeValueClassName = @"NSNumber";
     [properties addObject:attributeDescription];
     
     attributeDescription = [[NSAttributeDescription alloc] init];
     attributeDescription.name = @"publicationExpiryInterval";
-    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeType = NSInteger32AttributeType;
     attributeDescription.attributeValueClassName = @"NSNumber";
     [properties addObject:attributeDescription];
     
     attributeDescription = [[NSAttributeDescription alloc] init];
     attributeDescription.name = @"topicAlias";
-    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeType = NSInteger16AttributeType;
     attributeDescription.attributeValueClassName = @"NSNumber";
     [properties addObject:attributeDescription];
     
     attributeDescription = [[NSAttributeDescription alloc] init];
     attributeDescription.name = @"correlationData";
-    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeType = NSBinaryDataAttributeType;
     attributeDescription.attributeValueClassName = @"NSData";
     [properties addObject:attributeDescription];
     
     attributeDescription = [[NSAttributeDescription alloc] init];
     attributeDescription.name = @"userProperties";
-    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeType = NSBinaryDataAttributeType;
     attributeDescription.attributeValueClassName = @"NSData";
     [properties addObject:attributeDescription];
     
     attributeDescription = [[NSAttributeDescription alloc] init];
     attributeDescription.name = @"responseTopic";
-    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeType = NSStringAttributeType;
     attributeDescription.attributeValueClassName = @"NSString";
     [properties addObject:attributeDescription];
     
     attributeDescription = [[NSAttributeDescription alloc] init];
     attributeDescription.name = @"contentType";
-    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeType = NSStringAttributeType;
     attributeDescription.attributeValueClassName = @"NSString";
     [properties addObject:attributeDescription];
 
     attributeDescription = [[NSAttributeDescription alloc] init];
     attributeDescription.name = @"subscriptionIdentifiers";
-    attributeDescription.attributeType = NSDateAttributeType;
+    attributeDescription.attributeType = NSBinaryDataAttributeType;
     attributeDescription.attributeValueClassName = @"NSData";
     [properties addObject:attributeDescription];
 

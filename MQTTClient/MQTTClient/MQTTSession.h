@@ -567,6 +567,8 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 @property (readonly, strong, nonatomic) NSString * _Nullable reasonString;
 @property (readonly, strong, nonatomic) NSNumber * _Nullable brokerReceiveMaximum;
 @property (readonly, strong, nonatomic) NSNumber * _Nullable brokerTopicAliasMaximum;
+@property (readonly, strong, nonatomic) NSMutableDictionary <NSNumber *, NSString *> * _Nonnull brokerTopicAliases;
+
 @property (readonly, strong, nonatomic) NSNumber * _Nullable maximumQoS;
 @property (readonly, strong, nonatomic) NSNumber * _Nullable retainAvailable;
 @property (readonly, strong, nonatomic) NSMutableArray <NSDictionary <NSString *, NSString *> *> * _Nullable brokerUserProperties;
@@ -615,6 +617,7 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 
 /** topicAliasMaximum specifies the number of seconds after which a session should expire MQTT v5.0*/
 @property (strong, nonatomic) NSNumber * _Nullable topicAliasMaximum;
+@property (readonly, strong, nonatomic) NSMutableDictionary <NSNumber *, NSString *> * _Nonnull topicAliases;
 
 /** userProperties contains the user properties to be sent on connect MQTT v5.0*/
 @property (strong, nonatomic) NSArray <NSDictionary <NSString *, NSString*> *> * _Nullable userProperties;

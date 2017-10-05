@@ -177,28 +177,28 @@ subscriptionIdentifiers:(NSArray<NSNumber *> * _Nullable)subscriptionIdentifiers
     NSMutableDictionary *newMessageV5 = [[NSMutableDictionary alloc] init];
     newMessageV5[@"cmd"] = @"callback";
     newMessageV5[@"callback"] = @"newMessageV5";
-    newMessageV5[@"session"] = session.clientId;
-    newMessageV5[@"data"] = [data base64EncodedStringWithOptions:0];
+    newMessageV5[@"s"] = session.clientId;
+    newMessageV5[@"d"] = [data base64EncodedStringWithOptions:0];
     NSString *s = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     if (s) {
-        newMessageV5[@"dataAsString"] = s;
+        newMessageV5[@"dAS"] = s;
     }
     id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     if (json) {
-        newMessageV5[@"dataAsJSON"] = json;
+        newMessageV5[@"dAJ"] = json;
     }
-    newMessageV5[@"topic"] = topic;
-    newMessageV5[@"qos"] = @(qos);
-    newMessageV5[@"retained"] = @(retained);
+    newMessageV5[@"t"] = topic;
+    newMessageV5[@"q"] = @(qos);
+    newMessageV5[@"r"] = @(retained);
     newMessageV5[@"mid"] = @(mid);
-    newMessageV5[@"payloadFormatIndicator"] = payloadFormatIndicator;
-    newMessageV5[@"publicationExpiryInterval"] = publicationExpiryInterval;
-    newMessageV5[@"topicAlias"] = topicAlias;
-    newMessageV5[@"responseTopic"] = responseTopic;
-    newMessageV5[@"corrlationData"] = [correlationData base64EncodedDataWithOptions:0];;
-    newMessageV5[@"userProperties"] = userProperties;
-    newMessageV5[@"contentType"] = contentType;
-    newMessageV5[@"subscriptionIdentifiers"] = subscriptionIdentifiers;
+    newMessageV5[@"pFI"] = payloadFormatIndicator;
+    newMessageV5[@"pEI"] = publicationExpiryInterval;
+    newMessageV5[@"tA"] = topicAlias;
+    newMessageV5[@"rT"] = responseTopic;
+    newMessageV5[@"cD"] = [correlationData base64EncodedDataWithOptions:0];;
+    newMessageV5[@"uP"] = userProperties;
+    newMessageV5[@"cT"] = contentType;
+    newMessageV5[@"sI"] = subscriptionIdentifiers;
 
     NSData *newMessageV5Data = [NSJSONSerialization dataWithJSONObject:newMessageV5 options:0 error:nil];
     NSString *newMessageV5String = [[NSString alloc] initWithData:newMessageV5Data encoding:NSUTF8StringEncoding];
@@ -351,7 +351,6 @@ int main(int argc, const char * argv[]) {
                                 s.requestProblemInformation = dictJSON[@"requestProblemInformation"];
                                 s.requestResponseInformation = dictJSON[@"requestResponseInformation"];
                                 s.topicAliasMaximum = dictJSON[@"topicAliasMaximum"];
-
 
                                 [[NSFileHandle fileHandleWithStandardOutput] prints:
                                  [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"connecting to %@:%d (%d) mPS=%@\"}\n",
