@@ -565,6 +565,7 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 @property (readonly, strong, nonatomic) NSString * _Nullable brokerResponseInformation;
 @property (readonly, strong, nonatomic) NSString * _Nullable serverReference;
 @property (readonly, strong, nonatomic) NSString * _Nullable reasonString;
+@property (readonly, strong, nonatomic) NSNumber * _Nullable brokerSessionExpiryInterval;
 @property (readonly, strong, nonatomic) NSNumber * _Nullable brokerReceiveMaximum;
 @property (readonly, strong, nonatomic) NSNumber * _Nullable brokerTopicAliasMaximum;
 @property (readonly, strong, nonatomic) NSMutableDictionary <NSNumber *, NSString *> * _Nonnull brokerTopicAliases;

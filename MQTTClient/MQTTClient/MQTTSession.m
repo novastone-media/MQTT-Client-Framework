@@ -32,6 +32,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 @property (strong, nonatomic) NSString * _Nullable brokerResponseInformation;
 @property (strong, nonatomic) NSString * _Nullable serverReference;
 @property (strong, nonatomic) NSString * _Nullable brokerReasonString;
+@property (strong, nonatomic) NSNumber * _Nullable brokerSessionExpiryInterval;
 @property (strong, nonatomic) NSNumber * _Nullable brokerReceiveMaximum;
 @property (strong, nonatomic) NSNumber * _Nullable brokerTopicAliasMaximum;
 @property (strong, nonatomic) NSMutableDictionary <NSNumber *, NSString *> * _Nonnull brokerTopicAliases;
@@ -1164,6 +1165,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                     self.brokerResponseInformation = message.properties.responseInformation;
                                     self.serverReference = message.properties.serverReference;
                                     self.brokerReasonString = message.properties.reasonString;
+                                    self.brokerSessionExpiryInterval = message.properties.sessionExpiryInterval;
                                     self.brokerReceiveMaximum = message.properties.receiveMaximum;
                                     self.brokerTopicAliasMaximum = message.properties.topicAliasMaximum;
                                     self.maximumQoS = message.properties.maximumQoS;
@@ -2266,10 +2268,9 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
 
     if (MQTTStrict.strict &&
         self.maximumPacketSize &&
-        (self.maximumPacketSize.unsignedLongValue == 0 ||
-         self.maximumPacketSize.unsignedLongValue >  2684354565)) {
+        self.maximumPacketSize.unsignedLongValue == 0) {
             NSException* myException = [NSException
-                                        exceptionWithName:@"Maximum Packet Size must not be zero or greater than 2,684,354,565"
+                                        exceptionWithName:@"Maximum Packet Size must not be zero"
                                         reason:[NSString stringWithFormat:@"%@", self.maximumPacketSize]
                                         userInfo:nil];
             @throw myException;

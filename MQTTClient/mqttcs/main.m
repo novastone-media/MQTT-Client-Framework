@@ -383,6 +383,7 @@ int main(int argc, const char * argv[]) {
                                           "\"bRI\":%@, "
                                           "\"sR\":%@, "
                                           "\"rS\":%@, "
+                                          "\"bSEI\":%@, "
                                           "\"bRM\":%@, "
                                           "\"bTAM\":%@, "
                                           "\"mQ\":%@, "
@@ -404,6 +405,7 @@ int main(int argc, const char * argv[]) {
                                           s.brokerResponseInformation,
                                           s.serverReference,
                                           s.reasonString,
+                                          s.brokerSessionExpiryInterval,
                                           s.brokerReceiveMaximum,
                                           s.brokerTopicAliasMaximum,
                                           s.maximumQoS,
