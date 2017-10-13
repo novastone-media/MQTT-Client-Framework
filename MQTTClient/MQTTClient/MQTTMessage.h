@@ -165,11 +165,13 @@ typedef NS_ENUM(NSUInteger, MQTTReturnCode) {
 + (MQTTMessage *)subscribeMessageWithMessageId:(UInt16)msgId
                                         topics:(NSDictionary *)topics
                                  protocolLevel:(MQTTProtocolVersion)protocolLevel
-                       subscriptionIdentifier:(NSNumber *)subscriptionIdentifier;
+                       subscriptionIdentifier:(NSNumber *)subscriptionIdentifier
+                                userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties;
 
 + (MQTTMessage *)unsubscribeMessageWithMessageId:(UInt16)msgId
                                           topics:(NSArray *)topics
-                                   protocolLevel:(MQTTProtocolVersion)protocolLevel;
+                                   protocolLevel:(MQTTProtocolVersion)protocolLevel
+                                  userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties;
 
 + (MQTTMessage *)publishMessageWithData:(NSData*)payload
                                 onTopic:(NSString*)topic

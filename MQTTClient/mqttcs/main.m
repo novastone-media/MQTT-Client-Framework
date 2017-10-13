@@ -492,6 +492,8 @@ int main(int argc, const char * argv[]) {
                                     noLocal = @(false);
                                 }
 
+                                NSArray <NSDictionary <NSString *, NSString *> *> *userProperties = dictJSON[@"userProperties"];
+
                                 NSNumber *subscribeOptions = @(
                                 qos.intValue |
                                 noLocal.intValue << 2 |
@@ -508,13 +510,15 @@ int main(int argc, const char * argv[]) {
                                 }
 
                                 [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"subscribing \", \"subs\": %@}\n",
-                                  subs.jsonString]
+                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"subscribing \", \"subs\": %@, \"uP\": %@}\n",
+                                  subs.jsonString,
+                                  userProperties.jsonString]
                                  ];
 
                                 busy = true;
                                 [s subscribeToTopicsV5:subs
                                 subscriptionIdentifier:subscriptionIdentifier.intValue
+                                        userProperties:userProperties
                                       subscribeHandler:^(NSError *error,
                                                          NSString *reasonString,
                                                          NSArray <NSDictionary <NSString *, NSString*> *> *userProperties,
@@ -548,30 +552,35 @@ int main(int argc, const char * argv[]) {
                                     [unsubs addObject:topic];
                                 }
 
+                                NSArray <NSDictionary <NSString *, NSString *> *> *userProperties = dictJSON[@"userProperties"];
+
                                 [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"unsubscribing \", \"unsubs\": %@}\n",
-                                  unsubs.jsonString]
+                                 [NSString stringWithFormat:@"{\"cmd\": \"info\", \"info\": \"unsubscribing \", \"unsubs\": %@, \"uP\": %@}\n",
+                                  unsubs.jsonString,
+                                  userProperties.jsonString]
                                  ];
 
                                 busy = true;
-                                [s unsubscribeTopicsV5:unsubs unsubscribeHandler:^(NSError *error,
-                                                                                   NSString *reasonString,
-                                                                                   NSArray <NSDictionary <NSString *, NSString*> *> *userProperties,
-                                                                                   NSArray <NSNumber *> *reasonCodes) {
-                                    busy = false;
-                                    if (error) {
-                                        [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                         [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"unsubscribe error %@ %@ %@\"}\n",
-                                          error, reasonString, userProperties]
-                                         ];
-                                        exit(1);
-                                    } else {
-                                        [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                         [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"unsubscribed %@ %@ %@\"}\n",
-                                          reasonCodes.escapedJsonString, reasonString, userProperties.escapedJsonString]
-                                         ];
-                                    }
-                                }];
+                                [s unsubscribeTopicsV5:unsubs
+                                        userProperties:userProperties
+                                    unsubscribeHandler:^(NSError *error,
+                                                         NSString *reasonString,
+                                                         NSArray <NSDictionary <NSString *, NSString*> *> *userProperties,
+                                                         NSArray <NSNumber *> *reasonCodes) {
+                                        busy = false;
+                                        if (error) {
+                                            [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                             [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"unsubscribe error %@ %@ %@\"}\n",
+                                              error, reasonString, userProperties]
+                                             ];
+                                            exit(1);
+                                        } else {
+                                            [[NSFileHandle fileHandleWithStandardOutput] prints:
+                                             [NSString stringWithFormat:@"{\"cmd\": \"success\", \"success\": \"unsubscribed %@ %@ %@\"}\n",
+                                              reasonCodes.escapedJsonString, reasonString, userProperties.escapedJsonString]
+                                             ];
+                                        }
+                                    }];
 
                                 /*                _      _  _       _
                                  *  _ __   _   _ | |__  | |(_) ___ | |__

@@ -175,6 +175,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                   retainAsPublished:retainAsPublished
                      retainHandling:retainHandling
              subscriptionIdentifier:subscriptionIdentifier
+                     userProperties:nil
                    subscribeHandler:nil];
 }
 
@@ -190,10 +191,13 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
            retainAsPublished:(BOOL)retainAsPublished
               retainHandling:(MQTTRetainHandling)retainHandling
       subscriptionIdentifier:(UInt32)subscriptionIdentifier
+              userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties
             subscribeHandler:(MQTTSubscribeHandlerV5 _Nullable)subscribeHandler {
     UInt8 subscriptionOptions = qosLevel | noLocal << 2 | retainAsPublished << 3 | retainHandling << 4;
     return [self subscribeToTopicsV5:topic ? @{topic: @(subscriptionOptions)} : @{}
-              subscriptionIdentifier:subscriptionIdentifier subscribeHandler:subscribeHandler];
+              subscriptionIdentifier:subscriptionIdentifier
+            userProperties:userProperties
+                    subscribeHandler:subscribeHandler];
 }
 
 - (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics {
@@ -204,6 +208,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
      subscriptionIdentifier:(UInt32)subscriptionIdentifier {
     return [self subscribeToTopicsV5:topics
               subscriptionIdentifier:subscriptionIdentifier
+                      userProperties:nil
                     subscribeHandler:nil];
 }
 
@@ -276,6 +281,37 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                             userInfo:nil];
                 @throw myException;
             }
+
+            if (components.count >= 1 && [components[0] isEqualToString:@"$share"]) {
+                if (components.count < 3) {
+                    NSException* myException = [NSException
+                                                exceptionWithName:@"topicFilter must be at lease 1 character long"
+                                                reason:[NSString stringWithFormat:@"%@", components]
+                                                userInfo:nil];
+                    @throw myException;
+                }
+
+
+                if (components.count >= 2 &&
+                    components[1].length < 1) {
+                    NSException* myException = [NSException
+                                                exceptionWithName:@"shareName must not at least 1 character long"
+                                                reason:[NSString stringWithFormat:@"%@", components]
+                                                userInfo:nil];
+                    @throw myException;
+                }
+
+                if (components.count >= 2 &&
+                    ([components[1] containsString:@"+"] ||
+                     [components[1] containsString:@"#"])
+                    ) {
+                    NSException* myException = [NSException
+                                                exceptionWithName:@"shareName must not contain wildcards"
+                                                reason:[NSString stringWithFormat:@"shareName = %@", components[1]]
+                                                userInfo:nil];
+                    @throw myException;
+                }
+            }
         }
 
         if (MQTTStrict.strict &&
@@ -289,7 +325,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                         userInfo:nil];
             @throw myException;
         }
-
     }
 }
 
@@ -321,13 +356,15 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     (void)[self encode:[MQTTMessage subscribeMessageWithMessageId:mid
                                                            topics:topics
                                                     protocolLevel:self.protocolLevel
-                                           subscriptionIdentifier:nil]];
+                                           subscriptionIdentifier:nil
+                                                   userProperties:nil]];
 
     return mid;
 }
 
 - (UInt16)subscribeToTopicsV5:(NSDictionary<NSString *,NSNumber *> *)topics
        subscriptionIdentifier:(UInt32)subscriptionIdentifier
+               userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties
              subscribeHandler:(MQTTSubscribeHandlerV5)subscribeHandler {
     DDLogVerbose(@"[MQTTSession] subscribeToTopics:%@]", topics);
 
@@ -379,7 +416,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     (void)[self encode:[MQTTMessage subscribeMessageWithMessageId:mid
                                                            topics:topics
                                                     protocolLevel:self.protocolLevel
-                                           subscriptionIdentifier:subscriptionIdentifier ? @(subscriptionIdentifier) : nil]];
+                                           subscriptionIdentifier:subscriptionIdentifier ? @(subscriptionIdentifier) : nil
+                                                   userProperties:userProperties]];
 
     return mid;
 }
@@ -391,25 +429,32 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
  *  \___/ |_| \_||____/  \___/ |____/|____/  \____||_| \_\|___||____/ |_____|
  */
 - (UInt16)unsubscribeTopic:(NSString*)topic {
-    return [self unsubscribeTopic:topic unsubscribeHandler:nil];
+    return [self unsubscribeTopic:topic
+               unsubscribeHandler:nil];
 }
 
 - (UInt16)unsubscribeTopic:(NSString *)topic
         unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler {
-    return [self unsubscribeTopics:topic ? @[topic] : @[] unsubscribeHandler:unsubscribeHandler];
+    return [self unsubscribeTopics:topic ? @[topic] : @[]
+                unsubscribeHandler:unsubscribeHandler];
 }
 
 - (UInt16)unsubscribeTopicV5:(NSString *)topic
           unsubscribeHandler:(MQTTUnsubscribeHandlerV5)unsubscribeHandler {
-    return [self unsubscribeTopicsV5:topic ? @[topic] : @[] unsubscribeHandler:unsubscribeHandler];
+    return [self unsubscribeTopicsV5:topic ? @[topic] : @[]
+                      userProperties:nil
+                  unsubscribeHandler:unsubscribeHandler];
 }
 
 - (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics {
-    return [self unsubscribeTopics:topics unsubscribeHandler:nil];
+    return [self unsubscribeTopics:topics
+                unsubscribeHandler:nil];
 }
 
 - (UInt16)unsubscribeTopicsV5:(NSArray<NSString *> *)topics {
-    return [self unsubscribeTopicsV5:topics unsubscribeHandler:nil];
+    return [self unsubscribeTopicsV5:topics
+                      userProperties:nil
+                  unsubscribeHandler:nil];
 }
 
 - (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics
@@ -426,11 +471,13 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
     (void)[self encode:[MQTTMessage unsubscribeMessageWithMessageId:mid
                                                              topics:topics
-                                                      protocolLevel:self.protocolLevel]];
+                                                      protocolLevel:self.protocolLevel
+                                                     userProperties:nil]];
     return mid;
 }
 
 - (UInt16)unsubscribeTopicsV5:(NSArray<NSString *> *)topics
+               userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties
            unsubscribeHandler:(MQTTUnsubscribeHandlerV5)unsubscribeHandler {
     DDLogVerbose(@"[MQTTSession] unsubscribeTopicsV5:%@", topics);
 
@@ -444,7 +491,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
     (void)[self encode:[MQTTMessage unsubscribeMessageWithMessageId:mid
                                                              topics:topics
-                                                      protocolLevel:self.protocolLevel]];
+                                                      protocolLevel:self.protocolLevel
+                                                     userProperties:userProperties]];
     return mid;
 }
 
@@ -697,13 +745,14 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                            msgId:msgId
                                                     incomingFlag:NO
                                                      commandType:MQTTPublish
-                                                        deadline:[NSDate dateWithTimeIntervalSinceNow:self.dupTimeout]
+                                                        deadline:self.protocolLevel != MQTTProtocolVersion50 ? 
+                        [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout] : [NSDate distantFuture]
                                           payloadFormatIndicator:payloadFormatIndicator
                                        publicationExpiryInterval:publicationExpiryInterval
                                                       topicAlias:topicAlias
                                                    responseTopic:responseTopic
                                                  correlationData:correlationData
-                                                  userProperties:userProperties
+                                                  userProperties:(userProperties && [NSJSONSerialization isValidJSONObject:userProperties]) ? [NSJSONSerialization dataWithJSONObject:userProperties options:0 error:nil] : nil
                                                      contentType:contentType
                                          subscriptionIdentifiers:nil];
             }
@@ -723,7 +772,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                   topicAlias:topicAlias
                                                responseTopic:responseTopic
                                              correlationData:correlationData
-                                              userProperties:userProperties
+                                              userProperties:(userProperties && [NSJSONSerialization isValidJSONObject:userProperties]) ? [NSJSONSerialization dataWithJSONObject:userProperties options:0 error:nil] : nil
                                                  contentType:contentType
                                      subscriptionIdentifiers:nil];
         }
@@ -843,7 +892,8 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
         switch ((flow.commandType).intValue) {
             case MQTTPublish:
             case MQTTPubrel:
-                flow.deadline = [flow.deadline dateByAddingTimeInterval:-self.dupTimeout];
+                flow.deadline = self.protocolLevel != MQTTProtocolVersion50 ?
+                [flow.deadline dateByAddingTimeInterval:-self.dupTimeout] : [NSDate date];
                 [self.persistence sync];
                 break;
         }
@@ -956,7 +1006,8 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                           contentType:flow.contentType];
                         if ([self encode:message]) {
                             flow.commandType = @(MQTTPublish);
-                            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout];
+                            flow.deadline = self.protocolLevel != MQTTProtocolVersion50 ?
+                            [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout] : [NSDate distantFuture];
                             [self.persistence sync];
                             windowSize++;
                         }
@@ -991,7 +1042,8 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                          reasonString:nil
                                                        userProperties:nil];
                     if ([self encode:message]) {
-                        flow.deadline = [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout];
+                        flow.deadline = self.protocolLevel != MQTTProtocolVersion50 ?
+                        [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout] : [NSDate distantFuture];
                         [self.persistence sync];
                     }
                     break;
@@ -1456,6 +1508,15 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
             }
             return;
         } else {
+            NSData *uP;
+            if (msg.properties.userProperties && [NSJSONSerialization isValidJSONObject:msg.properties.userProperties]) {
+                uP = [NSJSONSerialization dataWithJSONObject:msg.properties.userProperties options:0 error:nil];
+            }
+            NSData *sI;
+            if (msg.properties.subscriptionIdentifiers && [NSJSONSerialization isValidJSONObject:msg.properties.subscriptionIdentifiers]) {
+                uP = [NSJSONSerialization dataWithJSONObject:msg.properties.subscriptionIdentifiers options:0 error:nil];
+            }
+
             if (![self.persistence storeMessageForClientId:self.clientId
                                                      topic:topic
                                                       data:data
@@ -1464,15 +1525,16 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                      msgId:msg.mid
                                               incomingFlag:YES
                                                commandType:MQTTPubrec
-                                                  deadline:[NSDate dateWithTimeIntervalSinceNow:self.dupTimeout]
+                                                  deadline:self.protocolLevel != MQTTProtocolVersion50 ?
+                  [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout] : [NSDate distantFuture]
                                     payloadFormatIndicator:msg.properties.payloadFormatIndicator
                                  publicationExpiryInterval:msg.properties.publicationExpiryInterval
                                                 topicAlias:msg.properties.publicationExpiryInterval
                                              responseTopic:msg.properties.responseTopic
                                            correlationData:msg.properties.correlationData
-                                            userProperties:msg.properties.userProperties
+                                            userProperties:uP
                                                contentType:msg.properties.contentType
-                                   subscriptionIdentifiers:msg.properties.subscriptionIdentifiers
+                                   subscriptionIdentifiers:sI
                   ]) {
                 DDLogWarn(@"[MQTTSession] dropping incoming messages");
             } else {
@@ -1651,7 +1713,8 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     if (flow) {
         if ((flow.commandType).intValue == MQTTPublish && (flow.qosLevel).intValue == MQTTQosLevelExactlyOnce) {
             flow.commandType = @(MQTTPubrel);
-            flow.deadline = [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout];
+            flow.deadline = self.protocolLevel != MQTTProtocolVersion50 ?
+            [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout] : [NSDate distantFuture];
             [self.persistence sync];
         }
     }
@@ -1665,8 +1728,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     if (flow) {
         BOOL processed = true;
         NSData *data = flow.data;
-        NSData *uP = flow.userProperties;
-        NSData *sI = flow.subscriptionIdentifiers;
 
         if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
             [self.delegate newMessage:self

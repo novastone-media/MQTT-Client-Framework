@@ -219,7 +219,8 @@
 + (MQTTMessage *)subscribeMessageWithMessageId:(UInt16)msgId
                                         topics:(NSDictionary *)topics
                                  protocolLevel:(MQTTProtocolVersion)protocolLevel
-                       subscriptionIdentifier:(NSNumber *)subscriptionIdentifier {
+                       subscriptionIdentifier:(NSNumber *)subscriptionIdentifier
+                                userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
     if (protocolLevel == MQTTProtocolVersion50) {
@@ -227,6 +228,15 @@
         if (subscriptionIdentifier) {
             [properties appendByte:MQTTSubscriptionIdentifier];
             [properties appendVariableLength:subscriptionIdentifier.unsignedLongValue];
+        }
+        if (userProperties) {
+            for (NSDictionary *userProperty in userProperties) {
+                for (NSString *key in userProperty.allKeys) {
+                    [properties appendByte:MQTTUserProperty];
+                    [properties appendMQTTString:key];
+                    [properties appendMQTTString:userProperty[key]];
+                }
+            }
         }
         [data appendVariableLength:properties.length];
         [data appendData:properties];
@@ -245,9 +255,26 @@
 
 + (MQTTMessage *)unsubscribeMessageWithMessageId:(UInt16)msgId
                                           topics:(NSArray *)topics
-                                   protocolLevel:(MQTTProtocolVersion)protocolLevel {
+                                   protocolLevel:(MQTTProtocolVersion)protocolLevel
+                                  userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
+
+    if (protocolLevel == MQTTProtocolVersion50) {
+        NSMutableData *properties = [[NSMutableData alloc] init];
+        if (userProperties) {
+            for (NSDictionary *userProperty in userProperties) {
+                for (NSString *key in userProperty.allKeys) {
+                    [properties appendByte:MQTTUserProperty];
+                    [properties appendMQTTString:key];
+                    [properties appendMQTTString:userProperty[key]];
+                }
+            }
+        }
+        [data appendVariableLength:properties.length];
+        [data appendData:properties];
+    }
+
     for (NSString *topic in topics) {
         [data appendMQTTString:topic];
     }

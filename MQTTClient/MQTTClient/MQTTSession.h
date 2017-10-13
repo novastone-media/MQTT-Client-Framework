@@ -692,6 +692,7 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 
  @param qosLevel specifies the QoS Level of the subscription.
  qosLevel can be 0, 1, or 2.
+ @param userProperties additional dictionary of user key/value combinations
  @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
  Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
  array of grantes Qos
@@ -727,12 +728,14 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
            retainAsPublished:(BOOL)retainAsPublished
               retainHandling:(MQTTRetainHandling)retainHandling
       subscriptionIdentifier:(UInt32)subscriptionIdentifier
+              userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
             subscribeHandler:(MQTTSubscribeHandlerV5 _Nullable)subscribeHandler;
 
 /** subscribes a number of topics
 
  @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
  the corresponding QoS as NSNumber values
+@param userProperties additional dictionary of user key/value combinations
  @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
  Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
  array of grantes Qos
@@ -767,11 +770,13 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 
 - (UInt16)subscribeToTopicsV5:(NSDictionary<NSString *, NSNumber *> * _Nonnull)topics
        subscriptionIdentifier:(UInt32)subscriptionIdentifier
+               userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
              subscribeHandler:(MQTTSubscribeHandlerV5 _Nullable)subscribeHandler;
 
 /** unsubscribes from a number of topic
 
  @param topics an NSArray<NSString *> of topics to unsubscribe from
+ @param userProperties additional dictionary of user key/value combinations
 
  @param unsubscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
  Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
@@ -783,6 +788,7 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
 
  */
 - (UInt16)unsubscribeTopicsV5:(NSArray<NSString *> * _Nonnull)topics
+               userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
            unsubscribeHandler:(MQTTUnsubscribeHandlerV5 _Nullable)unsubscribeHandler;
 
 /** publishes data on a given topic at a specified QoS level and retain flag
@@ -792,6 +798,7 @@ typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
  @param retainFlag if YES, data is stored on the MQTT broker until overwritten by the next publish with retainFlag = YES
  @param qos specifies the Quality of Service for the publish
  qos can be 0, 1, or 2.
+ @param userProperties additional dictionary of user key/value combinations
  @return the packet identifier
  */
 - (UInt16)publishDataV5:(NSData * _Nonnull)data
