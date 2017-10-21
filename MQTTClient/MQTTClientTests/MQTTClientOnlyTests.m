@@ -37,7 +37,7 @@
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
         self.event = -1;
-        [self.session connect];
+        [self.session connectWithConnectHandler:nil];
         while (self.event == -1) {
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
@@ -58,7 +58,7 @@
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
         self.event = -1;
-        [self.session connect];
+        [self.session connectWithConnectHandler:nil];
         while (self.event == -1) {
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }

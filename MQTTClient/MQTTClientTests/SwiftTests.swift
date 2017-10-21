@@ -35,32 +35,56 @@ class SwiftTests : MQTTTestHelpers {
             
             if ((broker.value(forKey: "websocket")) as AnyObject).boolValue != true {
                 
-                session = MQTTSession();
+                session = MQTTSession()
                 session!.delegate = self;
+
+                let transport = MQTTCFSocketTransport()
+                transport.host = broker.value(forKey: "host") as! String
+                transport.port = UInt32(broker.value(forKey: "port") as! Int)
+                transport.tls = broker.value(forKey: "tls") as! Bool
+                session!.transport = transport
+                session!.connect(connectHandler: { (error) in
+                    //
+                })
                 
-                session!.connect(toHost: broker.value(forKey: "host") as! String,
-                                 port: UInt32(broker.value(forKey: "port") as! Int),
-                                 usingSSL: broker.value(forKey: "tls") as! Bool)
                 while !sessionConnected && !sessionError {
                     RunLoop.current.run(until: Date(timeIntervalSinceNow: 1))
                 }
-                
-                session!.subscribe(toTopic: "#", at: .atMostOnce)
-                
+
+                session!.subscribe(toTopicV5: "#", at: .atMostOnce, noLocal: false, retainAsPublished: false, retainHandling: .sendRetained, subscriptionIdentifier: 0, userProperties: nil, subscribeHandler: { (error, reasonString, userProperties, reasonCodes) in
+                    //
+                })
+
                 while sessionConnected && !sessionError && !sessionSubAcked {
                     RunLoop.current.run(until: Date(timeIntervalSinceNow: 1))
                 }
-                
-                session!.publishData("sent from Xcode 8.0 using Swift".data(using: String.Encoding.utf8, allowLossyConversion: false)!,
-                                     onTopic: TOPIC,
-                                     retain: false,
-                                     qos: .atMostOnce)
+
+                session!.publishDataV5("sent from Xcode 8.0 using Swift".data(using: String.Encoding.utf8, allowLossyConversion: false)!,
+                                       onTopic: TOPIC,
+                                       retain: false,
+                                       qos: .atMostOnce,
+                                       payloadFormatIndicator: nil,
+                                       publicationExpiryInterval: nil,
+                                       topicAlias: nil,
+                                       responseTopic: nil,
+                                       correlationData: nil,
+                                       userProperties: nil,
+                                       contentType: nil,
+                                       publishHandler: { (error, reasonString, userProperties, reasonCode) in
+                                        //
+                })
                 
                 while sessionConnected && !sessionError && !sessionReceived {
                     RunLoop.current.run(until: Date(timeIntervalSinceNow: 1))
                 }
                 
-                session!.close()
+                session!.close(with: .success,
+                               sessionExpiryInterval: nil,
+                               reasonString: nil,
+                               userProperties: nil,
+                               disconnectHandler: { (error) in
+                    //
+                })
             }
         }
     }
@@ -77,7 +101,7 @@ class SwiftTests : MQTTTestHelpers {
             m.delegate = self
             
             m.connect(to: broker.value(forKey: "host") as! String,
-                      port: broker.value(forKey: "port") as! Int,
+                      port: broker.value(forKey: "port") as! UInt32,
                       tls:  broker.value(forKey: "tls") as! Bool,
                       keepalive: 60,
                       clean: true,
@@ -112,14 +136,12 @@ class SwiftTests : MQTTTestHelpers {
             sessionError = true
         }
     }
-    
-    override func newMessage(_ session: MQTTSession, data: Data, onTopic topic: String, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
-        print("Received \(data) on:\(topic) q\(qos) r\(retained) m\(mid)")
+
+    override func newMessageV5(_ session: MQTTSession, data: Data, onTopic topic: String, qos: MQTTQosLevel, retained: Bool, mid: UInt32, payloadFormatIndicator: NSNumber?, publicationExpiryInterval: NSNumber?, topicAlias: NSNumber?, responseTopic: String?, correlationData: Data?, userProperties: [[String : String]]?, contentType: String?, subscriptionIdentifiers: [NSNumber]?) {
         sessionReceived = true;
     }
     
-    override func subAckReceived(_ session: MQTTSession, msgID: UInt16, grantedQoss qoss: [NSNumber]) {
+    override func subAckReceivedV5(_ session: MQTTSession, msgID: UInt16, reasonString: String?, userProperties: [[String : String]]?, reasonCodes: [NSNumber]?) {
         sessionSubAcked = true;
     }
-    
 }

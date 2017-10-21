@@ -215,7 +215,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 
 - (void)connectTo:(NSString *)host
-             port:(NSInteger)port
+             port:(UInt32)port
               tls:(BOOL)tls
         keepalive:(NSInteger)keepalive
             clean:(BOOL)clean
@@ -255,7 +255,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 
 - (void)connectTo:(NSString *)host
-             port:(NSInteger)port
+             port:(UInt32)port
               tls:(BOOL)tls
         keepalive:(NSInteger)keepalive
             clean:(BOOL)clean
@@ -293,7 +293,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 
 - (void)connectTo:(NSString *)host
-             port:(NSInteger)port
+             port:(UInt32)port
               tls:(BOOL)tls
         keepalive:(NSInteger)keepalive
             clean:(BOOL)clean
@@ -327,7 +327,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 
 - (void)connectTo:(NSString *)host
-             port:(NSInteger)port
+             port:(UInt32)port
               tls:(BOOL)tls
         keepalive:(NSInteger)keepalive
             clean:(BOOL)clean
@@ -358,7 +358,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 
 - (void)connectTo:(NSString *)host
-                  port:(NSInteger)port
+                  port:(UInt32)port
                    tls:(BOOL)tls
              keepalive:(NSInteger)keepalive
                  clean:(BOOL)clean

@@ -639,7 +639,10 @@ int main(int argc, const char * argv[]) {
                                                       correlationData:[correlationDataString dataUsingEncoding:NSUTF8StringEncoding]
                                                        userProperties:userProperties
                                                           contentType:contentType
-                                                       publishHandler:^(NSError *error) {
+                                                       publishHandler:^(NSError * _Nullable error,
+                                                                        NSString * _Nullable reasonString,
+                                                                        NSArray<NSDictionary<NSString *,NSString *> *> * _Nullable userProperties,
+                                                                        NSNumber * _Nullable reasonCode) {
                                                            if (error) {
                                                                [[NSFileHandle fileHandleWithStandardOutput] prints:
                                                                 [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"publish error %@\"}\n",

@@ -44,7 +44,7 @@
                        withObject:nil
                        afterDelay:[parameters[@"timeout"] intValue]];
             
-            [self.session connect];
+            [self.session connectWithConnectHandler:nil];
             
             while (!self.timedout && self.event == -1) {
                 DDLogVerbose(@"waiting for connection");
@@ -63,7 +63,11 @@
                        withObject:nil
                        afterDelay:[parameters[@"timeout"] intValue]];
             
-            [self.session disconnect];
+            [self.session closeWithReturnCode:0
+                        sessionExpiryInterval:nil
+                                 reasonString:nil
+                               userProperties:nil
+                            disconnectHandler:nil];
             
             while (!self.timedout && self.event == -1) {
                 DDLogVerbose(@"waiting for disconnect");
@@ -126,17 +130,40 @@
                 [self performSelector:@selector(timedout:)
                            withObject:nil
                            afterDelay:[parameters[@"timeout"] intValue]];
-                
-                [self.session subscribeAndWaitToTopic:@"$SYS/#" atLevel:MQTTQosLevelAtLeastOnce timeout:[parameters[@"timeout"] intValue]];
-                [self.session subscribeAndWaitToTopic:@"#" atLevel:MQTTQosLevelAtLeastOnce timeout:[parameters[@"timeout"] intValue]];
-                
+
+                [self.session subscribeToTopicV5:@"$SYS/#"
+                                         atLevel:MQTTQosLevelAtLeastOnce
+                                         noLocal:false
+                               retainAsPublished:false
+                                  retainHandling:MQTTSendRetained
+                          subscriptionIdentifier:0
+                                  userProperties:nil
+                                subscribeHandler:nil];
+
+                [self.session subscribeToTopicV5:@"#"
+                                         atLevel:MQTTQosLevelAtLeastOnce
+                                         noLocal:false
+                               retainAsPublished:false
+                                  retainHandling:MQTTSendRetained
+                          subscriptionIdentifier:0
+                                  userProperties:nil
+                                subscribeHandler:nil];
+
                 while (!self.timedout) {
                     DDLogVerbose(@"looping for messages");
-                    [self.session publishAndWaitData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
-                                             onTopic:@"MQTTClient"
-                                              retain:false
-                                                 qos:MQTTQosLevelAtLeastOnce];
-                    
+                    [self.session publishDataV5:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
+                                        onTopic:@"MQTTClient"
+                                         retain:false
+                                            qos:MQTTQosLevelAtLeastOnce
+                         payloadFormatIndicator:nil
+                      publicationExpiryInterval:nil
+                                     topicAlias:nil
+                                  responseTopic:nil
+                                correlationData:nil
+                                 userProperties:nil
+                                    contentType:nil
+                                 publishHandler:nil];
+
                     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
                 }
                 
@@ -176,17 +203,33 @@
                 [self performSelector:@selector(timedout:)
                            withObject:nil
                            afterDelay:[parameters[@"timeout"] intValue]];
-                
-                [self.session subscribeAndWaitToTopic:@"MQTTClient" atLevel:MQTTQosLevelAtLeastOnce timeout:[parameters[@"timeout"] intValue]];
-                
+
+                [self.session subscribeToTopicV5:@"MQTTClient"
+                                         atLevel:MQTTQosLevelAtLeastOnce
+                                         noLocal:false
+                               retainAsPublished:false
+                                  retainHandling:MQTTSendRetained
+                          subscriptionIdentifier:0
+                                  userProperties:nil
+                                subscribeHandler:nil];
+
                 NSString *payload = @"abcdefgh";
                 
                 while (!self.timedout && strlen([payload substringFromIndex:1].UTF8String) <= 1000) {
                     DDLogVerbose(@"looping for messages");
-                    [self.session publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding]
-                                             onTopic:@"MQTTClient"
-                                              retain:false
-                                                 qos:MQTTQosLevelAtLeastOnce];
+                    [self.session publishDataV5:[payload dataUsingEncoding:NSUTF8StringEncoding]
+                                        onTopic:@"MQTTClient"
+                                         retain:false
+                                            qos:MQTTQosLevelAtLeastOnce
+                         payloadFormatIndicator:nil
+                      publicationExpiryInterval:nil
+                                     topicAlias:nil
+                                  responseTopic:nil
+                                correlationData:nil
+                                 userProperties:nil
+                                    contentType:nil
+                                 publishHandler:nil];
+
                     payload = [payload stringByAppendingString:payload];
                     payload = [payload stringByAppendingString:payload];
                     
@@ -329,7 +372,7 @@ didReceiveMessage:(id)message {
                withObject:nil
                afterDelay:[parameters[@"timeout"] intValue]];
     
-    [self.session connect];
+    [self.session connectWithConnectHandler:nil];
     
     while (!self.timedout && self.event == -1) {
         DDLogVerbose(@"waiting for connection");
@@ -348,7 +391,11 @@ didReceiveMessage:(id)message {
                withObject:nil
                afterDelay:[parameters[@"timeout"] intValue]];
     
-    [self.session disconnect];
+    [self.session closeWithReturnCode:0
+                sessionExpiryInterval:nil
+                         reasonString:nil
+                       userProperties:nil
+                    disconnectHandler:nil];
     
     while (!self.timedout && self.event == -1) {
         DDLogVerbose(@"waiting for disconnect");

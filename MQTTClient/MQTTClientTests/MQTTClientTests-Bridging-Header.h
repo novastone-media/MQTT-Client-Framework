@@ -4,3 +4,4 @@
 
 #import <XCTest/XCTest.h>
 #import "MQTTTestHelpers.h"
+#import "MQTTCFSocketTransport.h"

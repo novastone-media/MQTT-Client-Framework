@@ -56,24 +56,6 @@
     }
 }
 
-- (void)test_legacy {
-    for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
-        
-        self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                    userName:nil
-                                                    password:nil
-                                                   keepAlive:60
-                                                cleanSession:TRUE
-                                                     runLoop:nil
-                                                     forMode:nil];
-        self.session.delegate = self;
-        [self shutdown:parameters];
-    }
-}
-
-
 - (void)test_example {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
@@ -87,7 +69,21 @@
         self.session.transport = transport;
         
         self.session.delegate = self;
-        [self.session connectAndWaitTimeout:30];
+        self.event = -1;
+
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        self.timedout = FALSE;
+
+        [self performSelector:@selector(timedout:)
+                   withObject:nil
+                   afterDelay:[parameters[@"timeout"] intValue]];
+
+        [self.session connectWithConnectHandler:nil];
+
+        while (!self.timedout && self.event == -1) {
+            DDLogVerbose(@"waiting for connection");
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
         [self shutdown:parameters];
     }
 }
@@ -135,7 +131,7 @@
         @try {
             self.session.cleanSessionFlag = FALSE;
             self.session.clientId = @"";
-            [self.session connect];
+            [self.session connectWithConnectHandler:nil];
         } @catch (NSException *exception) {
             continue;
         } @finally {
@@ -1106,7 +1102,7 @@
                withObject:nil
                afterDelay:[parameters[@"timeout"] intValue]];
     
-    [self.session connect];
+    [self.session connectWithConnectHandler:nil];
     
     while (!self.timedout && self.event == -1) {
         DDLogVerbose(@"waiting for connection");

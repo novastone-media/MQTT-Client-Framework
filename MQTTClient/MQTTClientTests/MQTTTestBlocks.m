@@ -44,43 +44,73 @@
         __block int delivered = 0;
         for (int i = 0; i < BULK; i++) {
             __block NSString *payload = [NSString stringWithFormat:@"Payload Qos0 %d", i];
-            [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding]
-                              onTopic:payload
-                               retain:FALSE
-                                  qos:MQTTQosLevelAtMostOnce
-                       publishHandler:^(NSError *error){
-                           if (error) {
-                               DDLogVerbose(@"error: %@ %@", error.localizedDescription, payload);
-                           } else {
-                               DDLogVerbose(@"delivered:%@", payload);
-                               delivered++;
-                           }
-                       }];
+            [self.session publishDataV5:[payload dataUsingEncoding:NSUTF8StringEncoding]
+                                onTopic:payload
+                                 retain:FALSE
+                                    qos:MQTTQosLevelAtMostOnce
+                 payloadFormatIndicator:nil
+              publicationExpiryInterval:nil
+                             topicAlias:nil
+                          responseTopic:nil
+                        correlationData:nil
+                         userProperties:nil
+                            contentType:nil
+                         publishHandler:^(NSError *error,
+                                          NSString *reasonString,
+                                          NSArray <NSDictionary <NSString *, NSString *> *> *userProperties,
+                                          NSNumber *reasconCode){
+                             if (error) {
+                                 DDLogVerbose(@"error: %@ %@", error.localizedDescription, payload);
+                             } else {
+                                 DDLogVerbose(@"delivered:%@", payload);
+                                 delivered++;
+                             }
+                         }];
             pubs++;
         }
         for (int i = 0; i < BULK; i++) {
             __block NSString *payload = [NSString stringWithFormat:@"Payload Qos1 %d", i];
-            __block UInt16 mid = [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding]
-                                                   onTopic:payload
-                                                    retain:FALSE
-                                                       qos:MQTTQosLevelAtLeastOnce
-                                            publishHandler:^(NSError *error){
-                                                if (error) {
-                                                    DDLogVerbose(@"error: %@ %@", error.localizedDescription, payload);
-                                                } else {
-                                                    DDLogVerbose(@"%u delivered:%@", mid, payload);
-                                                    delivered++;
-                                                }
-                                            }];
+            __block UInt16 mid = [self.session publishDataV5:[payload dataUsingEncoding:NSUTF8StringEncoding]
+                                                     onTopic:payload
+                                                      retain:FALSE
+                                                         qos:MQTTQosLevelAtLeastOnce
+                                      payloadFormatIndicator:nil
+                                   publicationExpiryInterval:nil
+                                                  topicAlias:nil
+                                               responseTopic:nil
+                                             correlationData:nil
+                                              userProperties:nil
+                                                 contentType:nil
+                                              publishHandler:^(NSError *error,
+                                                               NSString *reasonString,
+                                                               NSArray <NSDictionary <NSString *, NSString *> *> *userProperties,
+                                                               NSNumber *reasconCode){
+                                                  if (error) {
+                                                      DDLogVerbose(@"error: %@ %@", error.localizedDescription, payload);
+                                                  } else {
+                                                      DDLogVerbose(@"%u delivered:%@", mid, payload);
+                                                      delivered++;
+                                                  }
+                                              }];
             pubs++;
         }
         for (int i = 0; i < BULK; i++) {
             __block NSString *payload = [NSString stringWithFormat:@"Payload Qos2 %d", i];
-            __block UInt16 mid = [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding]
-                                                   onTopic:payload
-                                                    retain:FALSE
-                                                       qos:MQTTQosLevelExactlyOnce
-                                            publishHandler:^(NSError *error){
+            __block UInt16 mid = [self.session publishDataV5:[payload dataUsingEncoding:NSUTF8StringEncoding]
+                                                     onTopic:payload
+                                                      retain:FALSE
+                                                         qos:MQTTQosLevelExactlyOnce
+                                      payloadFormatIndicator:nil
+                                   publicationExpiryInterval:nil
+                                                  topicAlias:nil
+                                               responseTopic:nil
+                                             correlationData:nil
+                                              userProperties:nil
+                                                 contentType:nil
+                                              publishHandler:^(NSError *error,
+                                                               NSString *reasonString,
+                                                               NSArray <NSDictionary <NSString *, NSString *> *> *userProperties,
+                                                               NSNumber *reasconCode){
                                                 if (error) {
                                                     DDLogVerbose(@"error: %@ %@", error.localizedDescription, payload);
                                                 } else {
@@ -97,11 +127,16 @@
         }
         
         __block BOOL closed = false;
-        [self.session closeWithDisconnectHandler:^(NSError *error){
-            DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-            closed = true;
-        }];
-        
+        [self.session closeWithReturnCode:0
+                    sessionExpiryInterval:nil
+                             reasonString:nil
+                           userProperties:nil
+                        disconnectHandler:^(NSError *error){
+                            DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
+                            closed = true;
+                        }
+         ];
+
         while (!closed && !self.timedout) {
             DDLogVerbose(@"waiting for close");
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
@@ -124,32 +159,56 @@
             DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
             XCTAssertEqual(error, nil, @"Connect error %@", error.localizedDescription);
             if (!error) {
-                __block UInt16 mid1 = [self.session subscribeToTopic:@"$SYS/#"
-                                                             atLevel:2
-                                                    subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                __block UInt16 mid1 = [self.session subscribeToTopicV5:@"SYS/#"
+                                                               atLevel:MQTTQosLevelExactlyOnce
+                                                               noLocal:NO
+                                                     retainAsPublished:NO
+                                                        retainHandling:MQTTSendRetained
+                                                subscriptionIdentifier:0
+                                                        userProperties:nil
+                                                      subscribeHandler:^(NSError *error,
+                                                                       NSString *reasonString,
+                                                                       NSArray <NSDictionary <NSString *, NSString *> *> *userProperties,
+                                                                       NSArray <NSNumber *> *reasonCodes) {
                                                         subs++;
                                                         if (!error) {
-                                                            DDLogVerbose(@"%u Granted qoss:%@", mid1, grantedQos);
+                                                            DDLogVerbose(@"%u Granted qoss:%@", mid1, reasonCodes);
                                                         } else {
                                                             DDLogVerbose(@"%u Subscribe with error:%@", mid1, error.localizedDescription);
                                                         }
                                                     }];
-                __block UInt16 mid2 = [self.session subscribeToTopic:TOPIC
-                                                             atLevel:2
-                                                    subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                __block UInt16 mid2 = [self.session subscribeToTopicV5:TOPIC
+                                                               atLevel:MQTTQosLevelExactlyOnce
+                                                               noLocal:NO
+                                                     retainAsPublished:NO
+                                                        retainHandling:MQTTSendRetained
+                                                subscriptionIdentifier:0
+                                                        userProperties:nil
+                                                      subscribeHandler:^(NSError *error,
+                                                                         NSString *reasonString,
+                                                                         NSArray <NSDictionary <NSString *, NSString *> *> *userProperties,
+                                                                         NSArray <NSNumber *> *reasonCodes) {
                                                         subs++;
                                                         if (!error) {
-                                                            DDLogVerbose(@"%u Granted qoss:%@", mid2, grantedQos);
+                                                            DDLogVerbose(@"%u Granted qoss:%@", mid2, reasonCodes);
                                                         } else {
                                                             DDLogVerbose(@"%u Subscribe with error:%@", mid2, error.localizedDescription);
                                                         }
                                                     }];
-                __block UInt16 mid3 = [self.session subscribeToTopic:@"abc"
-                                                             atLevel:2
-                                                    subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                __block UInt16 mid3 = [self.session subscribeToTopicV5:@"abc"
+                                                               atLevel:MQTTQosLevelExactlyOnce
+                                                               noLocal:NO
+                                                     retainAsPublished:NO
+                                                        retainHandling:MQTTSendRetained
+                                                subscriptionIdentifier:0
+                                                        userProperties:nil
+                                                      subscribeHandler:^(NSError *error,
+                                                                         NSString *reasonString,
+                                                                         NSArray <NSDictionary <NSString *, NSString *> *> *userProperties,
+                                                                         NSArray <NSNumber *> *reasonCodes) {
                                                         subs++;
                                                         if (!error) {
-                                                            DDLogVerbose(@"%u Granted qoss:%@", mid3, grantedQos);
+                                                            DDLogVerbose(@"%u Granted qoss:%@", mid3, reasonCodes);
                                                         } else {
                                                             DDLogVerbose(@"%u Subscribe with error:%@", mid3, error.localizedDescription);
                                                         }
@@ -162,11 +221,16 @@
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         
-        [self.session closeWithDisconnectHandler:^(NSError *error){
-            DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-            closed = true;
-        }];
-        
+        [self.session closeWithReturnCode:0
+                    sessionExpiryInterval:nil
+                             reasonString:nil
+                           userProperties:nil
+                        disconnectHandler:^(NSError *error){
+                            DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
+                            closed = true;
+                        }
+         ];
+
         while (!closed) {
             DDLogVerbose(@"waiting for close");
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
@@ -188,11 +252,19 @@
             DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
             XCTAssertEqual(error, nil, @"Connect error %@", error.localizedDescription);
             if (!error) {
-                __block UInt16 mid1 = [self.session subscribeToTopic:@"subscriber"
-                                                             atLevel:1
-                                                    subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                __block UInt16 mid1 = [self.session subscribeToTopicV5:@"subscriber"
+                                                               atLevel:MQTTQosLevelAtLeastOnce
+                                                               noLocal:NO
+                                                     retainAsPublished:NO
+                                                        retainHandling:MQTTSendRetained
+                                                subscriptionIdentifier:0
+                                                        userProperties:nil
+                                                      subscribeHandler:^(NSError *error,
+                                                                         NSString *reasonString,
+                                                                         NSArray <NSDictionary <NSString *, NSString *> *> *userProperties,
+                                                                         NSArray <NSNumber *> *reasonCodes) {
                                                         if (!error) {
-                                                            DDLogVerbose(@"%u Granted qoss:%@", mid1, grantedQos);
+                                                            DDLogVerbose(@"%u Granted qoss:%@", mid1, reasonCodes);
                                                         } else {
                                                             DDLogVerbose(@"%u Subscribe with error:%@", mid1, error.localizedDescription);
                                                         }
@@ -224,19 +296,31 @@
                          DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
                          XCTAssertEqual(error, nil, @"Connect error %@", error.localizedDescription);
                          if (!error) {
-                             __block UInt16 mid = [self.session subscribeToTopic:@"$SYS/#/ABC"
-                                                                         atLevel:2
-                                                                subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                             __block UInt16 mid = [self.session subscribeToTopicV5:@"$SYS/#/abc"
+                                                                           atLevel:MQTTQosLevelAtLeastOnce
+                                                                           noLocal:NO
+                                                                 retainAsPublished:NO
+                                                                    retainHandling:MQTTSendRetained
+                                                            subscriptionIdentifier:0
+                                                                    userProperties:nil
+                                                                  subscribeHandler:^(NSError *error,
+                                                                                     NSString *reasonString,
+                                                                                     NSArray <NSDictionary <NSString *, NSString *> *> *userProperties,
+                                                                                     NSArray <NSNumber *> *reasonCodes) {
                                                                     if (!error) {
-                                                                        DDLogVerbose(@"%d Granted qoss:%@", mid, grantedQos);
+                                                                        DDLogVerbose(@"%d Granted qoss:%@", mid, reasonCodes);
                                                                     } else {
                                                                         DDLogVerbose(@"%d Subscribe with error:%@", mid, error.localizedDescription);
                                                                     }
                                                                     
-                                                                    [self.session closeWithDisconnectHandler:^(NSError *error){
-                                                                        DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-                                                                        closed = true;
-                                                                    }];
+                                                                    [self.session closeWithReturnCode:0
+                                                                                sessionExpiryInterval:nil
+                                                                                         reasonString:nil
+                                                                                       userProperties:nil
+                                                                                    disconnectHandler:^(NSError *error){
+                                                                                        DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
+                                                                                        closed = true;
+                                                                                    }];
                                                                 }];
                          }
                      }];
@@ -262,10 +346,14 @@
                          DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
                          XCTAssertEqual(error, nil, @"Connect error %@", error.localizedDescription);
                          if (!error) {
-                             [self.session closeWithDisconnectHandler:^(NSError *error){
-                                 DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-                                 closed = true;
-                             }];
+                             [self.session closeWithReturnCode:0
+                                         sessionExpiryInterval:nil
+                                                  reasonString:nil
+                                                userProperties:nil
+                                             disconnectHandler:^(NSError *error){
+                                                 DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
+                                                 closed = true;
+                                             }];
                          }
                      }];
         
@@ -289,11 +377,16 @@
         
         [self.session connectWithConnectHandler:^(NSError *error){
                          XCTAssertNotEqual(error, nil, @"No error detected");
-                         [self.session closeWithDisconnectHandler:^(NSError *error){
-                             DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-                             closed = true;
-                         }];
-                     }];
+            [self.session closeWithReturnCode:0
+                        sessionExpiryInterval:nil
+                                 reasonString:nil
+                               userProperties:nil
+                            disconnectHandler:^(NSError *error){
+                                DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
+                                closed = true;
+                            }
+             ];
+        }];
         
         while (!closed) {
             DDLogVerbose(@"waiting for connect and close");
@@ -315,11 +408,15 @@
         
         [self.session connectWithConnectHandler:^(NSError *error){
                          XCTAssertNotEqual(error, nil, @"No error detected");
-                         [self.session closeWithDisconnectHandler:^(NSError *error){
-                             DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-                             closed = true;
-                         }];
-                     }];
+            [self.session closeWithReturnCode:0
+                        sessionExpiryInterval:nil
+                                 reasonString:nil
+                               userProperties:nil
+                            disconnectHandler:^(NSError *error){
+                                DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
+                                closed = true;
+                            }];
+        }];
         
         while (!closed) {
             DDLogVerbose(@"waiting for connect and close");

@@ -112,7 +112,7 @@
         self.session.userName = nil;
         @try {
             self.session.password = @"password w/o user";
-            [self.session connect];
+            [self.session connectWithConnectHandler:nil];
         } @catch (NSException *exception) {
             continue;
         } @finally {
@@ -144,7 +144,7 @@
         }
 
         @try {
-            [self.session connect];
+            [self.session connectWithConnectHandler:nil];
         } @catch (NSException *exception) {
             continue;
         } @finally {
@@ -173,7 +173,7 @@
             //self.session.userName = stringWithFEFF;
             //NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
             //self.session.userName = stringWithNull;
-            [self.session connect];
+            [self.session connectWithConnectHandler:nil];
         } @catch (NSException *exception) {
             continue;
         } @finally {
@@ -188,7 +188,7 @@
     self.event = -1;
     self.timedout = FALSE;
 
-    [self.session connect];
+    [self.session connectWithConnectHandler:nil];
 
     [self performSelector:@selector(timedout:)
                withObject:nil

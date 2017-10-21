@@ -33,41 +33,103 @@
 
 - (BOOL)runSync {
     DDLogVerbose(@"%@ connecting", self.session.clientId);
-    
-    if ([self.session connectAndWaitTimeout:10]) {
-        
-        [self.session subscribeAndWaitToTopic:@"#" atLevel:MQTTQosLevelAtLeastOnce timeout:10];
-        
-        [self.session publishAndWaitData:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
-                                 onTopic:@"MQTTClient"
-                                  retain:NO
-                                     qos:2
-                                 timeout:10];
-        
-        [self.session closeAndWait:10];
-        return true;
-    } else {
-        return false;
+    __block NSNumber *result = nil;
+
+    [self.session connectWithConnectHandler:^(NSError *error) {
+        if (!error) {
+            [self.session subscribeToTopicV5:@"#"
+                                     atLevel:MQTTQosLevelAtLeastOnce
+                                     noLocal:NO
+                           retainAsPublished:NO
+                              retainHandling:MQTTSendRetained
+                      subscriptionIdentifier:0
+                              userProperties:nil
+                            subscribeHandler:^(NSError *error, NSString *reasonString, NSArray<NSDictionary<NSString *,NSString *> *> *userProperties, NSArray<NSNumber *> *reasonCodes) {
+                                if (!error) {
+                                    [self.session publishDataV5:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
+                                                        onTopic:TOPIC
+                                                         retain:NO
+                                                            qos:MQTTQosLevelExactlyOnce
+                                         payloadFormatIndicator:nil
+                                      publicationExpiryInterval:nil
+                                                     topicAlias:nil
+                                                  responseTopic:nil
+                                                correlationData:nil
+                                                 userProperties:nil
+                                                    contentType:nil
+                                                 publishHandler:^(NSError *error, NSString *reasonString, NSArray<NSDictionary<NSString *,NSString *> *> *userProperties, NSNumber *reasonCode) {
+                                                     [self.session closeWithReturnCode:0
+                                                                 sessionExpiryInterval:nil
+                                                                          reasonString:nil
+                                                                        userProperties:nil
+                                                                     disconnectHandler:nil];
+                                                     if (!error) {
+                                                         result = @(TRUE);
+                                                     } else {
+                                                         result = @(FALSE);
+                                                     }
+                                                 }
+                                    ];
+
+                                } else {
+                                    [self.session closeWithReturnCode:0
+                                                sessionExpiryInterval:nil
+                                                         reasonString:nil
+                                                       userProperties:nil
+                                                    disconnectHandler:nil];
+                                    result = @(FALSE);
+                                }
+                            }];
+        } else {
+            result = @(FALSE);
+        }
+    }];
+
+    NSDate *start = [NSDate date];
+    while (!result) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        if ([NSDate date].timeIntervalSince1970 > start.timeIntervalSince1970 + 10) {
+            result = @(FALSE);
+        }
     }
+    return result.boolValue;
 }
 
 - (void)start
 {
     self.event = -1;
-    [self.session connect];
+    [self.session connectWithConnectHandler:nil];
     DDLogVerbose(@"%@ connecting", self.session.clientId);
 }
 
 - (void)sub
 {
     self.event = -1;
-    [self.session subscribeToTopic:@"MQTTClient/#" atLevel:1];
+    [self.session subscribeToTopicV5:@"MQTTClient/#"
+                             atLevel:MQTTQosLevelAtLeastOnce
+                             noLocal:NO
+                   retainAsPublished:NO
+                      retainHandling:MQTTSendRetained
+              subscriptionIdentifier:0
+                      userProperties:nil
+                    subscribeHandler:nil];
 }
 
 - (void)pub
 {
     self.event = -1;
-    [self.session publishData:[@"data" dataUsingEncoding:NSUTF8StringEncoding] onTopic:@"MQTTClient" retain:NO qos:2];
+    [self.session publishDataV5:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
+                        onTopic:TOPIC
+                         retain:NO
+                            qos:MQTTQosLevelExactlyOnce
+         payloadFormatIndicator:nil
+      publicationExpiryInterval:nil
+                     topicAlias:nil
+                  responseTopic:nil
+                correlationData:nil
+                 userProperties:nil
+                    contentType:nil
+                 publishHandler:nil];
 }
 
 - (void)close

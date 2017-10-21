@@ -57,6 +57,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTUnsubscribeHandler> *unsubscribeHandlers;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTUnsubscribeHandlerV5> *unsubscribeHandlersV5;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTPublishHandler> *publishHandlers;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTPublishHandlerV5> *publishHandlersV5;
 
 @property (nonatomic) UInt16 txMsgId;
 
@@ -97,6 +98,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.unsubscribeHandlers = [[NSMutableDictionary alloc] init];
     self.unsubscribeHandlersV5 = [[NSMutableDictionary alloc] init];
     self.publishHandlers = [[NSMutableDictionary alloc] init];
+    self.publishHandlersV5 = [[NSMutableDictionary alloc] init];
 
     self.topicAliases = [[NSMutableDictionary alloc] init];
     self.brokerTopicAliases = [[NSMutableDictionary alloc] init];
@@ -577,7 +579,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
         correlationData:(NSData *)correlationData
          userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
             contentType:(NSString *)contentType
-         publishHandler:(MQTTPublishHandler)publishHandler {
+         publishHandler:(MQTTPublishHandlerV5)publishHandler {
 
     DDLogVerbose(@"[MQTTSession] publishData:%@... onTopic:%@ retain:%d qos:%ld "
                  "payloadFormatIndicator %@ "
@@ -703,7 +705,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                     userInfo:@{NSLocalizedDescriptionKey : @"Encoder not ready"}];
         }
         if (publishHandler) {
-            [self onPublish:publishHandler error:error];
+            [self onPublishV5:publishHandler error:error reasonString:nil userProperties:nil reasonCode:nil];
         }
     } else {
         msgId = [self nextMsgId];
@@ -783,15 +785,15 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                  code:MQTTSessionErrorDroppingOutgoingMessage
                                              userInfo:@{NSLocalizedDescriptionKey : @"Dropping outgoing Message"}];
             if (publishHandler) {
-                [self onPublish:publishHandler error:error];
+                [self onPublishV5:publishHandler error:error reasonString:nil userProperties:nil reasonCode:nil];
             }
             msgId = 0;
         } else {
             [self.persistence sync];
             if (publishHandler) {
-                (self.publishHandlers)[@(msgId)] = [publishHandler copy];
+                (self.publishHandlersV5)[@(msgId)] = [publishHandler copy];
             } else {
-                [self.publishHandlers removeObjectForKey:@(msgId)];
+                [self.publishHandlersV5 removeObjectForKey:@(msgId)];
             }
 
             if ((flow.commandType).intValue == MQTTPublish) {
@@ -1597,6 +1599,11 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                 [self.publishHandlers removeObjectForKey:@(msg.mid)];
                 [self onPublish:publishHandler error:nil];
             }
+            MQTTPublishHandlerV5 publishHandlerV5 = (self.publishHandlersV5)[@(msg.mid)];
+            if (publishHandlerV5) {
+                [self.publishHandlersV5 removeObjectForKey:@(msg.mid)];
+                [self onPublishV5:publishHandlerV5 error:nil reasonString:nil userProperties:nil reasonCode:nil];
+            }
             [self.persistence deleteFlow:flow];
             [self.persistence sync];
             [self tell];
@@ -1866,6 +1873,11 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
             [self.publishHandlers removeObjectForKey:@(message.mid)];
             [self onPublish:publishHandler error:nil];
         }
+        MQTTPublishHandlerV5 publishHandlerV5 = (self.publishHandlersV5)[@(message.mid)];
+        if (publishHandlerV5) {
+            [self.publishHandlersV5 removeObjectForKey:@(message.mid)];
+            [self onPublishV5:publishHandlerV5 error:nil reasonString:nil userProperties:nil reasonCode:nil];
+        }
         [self.persistence deleteFlow:flow];
         [self.persistence sync];
         [self tell];
@@ -2096,6 +2108,38 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     MQTTPublishHandler publishHandler = dict[@"Block"];
     NSError *error = dict[@"Error"];
     publishHandler(error);
+}
+
+- (void)onPublishV5:(MQTTPublishHandlerV5)publishHandler
+              error:(NSError *)error
+       reasonString:(NSString *)reasonString
+     userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties
+           reasonCode:(NSNumber *)reasonCode {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObject:publishHandler forKey:@"Block"];
+    if (error) {
+        dict[@"Error"] = error;
+    }
+    if (reasonString) {
+        dict[@"ReasonString"] = reasonString;
+    }
+    if (userProperties) {
+        dict[@"UserProperties"] = userProperties;
+    }
+    if (reasonCode) {
+        dict[@"ReasonCode"] = reasonCode;
+    }
+
+    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(onPublishExecuteV5:) object:dict];
+    [thread start];
+}
+
+- (void)onPublishExecuteV5:(NSDictionary *)dict {
+    MQTTPublishHandlerV5 publishHandler = dict[@"Block"];
+    NSError *error = dict[@"Error"];
+    NSString *reasonString = dict[@"ReasonString"];
+    NSArray <NSDictionary <NSString *, NSString *> *> *userProperties = dict[@"UserProperties"];
+    NSNumber *reasonCode = dict[@"ReasonCode"];
+    publishHandler(error, reasonString, userProperties, reasonCode);
 }
 
 #pragma mark - MQTTTransport interface

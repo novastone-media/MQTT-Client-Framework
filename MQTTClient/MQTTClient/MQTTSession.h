@@ -449,13 +449,23 @@ __attribute__((deprecated("Replaced by -buffered:flowingIn:flowingOut:")));
 
 typedef void (^MQTTConnectHandler)(NSError * _Nullable error);
 typedef void (^MQTTDisconnectHandler)(NSError * _Nullable error);
-typedef void (^MQTTSubscribeHandler)(NSError * _Nullable error, NSArray<NSNumber *> * _Nullable gQoss);
-typedef void (^MQTTSubscribeHandlerV5)(NSError * _Nullable error, NSString * _Nullable reasonString,
-NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable userProperties, NSArray<NSNumber *> * _Nullable reasonCodes);
+typedef void (^MQTTSubscribeHandler)(NSError * _Nullable error,
+                                     NSArray<NSNumber *> * _Nullable gQoss);
+typedef void (^MQTTSubscribeHandlerV5)(NSError * _Nullable error,
+                                       NSString * _Nullable reasonString,
+                                       NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable userProperties,
+                                       NSArray<NSNumber *> * _Nullable reasonCodes);
 typedef void (^MQTTUnsubscribeHandler)(NSError * _Nullable error);
-typedef void (^MQTTUnsubscribeHandlerV5)(NSError * _Nullable error, NSString * _Nullable reasonString,
-NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable userProperties, NSArray <NSNumber *> * _Nullable reasonCodes);
+typedef void (^MQTTUnsubscribeHandlerV5)(NSError * _Nullable error,
+                                         NSString * _Nullable reasonString,
+                                         NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable userProperties,
+                                         NSArray <NSNumber *> * _Nullable reasonCodes);
 typedef void (^MQTTPublishHandler)(NSError * _Nullable error);
+typedef void (^MQTTPublishHandlerV5)(NSError * _Nullable error,
+                                     NSString * _Nullable reasonString,
+                                     NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable userProperties,
+                                     NSNumber * _Nullable reasonCode);
+
 
 /** Session implements the MQTT protocol for your application
  *
@@ -813,7 +823,7 @@ publicationExpiryInterval:(NSNumber *  _Nullable)publicationExpiryInterval
         correlationData:(NSData * _Nullable)correlationData
          userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> * _Nullable)userProperties
             contentType:(NSString * _Nullable)contentType
-         publishHandler:(MQTTPublishHandler _Nullable)publishHandler;
+         publishHandler:(MQTTPublishHandlerV5 _Nullable)publishHandler;
 
 /** closeWithReturnCode
  *  @param returnCode the returncode send to the broker
@@ -1242,7 +1252,7 @@ __attribute__((deprecated("Replaced by -closeWithReturnCode:")));
  *
  */
 - (void)disconnect
-__attribute__((deprecated("Replaced by -subscribeToTopicV5:")));
+__attribute__((deprecated("Replaced by -closeWithReturnCode:")));
 ;
 
 /** disconnect V5

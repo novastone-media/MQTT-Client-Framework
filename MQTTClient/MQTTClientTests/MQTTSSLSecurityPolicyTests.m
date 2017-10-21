@@ -588,22 +588,21 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     securityPolicy.pinnedCertificates = @[[NSData dataWithContentsOfFile:certificate]];
     securityPolicy.allowInvalidCertificates = YES;
     MQTTSSLSecurityPolicyTransport *transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
+    transport.host = @"localhost";
+    transport.port = 1883;
+    transport.tls = TRUE;
     transport.securityPolicy = securityPolicy;
     session.transport = transport;
 
     __block BOOL handled = FALSE;
-
-    [session connectToHost:@"localhost"
-                      port:1883
-                  usingSSL:TRUE
-            connectHandler:^(NSError *error) {
-                if (error) {
-                    NSLog(@"\n<<< Error in Connection Handler: %@\n", error.localizedDescription);
-                } else {
-                    NSLog(@"\n<<< Success in Connection Handler\n");
-                }
-                handled = TRUE;
-            }
+    [session connectWithConnectHandler:^(NSError *error) {
+        if (error) {
+            NSLog(@"\n<<< Error in Connection Handler: %@\n", error.localizedDescription);
+        } else {
+            NSLog(@"\n<<< Success in Connection Handler\n");
+        }
+        handled = TRUE;
+    }
      ];
 
     while (!handled) {

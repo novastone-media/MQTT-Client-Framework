@@ -50,10 +50,20 @@
         DDLogInfo(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
         [self connect:parameters];
-        [self.session publishData:[[NSData alloc] init]
-                          onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
-                           retain:NO
-                              qos:0];
+        [self.session publishDataV5:[[NSData alloc] init]
+                            onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
+                             retain:NO
+                                qos:0
+             payloadFormatIndicator:nil
+          publicationExpiryInterval:nil
+                         topicAlias:nil
+                      responseTopic:nil
+                    correlationData:nil
+                     userProperties:nil
+                        contentType:nil
+                     publishHandler:^(NSError * _Nullable error, NSString * _Nullable reasonString, NSArray<NSDictionary<NSString *,NSString *> *> * _Nullable userProperties, NSNumber * _Nullable reasonCode) {
+                         //
+                     }];
         [self shutdown:parameters];
     }
 }
@@ -197,23 +207,60 @@
         
         NSData *data = [NSData dataWithBytes:"MQTTClient/abc\x9c\x9dxyz" length:19];
         NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
-
         NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
-
         NSString *stringWithFEFF = [NSString stringWithFormat:@"%@<%C>/%s", TOPIC, 0xfeff, __FUNCTION__];
-
         NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
 
         @try {
-            [self.session publishData:[[NSData alloc] init]
-                              onTopic:stringWith9c retain:0 qos:0];
-            [self.session publishData:[[NSData alloc] init]
-                              onTopic:stringWithNull retain:0 qos:0];
-            [self.session publishData:[[NSData alloc] init]
-                              onTopic:stringWithFEFF retain:0 qos:0];
-            [self.session publishData:[[NSData alloc] init]
-                              onTopic:stringWithD800 retain:0 qos:0];
-            [self.session connect];
+            [self.session publishDataV5:[[NSData alloc] init]
+                                onTopic:stringWith9c
+                                 retain:NO
+                                    qos:0
+                 payloadFormatIndicator:nil
+              publicationExpiryInterval:nil
+                             topicAlias:nil
+                          responseTopic:nil
+                        correlationData:nil
+                         userProperties:nil
+                            contentType:nil
+                         publishHandler:nil];
+            [self.session publishDataV5:[[NSData alloc] init]
+                                onTopic:stringWithNull
+                                 retain:NO
+                                    qos:0
+                 payloadFormatIndicator:nil
+              publicationExpiryInterval:nil
+                             topicAlias:nil
+                          responseTopic:nil
+                        correlationData:nil
+                         userProperties:nil
+                            contentType:nil
+                         publishHandler:nil];
+            [self.session publishDataV5:[[NSData alloc] init]
+                                onTopic:stringWithFEFF
+                                 retain:NO
+                                    qos:0
+                 payloadFormatIndicator:nil
+              publicationExpiryInterval:nil
+                             topicAlias:nil
+                          responseTopic:nil
+                        correlationData:nil
+                         userProperties:nil
+                            contentType:nil
+                         publishHandler:nil];
+            [self.session publishDataV5:[[NSData alloc] init]
+                                onTopic:stringWithD800
+                                 retain:NO
+                                    qos:0
+                 payloadFormatIndicator:nil
+              publicationExpiryInterval:nil
+                             topicAlias:nil
+                          responseTopic:nil
+                        correlationData:nil
+                         userProperties:nil
+                            contentType:nil
+                         publishHandler:nil];
+            [self.session connectWithConnectHandler:nil];
         } @catch (NSException *exception) {
             continue;
         } @finally {
@@ -245,7 +292,20 @@
         for (int i = 0; i < ALOT; i++) {
             NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
-            self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelAtMostOnce];
+            self.sentMessageMid = [self.session publishDataV5:data
+                                                      onTopic:topic
+                                                       retain:false
+                                                          qos:MQTTQosLevelAtMostOnce
+                                       payloadFormatIndicator:nil
+                                    publicationExpiryInterval:nil
+                                                   topicAlias:nil
+                                                responseTopic:nil
+                                              correlationData:nil
+                                               userProperties:nil
+                                                  contentType:nil
+                                               publishHandler:^(NSError * _Nullable error, NSString * _Nullable reasonString, NSArray<NSDictionary<NSString *,NSString *> *> * _Nullable userProperties, NSNumber * _Nullable reasonCode) {
+                                                   //
+                                               }];
             DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
         }
         [self shutdown:parameters];
@@ -263,7 +323,21 @@
         for (int i = 0; i < ALOT; i++) {
             NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
-            self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelAtLeastOnce];
+            self.sentMessageMid = [self.session publishDataV5:data
+                                                      onTopic:topic
+                                                       retain:false
+                                                          qos:MQTTQosLevelAtLeastOnce
+                                       payloadFormatIndicator:nil
+                                    publicationExpiryInterval:nil
+                                                   topicAlias:nil
+                                                responseTopic:nil
+                                              correlationData:nil
+                                               userProperties:nil
+                                                  contentType:nil
+                                               publishHandler:^(NSError * _Nullable error, NSString * _Nullable reasonString, NSArray<NSDictionary<NSString *,NSString *> *> * _Nullable userProperties, NSNumber * _Nullable reasonCode) {
+                                                   //
+                                               }];
+
             DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
             (self.inflight)[@(self.sentMessageMid)] = @"PUBLISHED";
         }
@@ -297,7 +371,21 @@
         for (int i = 0; i < ALOT; i++) {
             NSData *data = [[NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i] dataUsingEncoding:NSUTF8StringEncoding];
             NSString *topic = [NSString stringWithFormat:@"%@/%s/%d", TOPIC, __FUNCTION__, i];
-            self.sentMessageMid = [self.session publishData:data onTopic:topic retain:false qos:MQTTQosLevelExactlyOnce];
+            self.sentMessageMid = [self.session publishDataV5:data
+                                                      onTopic:topic
+                                                       retain:false
+                                                          qos:MQTTQosLevelExactlyOnce
+                                       payloadFormatIndicator:nil
+                                    publicationExpiryInterval:nil
+                                                   topicAlias:nil
+                                                responseTopic:nil
+                                              correlationData:nil
+                                               userProperties:nil
+                                                  contentType:nil
+                                               publishHandler:^(NSError * _Nullable error, NSString * _Nullable reasonString, NSArray<NSDictionary<NSString *,NSString *> *> * _Nullable userProperties, NSNumber * _Nullable reasonCode) {
+                                                   //
+                                               }];
+
             DDLogInfo(@"testing publish %d/%d", i, self.sentMessageMid);
             (self.inflight)[@(self.sentMessageMid)] = @"PUBLISHED";
         }
@@ -673,8 +761,22 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
 - (void)testPublishCore:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos
 {
     self.deliveredMessageMid = -1;
-    self.sentMessageMid = [self.session publishData:data onTopic:topic retain:retain qos:qos];
-    
+    self.sentMessageMid = [self.session publishDataV5:data
+                                              onTopic:topic
+                                               retain:retain
+                                                  qos:qos
+                               payloadFormatIndicator:nil
+                            publicationExpiryInterval:nil
+                                           topicAlias:nil
+                                        responseTopic:nil
+                                      correlationData:nil
+                                       userProperties:nil
+                                          contentType:nil
+                                       publishHandler:^(NSError * _Nullable error, NSString * _Nullable reasonString, NSArray<NSDictionary<NSString *,NSString *> *> * _Nullable userProperties, NSNumber * _Nullable reasonCode) {
+                                           //
+                                       }];
+
+
     self.timedout = false;
     [self performSelector:@selector(timedout:)
                withObject:nil
@@ -709,7 +811,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
                withObject:nil
                afterDelay:self.timeoutValue];
 
-    [self.session connect];
+    [self.session connectWithConnectHandler:nil];
 
     while (self.event == -1 && !self.timedout) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
@@ -753,24 +855,72 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
     self.session = nil;
 }
 
-- (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID {
+- (void)messageDeliveredV5:(MQTTSession *)session
+                     msgID:(UInt16)msgID
+                     topic:(NSString *)topic
+                      data:(NSData *)data
+                       qos:(MQTTQosLevel)qos
+                retainFlag:(BOOL)retainFlag
+    payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
+ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+                topicAlias:(NSNumber *)topicAlias
+             responseTopic:(NSString *)responseTopic
+           correlationData:(NSData *)correlationData
+            userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
+               contentType:(NSString *)contentType {
     DDLogInfo(@"messageDelivered %d", msgID);
 
     if (self.inflight) {
         [self.inflight removeObjectForKey:@(msgID)];
     }
-    [super messageDelivered:session msgID:msgID];
+    [super messageDeliveredV5:session
+                        msgID:msgID
+                        topic:topic
+                         data:data
+                          qos:qos
+                   retainFlag:retainFlag
+       payloadFormatIndicator:payloadFormatIndicator
+    publicationExpiryInterval:publicationExpiryInterval
+                   topicAlias:topicAlias
+                responseTopic:responseTopic
+              correlationData:correlationData
+               userProperties:userProperties
+                  contentType:contentType];
 }
 
-- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic
-               qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
+- (void)newMessageV5:(MQTTSession *)session
+                data:(NSData *)data
+             onTopic:(NSString *)topic
+                 qos:(MQTTQosLevel)qos
+            retained:(BOOL)retained
+                 mid:(unsigned int)mid
+payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
+publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+          topicAlias:(NSNumber *)topicAlias
+       responseTopic:(NSString *)responseTopic
+     correlationData:(NSData *)correlationData
+      userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
+         contentType:(NSString *)contentType
+subscriptionIdentifiers:(NSArray<NSNumber *> *)subscriptionIdentifiers {
     DDLogInfo(@"newMessage %d", mid);
 
     if (self.inflight) {
         [self.inflight removeObjectForKey:@(mid)];
     }
-    [super newMessage:session data:data onTopic:topic
-                  qos:qos retained:retained mid:mid];
+    [super newMessageV5:session
+                   data:data
+                onTopic:topic
+                    qos:qos
+               retained:retained
+                    mid:mid
+ payloadFormatIndicator:payloadFormatIndicator
+publicationExpiryInterval:publicationExpiryInterval
+             topicAlias:topicAlias
+          responseTopic:responseTopic
+        correlationData:correlationData
+         userProperties:userProperties
+            contentType:contentType
+subscriptionIdentifiers:subscriptionIdentifiers];
 }
 
 
