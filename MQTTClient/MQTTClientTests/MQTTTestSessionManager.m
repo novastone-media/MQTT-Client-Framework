@@ -30,11 +30,7 @@
                auth:NO
                user:nil
                pass:nil
-               will:NO
-          willTopic:nil
-            willMsg:nil
-            willQos:MQTTQosLevelAtMostOnce
-     willRetainFlag:NO
+               will:nil
        withClientId:nil
      securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
        certificates:[MQTTTestHelpers clientCerts:parameters]
@@ -173,7 +169,9 @@
         MQTTSessionManager *manager = [[MQTTSessionManager alloc] initWithPersistence:true
                                                                         maxWindowSize:2
                                                                           maxMessages:1024
-                                                                              maxSize:64*1024*1024];
+                                                                              maxSize:64*1024*1024
+                                                           maxConnectionRetryInterval:60
+                                                                  connectInForeground:YES];
         manager.delegate = self;
         [manager addObserver:self
                   forKeyPath:@"effectiveSubscriptions"

@@ -32,9 +32,9 @@
                         offset += 2;
                     }
                     break;
-                case MQTTPublicationExpiryInterval:
+                case MQTTMessageExpiryInterval:
                     if (propertyLength - offset > 4) {
-                        self.publicationExpiryInterval = @([MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
+                        self.messageExpiryInterval = @([MQTTProperties getFourByteInt:[remainingData subdataWithRange:NSMakeRange(offset + 1, remainingData.length - (offset + 1))]]);
                         offset += 5;
                     }
                     break;

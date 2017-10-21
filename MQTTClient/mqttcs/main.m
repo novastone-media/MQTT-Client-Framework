@@ -135,7 +135,7 @@
                        qos:(MQTTQosLevel)qos
                 retainFlag:(BOOL)retainFlag
     payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
- publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+ messageExpiryInterval:(NSNumber *)messageExpiryInterval
                 topicAlias:(NSNumber *)topicAlias
              responseTopic:(NSString *)responseTopic
            correlationData:(NSData *)correlationData
@@ -149,7 +149,7 @@
           retainFlag,
           qos,
           payloadFormatIndicator,
-          publicationExpiryInterval,
+          messageExpiryInterval,
           topicAlias,
           responseTopic,
           correlationData,
@@ -167,7 +167,7 @@
            retained:(BOOL)retained
                 mid:(unsigned int)mid
 payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+messageExpiryInterval:(NSNumber *)messageExpiryInterval
          topicAlias:(NSNumber *)topicAlias
       responseTopic:(NSString *)responseTopic
     correlationData:(NSData *)correlationData
@@ -192,7 +192,7 @@ subscriptionIdentifiers:(NSArray<NSNumber *> * _Nullable)subscriptionIdentifiers
     newMessageV5[@"r"] = @(retained);
     newMessageV5[@"mid"] = @(mid);
     newMessageV5[@"pFI"] = payloadFormatIndicator;
-    newMessageV5[@"pEI"] = publicationExpiryInterval;
+    newMessageV5[@"pEI"] = messageExpiryInterval;
     newMessageV5[@"tA"] = topicAlias;
     newMessageV5[@"rT"] = responseTopic;
     newMessageV5[@"cD"] = [correlationData base64EncodedDataWithOptions:0];;
@@ -325,15 +325,29 @@ int main(int argc, const char * argv[]) {
                                 NSString *willMessageString = dictJSON[@"willMessage"];
                                 NSNumber *willQoS = dictJSON[@"willQoS"];
                                 NSNumber *willRetain = dictJSON[@"willRetain"];
+                                NSNumber *willDelayInterval = dictJSON[@"willDelayInterval"];
+                                NSNumber *payloadFormatIndicator = dictJSON[@"payloadFormatIndicator"];
+                                NSNumber *messageExpiryInterval = dictJSON[@"messageExpiryInterval"];
+                                NSString *contentType = dictJSON[@"contentType"];
+                                NSString *responseTopic = dictJSON[@"responseTopic"];
+                                NSString *correlationDataString = dictJSON[@"correlationData"];
+                                NSArray <NSDictionary <NSString *, NSString *> *> *userProperties = dictJSON[@"userProperties"];
+
                                 if (willTopic) {
                                     s.will = [[MQTTWill alloc]
                                               initWithTopic:willTopic
                                               data:willMessageString ? [willMessageString dataUsingEncoding:NSUTF8StringEncoding] : [[NSData alloc] init]
                                               retainFlag:willRetain ? willRetain.boolValue : false
-                                              qos:willQoS ? willQoS.unsignedCharValue : MQTTQosLevelAtMostOnce];
+                                              qos:willQoS ? willQoS.unsignedCharValue : MQTTQosLevelAtMostOnce
+                                              willDelayInterval:willDelayInterval
+                                              payloadFormatIndicator:payloadFormatIndicator
+                                              messageExpiryInterval:messageExpiryInterval
+                                              contentType:contentType
+                                              responseTopic:responseTopic
+                                              correlationData:[correlationDataString dataUsingEncoding:NSUTF8StringEncoding]
+                                              userProperties:userProperties];
                                 }
 
-                                s.willDelayInterval = dictJSON[@"willDelayInterval"];
                                 s.sessionExpiryInterval = dictJSON[@"sessionExpiryInterval"];
 
                                 s.userName = dictJSON[@"userName"];
@@ -605,7 +619,7 @@ int main(int argc, const char * argv[]) {
 
                                 NSNumber *topicAlias = dictJSON[@"topicAlias"];
                                 NSNumber *payloadFormatIndicator = dictJSON[@"payloadFormatIndicator"];
-                                NSNumber *publicationExpiryInterval = dictJSON[@"publicationExpiryInterval"];
+                                NSNumber *messageExpiryInterval = dictJSON[@"messageExpiryInterval"];
                                 NSString *responseTopic = dictJSON[@"responseTopic"];
                                 NSString *dataString = dictJSON[@"data"];
                                 NSString *correlationDataString = dictJSON[@"correlationData"];
@@ -620,7 +634,7 @@ int main(int argc, const char * argv[]) {
                                   retain.boolValue,
                                   qos.unsignedCharValue,
                                   payloadFormatIndicator,
-                                  publicationExpiryInterval,
+                                  messageExpiryInterval,
                                   topicAlias,
                                   responseTopic,
                                   correlationDataString,
@@ -633,7 +647,7 @@ int main(int argc, const char * argv[]) {
                                                                retain:retain.boolValue
                                                                   qos:qos.unsignedCharValue
                                                payloadFormatIndicator:payloadFormatIndicator
-                                            publicationExpiryInterval:publicationExpiryInterval
+                                            messageExpiryInterval:messageExpiryInterval
                                                            topicAlias:topicAlias
                                                         responseTopic:responseTopic
                                                       correlationData:[correlationDataString dataUsingEncoding:NSUTF8StringEncoding]

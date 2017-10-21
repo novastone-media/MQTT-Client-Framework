@@ -10,6 +10,7 @@
 #import "MQTTCoreDataPersistence.h"
 #import "MQTTSSLSecurityPolicyTransport.h"
 #import "MQTTLog.h"
+#import "MQTTWill.h"
 #import "ReconnectTimer.h"
 #import "ForegroundReconnection.h"
 
@@ -22,25 +23,6 @@
 @property (nonatomic) BOOL reconnectFlag;
 
 @property (strong, nonatomic) MQTTSession *session;
-
-@property (strong, nonatomic) NSString *host;
-@property (nonatomic) UInt32 port;
-@property (nonatomic) BOOL tls;
-@property (nonatomic) NSInteger keepalive;
-@property (nonatomic) BOOL clean;
-@property (nonatomic) BOOL auth;
-@property (nonatomic) BOOL will;
-@property (strong, nonatomic) NSString *user;
-@property (strong, nonatomic) NSString *pass;
-@property (strong, nonatomic) NSString *willTopic;
-@property (strong, nonatomic) NSData *willMsg;
-@property (nonatomic) NSInteger willQos;
-@property (nonatomic) BOOL willRetainFlag;
-@property (strong, nonatomic) NSString *clientId;
-@property (strong, nonatomic) NSRunLoop *runLoop;
-@property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
-@property (strong, nonatomic) NSArray *certificates;
-@property (nonatomic) MQTTProtocolVersion protocolLevel;
 
 #if TARGET_OS_IPHONE == 1
 @property (strong, nonatomic) ForegroundReconnection *foregroundReconnection;
@@ -62,6 +44,15 @@
 #define BACKGROUND_DISCONNECT_AFTER 8.0
 
 @implementation MQTTSessionManager
+- (instancetype)init {
+    self = [self initWithPersistence:MQTT_PERSISTENT
+                       maxWindowSize:MQTT_MAX_WINDOW_SIZE
+                         maxMessages:MQTT_MAX_MESSAGES
+                             maxSize:MQTT_MAX_SIZE
+          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
+                 connectInForeground:YES];
+    return self;
+}
 
 - (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
                               maxWindowSize:(NSUInteger)maxWindowSize
@@ -95,43 +86,6 @@
     return self;
 }
 
-- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
-                              maxWindowSize:(NSUInteger)maxWindowSize
-                                maxMessages:(NSUInteger)maxMessages
-                                    maxSize:(NSUInteger)maxSize
-                        connectInForeground:(BOOL)connectInForeground {
-    self = [self initWithPersistence:persistent
-                       maxWindowSize:maxWindowSize
-                         maxMessages:maxMessages
-                             maxSize:maxSize
-          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
-                 connectInForeground:connectInForeground];
-    return self;
-}
-
-- (instancetype)init {
-    self = [self initWithPersistence:MQTT_PERSISTENT
-                       maxWindowSize:MQTT_MAX_WINDOW_SIZE
-                         maxMessages:MQTT_MAX_MESSAGES
-                             maxSize:MQTT_MAX_SIZE
-          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
-                 connectInForeground:YES];
-    return self;
-}
-
-- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
-                              maxWindowSize:(NSUInteger)maxWindowSize
-                                maxMessages:(NSUInteger)maxMessages
-                                    maxSize:(NSUInteger)maxSize {
-    self = [self initWithPersistence:persistent
-                       maxWindowSize:maxWindowSize
-                         maxMessages:maxMessages
-                             maxSize:maxSize
-          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
-                 connectInForeground:YES];
-    return self;
-}
-
 - (void)connectTo:(NSString *)host
              port:(UInt32)port
               tls:(BOOL)tls
@@ -140,145 +94,7 @@
              auth:(BOOL)auth
              user:(NSString *)user
              pass:(NSString *)pass
-        willTopic:(NSString *)willTopic
-             will:(NSData *)will
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId {
-    [self connectTo:host
-               port:port
-                tls:tls
-          keepalive:keepalive
-              clean:clean
-               auth:auth
-               user:user
-               pass:pass
-               will:YES
-          willTopic:willTopic
-            willMsg:will
-            willQos:willQos
-     willRetainFlag:willRetainFlag
-       withClientId:clientId];
-}
-
-- (void)connectTo:(NSString *)host
-             port:(UInt32)port
-              tls:(BOOL)tls
-        keepalive:(NSInteger)keepalive
-            clean:(BOOL)clean
-             auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
-             will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId {
-    [self connectTo:host
-               port:port
-                tls:tls
-          keepalive:keepalive
-              clean:clean
-               auth:auth
-               user:user
-               pass:pass
-               will:will
-          willTopic:willTopic
-            willMsg:willMsg
-            willQos:willQos
-     willRetainFlag:willRetainFlag
-       withClientId:clientId
-     securityPolicy:nil
-       certificates:nil];
-}
-
-- (void)connectTo:(NSString *)host
-             port:(UInt32)port
-              tls:(BOOL)tls
-        keepalive:(NSInteger)keepalive
-            clean:(BOOL)clean
-             auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
-             will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId
-   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-     certificates:(NSArray *)certificates
-protocolLevel:(MQTTProtocolVersion)protocolLevel {
-    [self connectTo:host
-               port:port
-                tls:tls
-          keepalive:keepalive
-              clean:clean
-               auth:auth
-               user:user
-               pass:pass
-               will:will
-          willTopic:willTopic
-            willMsg:willMsg
-            willQos:willQos
-     willRetainFlag:willRetainFlag
-       withClientId:clientId
-     securityPolicy:securityPolicy
-       certificates:certificates
-      protocolLevel:protocolLevel
-            runLoop:[NSRunLoop currentRunLoop]];
-}
-
-- (void)connectTo:(NSString *)host
-             port:(UInt32)port
-              tls:(BOOL)tls
-        keepalive:(NSInteger)keepalive
-            clean:(BOOL)clean
-             auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
-             will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId
-   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-     certificates:(NSArray *)certificates {
-    [self connectTo:host
-               port:port
-                tls:tls
-          keepalive:keepalive
-              clean:clean
-               auth:auth
-               user:user
-               pass:pass
-               will:will
-          willTopic:willTopic
-            willMsg:willMsg
-            willQos:willQos
-     willRetainFlag:willRetainFlag
-       withClientId:clientId
-     securityPolicy:securityPolicy
-       certificates:certificates
-      protocolLevel:MQTTProtocolVersion311 // use this level as default, keeps it backwards compatible
-            runLoop:[NSRunLoop currentRunLoop]];
-}
-
-- (void)connectTo:(NSString *)host
-             port:(UInt32)port
-              tls:(BOOL)tls
-        keepalive:(NSInteger)keepalive
-            clean:(BOOL)clean
-             auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
-             will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
+             will:(MQTTWill *)will
      withClientId:(NSString *)clientId
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates
@@ -286,89 +102,49 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
           runLoop:(NSRunLoop *)runLoop {
     DDLogVerbose(@"MQTTSessionManager connectTo:%@", host);
     BOOL shouldReconnect = self.session != nil;
-    if (!self.session ||
-        ![host isEqualToString:self.host] ||
-        port != self.port ||
-        tls != self.tls ||
-        keepalive != self.keepalive ||
-        clean != self.clean ||
-        auth != self.auth ||
-        ![user isEqualToString:self.user] ||
-        ![pass isEqualToString:self.pass] ||
-        ![willTopic isEqualToString:self.willTopic] ||
-        ![willMsg isEqualToData:self.willMsg] ||
-        willQos != self.willQos ||
-        willRetainFlag != self.willRetainFlag ||
-        ![clientId isEqualToString:self.clientId] ||
-        securityPolicy != self.securityPolicy ||
-        certificates != self.certificates ||
-        runLoop != self.runLoop) {
-        self.host = host;
-        self.port = port;
-        self.tls = tls;
-        self.keepalive = keepalive;
-        self.clean = clean;
-        self.auth = auth;
-        self.user = user;
-        self.pass = pass;
-        self.will = will;
-        self.willTopic = willTopic;
-        self.willMsg = willMsg;
-        self.willQos = willQos;
-        self.willRetainFlag = willRetainFlag;
-        self.clientId = clientId;
-        self.securityPolicy = securityPolicy;
-        self.certificates = certificates;
-        self.protocolLevel = protocolLevel;
-        self.runLoop = runLoop;
 
-        self.session = [[MQTTSession alloc] init];
-        self.session.clientId = clientId;
-        self.session.userName = auth ? user : nil;
-        self.session.password = auth ? pass : nil;
-        self.session.keepAliveInterval = keepalive;
-        self.session.cleanSessionFlag = clean;
-        if (will) {
-            self.session.will = [[MQTTWill alloc] initWithTopic:willTopic
-                                                           data:willMsg
-                                                     retainFlag:willRetainFlag
-                                                            qos:willQos];
-        }
-        self.session.protocolLevel = protocolLevel;
-        self.session.runLoop = runLoop;
+    self.session = [[MQTTSession alloc] init];
+    self.session.clientId = clientId;
+    self.session.userName = auth ? user : nil;
+    self.session.password = auth ? pass : nil;
+    self.session.keepAliveInterval = keepalive;
+    self.session.cleanSessionFlag = clean;
+    self.session.will = will;
+    self.session.protocolLevel = protocolLevel;
+    self.session.runLoop = runLoop;
 
-        MQTTCoreDataPersistence *persistence = [[MQTTCoreDataPersistence alloc] init];
+    MQTTCoreDataPersistence *persistence = [[MQTTCoreDataPersistence alloc] init];
 
-        persistence.persistent = self.persistent;
-        persistence.maxWindowSize = self.maxWindowSize;
-        persistence.maxSize = self.maxSize;
-        persistence.maxMessages = self.maxMessages;
+    persistence.persistent = self.persistent;
+    persistence.maxWindowSize = self.maxWindowSize;
+    persistence.maxSize = self.maxSize;
+    persistence.maxMessages = self.maxMessages;
 
-        self.session.persistence = persistence;
+    self.session.persistence = persistence;
 
-        if (securityPolicy) {
-            MQTTSSLSecurityPolicyTransport *transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
-            transport.host = host;
-            transport.port = port;
-            transport.tls = tls;
-            transport.securityPolicy = securityPolicy;
-            transport.certificates = certificates;
-            transport.runLoop = runLoop;
-            self.session.transport = transport;
+    if (securityPolicy) {
+        MQTTSSLSecurityPolicyTransport *transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
+        transport.host = host;
+        transport.port = port;
+        transport.tls = tls;
+        transport.securityPolicy = securityPolicy;
+        transport.certificates = certificates;
+        transport.runLoop = runLoop;
+        self.session.transport = transport;
 
-        } else {
-            MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
-            transport.host = host;
-            transport.port = port;
-            transport.tls = tls;
-            transport.certificates = self.certificates;
-            transport.runLoop = runLoop;
-            self.session.transport = transport;
-        }
-
-        self.session.delegate = self;
-        self.reconnectFlag = FALSE;
+    } else {
+        MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
+        transport.host = host;
+        transport.port = port;
+        transport.tls = tls;
+        transport.certificates = certificates;
+        transport.runLoop = runLoop;
+        self.session.transport = transport;
     }
+
+    self.session.delegate = self;
+    self.reconnectFlag = FALSE;
+
     if (shouldReconnect) {
         DDLogVerbose(@"[MQTTSessionManager] reconnecting");
         [self disconnect];
@@ -388,7 +164,7 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
                                         retain:retainFlag
                                            qos:qos
                         payloadFormatIndicator:nil
-                     publicationExpiryInterval:nil
+                     messageExpiryInterval:nil
                                     topicAlias:nil
                                  responseTopic:nil
                                correlationData:nil
@@ -479,7 +255,7 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
 }
 
 - (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
-    if (self.clean || !self.reconnectFlag || !sessionPresent) {
+    if (session.cleanSessionFlag || !self.reconnectFlag || !sessionPresent) {
         NSDictionary *subscriptions = [self.internalSubscriptions copy];
         [self.subscriptionLock lock];
         self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];

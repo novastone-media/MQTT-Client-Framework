@@ -10,7 +10,6 @@
 
 #import "MQTTLog.h"
 #import "MQTTTestHelpers.h"
-#import "MQTTSessionSynchron.h"
 #import "MQTTCFSocketTransport.h"
 
 @interface MQTTClientTestsV5 : MQTTTestHelpers
@@ -33,7 +32,6 @@
             self.session.authMethod = @"method";
             self.session.authData = [@"data" dataUsingEncoding:NSUTF8StringEncoding];
             self.session.requestProblemInformation = @1U;
-            self.session.willDelayInterval = @30U;
             self.session.requestResponseInformation = @1U;
             self.session.receiveMaximum = @5U;
             self.session.topicAliasMaximum = @10U;
@@ -110,11 +108,17 @@
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
             self.session.sessionExpiryInterval = @10U;
-            self.session.willDelayInterval = @5U;
             self.session.will = [[MQTTWill alloc] initWithTopic:TOPIC
                                                            data:[@"will" dataUsingEncoding:NSUTF8StringEncoding]
                                                      retainFlag:false
-                                                            qos:(MQTTQosLevel)MQTTQosLevelAtMostOnce];
+                                                            qos:(MQTTQosLevel)MQTTQosLevelAtMostOnce
+                                              willDelayInterval:@30
+                                         payloadFormatIndicator:nil
+                                          messageExpiryInterval:nil
+                                                    contentType:nil
+                                                  responseTopic:nil
+                                                correlationData:nil
+                                                 userProperties:nil];
             [self connect:parameters];
             XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
             [self shutdown:parameters
@@ -132,11 +136,17 @@
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
             self.session.sessionExpiryInterval = @5U;
-            self.session.willDelayInterval = @0U;
             self.session.will = [[MQTTWill alloc] initWithTopic:TOPIC
                                                            data:[@"will" dataUsingEncoding:NSUTF8StringEncoding]
                                                      retainFlag:false
-                                                            qos:(MQTTQosLevel)MQTTQosLevelAtMostOnce];
+                                                            qos:(MQTTQosLevel)MQTTQosLevelAtMostOnce
+                                              willDelayInterval:@0
+                                         payloadFormatIndicator:nil
+                                          messageExpiryInterval:nil
+                                                    contentType:nil
+                                                  responseTopic:nil
+                                                correlationData:nil
+                                                 userProperties:nil];
 
             [self connect:parameters];
             XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -155,11 +165,18 @@
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
-            self.session.sessionExpiryInterval = @0U;
             self.session.will = [[MQTTWill alloc] initWithTopic:TOPIC
                                                            data:[@"will" dataUsingEncoding:NSUTF8StringEncoding]
                                                      retainFlag:false
-                                                            qos:(MQTTQosLevel)MQTTQosLevelAtMostOnce];
+                                                            qos:(MQTTQosLevel)MQTTQosLevelAtMostOnce
+                                              willDelayInterval:@0
+                                         payloadFormatIndicator:nil
+                                          messageExpiryInterval:nil
+                                                    contentType:nil
+                                                  responseTopic:nil
+                                                correlationData:nil
+                                                 userProperties:nil];
+
             [self connect:parameters];
             XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
             [self shutdown:parameters
@@ -206,7 +223,7 @@
                                retain:TRUE
                                   qos:qos
                payloadFormatIndicator:nil
-            publicationExpiryInterval:nil
+            messageExpiryInterval:nil
                            topicAlias:nil
                         responseTopic:nil
                       correlationData:nil
@@ -280,7 +297,7 @@
                                    retain:false
                                       qos:qos
                    payloadFormatIndicator:nil
-                publicationExpiryInterval:nil
+                messageExpiryInterval:nil
                                topicAlias:nil
                             responseTopic:nil
                           correlationData:nil
@@ -375,7 +392,7 @@
                                retain:true
                                   qos:qos
                payloadFormatIndicator:nil
-            publicationExpiryInterval:nil
+            messageExpiryInterval:nil
                            topicAlias:nil
                         responseTopic:nil
                       correlationData:nil
@@ -439,7 +456,7 @@
                                    retain:false
                                       qos:qos
                    payloadFormatIndicator:nil
-                publicationExpiryInterval:nil
+                messageExpiryInterval:nil
                                topicAlias:nil
                             responseTopic:nil
                           correlationData:nil
@@ -504,7 +521,7 @@
                         retained:(BOOL)retained
                              mid:(unsigned int)mid
           payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-       publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+       messageExpiryInterval:(NSNumber *)messageExpiryInterval
                       topicAlias:(NSNumber *)topicAlias
                    responseTopic:(NSString *)responseTopic
                  correlationData:(NSData *)correlationData

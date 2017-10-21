@@ -19,6 +19,7 @@
 
 #import <Foundation/Foundation.h>
 @class MQTTProperties;
+@class MQTTWill;
 
 /**
  Enumeration of MQTT Quality of Service levels
@@ -136,17 +137,12 @@ typedef NS_ENUM(NSUInteger, MQTTReturnCode) {
                                    password:(NSString*)password
                                   keepAlive:(NSInteger)keeplive
                                cleanSession:(BOOL)cleanSessionFlag
-                                       will:(BOOL)will
-                                  willTopic:(NSString*)willTopic
-                                    willMsg:(NSData*)willData
-                                    willQoS:(MQTTQosLevel)willQoS
-                                 willRetain:(BOOL)willRetainFlag
+                                       will:(MQTTWill *)will
                               protocolLevel:(MQTTProtocolVersion)protocolLevel
                       sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
                                  authMethod:(NSString *)authMethod
                                    authData:(NSData *)authData
                   requestProblemInformation:(NSNumber *)requestProblemInformation
-                          willDelayInterval:(NSNumber *)willDelayInterval
                  requestResponseInformation:(NSNumber *)requestResponseInformation
                              receiveMaximum:(NSNumber *)receiveMaximum
                           topicAliasMaximum:(NSNumber *)topicAliasMaximum
@@ -181,7 +177,7 @@ typedef NS_ENUM(NSUInteger, MQTTReturnCode) {
                                 dupFlag:(BOOL)dup
                           protocolLevel:(MQTTProtocolVersion)protocolLevel
                  payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-              publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+              messageExpiryInterval:(NSNumber *)messageExpiryInterval
                              topicAlias:(NSNumber *)topicAlias
                           responseTopic:(NSString *)responseTopic
                         correlationData:(NSData *)correlationData

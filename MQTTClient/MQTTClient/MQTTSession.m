@@ -51,24 +51,13 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 @property (strong, nonatomic) MQTTDecoder *decoder;
 
+@property (copy, nonatomic) MQTTConnectHandler connectHandler;
 @property (copy, nonatomic) MQTTDisconnectHandler disconnectHandler;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTSubscribeHandler> *subscribeHandlers;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTSubscribeHandlerV5> *subscribeHandlersV5;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTUnsubscribeHandler> *unsubscribeHandlers;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTUnsubscribeHandlerV5> *unsubscribeHandlersV5;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTPublishHandler> *publishHandlers;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTPublishHandlerV5> *publishHandlersV5;
 
 @property (nonatomic) UInt16 txMsgId;
-
-@property (nonatomic) BOOL synchronPub;
-@property (nonatomic) UInt16 synchronPubMid;
-@property (nonatomic) BOOL synchronUnsub;
-@property (nonatomic) UInt16 synchronUnsubMid;
-@property (nonatomic) BOOL synchronSub;
-@property (nonatomic) UInt16 synchronSubMid;
-@property (nonatomic) BOOL synchronConnect;
-@property (nonatomic) BOOL synchronDisconnect;
 
 @property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
 
@@ -93,11 +82,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self = [super init];
     self.txMsgId = 1;
     self.persistence = [[MQTTCoreDataPersistence alloc] init];
-    self.subscribeHandlers = [[NSMutableDictionary alloc] init];
     self.subscribeHandlersV5 = [[NSMutableDictionary alloc] init];
-    self.unsubscribeHandlers = [[NSMutableDictionary alloc] init];
     self.unsubscribeHandlersV5 = [[NSMutableDictionary alloc] init];
-    self.publishHandlers = [[NSMutableDictionary alloc] init];
     self.publishHandlersV5 = [[NSMutableDictionary alloc] init];
 
     self.topicAliases = [[NSMutableDictionary alloc] init];
@@ -110,11 +96,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.dupTimeout = 20.0;
     self.cleanSessionFlag = true;
     self.will = nil;
-    self.willFlag = false;
-    self.willTopic = nil;
-    self.willMsg = nil;
-    self.willQoS = MQTTQosLevelAtMostOnce;
-    self.willRetainFlag = false;
     self.protocolLevel = MQTTProtocolVersion311;
     self.runLoop = [NSRunLoop currentRunLoop];
     self.runLoopMode = NSRunLoopCommonModes;
@@ -161,33 +142,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
  * |____/  \___/ |____/|____/  \____||_| \_\|___||____/ |_____|
  */
 
-- (UInt16)subscribeToTopic:(NSString *)topic
-                   atLevel:(MQTTQosLevel)qosLevel {
-    return [self subscribeToTopic:topic atLevel:qosLevel subscribeHandler:nil];
-}
-
-- (UInt16)subscribeToTopic:(NSString *)topic
-                   atLevel:(MQTTQosLevel)qosLevel
-                   noLocal:(BOOL)noLocal
-         retainAsPublished:(BOOL)retainAsPublished
-            retainHandling:(MQTTRetainHandling)retainHandling
-    subscriptionIdentifier:(UInt32)subscriptionIdentifier {
-    return [self subscribeToTopicV5:topic
-                            atLevel:qosLevel
-                            noLocal:noLocal
-                  retainAsPublished:retainAsPublished
-                     retainHandling:retainHandling
-             subscriptionIdentifier:subscriptionIdentifier
-                     userProperties:nil
-                   subscribeHandler:nil];
-}
-
-- (UInt16)subscribeToTopic:(NSString *)topic
-                   atLevel:(MQTTQosLevel)qosLevel
-          subscribeHandler:(MQTTSubscribeHandler)subscribeHandler {
-    return [self subscribeToTopics:topic ? @{topic: @(qosLevel)} : @{} subscribeHandler:subscribeHandler];
-}
-
 - (UInt16)subscribeToTopicV5:(NSString *)topic
                      atLevel:(MQTTQosLevel)qosLevel
                      noLocal:(BOOL)noLocal
@@ -199,20 +153,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     UInt8 subscriptionOptions = qosLevel | noLocal << 2 | retainAsPublished << 3 | retainHandling << 4;
     return [self subscribeToTopicsV5:topic ? @{topic: @(subscriptionOptions)} : @{}
               subscriptionIdentifier:subscriptionIdentifier
-            userProperties:userProperties
+                      userProperties:userProperties
                     subscribeHandler:subscribeHandler];
-}
-
-- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics {
-    return [self subscribeToTopics:topics subscribeHandler:nil];
-}
-
-- (UInt16)subscribeToTopics:(NSDictionary<NSString *,NSNumber *> *)topics
-     subscriptionIdentifier:(UInt32)subscriptionIdentifier {
-    return [self subscribeToTopicsV5:topics
-              subscriptionIdentifier:subscriptionIdentifier
-                      userProperties:nil
-                    subscribeHandler:nil];
 }
 
 - (void)checkTopicFilters:(NSArray <NSString *> *)topicFilters {
@@ -331,40 +273,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
 }
 
-- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics
-           subscribeHandler:(MQTTSubscribeHandler)subscribeHandler {
-    DDLogVerbose(@"[MQTTSession] subscribeToTopics:%@]", topics);
-
-    [self checkTopicFilters:topics.allKeys];
-
-    for (NSNumber *qos in topics.allValues) {
-        if (MQTTStrict.strict &&
-            qos.intValue != MQTTQosLevelAtMostOnce &&
-            qos.intValue != MQTTQosLevelAtLeastOnce &&
-            qos.intValue != MQTTQosLevelExactlyOnce) {
-            NSException* myException = [NSException
-                                        exceptionWithName:@"Illegal QoS level"
-                                        reason:[NSString stringWithFormat:@"%d is not 0, 1, or 2", qos.intValue]
-                                        userInfo:nil];
-            @throw myException;
-        }
-    }
-
-    UInt16 mid = [self nextMsgId];
-    if (subscribeHandler) {
-        (self.subscribeHandlers)[@(mid)] = [subscribeHandler copy];
-    } else {
-        [self.subscribeHandlers removeObjectForKey:@(mid)];
-    }
-    (void)[self encode:[MQTTMessage subscribeMessageWithMessageId:mid
-                                                           topics:topics
-                                                    protocolLevel:self.protocolLevel
-                                           subscriptionIdentifier:nil
-                                                   userProperties:nil]];
-
-    return mid;
-}
-
 - (UInt16)subscribeToTopicsV5:(NSDictionary<NSString *,NSNumber *> *)topics
        subscriptionIdentifier:(UInt32)subscriptionIdentifier
                userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties
@@ -431,53 +339,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
  * | |_| || |\  | ___) || |_| || |_) |___) || |___ |  _ <  | | | |_) || |___
  *  \___/ |_| \_||____/  \___/ |____/|____/  \____||_| \_\|___||____/ |_____|
  */
-- (UInt16)unsubscribeTopic:(NSString*)topic {
-    return [self unsubscribeTopic:topic
-               unsubscribeHandler:nil];
-}
-
-- (UInt16)unsubscribeTopic:(NSString *)topic
-        unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler {
-    return [self unsubscribeTopics:topic ? @[topic] : @[]
-                unsubscribeHandler:unsubscribeHandler];
-}
-
-- (UInt16)unsubscribeTopicV5:(NSString *)topic
-          unsubscribeHandler:(MQTTUnsubscribeHandlerV5)unsubscribeHandler {
-    return [self unsubscribeTopicsV5:topic ? @[topic] : @[]
-                      userProperties:nil
-                  unsubscribeHandler:unsubscribeHandler];
-}
-
-- (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics {
-    return [self unsubscribeTopics:topics
-                unsubscribeHandler:nil];
-}
-
-- (UInt16)unsubscribeTopicsV5:(NSArray<NSString *> *)topics {
-    return [self unsubscribeTopicsV5:topics
-                      userProperties:nil
-                  unsubscribeHandler:nil];
-}
-
-- (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics
-         unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler {
-    DDLogVerbose(@"[MQTTSession] unsubscribeTopics:%@", topics);
-
-    [self checkTopicFilters:topics];
-
-    UInt16 mid = [self nextMsgId];
-    if (unsubscribeHandler) {
-        (self.unsubscribeHandlers)[@(mid)] = [unsubscribeHandler copy];
-    } else {
-        [self.unsubscribeHandlers removeObjectForKey:@(mid)];
-    }
-    (void)[self encode:[MQTTMessage unsubscribeMessageWithMessageId:mid
-                                                             topics:topics
-                                                      protocolLevel:self.protocolLevel
-                                                     userProperties:nil]];
-    return mid;
-}
 
 - (UInt16)unsubscribeTopicsV5:(NSArray<NSString *> *)topics
                userProperties:(NSArray <NSDictionary <NSString *, NSString *> *> *)userProperties
@@ -506,74 +367,13 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
  * |  __/ | |_| || |_) || |___  | |  ___) ||  _  |
  * |_|     \___/ |____/ |_____||___||____/ |_| |_|
  */
-- (UInt16)publishData:(NSData*)data
-              onTopic:(NSString*)topic
-               retain:(BOOL)retainFlag
-                  qos:(MQTTQosLevel)qos {
-    return [self publishDataV5:data
-                       onTopic:topic
-                        retain:retainFlag
-                           qos:qos
-        payloadFormatIndicator:0
-     publicationExpiryInterval:0
-                    topicAlias:0
-                 responseTopic:nil
-               correlationData:nil
-                userProperties:nil
-                   contentType:nil];
-}
 
 - (UInt16)publishDataV5:(NSData *)data
                 onTopic:(NSString *)topic
                  retain:(BOOL)retainFlag
                     qos:(MQTTQosLevel)qos
  payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
-             topicAlias:(NSNumber *)topicAlias
-          responseTopic:(NSString *)responseTopic
-        correlationData:(NSData *)correlationData
-         userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
-            contentType:(NSString *)contentType {
-    return [self publishDataV5:data
-                       onTopic:topic
-                        retain:retainFlag
-                           qos:qos
-        payloadFormatIndicator:payloadFormatIndicator
-     publicationExpiryInterval:publicationExpiryInterval
-                    topicAlias:topicAlias
-                 responseTopic:responseTopic
-               correlationData:correlationData
-                userProperties:userProperties
-                   contentType:contentType
-                publishHandler:nil];
-}
-
-- (UInt16)publishData:(NSData *)data
-              onTopic:(NSString *)topic
-               retain:(BOOL)retainFlag
-                  qos:(MQTTQosLevel)qos
-       publishHandler:(MQTTPublishHandler)publishHandler {
-    return [self publishDataV5:data
-                       onTopic:topic
-                        retain:retainFlag
-                           qos:qos
-        payloadFormatIndicator:0
-     publicationExpiryInterval:0
-                    topicAlias:0
-                 responseTopic:nil
-               correlationData:nil
-                userProperties:nil
-                   contentType:nil
-                publishHandler:nil];
-
-}
-
-- (UInt16)publishDataV5:(NSData *)data
-                onTopic:(NSString *)topic
-                 retain:(BOOL)retainFlag
-                    qos:(MQTTQosLevel)qos
- payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+messageExpiryInterval:(NSNumber *)messageExpiryInterval
              topicAlias:(NSNumber *)topicAlias
           responseTopic:(NSString *)responseTopic
         correlationData:(NSData *)correlationData
@@ -583,7 +383,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
 
     DDLogVerbose(@"[MQTTSession] publishData:%@... onTopic:%@ retain:%d qos:%ld "
                  "payloadFormatIndicator %@ "
-                 "publicationExpiryInterval %@ "
+                 "messageExpiryInterval %@ "
                  "topicAlias %@ "
                  "responseTopic %@ "
                  "correlationData %@ "
@@ -595,7 +395,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                  retainFlag,
                  (long)qos,
                  payloadFormatIndicator,
-                 publicationExpiryInterval,
+                 messageExpiryInterval,
                  topicAlias,
                  responseTopic,
                  correlationData,
@@ -692,7 +492,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                        dupFlag:FALSE
                                                  protocolLevel:self.protocolLevel
                                         payloadFormatIndicator:payloadFormatIndicator
-                                     publicationExpiryInterval:publicationExpiryInterval
+                                     messageExpiryInterval:messageExpiryInterval
                                                     topicAlias:topicAlias
                                                  responseTopic:responseTopic
                                                correlationData:correlationData
@@ -734,7 +534,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                   dupFlag:FALSE
                                             protocolLevel:self.protocolLevel
                                    payloadFormatIndicator:payloadFormatIndicator
-                                publicationExpiryInterval:publicationExpiryInterval
+                                messageExpiryInterval:messageExpiryInterval
                                                topicAlias:topicAlias
                                             responseTopic:responseTopic
                                           correlationData:correlationData
@@ -751,7 +551,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                         deadline:self.protocolLevel != MQTTProtocolVersion50 ? 
                         [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout] : [NSDate distantFuture]
                                           payloadFormatIndicator:payloadFormatIndicator
-                                       publicationExpiryInterval:publicationExpiryInterval
+                                       messageExpiryInterval:messageExpiryInterval
                                                       topicAlias:topicAlias
                                                    responseTopic:responseTopic
                                                  correlationData:correlationData
@@ -771,7 +571,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                  commandType:MQTT_None
                                                     deadline:[NSDate date]
                                       payloadFormatIndicator:payloadFormatIndicator
-                                   publicationExpiryInterval:publicationExpiryInterval
+                                   messageExpiryInterval:messageExpiryInterval
                                                   topicAlias:topicAlias
                                                responseTopic:responseTopic
                                              correlationData:correlationData
@@ -914,22 +714,10 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                          code:MQTTSessionErrorNoResponse
                                      userInfo:@{NSLocalizedDescriptionKey : @"No response"}];
 
-    NSArray *allSubscribeHandlers = self.subscribeHandlers.allValues;
-    [self.subscribeHandlers removeAllObjects];
-    for (MQTTSubscribeHandler subscribeHandler in allSubscribeHandlers) {
-        subscribeHandler(error, nil);
-    }
-
     NSArray *allSubscribeHandlersV5 = self.subscribeHandlersV5.allValues;
     [self.subscribeHandlersV5 removeAllObjects];
     for (MQTTSubscribeHandlerV5 subscribeHandlerV5 in allSubscribeHandlersV5) {
         subscribeHandlerV5(error, nil, nil, nil);
-    }
-
-    NSArray *allUnsubscribeHandlers = self.unsubscribeHandlers.allValues;
-    [self.unsubscribeHandlers removeAllObjects];
-    for (MQTTUnsubscribeHandler unsubscribeHandler in allUnsubscribeHandlers) {
-        unsubscribeHandler(error);
     }
 
     NSArray *allUnsubscribeHandlersV5 = self.unsubscribeHandlersV5.allValues;
@@ -945,12 +733,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     }
 
     [self tell];
-    self.synchronPub = FALSE;
-    self.synchronPubMid = 0;
-    self.synchronSub = FALSE;
-    self.synchronSubMid = 0;
-    self.synchronUnsub = FALSE;
-    self.synchronUnsubMid = 0;
 }
 
 
@@ -1001,7 +783,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                               dupFlag:NO
                                                         protocolLevel:self.protocolLevel
                                                payloadFormatIndicator:flow.payloadFormatIndicator
-                                            publicationExpiryInterval:flow.publicationExpiryInterval
+                                            messageExpiryInterval:flow.messageExpiryInterval
                                                            topicAlias:flow.topicAlias
                                                         responseTopic:flow.responseTopic
                                                       correlationData:flow.correlationData
@@ -1026,7 +808,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                           dupFlag:YES
                                                     protocolLevel:self.protocolLevel
                                            payloadFormatIndicator:flow.payloadFormatIndicator
-                                        publicationExpiryInterval:flow.publicationExpiryInterval
+                                        messageExpiryInterval:flow.messageExpiryInterval
                                                        topicAlias:flow.topicAlias
                                                     responseTopic:flow.responseTopic
                                                   correlationData:flow.correlationData
@@ -1198,16 +980,10 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                 if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
                                     [self.delegate handleEvent:self event:MQTTSessionEventConnected error:nil];
                                 }
-                                if ([self.delegate respondsToSelector:@selector(connected:)]) {
-                                    [self.delegate connected:self];
-                                }
                                 if ([self.delegate respondsToSelector:@selector(connected:sessionPresent:)]) {
                                     [self.delegate connected:self sessionPresent:self.sessionPresent];
                                 }
 
-                                if(self.connectionHandler){
-                                    self.connectionHandler(MQTTSessionEventConnected);
-                                }
                                 MQTTConnectHandler connectHandler = self.connectHandler;
                                 if (connectHandler) {
                                     self.connectHandler = nil;
@@ -1259,10 +1035,9 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                     [self onConnect:connectHandler error:error];
                                 }
                             }
-
-                            self.synchronConnect = FALSE;
                         }
                         break;
+
                     case MQTTDisconnect: {
                         NSError *error = [NSError errorWithDomain:MQTTSessionErrorDomain
                                                              code:(message.returnCode).intValue
@@ -1395,15 +1170,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     }
 
     if (msg.qos == 0) {
-        if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
-            [self.delegate newMessage:self
-                                 data:data
-                              onTopic:topic
-                                  qos:msg.qos
-                             retained:msg.retainFlag
-                                  mid:0];
-        }
-        if ([self.delegate respondsToSelector:@selector(newMessageV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
+        if ([self.delegate respondsToSelector:@selector(newMessageV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:messageExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
             [self.delegate newMessageV5:self
                                    data:data
                                 onTopic:topic
@@ -1411,7 +1178,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                retained:msg.retainFlag
                                     mid:0
                  payloadFormatIndicator:msg.properties.payloadFormatIndicator
-              publicationExpiryInterval:msg.properties.publicationExpiryInterval
+              messageExpiryInterval:msg.properties.messageExpiryInterval
                              topicAlias:msg.properties.topicAlias
                           responseTopic:msg.properties.responseTopic
                         correlationData:msg.properties.correlationData
@@ -1420,15 +1187,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                 subscriptionIdentifiers:msg.properties.subscriptionIdentifiers];
         }
 
-        if ([self.delegate respondsToSelector:@selector(newMessageWithFeedback:data:onTopic:qos:retained:mid:)]) {
-            [self.delegate newMessageWithFeedback:self
-                                             data:data
-                                          onTopic:topic
-                                              qos:msg.qos
-                                         retained:msg.retainFlag
-                                              mid:0];
-        }
-        if ([self.delegate respondsToSelector:@selector(newMessageWithFeedbackV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
+        if ([self.delegate respondsToSelector:@selector(newMessageWithFeedbackV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:messageExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
             [self.delegate newMessageWithFeedbackV5:self
                                                data:data
                                             onTopic:topic
@@ -1436,7 +1195,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                            retained:msg.retainFlag
                                                 mid:0
                              payloadFormatIndicator:msg.properties.payloadFormatIndicator
-                          publicationExpiryInterval:msg.properties.publicationExpiryInterval
+                          messageExpiryInterval:msg.properties.messageExpiryInterval
                                          topicAlias:msg.properties.topicAlias
                                       responseTopic:msg.properties.responseTopic
                                     correlationData:msg.properties.correlationData
@@ -1444,21 +1203,10 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                         contentType:msg.properties.contentType
                             subscriptionIdentifiers:msg.properties.subscriptionIdentifiers];
         }
-        if (self.messageHandler) {
-            self.messageHandler(data, topic);
-        }
     } else {
         if (msg.qos == 1) {
             BOOL processed = true;
-            if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
-                [self.delegate newMessage:self
-                                     data:data
-                                  onTopic:topic
-                                      qos:msg.qos
-                                 retained:msg.retainFlag
-                                      mid:msg.mid];
-            }
-            if ([self.delegate respondsToSelector:@selector(newMessageV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
+            if ([self.delegate respondsToSelector:@selector(newMessageV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:messageExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
                 [self.delegate newMessageV5:self
                                        data:data
                                     onTopic:topic
@@ -1466,7 +1214,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                    retained:msg.retainFlag
                                         mid:0
                      payloadFormatIndicator:msg.properties.payloadFormatIndicator
-                  publicationExpiryInterval:msg.properties.publicationExpiryInterval
+                  messageExpiryInterval:msg.properties.messageExpiryInterval
                                  topicAlias:msg.properties.topicAlias
                               responseTopic:msg.properties.responseTopic
                             correlationData:msg.properties.correlationData
@@ -1475,15 +1223,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                     subscriptionIdentifiers:msg.properties.subscriptionIdentifiers];
             }
 
-            if ([self.delegate respondsToSelector:@selector(newMessageWithFeedback:data:onTopic:qos:retained:mid:)]) {
-                processed = [self.delegate newMessageWithFeedback:self
-                                                             data:data
-                                                          onTopic:topic
-                                                              qos:msg.qos
-                                                         retained:msg.retainFlag
-                                                              mid:msg.mid];
-            }
-            if ([self.delegate respondsToSelector:@selector(newMessageWithFeedbackV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
+            if ([self.delegate respondsToSelector:@selector(newMessageWithFeedbackV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:messageExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
                 processed = [self.delegate newMessageWithFeedbackV5:self
                                                                data:data
                                                             onTopic:topic
@@ -1491,7 +1231,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                            retained:msg.retainFlag
                                                                 mid:0
                                              payloadFormatIndicator:msg.properties.payloadFormatIndicator
-                                          publicationExpiryInterval:msg.properties.publicationExpiryInterval
+                                          messageExpiryInterval:msg.properties.messageExpiryInterval
                                                          topicAlias:msg.properties.topicAlias
                                                       responseTopic:msg.properties.responseTopic
                                                     correlationData:msg.properties.correlationData
@@ -1500,9 +1240,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                             subscriptionIdentifiers:msg.properties.subscriptionIdentifiers];
             }
 
-            if (self.messageHandler) {
-                self.messageHandler(data, topic);
-            }
             if (processed) {
                 (void)[self encode:[MQTTMessage pubackMessageWithMessageId:msg.mid
                                                              protocolLevel:self.protocolLevel
@@ -1532,8 +1269,8 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                   deadline:self.protocolLevel != MQTTProtocolVersion50 ?
                   [NSDate dateWithTimeIntervalSinceNow:self.dupTimeout] : [NSDate distantFuture]
                                     payloadFormatIndicator:msg.properties.payloadFormatIndicator
-                                 publicationExpiryInterval:msg.properties.publicationExpiryInterval
-                                                topicAlias:msg.properties.publicationExpiryInterval
+                                 messageExpiryInterval:msg.properties.messageExpiryInterval
+                                                topicAlias:msg.properties.messageExpiryInterval
                                              responseTopic:msg.properties.responseTopic
                                            correlationData:msg.properties.correlationData
                                             userProperties:uP
@@ -1560,18 +1297,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                 messageId:msg.mid];
     if (flow) {
         if ((flow.commandType).intValue == MQTTPublish && (flow.qosLevel).intValue == MQTTQosLevelAtLeastOnce) {
-            if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
-                [self.delegate messageDelivered:self msgID:msg.mid];
-            }
-            if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:topic:data:qos:retainFlag:)]) {
-                [self.delegate messageDelivered:self
-                                          msgID:msg.mid
-                                          topic:flow.topic
-                                           data:flow.data
-                                            qos:(flow.qosLevel).intValue
-                                     retainFlag:(flow.retainedFlag).boolValue];
-            }
-            if ([self.delegate respondsToSelector:@selector(messageDeliveredV5:msgID:topic:data:qos:retainFlag:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:)]) {
+            if ([self.delegate respondsToSelector:@selector(messageDeliveredV5:msgID:topic:data:qos:retainFlag:payloadFormatIndicator:messageExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:)]) {
                 NSArray <NSDictionary <NSString *, NSString *> *> *userProperties;
                 if (flow.userProperties) {
                     userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:nil];
@@ -1584,20 +1310,12 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                               qos:(flow.qosLevel).intValue
                                        retainFlag:(flow.retainedFlag).boolValue
                            payloadFormatIndicator:flow.payloadFormatIndicator
-                        publicationExpiryInterval:flow.publicationExpiryInterval
+                        messageExpiryInterval:flow.messageExpiryInterval
                                        topicAlias:flow.topicAlias
                                     responseTopic:flow.responseTopic
                                   correlationData:flow.correlationData
                                    userProperties:userProperties
                                       contentType:flow.contentType];
-            }
-            if (self.synchronPub && self.synchronPubMid == msg.mid) {
-                self.synchronPub = FALSE;
-            }
-            MQTTPublishHandler publishHandler = (self.publishHandlers)[@(msg.mid)];
-            if (publishHandler) {
-                [self.publishHandlers removeObjectForKey:@(msg.mid)];
-                [self onPublish:publishHandler error:nil];
             }
             MQTTPublishHandlerV5 publishHandlerV5 = (self.publishHandlersV5)[@(msg.mid)];
             if (publishHandlerV5) {
@@ -1630,25 +1348,12 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     for (int i = 0; i < data.length; i++) {
         [qoss addObject:@(bytes[i])];
     }
-    if ([self.delegate respondsToSelector:@selector(subAckReceived:msgID:grantedQoss:)]) {
-        [self.delegate subAckReceived:self
-                                msgID:msg.mid grantedQoss:qoss];
-    }
     if ([self.delegate respondsToSelector:@selector(subAckReceivedV5:msgID:reasonString:userProperties:reasonCodes:)]) {
         [self.delegate subAckReceivedV5:self
                                   msgID:msg.mid
                            reasonString:msg.properties.reasonString
                          userProperties:msg.properties.userProperties
                             reasonCodes:qoss];
-    }
-    if (self.synchronSub && self.synchronSubMid == msg.mid) {
-        self.synchronSub = FALSE;
-    }
-    MQTTSubscribeHandler subscribeHandler = (self.subscribeHandlers)[@(msg.mid)];
-    if (subscribeHandler) {
-        [self.subscribeHandlers removeObjectForKey:@(msg.mid)];
-        [self onSubscribe:subscribeHandler error:nil
-                    gQoss:qoss];
     }
     MQTTSubscribeHandlerV5 subscribeHandlerV5 = (self.subscribeHandlersV5)[@(msg.mid)];
     if (subscribeHandlerV5) {
@@ -1681,23 +1386,12 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
         [reasonCodes addObject:@(bytes[i])];
     }
 
-    if ([self.delegate respondsToSelector:@selector(unsubAckReceived:msgID:)]) {
-        [self.delegate unsubAckReceived:self msgID:msg.mid];
-    }
     if ([self.delegate respondsToSelector:@selector(unsubAckReceivedV5:msgID:reasonString:userProperties:reasonCodes:)]) {
         [self.delegate unsubAckReceivedV5:self
                                     msgID:msg.mid
                              reasonString:msg.properties.reasonString
                            userProperties:msg.properties.userProperties
                               reasonCodes:reasonCodes];
-    }
-    if (self.synchronUnsub && self.synchronUnsubMid == msg.mid) {
-        self.synchronUnsub = FALSE;
-    }
-    MQTTUnsubscribeHandler unsubscribeHandler = (self.unsubscribeHandlers)[@(msg.mid)];
-    if (unsubscribeHandler) {
-        [self.unsubscribeHandlers removeObjectForKey:@(msg.mid)];
-        [self onUnsubscribe:unsubscribeHandler error:nil];
     }
     MQTTUnsubscribeHandlerV5 unsubscribeHandlerV5 = (self.unsubscribeHandlersV5)[@(msg.mid)];
     if (unsubscribeHandlerV5) {
@@ -1738,17 +1432,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
         BOOL processed = true;
         NSData *data = flow.data;
 
-        if ([self.delegate respondsToSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)]) {
-            [self.delegate newMessage:self
-                                 data:data
-                              onTopic:flow.topic
-                                  qos:(flow.qosLevel).intValue
-                             retained:(flow.retainedFlag).boolValue
-                                  mid:(flow.messageId).intValue
-             ];
-        }
-
-        if ([self.delegate respondsToSelector:@selector(newMessageV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
+        if ([self.delegate respondsToSelector:@selector(newMessageV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:messageExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
             NSArray <NSDictionary <NSString *, NSString *> *> *userProperties;
             if (flow.userProperties) {
                 userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:0];
@@ -1764,7 +1448,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                retained:(flow.retainedFlag).boolValue
                                     mid:(flow.messageId).intValue
                  payloadFormatIndicator:flow.payloadFormatIndicator
-              publicationExpiryInterval:flow.publicationExpiryInterval
+              messageExpiryInterval:flow.messageExpiryInterval
                              topicAlias:flow.topicAlias
                           responseTopic:flow.responseTopic
                         correlationData:flow.correlationData
@@ -1773,17 +1457,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                 subscriptionIdentifiers:subscriptionIdentifiers];
         }
 
-        if ([self.delegate respondsToSelector:@selector(newMessageWithFeedback:data:onTopic:qos:retained:mid:)]) {
-            processed = [self.delegate newMessageWithFeedback:self
-                                                         data:data
-                                                      onTopic:flow.topic
-                                                          qos:(flow.qosLevel).intValue
-                                                     retained:(flow.retainedFlag).boolValue
-                                                          mid:(flow.messageId).intValue
-                         ];
-        }
-
-        if ([self.delegate respondsToSelector:@selector(newMessageWithFeedbackV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
+        if ([self.delegate respondsToSelector:@selector(newMessageWithFeedbackV5:data:onTopic:qos:retained:mid:payloadFormatIndicator:messageExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:subscriptionIdentifiers:)]) {
             NSArray <NSDictionary <NSString *, NSString *> *> *userProperties;
             if (flow.userProperties) {
                 userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:0];
@@ -1800,7 +1474,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                        retained:(flow.retainedFlag).boolValue
                                                             mid:(flow.messageId).intValue
                                          payloadFormatIndicator:flow.payloadFormatIndicator
-                                      publicationExpiryInterval:flow.publicationExpiryInterval
+                                      messageExpiryInterval:flow.messageExpiryInterval
                                                      topicAlias:flow.topicAlias
                                                   responseTopic:flow.responseTopic
                                                 correlationData:flow.correlationData
@@ -1809,11 +1483,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                         subscriptionIdentifiers:subscriptionIdentifiers];
         }
 
-
-
-        if(self.messageHandler){
-            self.messageHandler(flow.data, flow.topic);
-        }
         if (processed) {
             [self.persistence deleteFlow:flow];
             [self.persistence sync];
@@ -1833,18 +1502,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                 messageId:message.mid];
     DDLogVerbose(@"flow %@", flow);
     if (flow && (flow.commandType).intValue == MQTTPubrel) {
-        if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:)]) {
-            [self.delegate messageDelivered:self msgID:message.mid];
-        }
-        if ([self.delegate respondsToSelector:@selector(messageDelivered:msgID:topic:data:qos:retainFlag:)]) {
-            [self.delegate messageDelivered:self
-                                      msgID:message.mid
-                                      topic:flow.topic
-                                       data:flow.data
-                                        qos:(flow.qosLevel).intValue
-                                 retainFlag:(flow.retainedFlag).boolValue];
-        }
-        if ([self.delegate respondsToSelector:@selector(messageDeliveredV5:msgID:topic:data:qos:retainFlag:payloadFormatIndicator:publicationExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:)]) {
+        if ([self.delegate respondsToSelector:@selector(messageDeliveredV5:msgID:topic:data:qos:retainFlag:payloadFormatIndicator:messageExpiryInterval:topicAlias:responseTopic:correlationData:userProperties:contentType:)]) {
             NSArray <NSDictionary <NSString *, NSString *> *> *userProperties;
             if (flow.userProperties) {
                 userProperties = [NSJSONSerialization JSONObjectWithData:flow.userProperties options:0 error:nil];
@@ -1857,7 +1515,7 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                           qos:(flow.qosLevel).intValue
                                    retainFlag:(flow.retainedFlag).boolValue
                        payloadFormatIndicator:flow.payloadFormatIndicator
-                    publicationExpiryInterval:flow.publicationExpiryInterval
+                    messageExpiryInterval:flow.messageExpiryInterval
                                    topicAlias:flow.topicAlias
                                 responseTopic:flow.responseTopic
                               correlationData:flow.correlationData
@@ -1865,14 +1523,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                   contentType:flow.contentType];
         }
 
-        if (self.synchronPub && self.synchronPubMid == message.mid) {
-            self.synchronPub = FALSE;
-        }
-        MQTTPublishHandler publishHandler = (self.publishHandlers)[@(message.mid)];
-        if (publishHandler) {
-            [self.publishHandlers removeObjectForKey:@(message.mid)];
-            [self onPublish:publishHandler error:nil];
-        }
         MQTTPublishHandlerV5 publishHandlerV5 = (self.publishHandlersV5)[@(message.mid)];
         if (publishHandlerV5) {
             [self.publishHandlersV5 removeObjectForKey:@(message.mid)];
@@ -1910,10 +1560,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     }
     [self closeInternal];
 
-    if(self.connectionHandler){
-        self.connectionHandler(eventCode);
-    }
-
     if(eventCode == MQTTSessionEventConnectionClosedByBroker && self.connectHandler) {
         error = [NSError errorWithDomain:MQTTSessionErrorDomain
                                     code:MQTTSessionErrorConnectionRefused
@@ -1923,15 +1569,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
         self.connectHandler = nil;
         [self onConnect:connectHandler error:error];
     }
-
-    self.synchronPub = FALSE;
-    self.synchronPubMid = 0;
-    self.synchronSub = FALSE;
-    self.synchronSubMid = 0;
-    self.synchronUnsub = FALSE;
-    self.synchronUnsubMid = 0;
-    self.synchronConnect = FALSE;
-    self.synchronDisconnect = FALSE;
 }
 
 - (UInt16)nextMsgId {
@@ -1956,12 +1593,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
                                                      incomingFlag:NO].count;
     if ([self.delegate respondsToSelector:@selector(buffered:flowingIn:flowingOut:)]) {
         [self.delegate buffered:self
-                      flowingIn:incoming
-                     flowingOut:outflowing];
-    }
-    if ([self.delegate respondsToSelector:@selector(buffered:queued:flowingIn:flowingOut:)]) {
-        [self.delegate buffered:self
-                         queued:0
                       flowingIn:incoming
                      flowingOut:outflowing];
     }
@@ -2000,18 +1631,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     disconnectHandler(error);
 }
 
-- (void)onSubscribe:(MQTTSubscribeHandler)subscribeHandler error:(NSError *)error gQoss:(NSArray *)gqoss{
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObject:subscribeHandler forKey:@"Block"];
-    if (error) {
-        dict[@"Error"] = error;
-    }
-    if (gqoss) {
-        dict[@"GQoss"] = gqoss;
-    }
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(onSubscribeExecute:) object:dict];
-    [thread start];
-}
-
 - (void)onSubscribeV5:(MQTTSubscribeHandlerV5)subscribeHandlerV5
                 error:(NSError *)error
          reasonString:(NSString *)reasonString
@@ -2034,13 +1653,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     [thread start];
 }
 
-- (void)onSubscribeExecute:(NSDictionary *)dict {
-    MQTTSubscribeHandler subscribeHandler = dict[@"Block"];
-    NSError *error = dict[@"Error"];
-    NSArray *gqoss = dict[@"GQoss"];
-    subscribeHandler(error, gqoss);
-}
-
 - (void)onSubscribeExecuteV5:(NSDictionary *)dict {
     MQTTSubscribeHandlerV5 subscribeHandler = dict[@"Block"];
     NSError *error = dict[@"Error"];
@@ -2050,14 +1662,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     subscribeHandler(error, reasonString, userProperties, reasonCodes);
 }
 
-- (void)onUnsubscribe:(MQTTUnsubscribeHandler)unsubscribeHandler error:(NSError *)error {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObject:unsubscribeHandler forKey:@"Block"];
-    if (error) {
-        dict[@"Error"] = error;
-    }
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(onUnsubscribeExecute:) object:dict];
-    [thread start];
-}
 - (void)onUnsubscribeV5:(MQTTUnsubscribeHandlerV5)unsubscribeHandler
                   error:(NSError *)error
            reasonString:(NSString *)reasonString
@@ -2080,12 +1684,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     [thread start];
 }
 
-- (void)onUnsubscribeExecute:(NSDictionary *)dict {
-    MQTTUnsubscribeHandler unsubscribeHandler = dict[@"Block"];
-    NSError *error = dict[@"Error"];
-    unsubscribeHandler(error);
-}
-
 - (void)onUnsubscribeExecuteV5:(NSDictionary *)dict {
     MQTTUnsubscribeHandlerV5 unsubscribeHandlerV5 = dict[@"Block"];
     NSError *error = dict[@"Error"];
@@ -2093,21 +1691,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     NSArray *userProperties = dict[@"UserProperties"];
     NSArray *reasonCodes = dict[@"ReasonCodes"];
     unsubscribeHandlerV5(error, reasonString, userProperties, reasonCodes);
-}
-
-- (void)onPublish:(MQTTPublishHandler)publishHandler error:(NSError *)error {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObject:publishHandler forKey:@"Block"];
-    if (error) {
-        dict[@"Error"] = error;
-    }
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(onPublishExecute:) object:dict];
-    [thread start];
-}
-
-- (void)onPublishExecute:(NSDictionary *)dict {
-    MQTTPublishHandler publishHandler = dict[@"Block"];
-    NSError *error = dict[@"Error"];
-    publishHandler(error);
 }
 
 - (void)onPublishV5:(MQTTPublishHandlerV5)publishHandler
@@ -2145,15 +1728,6 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
 #pragma mark - MQTTTransport interface
 
 - (void)connect {
-
-    if (!self.will) {
-        if (self.willFlag) {
-            self.will = [[MQTTWill alloc] initWithTopic:self.willTopic
-                                                   data:self.willMsg
-                                             retainFlag:self.willRetainFlag
-                                                    qos:self.willQoS];
-        }
-    }
 
     if (MQTTStrict.strict &&
         self.clientId && self.clientId.length < 1 &&
@@ -2323,11 +1897,8 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     DDLogVerbose(@"[MQTTSession] connecting");
     if (self.cleanSessionFlag) {
         [self.persistence deleteAllFlowsForClientId:self.clientId];
-        [self.subscribeHandlers removeAllObjects];
         [self.subscribeHandlersV5 removeAllObjects];
-        [self.unsubscribeHandlers removeAllObjects];
         [self.unsubscribeHandlersV5 removeAllObjects];
-        [self.publishHandlers removeAllObjects];
     }
     [self tell];
 
@@ -2407,32 +1978,22 @@ publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
     DDLogVerbose(@"[MQTTSession] mqttTransportDidOpen");
 
     DDLogVerbose(@"[MQTTSession] sending CONNECT");
-
-    if (!self.connectMessage) {
-        (void)[self encode:[MQTTMessage connectMessageWithClientId:self.clientId
-                                                          userName:self.userName
-                                                          password:self.password
-                                                         keepAlive:self.keepAliveInterval
-                                                      cleanSession:self.cleanSessionFlag
-                                                              will:self.will != nil
-                                                         willTopic:self.will ? self.will.topic : nil
-                                                           willMsg:self.will ? self.will.data : nil
-                                                           willQoS:self.will ? self.will.qos : MQTTQosLevelAtMostOnce
-                                                        willRetain:self.will ? self.will.retainFlag: false
-                                                     protocolLevel:self.protocolLevel
-                                             sessionExpiryInterval:self.sessionExpiryInterval
-                                                        authMethod:self.authMethod
-                                                          authData:self.authData
-                                         requestProblemInformation:self.requestProblemInformation
-                                                 willDelayInterval:self.willDelayInterval
-                                        requestResponseInformation:self.requestResponseInformation
-                                                    receiveMaximum:self.receiveMaximum
-                                                 topicAliasMaximum:self.topicAliasMaximum
-                                                    userProperties:self.userProperties
-                                                 maximumPacketSize:self.maximumPacketSize]];
-    } else {
-        (void)[self encode:self.connectMessage];
-    }
+    (void)[self encode:[MQTTMessage connectMessageWithClientId:self.clientId
+                                                      userName:self.userName
+                                                      password:self.password
+                                                     keepAlive:self.keepAliveInterval
+                                                  cleanSession:self.cleanSessionFlag
+                                                          will:self.will
+                                                 protocolLevel:self.protocolLevel
+                                         sessionExpiryInterval:self.sessionExpiryInterval
+                                                    authMethod:self.authMethod
+                                                      authData:self.authData
+                                     requestProblemInformation:self.requestProblemInformation
+                                    requestResponseInformation:self.requestResponseInformation
+                                                receiveMaximum:self.receiveMaximum
+                                             topicAliasMaximum:self.topicAliasMaximum
+                                                userProperties:self.userProperties
+                                             maximumPacketSize:self.maximumPacketSize]];
 }
 
 - (void)mqttTransport:(id<MQTTTransport>)mqttTransport didFailWithError:(NSError *)error {

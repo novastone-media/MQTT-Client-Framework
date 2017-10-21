@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 #endif
 #import "MQTTSession.h"
-#import "MQTTSessionLegacy.h"
+#import "MQTTWill.h"
 #import "MQTTSSLSecurityPolicy.h"
 
 @class MQTTSessionManager;
@@ -81,14 +81,6 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 /** Underlying MQTTSession currently in use.
  */
 @property (strong, nonatomic, readonly) MQTTSession *session;
-
-/** host an NSString containing the hostName or IP address of the Server
- */
-@property (readonly) NSString *host;
-
-/** port an unsigned 32 bit integer containing the IP port number of the Server
- */
-@property (readonly) UInt32 port;
 
 /** the delegate receiving incoming messages
  */
@@ -165,34 +157,6 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
                  maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
                         connectInForeground:(BOOL)connectInForeground NS_DESIGNATED_INITIALIZER;
 
-/** initWithPersistence sets the MQTTPersistence properties other than default
- * @param persistent YES or NO (default) to establish file or in memory persistence.
- * @param maxWindowSize (a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are stored and transmitted later.
- * @param maxSize (a positive number of bytes, default is 64 MB) to limit the size of the persistence file. Messages published after the limit is reached are dropped.
- * @param maxMessages (a positive number, default is 1024) to limit the number of messages stored. Additional messages published are dropped.
- * @param connectInForeground Whether or not to connect the MQTTSession when the app enters the foreground, and disconnect when it becomes inactive. When NO, the caller is responsible for calling -connectTo: and -disconnect. Defaults to YES.
- * @return the initialized MQTTSessionManager object
- */
-
-- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
-                              maxWindowSize:(NSUInteger)maxWindowSize
-                                maxMessages:(NSUInteger)maxMessages
-                                    maxSize:(NSUInteger)maxSize
-                        connectInForeground:(BOOL)connectInForeground;
-
-/** initWithPersistence sets the MQTTPersistence properties other than default
- * @param persistent YES or NO (default) to establish file or in memory persistence.
- * @param maxWindowSize (a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are stored and transmitted later.
- * @param maxSize (a positive number of bytes, default is 64 MB) to limit the size of the persistence file. Messages published after the limit is reached are dropped.
- * @param maxMessages (a positive number, default is 1024) to limit the number of messages stored. Additional messages published are dropped.
- * @return the initialized MQTTSessionManager object
- */
-
-- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
-                              maxWindowSize:(NSUInteger)maxWindowSize
-                                maxMessages:(NSUInteger)maxMessages
-                                    maxSize:(NSUInteger)maxSize;
-
 /** Connects to the MQTT broker and stores the parameters for subsequent reconnects
  * @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
  * @param port specifies the port to connect to
@@ -202,11 +166,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param auth specifies the user and pass parameters should be used for authenthication
  * @param user an NSString object containing the user's name (or ID) for authentication. May be nil.
  * @param pass an NSString object containing the user's password. If userName is nil, password must be nil as well.
- * @param will indicates whether a will shall be sent
- * @param willTopic the Will Topic is a string, may be nil
- * @param willMsg the Will Message, might be zero length or nil
- * @param willQos specifies the QoS level to be used when publishing the Will Message.
- * @param willRetainFlag indicates if the server should publish the Will Messages with retainFlag.
+ * @param will indicates whether and which will shall be sent
  * @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
  * @param securityPolicy A custom SSL security policy or nil.
  * @param certificates An NSArray of the pinned certificates to use or nil.
@@ -222,154 +182,12 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
              auth:(BOOL)auth
              user:(NSString *)user
              pass:(NSString *)pass
-             will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
+             will:(MQTTWill *)will
      withClientId:(NSString *)clientId
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates
     protocolLevel:(MQTTProtocolVersion)protocolLevel
           runLoop:(NSRunLoop *)runLoop;
-
-
-/** Connects to the MQTT broker and stores the parameters for subsequent reconnects
- * @param host see connectTo description
- * @param port see connectTo description
- * @param tls see connectTo description
- * @param keepalive see connectTo description
- * @param clean see connectTo description
- * @param auth see connectTo description
- * @param user see connectTo description
- * @param pass see connectTo description
- * @param will see connectTo description
- * @param willTopic see connectTo description
- * @param willMsg see connectTo description
- * @param willQos see connectTo description
- * @param willRetainFlag see connectTo description
- * @param clientId see connectTo description
- * @param securityPolicy see connectTo description
- * @param certificates An see connectTo description
- * @param protocolLevel see connectTo description
- */
-
-- (void)connectTo:(NSString *)host
-             port:(UInt32)port
-              tls:(BOOL)tls
-        keepalive:(NSInteger)keepalive
-            clean:(BOOL)clean
-             auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
-             will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId
-   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-     certificates:(NSArray *)certificates
-    protocolLevel:(MQTTProtocolVersion)protocolLevel;
-
-
-/** Connects to the MQTT broker and stores the parameters for subsequent reconnects
- * @param host see connectTo description
- * @param port see connectTo description
- * @param tls see connectTo description
- * @param keepalive see connectTo description
- * @param clean see connectTo description
- * @param auth see connectTo description
- * @param user see connectTo description
- * @param pass see connectTo description
- * @param will see connectTo description
- * @param willTopic see connectTo description
- * @param willMsg see connectTo description
- * @param willQos see connectTo description
- * @param willRetainFlag see connectTo description
- * @param clientId see connectTo description
- * @param securityPolicy see connectTo description
- * @param certificates An see connectTo description
- */
-
-- (void)connectTo:(NSString *)host
-             port:(UInt32)port
-              tls:(BOOL)tls
-        keepalive:(NSInteger)keepalive
-            clean:(BOOL)clean
-             auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
-             will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId
-   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-     certificates:(NSArray *)certificates;
-
-/** Convenience alternative to full paramter connectTo
- * @param host see connectTo description
- * @param port see connectTo description
- * @param tls see connectTo description
- * @param keepalive see connectTo description
- * @param clean see connectTo description
- * @param auth see connectTo description
- * @param user see connectTo description
- * @param pass see connectTo description
- * @param will see connectTo description
- * @param willTopic see connectTo description
- * @param willMsg see connectTo description
- * @param willQos see connectTo description
- * @param willRetainFlag see connectTo description
- * @param clientId see connectTo description
- */
-
-- (void)connectTo:(NSString *)host
-             port:(UInt32)port
-              tls:(BOOL)tls
-        keepalive:(NSInteger)keepalive
-            clean:(BOOL)clean
-             auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
-             will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId;
-
-/** Convenience alternative to full paramter connectTo
- * @param host see connectTo description
- * @param port see connectTo description
- * @param tls see connectTo description
- * @param keepalive see connectTo description
- * @param clean see connectTo description
- * @param auth see connectTo description
- * @param user see connectTo description
- * @param pass see connectTo description
- * @param willTopic the Will Topic is a string, must not be nil
- * @param will the Will Message, might be zero length
- * @param willQos see connectTo description
- * @param willRetainFlag see connectTo description
- * @param clientId see connectTo description
- */
-
-- (void)connectTo:(NSString *)host
-                  port:(UInt32)port
-                   tls:(BOOL)tls
-             keepalive:(NSInteger)keepalive
-                 clean:(BOOL)clean
-                  auth:(BOOL)auth
-                  user:(NSString *)user
-                  pass:(NSString *)pass
-             willTopic:(NSString *)willTopic
-                  will:(NSData *)will
-               willQos:(MQTTQosLevel)willQos
-        willRetainFlag:(BOOL)willRetainFlag
-          withClientId:(NSString *)clientId;
 
 /** Re-Connects to the MQTT broker using the parameters for given in the connectTo method
  */

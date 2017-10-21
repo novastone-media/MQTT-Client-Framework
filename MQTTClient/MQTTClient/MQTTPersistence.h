@@ -45,7 +45,7 @@ static NSInteger const MQTT_MAX_MESSAGES = 1024;
 @property (strong, nonatomic) NSDate *deadline;
 
 @property (strong, nonatomic) NSNumber *payloadFormatIndicator;
-@property (strong, nonatomic) NSNumber *publicationExpiryInterval;
+@property (strong, nonatomic) NSNumber *messageExpiryInterval;
 @property (strong, nonatomic) NSNumber *topicAlias;
 @property (strong, nonatomic) NSString *responseTopic;
 @property (strong, nonatomic) NSData *correlationData;
@@ -99,7 +99,7 @@ static NSInteger const MQTT_MAX_MESSAGES = 1024;
                             commandType:(UInt8)commandType
                                deadline:(NSDate *)deadline
                  payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-              publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+              messageExpiryInterval:(NSNumber *)messageExpiryInterval
                              topicAlias:(NSNumber *)topicAlias
                           responseTopic:(NSString *)responseTopic
                         correlationData:(NSData *)correlationData

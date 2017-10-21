@@ -90,7 +90,7 @@
                                         retain:NO
                                            qos:qos
                         payloadFormatIndicator:nil
-                     publicationExpiryInterval:nil
+                     messageExpiryInterval:nil
                                     topicAlias:nil
                                  responseTopic:nil
                                correlationData:nil

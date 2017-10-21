@@ -20,7 +20,7 @@
 @dynamic data;
 @dynamic deadline;
 @dynamic payloadFormatIndicator;
-@dynamic publicationExpiryInterval;
+@dynamic messageExpiryInterval;
 @dynamic topicAlias;
 @dynamic responseTopic;
 @dynamic userProperties;
@@ -262,17 +262,17 @@
     }];
 }
 
-- (NSNumber *)publicationExpiryInterval {
-    __block NSNumber *_publicationExpiryInterval;
+- (NSNumber *)messageExpiryInterval {
+    __block NSNumber *_messageExpiryInterval;
     [context performBlockAndWait:^{
-        _publicationExpiryInterval = object.publicationExpiryInterval;
+        _messageExpiryInterval = object.messageExpiryInterval;
     }];
-    return _publicationExpiryInterval;
+    return _messageExpiryInterval;
 }
 
-- (void)setPublicationExpiryInterval:(NSNumber *)publicationExpiryInterval {
+- (void)setMessageExpiryInterval:(NSNumber *)messageExpiryInterval {
     [context performBlockAndWait:^{
-        object.publicationExpiryInterval = publicationExpiryInterval;
+        object.messageExpiryInterval = messageExpiryInterval;
     }];
 }
 
@@ -342,7 +342,7 @@
                                   commandType:(UInt8)commandType
                                      deadline:(NSDate *)deadline
                        payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-                    publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+                    messageExpiryInterval:(NSNumber *)messageExpiryInterval
                                    topicAlias:(NSNumber *)topicAlias
                                 responseTopic:(NSString *)responseTopic
                               correlationData:(NSData *)correlationData
@@ -361,7 +361,7 @@
         flow.commandType = [NSNumber numberWithUnsignedInteger:commandType];
         flow.deadline = deadline;
         flow.payloadFormatIndicator = payloadFormatIndicator;
-        flow.publicationExpiryInterval = publicationExpiryInterval;
+        flow.messageExpiryInterval = messageExpiryInterval;
         flow.topicAlias = topicAlias;
         flow.correlationData = correlationData;
         if (userProperties && [NSJSONSerialization isValidJSONObject:userProperties]) {
@@ -590,7 +590,7 @@
     [properties addObject:attributeDescription];
     
     attributeDescription = [[NSAttributeDescription alloc] init];
-    attributeDescription.name = @"publicationExpiryInterval";
+    attributeDescription.name = @"messageExpiryInterval";
     attributeDescription.attributeType = NSInteger32AttributeType;
     attributeDescription.attributeValueClassName = @"NSNumber";
     [properties addObject:attributeDescription];

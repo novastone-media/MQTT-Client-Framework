@@ -55,7 +55,7 @@
                              retain:NO
                                 qos:0
              payloadFormatIndicator:nil
-          publicationExpiryInterval:nil
+          messageExpiryInterval:nil
                          topicAlias:nil
                       responseTopic:nil
                     correlationData:nil
@@ -217,7 +217,7 @@
                                  retain:NO
                                     qos:0
                  payloadFormatIndicator:nil
-              publicationExpiryInterval:nil
+              messageExpiryInterval:nil
                              topicAlias:nil
                           responseTopic:nil
                         correlationData:nil
@@ -229,7 +229,7 @@
                                  retain:NO
                                     qos:0
                  payloadFormatIndicator:nil
-              publicationExpiryInterval:nil
+              messageExpiryInterval:nil
                              topicAlias:nil
                           responseTopic:nil
                         correlationData:nil
@@ -241,7 +241,7 @@
                                  retain:NO
                                     qos:0
                  payloadFormatIndicator:nil
-              publicationExpiryInterval:nil
+              messageExpiryInterval:nil
                              topicAlias:nil
                           responseTopic:nil
                         correlationData:nil
@@ -253,7 +253,7 @@
                                  retain:NO
                                     qos:0
                  payloadFormatIndicator:nil
-              publicationExpiryInterval:nil
+              messageExpiryInterval:nil
                              topicAlias:nil
                           responseTopic:nil
                         correlationData:nil
@@ -297,7 +297,7 @@
                                                        retain:false
                                                           qos:MQTTQosLevelAtMostOnce
                                        payloadFormatIndicator:nil
-                                    publicationExpiryInterval:nil
+                                    messageExpiryInterval:nil
                                                    topicAlias:nil
                                                 responseTopic:nil
                                               correlationData:nil
@@ -328,7 +328,7 @@
                                                        retain:false
                                                           qos:MQTTQosLevelAtLeastOnce
                                        payloadFormatIndicator:nil
-                                    publicationExpiryInterval:nil
+                                    messageExpiryInterval:nil
                                                    topicAlias:nil
                                                 responseTopic:nil
                                               correlationData:nil
@@ -376,7 +376,7 @@
                                                        retain:false
                                                           qos:MQTTQosLevelExactlyOnce
                                        payloadFormatIndicator:nil
-                                    publicationExpiryInterval:nil
+                                    messageExpiryInterval:nil
                                                    topicAlias:nil
                                                 responseTopic:nil
                                               correlationData:nil
@@ -766,7 +766,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
                                                retain:retain
                                                   qos:qos
                                payloadFormatIndicator:nil
-                            publicationExpiryInterval:nil
+                            messageExpiryInterval:nil
                                            topicAlias:nil
                                         responseTopic:nil
                                       correlationData:nil
@@ -862,7 +862,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
                        qos:(MQTTQosLevel)qos
                 retainFlag:(BOOL)retainFlag
     payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
- publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+ messageExpiryInterval:(NSNumber *)messageExpiryInterval
                 topicAlias:(NSNumber *)topicAlias
              responseTopic:(NSString *)responseTopic
            correlationData:(NSData *)correlationData
@@ -880,7 +880,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
                           qos:qos
                    retainFlag:retainFlag
        payloadFormatIndicator:payloadFormatIndicator
-    publicationExpiryInterval:publicationExpiryInterval
+    messageExpiryInterval:messageExpiryInterval
                    topicAlias:topicAlias
                 responseTopic:responseTopic
               correlationData:correlationData
@@ -895,7 +895,7 @@ The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- de
             retained:(BOOL)retained
                  mid:(unsigned int)mid
 payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+messageExpiryInterval:(NSNumber *)messageExpiryInterval
           topicAlias:(NSNumber *)topicAlias
        responseTopic:(NSString *)responseTopic
      correlationData:(NSData *)correlationData
@@ -914,7 +914,7 @@ subscriptionIdentifiers:(NSArray<NSNumber *> *)subscriptionIdentifiers {
                retained:retained
                     mid:mid
  payloadFormatIndicator:payloadFormatIndicator
-publicationExpiryInterval:publicationExpiryInterval
+messageExpiryInterval:messageExpiryInterval
              topicAlias:topicAlias
           responseTopic:responseTopic
         correlationData:correlationData

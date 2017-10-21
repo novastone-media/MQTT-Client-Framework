@@ -49,7 +49,7 @@
                                  retain:FALSE
                                     qos:MQTTQosLevelAtMostOnce
                  payloadFormatIndicator:nil
-              publicationExpiryInterval:nil
+              messageExpiryInterval:nil
                              topicAlias:nil
                           responseTopic:nil
                         correlationData:nil
@@ -75,7 +75,7 @@
                                                       retain:FALSE
                                                          qos:MQTTQosLevelAtLeastOnce
                                       payloadFormatIndicator:nil
-                                   publicationExpiryInterval:nil
+                                   messageExpiryInterval:nil
                                                   topicAlias:nil
                                                responseTopic:nil
                                              correlationData:nil
@@ -101,7 +101,7 @@
                                                       retain:FALSE
                                                          qos:MQTTQosLevelExactlyOnce
                                       payloadFormatIndicator:nil
-                                   publicationExpiryInterval:nil
+                                   messageExpiryInterval:nil
                                                   topicAlias:nil
                                                responseTopic:nil
                                              correlationData:nil

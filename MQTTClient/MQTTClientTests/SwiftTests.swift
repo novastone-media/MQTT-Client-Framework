@@ -64,7 +64,7 @@ class SwiftTests : MQTTTestHelpers {
                                        retain: false,
                                        qos: .atMostOnce,
                                        payloadFormatIndicator: nil,
-                                       publicationExpiryInterval: nil,
+                                       messageExpiryInterval: nil,
                                        topicAlias: nil,
                                        responseTopic: nil,
                                        correlationData: nil,
@@ -108,14 +108,12 @@ class SwiftTests : MQTTTestHelpers {
                       auth: false,
                       user: nil,
                       pass: nil,
-                      will: false,
-                      willTopic: nil,
-                      willMsg: nil,
-                      willQos: .atMostOnce,
-                      willRetainFlag: false,
+                      will: nil,
                       withClientId: nil,
                       securityPolicy: MQTTTestHelpers.securityPolicy(broker as! [AnyHashable: Any]),
-                      certificates: MQTTTestHelpers.clientCerts(broker as! [AnyHashable: Any])
+                      certificates: MQTTTestHelpers.clientCerts(broker as! [AnyHashable: Any]),
+                      protocolLevel: .version311,
+                      runLoop: RunLoop.current
             )
             
             while (m.state != .connected) {
@@ -137,7 +135,7 @@ class SwiftTests : MQTTTestHelpers {
         }
     }
 
-    override func newMessageV5(_ session: MQTTSession, data: Data, onTopic topic: String, qos: MQTTQosLevel, retained: Bool, mid: UInt32, payloadFormatIndicator: NSNumber?, publicationExpiryInterval: NSNumber?, topicAlias: NSNumber?, responseTopic: String?, correlationData: Data?, userProperties: [[String : String]]?, contentType: String?, subscriptionIdentifiers: [NSNumber]?) {
+    override func newMessageV5(_ session: MQTTSession, data: Data, onTopic topic: String, qos: MQTTQosLevel, retained: Bool, mid: UInt32, payloadFormatIndicator: NSNumber?, messageExpiryInterval: NSNumber?, topicAlias: NSNumber?, responseTopic: String?, correlationData: Data?, userProperties: [[String : String]]?, contentType: String?, subscriptionIdentifiers: [NSNumber]?) {
         sessionReceived = true;
     }
     

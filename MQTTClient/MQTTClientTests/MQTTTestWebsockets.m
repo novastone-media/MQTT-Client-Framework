@@ -12,7 +12,6 @@
 #import "MQTTTestHelpers.h"
 #import <SocketRocket/SRWebSocket.h>
 #import "MQTTWebsocketTransport.h"
-#import "MQTTSessionSynchron.h"
 
 @interface MQTTTestWebsockets : MQTTTestHelpers <SRWebSocketDelegate>
 @property (strong, nonatomic) SRWebSocket *websocket;
@@ -156,7 +155,7 @@
                                          retain:false
                                             qos:MQTTQosLevelAtLeastOnce
                          payloadFormatIndicator:nil
-                      publicationExpiryInterval:nil
+                      messageExpiryInterval:nil
                                      topicAlias:nil
                                   responseTopic:nil
                                 correlationData:nil
@@ -222,7 +221,7 @@
                                          retain:false
                                             qos:MQTTQosLevelAtLeastOnce
                          payloadFormatIndicator:nil
-                      publicationExpiryInterval:nil
+                      messageExpiryInterval:nil
                                      topicAlias:nil
                                   responseTopic:nil
                                 correlationData:nil
@@ -245,89 +244,6 @@
     }
 }
 
-
-- (void)testWSLowLevel {
-    for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
-        if ([parameters[@"websocket"] boolValue]) {
-            
-            BOOL usingSSL = [parameters[@"tls"] boolValue];
-            UInt16 port = [parameters[@"port"] intValue];
-            NSString *host = parameters[@"host"];
-            
-            NSString *protocol = (usingSSL) ? @"wss" : @"ws";
-            NSString *portString = (port == 0) ? @"" : [NSString stringWithFormat:@":%d", (unsigned int)port];
-            NSString *path = @"/mqtt";
-            NSString *urlString = [NSString stringWithFormat:@"%@://%@%@%@", protocol, host, portString, path];
-            NSURL *url = [NSURL URLWithString:urlString];
-            NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-            
-            self.websocket = [[SRWebSocket alloc] initWithURLRequest:urlRequest protocols:@[@"mqtt"]];
-            self.websocket.delegate = self;
-            self.abort = false;
-            
-            self.timedout = FALSE;
-            [self performSelector:@selector(timedout:)
-                       withObject:nil
-                       afterDelay:[parameters[@"timeout"] intValue]];
-            
-            [self.websocket open];
-            
-            while (!(self.websocket.readyState == SR_OPEN) && !self.abort && !self.timedout) {
-                DDLogVerbose(@"waiting for open");
-                [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
-            }
-            [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            
-            XCTAssert(!self.timedout, @"timeout");
-            XCTAssertEqual(self.websocket.readyState, SR_OPEN, @"Websocket not open %ld", (long)self.websocket.readyState);
-            
-            MQTTMessage *connectMessage = [MQTTMessage connectMessageWithClientId:@"SRWebsocket"
-                                                                         userName:nil
-                                                                         password:nil
-                                                                        keepAlive:10
-                                                                     cleanSession:true
-                                                                             will:NO
-                                                                        willTopic:nil
-                                                                          willMsg:nil
-                                                                          willQoS:MQTTQosLevelAtLeastOnce
-                                                                       willRetain:false
-                                                                    protocolLevel:3
-                                                            sessionExpiryInterval:nil
-                                                                       authMethod:nil
-                                                                         authData:nil
-                                                        requestProblemInformation:nil
-                                                                willDelayInterval:nil
-                                                       requestResponseInformation:nil
-                                                                   receiveMaximum:nil
-                                                                topicAliasMaximum:nil
-                                                                   userProperties:nil
-                                                                maximumPacketSize:nil];
-            
-            self.timedout = FALSE;
-            [self performSelector:@selector(timedout:)
-                       withObject:nil
-                       afterDelay:[parameters[@"timeout"] intValue]];
-            
-            [self.websocket send:connectMessage.wireFormat];
-            
-            self.next = false;
-            while (!self.next && !self.abort && !self.timedout) {
-                DDLogVerbose(@"waiting for connect");
-                [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
-            }
-            
-            [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            
-            XCTAssert(!self.timedout, @"timeout");
-            XCTAssert(self.next, @"Websocket not response");
-            
-            
-            [self.websocket close];
-        }
-    }
-}
 
 - (void)webSocket:(SRWebSocket *)webSocket
 didReceiveMessage:(id)message {

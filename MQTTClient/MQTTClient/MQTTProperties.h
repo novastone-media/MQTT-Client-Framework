@@ -10,7 +10,7 @@
 
 typedef NS_ENUM(UInt8, MQTTPropertyIdentifier) {
     MQTTPayloadFormatIndicator = 1,
-    MQTTPublicationExpiryInterval = 2,
+    MQTTMessageExpiryInterval = 2,
     MQTTContentType = 3,
     MQTTResponseTopic = 8,
     MQTTCorrelationData = 9,
@@ -42,7 +42,7 @@ typedef NS_ENUM(UInt8, MQTTPropertyIdentifier) {
 @interface MQTTProperties : NSObject
 
 @property (strong, nonatomic) NSNumber *payloadFormatIndicator;
-@property (strong, nonatomic) NSNumber *publicationExpiryInterval;
+@property (strong, nonatomic) NSNumber *messageExpiryInterval;
 @property (strong, nonatomic) NSString *contentType;
 @property (strong, nonatomic) NSString *responseTopic;
 @property (strong, nonatomic) NSData *correlationData;

@@ -10,7 +10,6 @@
 
 #import "MQTTLog.h"
 #import "MQTTTestHelpers.h"
-#import "MQTTSessionSynchron.h"
 
 @interface OneTest : NSObject <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;
@@ -51,7 +50,7 @@
                                                          retain:NO
                                                             qos:MQTTQosLevelExactlyOnce
                                          payloadFormatIndicator:nil
-                                      publicationExpiryInterval:nil
+                                      messageExpiryInterval:nil
                                                      topicAlias:nil
                                                   responseTopic:nil
                                                 correlationData:nil
@@ -123,7 +122,7 @@
                          retain:NO
                             qos:MQTTQosLevelExactlyOnce
          payloadFormatIndicator:nil
-      publicationExpiryInterval:nil
+      messageExpiryInterval:nil
                      topicAlias:nil
                   responseTopic:nil
                 correlationData:nil

@@ -21,7 +21,7 @@
 @synthesize data;
 @synthesize deadline;
 @dynamic payloadFormatIndicator;
-@dynamic publicationExpiryInterval;
+@dynamic messageExpiryInterval;
 @dynamic topicAlias;
 @dynamic responseTopic;
 @dynamic correlationData;
@@ -76,7 +76,7 @@ static NSMutableDictionary *clientIds;
                                   commandType:(UInt8)commandType
                                      deadline:(NSDate *)deadline
                        payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-                    publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+                    messageExpiryInterval:(NSNumber *)messageExpiryInterval
                                    topicAlias:(NSNumber *)topicAlias
                                 responseTopic:(NSString *)responseTopic
                               correlationData:(NSData *)correlationData
@@ -96,7 +96,7 @@ static NSMutableDictionary *clientIds;
             flow.commandType = [NSNumber numberWithUnsignedInteger:commandType];
             flow.deadline = deadline;
             flow.payloadFormatIndicator = payloadFormatIndicator;
-            flow.publicationExpiryInterval = publicationExpiryInterval;
+            flow.messageExpiryInterval = messageExpiryInterval;
             flow.topicAlias = topicAlias;
             flow.correlationData = correlationData;
             flow.userProperties = userProperties;

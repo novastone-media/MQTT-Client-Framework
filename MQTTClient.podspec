@@ -42,8 +42,6 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicyTransport.{h,m}",
 					"MQTTClient/MQTTClient/MQTTProperties.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSession.{h,m}",
-					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
-					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
 					"MQTTClient/MQTTClient/MQTTTransport.{h,m}"
 	end
 
@@ -68,8 +66,6 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSSLSecurityPolicyTransport.{h,m}",
 					"MQTTClient/MQTTClient/MQTTProperties.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSession.{h,m}",
-					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
-					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
 					"MQTTClient/MQTTClient/MQTTTransport.{h,m}"
 		minl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'LUMBERJACK=1' }
 	end
