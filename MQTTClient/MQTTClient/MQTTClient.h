@@ -22,5 +22,6 @@
 #import <MQTTClient/MQTTMessage.h>
 #import <MQTTClient/MQTTTransport.h>
 #import <MQTTClient/MQTTCFSocketTransport.h>
+#import <MQTTClient/MQTTWebsocketTransport.h>
 #import <MQTTClient/MQTTCoreDataPersistence.h>
 #import <MQTTClient/MQTTSSLSecurityPolicyTransport.h>

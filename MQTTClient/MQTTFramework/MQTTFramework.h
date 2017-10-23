@@ -15,6 +15,7 @@
 #import "MQTTMessage.h"
 #import "MQTTTransport.h"
 #import "MQTTCFSocketTransport.h"
+#import "MQTTWebsocketTransport.h"
 #import "MQTTCoreDataPersistence.h"
 #import "MQTTSSLSecurityPolicyTransport.h"
 #import "MQTTSessionManager.h"
