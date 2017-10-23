@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MQTTTransport.h"
-#import <SocketRocket/SRWebSocket.h>
+#import <SocketRocket/SocketRocket.h>
 
 /** MQTTCFSocketTransport
  * implements an MQTTTransport on top of Websockets (SocketRocket)
