@@ -606,6 +606,28 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 
 - (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
 
+
+/** subscribes to a topic at a specific QoS level
+ 
+ @param topic the Topic Filter to subscribe to.
+ 
+ @param qosLevel specifies the QoS Level of the subscription.
+ qosLevel can be 0, 1, or 2.
+ @param subscribeHandler identifies a block which is executed on successfull or unsuccessfull subscription.
+ Might be nil. error is nil in the case of a successful subscription. In this case gQoss represents an
+ array of grantes Qos
+
+ @param explicitAcks If set to YES, messages will not be ACKed automatically. To acknowledge a message, call sendAckWithMessageId:
+ 
+ @return the Message Identifier of the SUBSCRIBE message.
+ 
+ @note returns immediately. To check results, register as an MQTTSessionDelegate and watch for events.
+ 
+ */
+
+- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler explicitAcks:(BOOL)explicitAcks;
+
+
 /** subscribes a number of topics
  
  @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and
@@ -849,6 +871,16 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  @endcode
  
  */
+
+
+/**
+ Sends an ACK message. Use this only to acknowledge messages received on a topic with the explicitAcks set to YES.
+ 
+ @param mid Message id
+ 
+ */
+- (void)sendAckForMessageId:(unsigned int)mid;
+
 - (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler;
 
 /** close V5
