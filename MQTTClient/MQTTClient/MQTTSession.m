@@ -35,6 +35,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTSubscribeHandler> *subscribeHandlers;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTUnsubscribeHandler> *unsubscribeHandlers;
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTPublishHandler> *publishHandlers;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *topicsWithExplicitAck;
 
 @property (nonatomic) UInt16 txMsgId;
 
@@ -73,6 +74,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.subscribeHandlers = [[NSMutableDictionary alloc] init];
     self.unsubscribeHandlers = [[NSMutableDictionary alloc] init];
     self.publishHandlers = [[NSMutableDictionary alloc] init];
+    self.topicsWithExplicitAck = [[NSMutableDictionary alloc] init];
 
     self.clientId = nil;
     self.userName = nil;
@@ -138,6 +140,13 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                    atLevel:(MQTTQosLevel)qosLevel
           subscribeHandler:(MQTTSubscribeHandler)subscribeHandler {
     return [self subscribeToTopics:topic ? @{topic: @(qosLevel)} : @{} subscribeHandler:subscribeHandler];
+}
+
+- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler explicitAcks:(BOOL)explicitAcks {
+    if (topic) {
+        self.topicsWithExplicitAck[topic] = @(explicitAcks);
+    }
+    return [self subscribeToTopic:topic atLevel:qosLevel subscribeHandler:subscribeHandler];
 }
 
 - (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics {
@@ -488,6 +497,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     return msgId;
 }
 
+- (void)sendAckForMessageId:(unsigned int)mid {
+    (void)[self encode:[MQTTMessage pubackMessageWithMessageId:mid
+                                                 protocolLevel:self.protocolLevel
+                                                    returnCode:MQTTSuccess
+                                                  reasonString:nil
+                                                  userProperty:nil]];}
 
 - (void)close {
     [self closeWithDisconnectHandler:nil];
@@ -1050,7 +1065,11 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                 if (self.messageHandler) {
                     self.messageHandler(data, topic);
                 }
-                if (processed) {
+                BOOL shouldAck = processed;
+                if (self.topicsWithExplicitAck[topic] && [self.topicsWithExplicitAck[topic] boolValue]) {
+                    shouldAck = NO;
+                }
+                if (shouldAck) {
                     (void)[self encode:[MQTTMessage pubackMessageWithMessageId:msgId
                                                                  protocolLevel:self.protocolLevel
                                                                     returnCode:MQTTSuccess
