@@ -604,7 +604,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  
  */
 
-- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler explicitAcks:(BOOL)explicitAcks;
+- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
+
 
 /** subscribes to a topic at a specific QoS level
  
@@ -624,7 +625,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  
  */
 
-- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
+- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler explicitAcks:(BOOL)explicitAcks;
+
 
 /** subscribes a number of topics
  
