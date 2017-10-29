@@ -1043,12 +1043,12 @@ messageExpiryInterval:(NSNumber *)messageExpiryInterval
                                                              code:(message.returnCode).intValue
                                                          userInfo:@{NSLocalizedDescriptionKey : @"MQTT protocol DISCONNECT instead of CONNACK"}];
 
-                        [self protocolError:error];
                         MQTTConnectHandler connectHandler = self.connectHandler;
                         if (connectHandler) {
                             self.connectHandler = nil;
                             [self onConnect:connectHandler error:error];
                         }
+                        [self protocolError:error];
                         break;
                     }
                     default: {
@@ -1560,14 +1560,16 @@ messageExpiryInterval:(NSNumber *)messageExpiryInterval
     }
     [self closeInternal];
 
-    if(eventCode == MQTTSessionEventConnectionClosedByBroker && self.connectHandler) {
+    if (eventCode == MQTTSessionEventConnectionClosedByBroker && self.connectHandler) {
         error = [NSError errorWithDomain:MQTTSessionErrorDomain
                                     code:MQTTSessionErrorConnectionRefused
                                 userInfo:@{NSLocalizedDescriptionKey : @"Server has closed connection without connack."}];
 
-        MQTTConnectHandler connectHandler = self.connectHandler;
-        self.connectHandler = nil;
-        [self onConnect:connectHandler error:error];
+        if (self.connectHandler) {
+            MQTTConnectHandler connectHandler = self.connectHandler;
+            self.connectHandler = nil;
+            [self onConnect:connectHandler error:error];
+        }
     }
 }
 
