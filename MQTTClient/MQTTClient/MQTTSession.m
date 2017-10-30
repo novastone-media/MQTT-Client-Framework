@@ -619,12 +619,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 }
 
 
-- (void)keepAlive {
+- (void)keepAlive:(NSTimer *)timer {
     DDLogVerbose(@"[MQTTSession] keepAlive %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
     (void)[self encode:[MQTTMessage pingreqMessage]];
 }
 
-- (void)checkDup {
+- (void)checkDup:(NSTimer *)timer {
     DDLogVerbose(@"[MQTTSession] checkDup %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
     [self checkTxFlows];
 }
@@ -802,14 +802,14 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                 } else {
                                     self.sessionPresent = false;
                                 }
-                                __weak typeof(self) weakSelf = self;
+
                                 self.checkDupTimer = [NSTimer timerWithTimeInterval:DUPLOOP
-                                                                            repeats:YES
-                                                                              block:^(NSTimer * _Nonnull timer) {
-                                                                                  [weakSelf checkDup];
-                                                                              }];
+                                                                             target:self
+                                                                           selector:@selector(checkDup:)
+                                                                           userInfo:nil
+                                                                            repeats:YES];
                                 [self.runLoop addTimer:self.checkDupTimer forMode:self.runLoopMode];
-                                [self checkDup];
+                                [self checkDup:self.checkDupTimer];
 
                                 if (message.properties) {
                                     self.serverKeepAlive = message.properties.serverKeepAlive;
@@ -823,10 +823,10 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                 if (self.effectiveKeepAlive > 0) {
                                     self.keepAliveTimer = [NSTimer
                                                            timerWithTimeInterval:self.effectiveKeepAlive
-                                                           repeats:YES
-                                                           block:^(NSTimer * _Nonnull timer) {
-                                                               [weakSelf keepAlive];
-                                                           }];
+                                                           target:self
+                                                           selector:@selector(keepAlive:)
+                                                           userInfo:nil
+                                                           repeats:YES];
                                     [self.runLoop addTimer:self.keepAliveTimer forMode:self.runLoopMode];
                                 }
 
