@@ -78,10 +78,11 @@
     self.maxWindowSize = maxWindowSize;
     self.maxSize = maxSize;
     self.maxMessages = maxMessages;
+    
+    __weak MQTTSessionManager *weakSelf = self;
     self.reconnectTimer = [[ReconnectTimer alloc] initWithRetryInterval:RECONNECT_TIMER
                                                        maxRetryInterval:maxRetryInterval
                                                          reconnectBlock:^{
-                                                             __weak MQTTSessionManager *weakSelf = self;
                                                              [weakSelf reconnect];
                                                          }];
 #if TARGET_OS_IPHONE == 1
