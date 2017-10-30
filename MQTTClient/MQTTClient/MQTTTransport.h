@@ -51,7 +51,7 @@
 /** MQTTTransportDelegate needs to be set to a class implementing th MQTTTransportDelegate protocol
  * to receive delegate messages.
  */
-@property (strong, nonatomic) _Nullable id<MQTTTransportDelegate> delegate;
+@property (weak, nonatomic) _Nullable id<MQTTTransportDelegate> delegate;
 
 /** state contains the current MQTTTransportState of the transport */
 @property (nonatomic) MQTTTransportState state;
