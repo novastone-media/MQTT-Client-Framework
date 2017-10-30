@@ -543,8 +543,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
 }
 
-- (void)closeInternal
-{
+- (void)closeInternal {
     DDLogVerbose(@"[MQTTSession] closeInternal");
 
     if (self.checkDupTimer) {
@@ -840,7 +839,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                     [self.delegate connected:self sessionPresent:self.sessionPresent];
                                 }
 
-                                if(self.connectionHandler){
+                                if (self.connectionHandler) {
                                     self.connectionHandler(MQTTSessionEventConnected);
                                 }
                                 MQTTConnectHandler connectHandler = self.connectHandler;
