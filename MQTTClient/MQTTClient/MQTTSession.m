@@ -94,18 +94,20 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     return self;
 }
 
-- (NSString *)host
-{
+- (void)dealloc {
+    [self.keepAliveTimer invalidate];
+    [self.checkDupTimer invalidate];
+}
+
+- (NSString *)host {
     return _transport.host;
 }
 
-- (UInt32)port
-{
+- (UInt32)port {
     return _transport.port;
 }
 
-- (void)setClientId:(NSString *)clientId
-{
+- (void)setClientId:(NSString *)clientId {
     if (!clientId) {
         clientId = [NSString stringWithFormat:@"MQTTClient%.0f",fmod([NSDate date].timeIntervalSince1970, 1.0) * 1000000.0];
     }
@@ -113,16 +115,14 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     _clientId = clientId;
 }
 
-- (void)setRunLoop:(NSRunLoop *)runLoop
-{
+- (void)setRunLoop:(NSRunLoop *)runLoop {
     if (!runLoop ) {
         runLoop = [NSRunLoop currentRunLoop];
     }
     _runLoop = runLoop;
 }
 
-- (void)setRunLoopMode:(NSString *)runLoopMode
-{
+- (void)setRunLoopMode:(NSString *)runLoopMode {
     if (!runLoopMode) {
         runLoopMode = NSRunLoopCommonModes;
     }
@@ -533,14 +533,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     DDLogVerbose(@"[MQTTSession] sending DISCONNECT");
     self.status = MQTTSessionStatusDisconnecting;
 
-    BOOL isSent = [self encode:[MQTTMessage disconnectMessage:self.protocolLevel
-                                                   returnCode:returnCode
-                                        sessionExpiryInterval:sessionExpiryInterval
-                                                 reasonString:reasonString
-                                                 userProperty:userProperty]];
-    if (isSent) {
-        [self closeInternal];
-    }
+    [self encode:[MQTTMessage disconnectMessage:self.protocolLevel
+                                     returnCode:returnCode
+                          sessionExpiryInterval:sessionExpiryInterval
+                                   reasonString:reasonString
+                                   userProperty:userProperty]];
+    [self closeInternal];
 }
 
 - (void)closeInternal {
