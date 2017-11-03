@@ -379,9 +379,10 @@ int main(int argc, const char * argv[]) {
                                     busy = false;
                                     if (e) {
                                         [[NSFileHandle fileHandleWithStandardOutput] prints:
-                                         [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"not connected to %@:%d\"}\n",
+                                         [NSString stringWithFormat:@"{\"cmd\": \"error\", \"error\": \"not connected to %@:%d %@\"}\n",
                                           s.transport.host,
-                                          s.transport.port
+                                          s.transport.port,
+                                          e
                                           ]
                                          ];
                                     } else {
