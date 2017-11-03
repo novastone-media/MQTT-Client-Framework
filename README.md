@@ -3,6 +3,12 @@ MQTT-Client-Framework
 
 an Objective-C native MQTT Framework http://mqtt.org
 
+* [Introduction](http://www.hivemq.com/blog/mqtt-client-library-encyclopedia-mqtt-client-framework)
+
+* [Support on request](mailto:support@ckrey.de)
+
+* [Developer Community Mailing List](mailto:mqttclient-dev-subscribe@ckrey.de)
+
 ### Tested with a long list of brokers
 
 * mosquitto

@@ -70,10 +70,11 @@
     self.maxWindowSize = maxWindowSize;
     self.maxSize = maxSize;
     self.maxMessages = maxMessages;
+    
+    __weak MQTTSessionManager *weakSelf = self;
     self.reconnectTimer = [[ReconnectTimer alloc] initWithRetryInterval:RECONNECT_TIMER
                                                        maxRetryInterval:maxRetryInterval
                                                          reconnectBlock:^{
-                                                             __weak MQTTSessionManager *weakSelf = self;
                                                              [weakSelf reconnect];
                                                          }];
 #if TARGET_OS_IPHONE == 1
@@ -340,11 +341,11 @@
                                                     NSArray <NSDictionary <NSString *, NSString *> *> *userProperties,
                                                     NSArray <NSNumber *> *reasonCodes) {
                     if (!error) {
-                        [self.subscriptionLock lock];
-                        NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                        [strongSelf.subscriptionLock lock];
+                        NSMutableDictionary *newEffectiveSubscriptions = [strongSelf.subscriptions mutableCopy];
                         [newEffectiveSubscriptions removeObjectForKey:topicFilter];
-                        self.effectiveSubscriptions = newEffectiveSubscriptions;
-                        [self.subscriptionLock unlock];
+                        strongSelf.effectiveSubscriptions = newEffectiveSubscriptions;
+                        [strongSelf.subscriptionLock unlock];
                     }
                 }];
             }

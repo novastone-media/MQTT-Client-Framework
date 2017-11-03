@@ -609,6 +609,15 @@
     }
 }
 
+- (void)testMQTTSessionManagerDestoryedWhenDeallocated {
+    __weak MQTTSessionManager *weakManager = nil;
+    @autoreleasepool {
+        MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
+        weakManager = manager;
+    }
+    XCTAssertNil(weakManager);
+}
+
 - (void)testMQTTSessionManagerRecconnectionWithConnectToLast {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogInfo(@"testing broker %@", broker);
