@@ -1,0 +1,21 @@
+[
+	{"cmd":"config","logLevel":0, "debug":0},
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5},
+	{"cmd":"subscribe", "topic":"$share/myshare/MQTTClient/#", "subcriptionIdentifier": 17},
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "one" },
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "two" },
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "three" },
+	{"cmd":"wait"},
+	{"cmd":"unsubscribe", "topic":"$share/myshare/MQTTClient/#"},
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "one" },
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "two" },
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "three" },
+	{"cmd":"wait"},
+	{"cmd":"unsubscribe", "topic":"$share/myshare/MQTTClient/#"},
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "one" },
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "two" },
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "three" },
+	{"cmd":"wait"},
+	{"cmd":"disconnect"},
+	{"cmd":"exit"}
+]

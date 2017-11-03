@@ -1,0 +1,4 @@
+[
+	{"cmd":"config","logLevel":65535, "debug":1},
+	{"cmd":"connect", "host":"localhost", "port":1884, "mqttProtocolLevel":5},
+]

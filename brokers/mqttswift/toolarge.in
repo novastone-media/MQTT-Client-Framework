@@ -1,0 +1,18 @@
+[
+	{"cmd":"config","logLevel":0, "debug":0},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "maximumPacketSize": 100},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan256", "data":"moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256", "qos":1},
+	{"cmd":"wait","seconds":3},
+	{"cmd":"disconnect"},
+
+	{"cmd":"config","logLevel":0, "debug":0, "strict": 1},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "maximumPacketSize": 100},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan256", "data":"moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256moreThan256", "qos":1},
+	{"cmd":"wait","seconds":3},
+	{"cmd":"disconnect"}
+
+]

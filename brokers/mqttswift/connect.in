@@ -1,0 +1,6 @@
+[
+	{"cmd":"config","logLevel":65535, "debug":1},
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "userName":"tom","password":"mot"},
+	{"cmd":"wait","seconds":30},
+	{"cmd":"disconnect"}
+]

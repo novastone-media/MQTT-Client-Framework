@@ -1,0 +1,15 @@
+[
+	{"cmd":"config","logLevel":0, "debug":0},
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5},
+	{"cmd":"publish", "topic":"MQTTClient/1", "data": "one", "retain": 1 },
+	{"cmd":"publish", "topic":"MQTTClient/2", "data": "two", "retain": 1, "publicationExpiryInterval": 3},
+	{"cmd":"publish", "topic":"MQTTClient/3", "data": "three", "retain": 1, "publicationExpiryInterval": 7},
+	{"cmd":"subscribe", "topic":"MQTTClient/#"},
+	{"cmd":"wait"},
+	{"cmd":"subscribe", "topic":"MQTTClient/#"},
+	{"cmd":"wait"},
+	{"cmd":"subscribe", "topic":"MQTTClient/#"},
+	{"cmd":"wait"},
+	{"cmd":"disconnect"},
+	{"cmd":"exit"}
+]

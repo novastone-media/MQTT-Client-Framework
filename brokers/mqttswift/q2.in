@@ -1,0 +1,30 @@
+[
+	{"cmd":"config","logLevel":0, "debug":0},
+	{"cmd":"connect", "host":"ckrey.ddns.net", "port":1883, "mqttProtocolLevel":5, "topicAliasMaximum": 2},
+	{"cmd":"subscribe", "topic":"MQTTClient/#", "qos":2, "subscriptionIdentifier": 7},
+	{"cmd":"subscribe", "topic":"MQTTClient/2", "qos":1, "subscriptionIdentifier": 5},
+	{"cmd":"wait","seconds":1},
+
+	{"cmd":"publish", "topic":"MQTTClient/2", "data":"one", "qos":2, "topicAlias": 2},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"MQTTClient/1", "data":"two", "qos":2, "topicAlias": 1},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"", "data":"three", "qos":2, "topicAlias": 2},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"", "data":"four", "qos":2, "topicAlias": 1},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"", "data":"five", "qos":2, "topicAlias": 2},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"", "data":"six", "qos":2, "topicAlias": 1},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"", "data":"seven", "qos":2, "topicAlias": 2},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"MQTTClient/3", "data":"eight", "qos":2},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"publish", "topic":"MQTTClient/4", "data":"nine", "qos":2},
+
+	{"cmd":"wait","seconds":30},
+
+	{"cmd":"disconnect"},
+	{"cmd":"exit"}
+]

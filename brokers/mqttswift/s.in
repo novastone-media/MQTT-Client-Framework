@@ -1,0 +1,8 @@
+[
+	{"cmd":"config","logLevel":65535, "debug":1},
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5},
+	{"cmd":"subscribe", "topic":"MQTTClient/#", "qos":2},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+	{"cmd":"exit"}
+]

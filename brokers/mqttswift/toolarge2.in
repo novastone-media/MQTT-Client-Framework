@@ -1,0 +1,24 @@
+[
+	{"cmd":"config","logLevel":0, "debug":0},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "maximumPacketSize": 120},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"subscribe", "topic":"MQTTClient/#", "qos":2},
+	
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/moreThan-120", "data":"moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120moreThan-120", "qos":1},
+	{"cmd":"wait","seconds":3},
+	{"cmd":"disconnect"},
+
+]

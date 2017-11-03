@@ -1,0 +1,19 @@
+[
+	{"cmd":"config","logLevel":0, "debug":0},
+	{"cmd":"connect", "host":"test.mosquitto.org", "port":1883, "mqttProtocolLevel":4},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"subscribe", "topic":"MQTTClient/#"},
+	{"cmd":"subscribe", "topic":"MQTTClient/testUnsubscribe"},
+	{"cmd":"unsubscribe", "topic":"MQTTClient/testUnsubscribe"},
+	{"cmd":"unsubscribe", "topic":"MQTTClient/testUnsubscribe"},
+	{"cmd":"publish", "topic":"MQTTClient/a", "data":"a"},
+	{"cmd":"publish", "topic":"MQTTClient/a", "data":"a r0", "retain":0},
+	{"cmd":"publish", "topic":"MQTTClient/a", "data":"a r1", "retain":1},
+	{"cmd":"publish", "topic":"MQTTClient/a", "data":"a q0", "qos":0},
+	{"cmd":"publish", "topic":"MQTTClient/a", "data":"a q1", "qos":1},
+	{"cmd":"publish", "topic":"MQTTClient/a", "data":"a q2", "qos":2},
+	{"cmd":"subscribe", "topic":"$SYS/#"},
+	{"cmd":"wait","seconds":32},
+	{"cmd":"disconnect"},
+	{"cmd":"exit"}
+]

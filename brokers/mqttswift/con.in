@@ -1,0 +1,42 @@
+[
+	{"cmd":"config","logLevel":0, "debug":0},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "keepAlive": 5},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "clientIdentifier": "mqttcs", "cleanStart": 0},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "clientIdentifier": "mqttcs", "cleanStart": 0},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "maximumPacketSize": 100},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "maximumPacketSize": 0},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "maximumPacketSize":  2684354566},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+
+	{"cmd":"config","logLevel":0, "debug":0, "strict": 1},
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "maximumPacketSize": 0},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+
+	{"cmd":"connect", "host":"localhost", "port":1883, "mqttProtocolLevel":5, "maximumPacketSize":  2684354566},
+	{"cmd":"wait","seconds":1},
+	{"cmd":"disconnect"},
+
+	{"cmd":"exit"}
+]
