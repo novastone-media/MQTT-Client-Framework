@@ -78,10 +78,11 @@
     self.maxWindowSize = maxWindowSize;
     self.maxSize = maxSize;
     self.maxMessages = maxMessages;
+    
+    __weak MQTTSessionManager *weakSelf = self;
     self.reconnectTimer = [[ReconnectTimer alloc] initWithRetryInterval:RECONNECT_TIMER
                                                        maxRetryInterval:maxRetryInterval
                                                          reconnectBlock:^{
-                                                             __weak MQTTSessionManager *weakSelf = self;
                                                              [weakSelf reconnect];
                                                          }];
 #if TARGET_OS_IPHONE == 1
@@ -453,17 +454,19 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
         self.effectiveSubscriptions = [[NSMutableDictionary alloc] init];
         [self.subscriptionLock unlock];
         if (subscriptions.count) {
+            __weak MQTTSessionManager *weakSelf = self;
             [self.session subscribeToTopics:subscriptions subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
+                MQTTSessionManager *strongSelf = weakSelf;
                 if (!error) {
                     NSArray<NSString *> *allTopics = subscriptions.allKeys;
                     for (int i = 0; i < allTopics.count; i++) {
                         NSString *topic = allTopics[i];
                         NSNumber *gQos = gQoss[i];
-                        [self.subscriptionLock lock];
-                        NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                        [strongSelf.subscriptionLock lock];
+                        NSMutableDictionary *newEffectiveSubscriptions = [strongSelf.subscriptions mutableCopy];
                         newEffectiveSubscriptions[topic] = gQos;
-                        self.effectiveSubscriptions = newEffectiveSubscriptions;
-                        [self.subscriptionLock unlock];
+                        strongSelf.effectiveSubscriptions = newEffectiveSubscriptions;
+                        [strongSelf.subscriptionLock unlock];
                     }
                 }
             }];
@@ -521,13 +524,15 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
 
         for (NSString *topicFilter in currentSubscriptions) {
             if (!newSubscriptions[topicFilter]) {
+                __weak MQTTSessionManager *weakSelf = self;
                 [self.session unsubscribeTopic:topicFilter unsubscribeHandler:^(NSError *error) {
+                    MQTTSessionManager *strongSelf = weakSelf;
                     if (!error) {
-                        [self.subscriptionLock lock];
-                        NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                        [strongSelf.subscriptionLock lock];
+                        NSMutableDictionary *newEffectiveSubscriptions = [strongSelf.subscriptions mutableCopy];
                         [newEffectiveSubscriptions removeObjectForKey:topicFilter];
-                        self.effectiveSubscriptions = newEffectiveSubscriptions;
-                        [self.subscriptionLock unlock];
+                        strongSelf.effectiveSubscriptions = newEffectiveSubscriptions;
+                        [strongSelf.subscriptionLock unlock];
                     }
                 }];
             }
@@ -537,14 +542,16 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
             if (!currentSubscriptions[topicFilter]) {
                 NSNumber *number = newSubscriptions[topicFilter];
                 MQTTQosLevel qos = number.unsignedIntValue;
+                __weak MQTTSessionManager *weakSelf = self;
                 [self.session subscribeToTopic:topicFilter atLevel:qos subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
+                    MQTTSessionManager *strongSelf = weakSelf;
                     if (!error) {
                         NSNumber *gQos = gQoss[0];
-                        [self.subscriptionLock lock];
-                        NSMutableDictionary *newEffectiveSubscriptions = [self.subscriptions mutableCopy];
+                        [strongSelf.subscriptionLock lock];
+                        NSMutableDictionary *newEffectiveSubscriptions = [strongSelf.subscriptions mutableCopy];
                         newEffectiveSubscriptions[topicFilter] = gQos;
-                        self.effectiveSubscriptions = newEffectiveSubscriptions;
-                        [self.subscriptionLock unlock];
+                        strongSelf.effectiveSubscriptions = newEffectiveSubscriptions;
+                        [strongSelf.subscriptionLock unlock];
                     }
                 }];
             }
