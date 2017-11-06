@@ -38,8 +38,8 @@
         dispatch_source_set_event_handler(self.timer, ^{
             if (!repeats) {
                 dispatch_source_cancel(self.timer);
-                block();
             }
+            block();
         });
         dispatch_resume(self.timer);
     }
