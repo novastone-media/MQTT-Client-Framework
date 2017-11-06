@@ -35,6 +35,15 @@
     return self;
 }
 
+- (void)dealloc {
+    if (self.queue != dispatch_get_current_queue()) {
+        dispatch_sync(self.queue, ^{
+            [self.encoder close];
+            [self.decoder close];
+        });
+    }
+}
+
 - (void)open {
     DDLogVerbose(@"[MQTTCFSocketTransport] open");
     self.state = MQTTTransportOpening;
