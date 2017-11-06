@@ -43,7 +43,8 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSession.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
-					"MQTTClient/MQTTClient/MQTTTransport.{h,m}"
+					"MQTTClient/MQTTClient/MQTTTransport.{h,m}",
+					"MQTTClient/MQTTClient/Timer.{h,m}"
 	end
 
 	mqttc.subspec 'MinL' do |minl|
@@ -68,7 +69,8 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSession.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
-					"MQTTClient/MQTTClient/MQTTTransport.{h,m}"
+					"MQTTClient/MQTTClient/MQTTTransport.{h,m}",
+					"MQTTClient/MQTTClient/Timer.{h,m}"
 		minl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'LUMBERJACK=1' }
 	end
 
