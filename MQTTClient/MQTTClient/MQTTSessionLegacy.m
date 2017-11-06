@@ -51,8 +51,7 @@
                           willQoS:(MQTTQosLevel)willQoS
                    willRetainFlag:(BOOL)willRetainFlag
                     protocolLevel:(UInt8)protocolLevel
-                          runLoop:(NSRunLoop *)runLoop
-                          forMode:(NSString *)runLoopMode {
+                            queue:(dispatch_queue_t)queue {
     return [self initWithClientId:clientId
                          userName:userName
                          password:password
@@ -64,8 +63,7 @@
                           willQoS:willQoS
                    willRetainFlag:willRetainFlag
                     protocolLevel:protocolLevel
-                          runLoop:runLoop
-                          forMode:runLoopMode
+                          queue:queue
                    securityPolicy:nil];
 }
 
@@ -80,8 +78,7 @@
                           willQoS:(MQTTQosLevel)willQoS
                    willRetainFlag:(BOOL)willRetainFlag
                     protocolLevel:(UInt8)protocolLevel
-                          runLoop:(NSRunLoop *)runLoop
-                          forMode:(NSString *)runLoopMode
+                            queue:(dispatch_queue_t)queue
                    securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy {
     return [self initWithClientId:clientId
                          userName:userName
@@ -94,8 +91,7 @@
                           willQoS:willQoS
                    willRetainFlag:willRetainFlag
                     protocolLevel:protocolLevel
-                          runLoop:runLoop
-                          forMode:runLoopMode
+                          queue:queue
                    securityPolicy:securityPolicy
                      certificates:nil];
     
@@ -112,8 +108,7 @@
                           willQoS:(MQTTQosLevel)willQoS
                    willRetainFlag:(BOOL)willRetainFlag
                     protocolLevel:(UInt8)protocolLevel
-                          runLoop:(NSRunLoop *)runLoop
-                          forMode:(NSString *)runLoopMode
+                            queue:(dispatch_queue_t)queue
                    securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
                      certificates:(NSArray *)certificates {
     DDLogVerbose(@"[MQTTSessionLegacy] initWithClientId:%@ ", clientId);
@@ -130,8 +125,7 @@
     self.willQoS = willQoS;
     self.willRetainFlag = willRetainFlag;
     self.protocolLevel = protocolLevel;
-    self.runLoop = runLoop;
-    self.runLoopMode = runLoopMode;
+    self.queue = queue;
     self.securityPolicy = securityPolicy;
     self.certificates = certificates;
     
@@ -151,13 +145,11 @@
                           willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
-                          runLoop:nil
-                          forMode:nil];
+                            queue:dispatch_get_main_queue()];
 }
 
-- (id)initWithClientId:(NSString*)theClientId
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode {
+- (id)initWithClientId:(NSString *)theClientId
+                 queue:(dispatch_queue_t)queue {
     
     return [self initWithClientId:theClientId
                          userName:nil
@@ -170,13 +162,12 @@
                           willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theRunLoopMode];
+                            queue:queue];
 }
 
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUsername
-              password:(NSString*)thePassword {
+- (id)initWithClientId:(NSString *)theClientId
+              userName:(NSString *)theUsername
+              password:(NSString *)thePassword {
     
     return [self initWithClientId:theClientId
                          userName:theUsername
@@ -189,15 +180,13 @@
                           willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
-                          runLoop:nil
-                          forMode:nil];
+                          queue:dispatch_get_main_queue()];
 }
 
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUserName
-              password:(NSString*)thePassword
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode {
+- (id)initWithClientId:(NSString *)theClientId
+              userName:(NSString *)theUserName
+              password:(NSString *)thePassword
+                 queue:(dispatch_queue_t)queue {
     
     return [self initWithClientId:theClientId
                          userName:theUserName
@@ -210,13 +199,12 @@
                           willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theRunLoopMode];
+                            queue:queue];
 }
 
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUsername
-              password:(NSString*)thePassword
+- (id)initWithClientId:(NSString *)theClientId
+              userName:(NSString *)theUsername
+              password:(NSString *)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
           cleanSession:(BOOL)cleanSessionFlag {
     
@@ -231,17 +219,15 @@
                           willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
-                          runLoop:nil
-                          forMode:nil];
+                            queue:dispatch_get_main_queue()];
 }
 
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUsername
-              password:(NSString*)thePassword
+- (id)initWithClientId:(NSString *)theClientId
+              userName:(NSString *)theUsername
+              password:(NSString *)thePassword
              keepAlive:(UInt16)theKeepAlive
           cleanSession:(BOOL)theCleanSessionFlag
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theMode {
+                 queue:(dispatch_queue_t)queue {
     
     return [self initWithClientId:theClientId
                          userName:theUsername
@@ -254,17 +240,16 @@
                           willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theMode];
+                          queue:queue];
 }
 
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUserName
-              password:(NSString*)thePassword
+- (id)initWithClientId:(NSString *)theClientId
+              userName:(NSString *)theUserName
+              password:(NSString *)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
           cleanSession:(BOOL)theCleanSessionFlag
-             willTopic:(NSString*)willTopic
-               willMsg:(NSData*)willMsg
+             willTopic:(NSString *)willTopic
+               willMsg:(NSData *)willMsg
                willQoS:(UInt8)willQoS
         willRetainFlag:(BOOL)willRetainFlag {
     
@@ -279,21 +264,19 @@
                           willQoS:willQoS
                    willRetainFlag:willRetainFlag
                     protocolLevel:4
-                          runLoop:nil
-                          forMode:nil];
+                            queue:dispatch_get_main_queue()];
 }
 
-- (id)initWithClientId:(NSString*)theClientId
-              userName:(NSString*)theUserName
-              password:(NSString*)thePassword
+- (id)initWithClientId:(NSString *)theClientId
+              userName:(NSString *)theUserName
+              password:(NSString *)thePassword
              keepAlive:(UInt16)theKeepAliveInterval
           cleanSession:(BOOL)theCleanSessionFlag
-             willTopic:(NSString*)willTopic
-               willMsg:(NSData*)willMsg
+             willTopic:(NSString *)willTopic
+               willMsg:(NSData *)willMsg
                willQoS:(UInt8)willQoS
         willRetainFlag:(BOOL)willRetainFlag
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode {
+                 queue:(dispatch_queue_t)queue {
     
     return [self initWithClientId:theClientId
                          userName:theUserName
@@ -306,15 +289,13 @@
                           willQoS:willQoS
                    willRetainFlag:willRetainFlag
                     protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theRunLoopMode];
+                          queue:queue];
 }
 
-- (id)initWithClientId:(NSString*)theClientId
+- (id)initWithClientId:(NSString *)theClientId
              keepAlive:(UInt16)theKeepAliveInterval
-        connectMessage:(MQTTMessage*)theConnectMessage
-               runLoop:(NSRunLoop*)theRunLoop
-               forMode:(NSString*)theRunLoopMode {
+        connectMessage:(MQTTMessage *)theConnectMessage
+                 queue:(dispatch_queue_t)queue {
     
     self.connectMessage = theConnectMessage;
     return [self initWithClientId:theClientId
@@ -328,8 +309,7 @@
                           willQoS:MQTTQosLevelAtMostOnce
                    willRetainFlag:FALSE
                     protocolLevel:4
-                          runLoop:theRunLoop
-                          forMode:theRunLoopMode];
+                          queue:queue];
 }
 
 - (void)connectToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL {
@@ -351,8 +331,7 @@
         transport.securityPolicy = self.securityPolicy;
         transport.certificates = self.certificates;
         transport.voip = self.voip;
-        transport.runLoop = self.runLoop;
-        transport.runLoopMode = self.runLoopMode;
+        transport.queue = self.queue;
         self.transport = transport;
         
     } else {
@@ -362,8 +341,7 @@
         transport.tls = usingSSL;
         transport.certificates = self.certificates;
         transport.voip = self.voip;
-        transport.runLoop = self.runLoop;
-        transport.runLoopMode = self.runLoopMode;
+        transport.queue = self.queue;
         self.transport = transport;
     }
     

@@ -12,8 +12,7 @@
 
 @implementation MQTTTransport
 @synthesize state;
-@synthesize runLoop;
-@synthesize runLoopMode;
+@synthesize queue;
 @synthesize delegate;
 @synthesize host;
 @synthesize port;
@@ -21,8 +20,6 @@
 - (instancetype)init {
     self = [super init];
     self.state = MQTTTransportCreated;
-    self.runLoop = [NSRunLoop currentRunLoop];
-    self.runLoopMode = NSRunLoopCommonModes;
     return self;
 }
 

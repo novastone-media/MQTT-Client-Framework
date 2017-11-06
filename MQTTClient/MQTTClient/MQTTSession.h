@@ -454,11 +454,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 /** maximumPacketSize specifies the number of seconds after which a session should expire MQTT v5.0*/
 @property (strong, nonatomic) NSNumber *maximumPacketSize;
 
-/** runLoop The runLoop where the streams are scheduled. If nil, defaults to [NSRunLoop currentRunLoop]. */
-@property (strong, nonatomic) NSRunLoop *runLoop;
-
-/** runLoopMode The runLoopMode where the streams are scheduled. If nil, defaults to NSRunLoopCommonModes. */
-@property (strong, nonatomic) NSString *runLoopMode;
+/** queue The queue where the streams are scheduled. */
+@property (strong, nonatomic) dispatch_queue_t queue;
 
 
 /** for mqttio-OBJC backward compatibility

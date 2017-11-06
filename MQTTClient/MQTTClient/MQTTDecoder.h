@@ -46,20 +46,20 @@ typedef NS_ENUM(unsigned int, MQTTDecoderState) {
 @end
 
 
-@interface MQTTDecoder : NSObject <NSStreamDelegate>
-@property (nonatomic)    MQTTDecoderState       state;
-@property (strong, nonatomic)    NSRunLoop*      runLoop;
-@property (strong, nonatomic)    NSString*       runLoopMode;
-@property (nonatomic)    UInt32          length;
-@property (nonatomic)    UInt32          lengthMultiplier;
-@property (nonatomic)    int          offset;
-@property (strong, nonatomic)    NSMutableData*  dataBuffer;
+@interface MQTTDecoder: NSObject <NSStreamDelegate>
+@property (nonatomic) MQTTDecoderState state;
+@property (strong, nonatomic) dispatch_queue_t queue;
+@property (nonatomic) UInt32 length;
+@property (nonatomic) UInt32 lengthMultiplier;
+@property (nonatomic) int offset;
+@property (strong, nonatomic) NSMutableData *dataBuffer;
 
-@property (weak, nonatomic ) id<MQTTDecoderDelegate> delegate;
+@property (weak, nonatomic) id<MQTTDecoderDelegate> delegate;
 
 - (void)open;
 - (void)close;
 - (void)decodeMessage:(NSData *)data;
+
 @end
 
 

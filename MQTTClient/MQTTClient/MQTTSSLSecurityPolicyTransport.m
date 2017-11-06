@@ -55,25 +55,24 @@
             sslOptions[(NSString *)kCFStreamSSLCertificates] = self.certificates;
         }
         
-        if(!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
+        if (!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
             connectError = [NSError errorWithDomain:@"MQTT"
                                                code:errSSLInternal
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl input stream!"}];
         }
-        if(!CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
+        if (!CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
             connectError = [NSError errorWithDomain:@"MQTT"
                                                code:errSSLInternal
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl output stream!"}];
         }
     }
     
-    if(!connectError){
+    if (!connectError) {
         self.encoder = [[MQTTSSLSecurityPolicyEncoder alloc] init];
+        CFWriteStreamSetDispatchQueue(writeStream, self.queue);
         self.encoder.stream = CFBridgingRelease(writeStream);
         self.encoder.securityPolicy = self.tls ? self.securityPolicy : nil;
         self.encoder.securityDomain = self.tls ? self.host : nil;
-        self.encoder.runLoop = self.runLoop;
-        self.encoder.runLoopMode = self.runLoopMode;
         self.encoder.delegate = self;
         if (self.voip) {
             [self.encoder.stream setProperty:NSStreamNetworkServiceTypeVoIP forKey:NSStreamNetworkServiceType];
@@ -81,11 +80,10 @@
         [self.encoder open];
         
         self.decoder = [[MQTTSSLSecurityPolicyDecoder alloc] init];
+        CFReadStreamSetDispatchQueue(readStream, self.queue);
         self.decoder.stream =  CFBridgingRelease(readStream);
         self.decoder.securityPolicy = self.tls ? self.securityPolicy : nil;
         self.decoder.securityDomain = self.tls ? self.host : nil;
-        self.decoder.runLoop = self.runLoop;
-        self.decoder.runLoopMode = self.runLoopMode;
         self.decoder.delegate = self;
         if (self.voip) {
             [self.decoder.stream setProperty:NSStreamNetworkServiceTypeVoIP forKey:NSStreamNetworkServiceType];

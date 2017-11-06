@@ -265,6 +265,12 @@
 		C21D3CA21B1EC63E0012DD2F /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
 		C21D3CA41B1EC6420012DD2F /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
 		C21D3CA61B1EC6450012DD2F /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
+		C701E3381FB0A70600B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; };
+		C701E3391FB0A70600B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; };
+		C701E33A1FB0A70600B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; };
+		C701E33B1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
+		C701E33C1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
+		C701E33D1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
 		C74489961FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
@@ -507,6 +513,8 @@
 		C21D3CA51B1EC6450012DD2F /* adn_2.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_2.cer; path = ADN.net/ADNNetServerTrustChain/adn_2.cer; sourceTree = "<group>"; };
 		C21D3CA71B1ED2F40012DD2F /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
 		C53615C962DC60ED0FD7E799 /* Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientOSXTestsNOLumberjack/Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; sourceTree = "<group>"; };
+		C701E3361FB0A70600B0CEB5 /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
+		C701E3371FB0A70600B0CEB5 /* Timer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Timer.m; sourceTree = "<group>"; };
 		C74489951FA74D58002751B2 /* MQTTSessionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionTests.m; sourceTree = "<group>"; };
 		C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReconnectTimer.m; sourceTree = "<group>"; };
 		C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReconnectTimer.h; sourceTree = "<group>"; };
@@ -783,6 +791,8 @@
 				840D3CEA1F264AD00072019B /* MQTTStrict.m */,
 				C7515E881F4B1BA80071CFFE /* SessionManager */,
 				846191301883E56800101409 /* Supporting Files */,
+				C701E3361FB0A70600B0CEB5 /* Timer.h */,
+				C701E3371FB0A70600B0CEB5 /* Timer.m */,
 			);
 			path = MQTTClient;
 			sourceTree = "<group>";
@@ -1066,6 +1076,7 @@
 				DE9EF5D91C062907009EF667 /* MQTTMessage.h in Headers */,
 				DE9EF5DA1C062907009EF667 /* MQTTSession.h in Headers */,
 				845922A81C175AA400CCE27E /* MQTTCFSocketTransport.h in Headers */,
+				C701E3381FB0A70600B0CEB5 /* Timer.h in Headers */,
 				841D0AA31C358843006A82DC /* MQTTInMemoryPersistence.h in Headers */,
 				841D0A9C1C358826006A82DC /* MQTTSSLSecurityPolicyTransport.h in Headers */,
 				845922A51C175AA400CCE27E /* MQTTCFSocketEncoder.h in Headers */,
@@ -1097,6 +1108,7 @@
 				F6D08FC41E535BF900CD2566 /* MQTTCFSocketDecoder.h in Headers */,
 				F6D08FBD1E535BF900CD2566 /* MQTTTransport.h in Headers */,
 				F6D08FC71E535BF900CD2566 /* MQTTMessage.h in Headers */,
+				C701E33A1FB0A70600B0CEB5 /* Timer.h in Headers */,
 				F6D08FC61E535BF900CD2566 /* MQTTDecoder.h in Headers */,
 				F6D08FC81E535BF900CD2566 /* MQTTSession.h in Headers */,
 				F6D08FC31E535BF900CD2566 /* MQTTCFSocketEncoder.h in Headers */,
@@ -1129,6 +1141,7 @@
 				F6D08FF71E535F2A00CD2566 /* MQTTCFSocketDecoder.h in Headers */,
 				F6D08FF21E535F2A00CD2566 /* MQTTSSLSecurityPolicy.h in Headers */,
 				F6D08FFA1E535F2A00CD2566 /* MQTTMessage.h in Headers */,
+				C701E3391FB0A70600B0CEB5 /* Timer.h in Headers */,
 				F6D08FF91E535F2A00CD2566 /* MQTTDecoder.h in Headers */,
 				F6D08FFB1E535F2A00CD2566 /* MQTTSession.h in Headers */,
 				C7515EB01F4C51600071CFFE /* ReconnectTimer.h in Headers */,
@@ -1825,6 +1838,7 @@
 				84A5921A1C3C64A9008C5199 /* MQTTSSLSecurityPolicyEncoder.m in Sources */,
 				840D3CED1F264AE20072019B /* MQTTStrict.m in Sources */,
 				84A5921B1C3C64A9008C5199 /* MQTTSSLSecurityPolicyTransport.m in Sources */,
+				C701E33B1FB0A70600B0CEB5 /* Timer.m in Sources */,
 				84A5921C1C3C64A9008C5199 /* MQTTCoreDataPersistence.m in Sources */,
 				84A5921D1C3C64A9008C5199 /* MQTTInMemoryPersistence.m in Sources */,
 				8439D5831C2EB3F000C24F4D /* MQTTSession.m in Sources */,
@@ -1853,6 +1867,7 @@
 				F6D08FAE1E535BCB00CD2566 /* MQTTSSLSecurityPolicyDecoder.m in Sources */,
 				840D3CEF1F264AE40072019B /* MQTTStrict.m in Sources */,
 				F6D08FAF1E535BCB00CD2566 /* MQTTSSLSecurityPolicyEncoder.m in Sources */,
+				C701E33D1FB0A70600B0CEB5 /* Timer.m in Sources */,
 				F6D08FB01E535BCB00CD2566 /* MQTTSSLSecurityPolicyTransport.m in Sources */,
 				F6D08FB21E535BCB00CD2566 /* MQTTCFSocketEncoder.m in Sources */,
 				F6D08FB31E535BCB00CD2566 /* MQTTCFSocketDecoder.m in Sources */,
@@ -1881,6 +1896,7 @@
 				F6D08FE31E535F1000CD2566 /* MQTTSSLSecurityPolicyDecoder.m in Sources */,
 				840D3CEE1F264AE30072019B /* MQTTStrict.m in Sources */,
 				F6D08FE41E535F1000CD2566 /* MQTTSSLSecurityPolicyEncoder.m in Sources */,
+				C701E33C1FB0A70600B0CEB5 /* Timer.m in Sources */,
 				F6D08FE51E535F1000CD2566 /* MQTTSSLSecurityPolicyTransport.m in Sources */,
 				F6D08FE61E535F1000CD2566 /* MQTTCFSocketEncoder.m in Sources */,
 				F6D08FE71E535F1000CD2566 /* MQTTCFSocketDecoder.m in Sources */,

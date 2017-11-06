@@ -211,7 +211,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param securityPolicy A custom SSL security policy or nil.
  * @param certificates An NSArray of the pinned certificates to use or nil.
  * @param protocolLevel Protocol version of the connection.
- * @param runLoop Run loop for MQTTSession.
+ * @param queue Queue for MQTTSession.
  */
 
 - (void)connectTo:(NSString *)host
@@ -231,7 +231,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates
     protocolLevel:(MQTTProtocolVersion)protocolLevel
-          runLoop:(NSRunLoop *)runLoop;
+          queue:(dispatch_queue_t)queue;
 
 
 /** Connects to the MQTT broker and stores the parameters for subsequent reconnects

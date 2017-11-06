@@ -12,6 +12,7 @@
 #import "MQTTProperties.h"
 #import "MQTTMessage.h"
 #import "MQTTCoreDataPersistence.h"
+#import "Timer.h"
 
 @class MQTTSSLSecurityPolicy;
 
@@ -24,10 +25,10 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 @property (nonatomic, readwrite) MQTTSessionStatus status;
 @property (nonatomic, readwrite) BOOL sessionPresent;
 
-@property (strong, nonatomic) NSTimer *keepAliveTimer;
+@property (strong, nonatomic) Timer *keepAliveTimer;
 @property (strong, nonatomic) NSNumber *serverKeepAlive;
 @property (nonatomic) UInt16 effectiveKeepAlive;
-@property (strong, nonatomic) NSTimer *checkDupTimer;
+@property (strong, nonatomic) Timer *checkDupTimer;
 
 @property (strong, nonatomic) MQTTDecoder *decoder;
 
@@ -86,11 +87,8 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.willQoS = MQTTQosLevelAtMostOnce;
     self.willRetainFlag = false;
     self.protocolLevel = MQTTProtocolVersion311;
-    self.runLoop = [NSRunLoop currentRunLoop];
-    self.runLoopMode = NSRunLoopCommonModes;
-
+    self.queue = dispatch_get_main_queue();
     self.status = MQTTSessionStatusCreated;
-
     return self;
 }
 
@@ -113,20 +111,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
 
     _clientId = clientId;
-}
-
-- (void)setRunLoop:(NSRunLoop *)runLoop {
-    if (!runLoop ) {
-        runLoop = [NSRunLoop currentRunLoop];
-    }
-    _runLoop = runLoop;
-}
-
-- (void)setRunLoopMode:(NSString *)runLoopMode {
-    if (!runLoopMode) {
-        runLoopMode = NSRunLoopCommonModes;
-    }
-    _runLoopMode = runLoopMode;
 }
 
 - (UInt16)subscribeToTopic:(NSString *)topic
@@ -616,12 +600,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 }
 
 
-- (void)keepAlive:(NSTimer *)timer {
+- (void)keepAlive {
     DDLogVerbose(@"[MQTTSession] keepAlive %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
     (void)[self encode:[MQTTMessage pingreqMessage]];
 }
 
-- (void)checkDup:(NSTimer *)timer {
+- (void)checkDup {
     DDLogVerbose(@"[MQTTSession] checkDup %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
     [self checkTxFlows];
 }
@@ -712,7 +696,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
 }
 
-- (void)decoder:(MQTTDecoder*)sender handleEvent:(MQTTDecoderEvent)eventCode error:(NSError *)error {
+- (void)decoder:(MQTTDecoder *)sender handleEvent:(MQTTDecoderEvent)eventCode error:(NSError *)error {
     __unused NSArray *events = @[
                                  @"MQTTDecoderEventProtocolError",
                                  @"MQTTDecoderEventConnectionClosed",
@@ -741,7 +725,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
 }
 
-- (void)decoder:(MQTTDecoder*)sender didReceiveMessage:(NSData *)data {
+- (void)decoder:(MQTTDecoder *)sender didReceiveMessage:(NSData *)data {
     MQTTMessage *message = [MQTTMessage messageFromData:data protocolLevel:self.protocolLevel];
     if (!message) {
         DDLogError(@"[MQTTSession] MQTT illegal message received");
@@ -800,21 +784,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                     self.sessionPresent = false;
                                 }
                                 __weak typeof(self) weakSelf = self;
-                                if (@available(macOS 10.12, iOS 10.0, watchOS 3.0, tvOS 10.0, *)) {
-                                    self.checkDupTimer = [NSTimer timerWithTimeInterval:DUPLOOP
-                                                                                repeats:YES
-                                                                                  block:^(NSTimer * _Nonnull timer) {
-                                                                                      [weakSelf checkDup:timer];
-                                                                                  }];
-                                } else {
-                                    self.checkDupTimer = [NSTimer timerWithTimeInterval:DUPLOOP
-                                                                                 target:self
-                                                                               selector:@selector(checkDup:)
-                                                                               userInfo:nil
-                                                                                repeats:YES];
-                                }
-                                [self.runLoop addTimer:self.checkDupTimer forMode:self.runLoopMode];
-                                [self checkDup:self.checkDupTimer];
+                                self.checkDupTimer = [Timer scheduledTimerWithTimeInterval:DUPLOOP
+                                                                                   repeats:YES
+                                                                                     queue:self.queue
+                                                                                     block:^{
+                                                                                         [weakSelf checkDup];                                                                                     }];
+                                [self checkDup];
 
                                 if (message.properties) {
                                     self.serverKeepAlive = message.properties.serverKeepAlive;
@@ -826,21 +801,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                 }
 
                                 if (self.effectiveKeepAlive > 0) {
-                                    if (@available(macOS 10.12, iOS 10.0, watchOS 3.0, tvOS 10.0, *)) {
-                                        self.keepAliveTimer = [NSTimer timerWithTimeInterval:self.effectiveKeepAlive
-                                                                                    repeats:YES
-                                                                                      block:^(NSTimer * _Nonnull timer) {
-                                                                                          [weakSelf keepAlive:timer];
-                                                                                      }];
-                                    } else {
-                                        self.keepAliveTimer = [NSTimer
-                                                               timerWithTimeInterval:self.effectiveKeepAlive
-                                                               target:self
-                                                               selector:@selector(keepAlive:)
-                                                               userInfo:nil
-                                                               repeats:YES];
-                                    }
-                                    [self.runLoop addTimer:self.keepAliveTimer forMode:self.runLoopMode];
+                                    self.keepAliveTimer = [Timer scheduledTimerWithTimeInterval:self.effectiveKeepAlive
+                                                                                        repeats:YES
+                                                                                          queue: self.queue
+                                                                                          block:^() {
+                                                                                              [weakSelf keepAlive];
+                                                                                          }];
                                 }
 
                                 if ([self.delegate respondsToSelector:@selector(handleEvent:event:error:)]) {
@@ -1639,8 +1605,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.status = MQTTSessionStatusConnecting;
 
     self.decoder = [[MQTTDecoder alloc] init];
-    self.decoder.runLoop = self.runLoop;
-    self.decoder.runLoopMode = self.runLoopMode;
+    self.decoder.queue = self.queue;
     self.decoder.delegate = self;
     [self.decoder open];
 

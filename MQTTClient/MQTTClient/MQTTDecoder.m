@@ -18,8 +18,6 @@
 - (instancetype)init {
     self = [super init];
     self.state = MQTTDecoderStateInitializing;
-    self.runLoop = [NSRunLoop currentRunLoop];
-    self.runLoopMode = NSRunLoopCommonModes;
     self.streams = [NSMutableArray arrayWithCapacity:5];
     return self;
 }
@@ -30,6 +28,8 @@
 
 - (void)decodeMessage:(NSData *)data {
     NSInputStream *stream = [NSInputStream inputStreamWithData:data];
+    CFReadStreamRef readStream = (__bridge CFReadStreamRef)stream;
+    CFReadStreamSetDispatchQueue(readStream, self.queue);
     [self openStream:stream];
 }
 
@@ -38,7 +38,6 @@
     stream.delegate = self;
     DDLogVerbose(@"[MQTTDecoder] #streams=%lu", (unsigned long)self.streams.count);
     if (self.streams.count == 1) {
-        [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
         [stream open];
     }
 }
@@ -51,7 +50,6 @@
     if (self.streams) {
         for (NSInputStream *stream in self.streams) {
             [stream close];
-            [stream removeFromRunLoop:self.runLoop forMode:self.runLoopMode];
             [stream setDelegate:nil];
         }
         [self.streams removeAllObjects];
@@ -150,7 +148,6 @@
             [self.streams removeObject:stream];
             if (self.streams.count) {
                 NSInputStream *stream = (self.streams)[0];
-                [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
                 [stream open];
             }
         }
@@ -165,7 +162,6 @@
             [self.streams removeObject:stream];
             if (self.streams.count) {
                 NSInputStream *stream = (self.streams)[0];
-                [stream scheduleInRunLoop:self.runLoop forMode:self.runLoopMode];
                 [stream open];
             }
         }

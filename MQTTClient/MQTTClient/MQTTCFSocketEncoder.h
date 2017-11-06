@@ -26,8 +26,6 @@ typedef NS_ENUM(NSInteger, MQTTCFSocketEncoderState) {
 @property (nonatomic) MQTTCFSocketEncoderState state;
 @property (strong, nonatomic) NSError *error;
 @property (strong, nonatomic) NSOutputStream *stream;
-@property (strong, nonatomic) NSRunLoop *runLoop;
-@property (strong, nonatomic) NSString *runLoopMode;
 @property (weak, nonatomic ) id<MQTTCFSocketEncoderDelegate> delegate;
 
 - (void)open;

@@ -36,7 +36,7 @@
 @property (nonatomic) NSInteger willQos;
 @property (nonatomic) BOOL willRetainFlag;
 @property (strong, nonatomic) NSString *clientId;
-@property (strong, nonatomic) NSRunLoop *runLoop;
+@property (strong, nonatomic) dispatch_queue_t queue;
 @property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
 @property (strong, nonatomic) NSArray *certificates;
 @property (nonatomic) MQTTProtocolVersion protocolLevel;
@@ -82,6 +82,7 @@
     __weak MQTTSessionManager *weakSelf = self;
     self.reconnectTimer = [[ReconnectTimer alloc] initWithRetryInterval:RECONNECT_TIMER
                                                        maxRetryInterval:maxRetryInterval
+                                                                  queue:self.queue
                                                          reconnectBlock:^{
                                                              [weakSelf reconnect];
                                                          }];
@@ -227,7 +228,7 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
      securityPolicy:securityPolicy
        certificates:certificates
       protocolLevel:protocolLevel
-            runLoop:[NSRunLoop currentRunLoop]];
+            queue:dispatch_get_main_queue()];
 }
 
 - (void)connectTo:(NSString *)host
@@ -263,7 +264,7 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
      securityPolicy:securityPolicy
        certificates:certificates
       protocolLevel:MQTTProtocolVersion311 // use this level as default, keeps it backwards compatible
-            runLoop:[NSRunLoop currentRunLoop]];
+            queue:dispatch_get_main_queue()];
 }
 
 - (void)connectTo:(NSString *)host
@@ -283,7 +284,7 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates
     protocolLevel:(MQTTProtocolVersion)protocolLevel
-          runLoop:(NSRunLoop *)runLoop {
+          queue:(dispatch_queue_t)queue {
     DDLogVerbose(@"MQTTSessionManager connectTo:%@", host);
     BOOL shouldReconnect = self.session != nil;
     if (!self.session ||
@@ -302,7 +303,7 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
         ![clientId isEqualToString:self.clientId] ||
         securityPolicy != self.securityPolicy ||
         certificates != self.certificates ||
-        runLoop != self.runLoop) {
+        queue != self.queue) {
         self.host = host;
         self.port = (int)port;
         self.tls = tls;
@@ -320,7 +321,7 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
         self.securityPolicy = securityPolicy;
         self.certificates = certificates;
         self.protocolLevel = protocolLevel;
-        self.runLoop = runLoop;
+        self.queue = queue;
         
         self.session = [[MQTTSession alloc] initWithClientId:clientId
                                                     userName:auth ? user : nil
@@ -333,8 +334,7 @@ protocolLevel:(MQTTProtocolVersion)protocolLevel {
                                                      willQoS:willQos
                                               willRetainFlag:willRetainFlag
                                                protocolLevel:protocolLevel
-                                                     runLoop:runLoop
-                                                     forMode:NSDefaultRunLoopMode
+                                                     queue:queue
                                               securityPolicy:securityPolicy
                                                 certificates:certificates];
 
