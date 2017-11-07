@@ -265,12 +265,16 @@
 		C21D3CA21B1EC63E0012DD2F /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
 		C21D3CA41B1EC6420012DD2F /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
 		C21D3CA61B1EC6450012DD2F /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
-		C701E3381FB0A70600B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; };
-		C701E3391FB0A70600B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; };
-		C701E33A1FB0A70600B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; };
+		C701E3381FB0A70600B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C701E3391FB0A70600B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C701E33A1FB0A70600B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C701E33B1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
 		C701E33C1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
 		C701E33D1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
+		C701E3441FB1AF5E00B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C701E3451FB1AF5F00B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C701E3461FB1AF6000B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C701E3471FB1AF6000B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C74489961FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
@@ -956,6 +960,7 @@
 				840D3D1A1F28A7C20072019B /* MQTTCFSocketDecoder.h in Headers */,
 				840D3D1B1F28A7C20072019B /* MQTTSSLSecurityPolicyEncoder.h in Headers */,
 				840D3D1C1F28A7C20072019B /* MQTTCFSocketTransport.h in Headers */,
+				C701E3441FB1AF5E00B0CEB5 /* Timer.h in Headers */,
 				840D3D1D1F28A7C20072019B /* MQTTDecoder.h in Headers */,
 				840D3D1E1F28A7C20072019B /* MQTTInMemoryPersistence.h in Headers */,
 				C7515EB21F4C516B0071CFFE /* ReconnectTimer.h in Headers */,
@@ -985,6 +990,7 @@
 				841D0A441C3585D4006A82DC /* MQTTCFSocketEncoder.h in Headers */,
 				841D0A451C3585D4006A82DC /* MQTTCFSocketDecoder.h in Headers */,
 				841D0A461C3585D4006A82DC /* MQTTCFSocketTransport.h in Headers */,
+				C701E3471FB1AF6000B0CEB5 /* Timer.h in Headers */,
 				841D0A471C3585D4006A82DC /* MQTTDecoder.h in Headers */,
 				841D0A481C3585D4006A82DC /* MQTTMessage.h in Headers */,
 				841D0A831C35876E006A82DC /* MQTTSSLSecurityPolicyDecoder.h in Headers */,
@@ -1017,6 +1023,7 @@
 				841D0A591C358600006A82DC /* MQTTCFSocketDecoder.h in Headers */,
 				841D0A991C358821006A82DC /* MQTTSSLSecurityPolicyEncoder.h in Headers */,
 				841D0A5A1C358600006A82DC /* MQTTCFSocketTransport.h in Headers */,
+				C701E3461FB1AF6000B0CEB5 /* Timer.h in Headers */,
 				841D0A5B1C358600006A82DC /* MQTTDecoder.h in Headers */,
 				841D0AA11C358842006A82DC /* MQTTInMemoryPersistence.h in Headers */,
 				C7515EB41F4C516C0071CFFE /* ReconnectTimer.h in Headers */,
@@ -1047,6 +1054,7 @@
 				841D0A6D1C35861D006A82DC /* MQTTCFSocketDecoder.h in Headers */,
 				841D0A9A1C358822006A82DC /* MQTTSSLSecurityPolicyEncoder.h in Headers */,
 				841D0A6E1C35861D006A82DC /* MQTTCFSocketTransport.h in Headers */,
+				C701E3451FB1AF5F00B0CEB5 /* Timer.h in Headers */,
 				841D0A6F1C35861E006A82DC /* MQTTDecoder.h in Headers */,
 				841D0AA21C358843006A82DC /* MQTTInMemoryPersistence.h in Headers */,
 				C7515EB31F4C516C0071CFFE /* ReconnectTimer.h in Headers */,

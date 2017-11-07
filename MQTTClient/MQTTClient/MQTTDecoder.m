@@ -19,6 +19,7 @@
     self = [super init];
     self.state = MQTTDecoderStateInitializing;
     self.streams = [NSMutableArray arrayWithCapacity:5];
+    self.queue = dispatch_get_main_queue();
     return self;
 }
 

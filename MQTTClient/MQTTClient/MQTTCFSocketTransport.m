@@ -32,6 +32,7 @@
     self.tls = false;
     self.voip = false;
     self.certificates = nil;
+    self.queue = dispatch_get_main_queue();
     return self;
 }
 
