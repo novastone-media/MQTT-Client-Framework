@@ -105,6 +105,11 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     return self;
 }
 
+- (void)dealloc {
+    [self.keepAliveTimer invalidate];
+    [self.checkDupTimer invalidate];
+}
+
 - (NSString *)host {
     return _transport.host;
 }
@@ -663,6 +668,7 @@ messageExpiryInterval:(NSNumber *)messageExpiryInterval
                                 sessionExpiryInterval:sessionExpiryInterval
                                          reasonString:reasonString
                                        userProperties:userProperties]];
+    [self closeInternal];
 }
 
 - (void)closeInternal {
@@ -999,6 +1005,9 @@ messageExpiryInterval:(NSNumber *)messageExpiryInterval
                                     [self.delegate connected:self sessionPresent:self.sessionPresent];
                                 }
 
+                                if (self.connectionHandler) {
+                                    self.connectionHandler(MQTTSessionEventConnected);
+                                }
                                 MQTTConnectHandler connectHandler = self.connectHandler;
                                 if (connectHandler) {
                                     self.connectHandler = nil;
