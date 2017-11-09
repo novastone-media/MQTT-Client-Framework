@@ -5,9 +5,9 @@ an Objective-C native MQTT Framework http://mqtt.org
 
 * [Introduction](http://www.hivemq.com/blog/mqtt-client-library-encyclopedia-mqtt-client-framework)
 
-* [Support on request](mailto:support@ckrey.de)
+* [Support on request](mailto:xxxxx@yyyy.zzz)
 
-* [Developer Community Mailing List](mailto:mqttclient-dev-subscribe@ckrey.de)
+* [Developer Community Mailing List](mailto:xxxxx@yyyy.zzz)
 
 ### Tested with a long list of brokers
 
