@@ -5,10 +5,6 @@ an Objective-C native MQTT Framework http://mqtt.org
 
 * [Introduction](http://www.hivemq.com/blog/mqtt-client-library-encyclopedia-mqtt-client-framework)
 
-* [Support on request](mailto:xxxxx@yyyy.zzz)
-
-* [Developer Community Mailing List](mailto:xxxxx@yyyy.zzz)
-
 ### Tested with a long list of brokers
 
 * mosquitto
@@ -73,7 +69,7 @@ Or include the source from here.
 github "ckrey/MQTT-Client-Framework"
 ```
 
-### docs
+### Docs
 
 Documentation generated with doxygen http://doxygen.org in the `./MQTTClient/dist/documentation` subdirectory.
 
@@ -90,7 +86,7 @@ Create a new client and connect to a broker:
 ```objective-c
 #import "MQTTClient.h"
 
-\@interface MyDelegate : ... <MQTTSessionDelegate>
+@interface MyDelegate : ... <MQTTSessionDelegate>
 ...
 
         MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
@@ -139,15 +135,4 @@ Publish a message to a topic:
                      retain:NO
 	                qos:MQTTQosLevelAtLeastOnce]; // this is part of the asynchronous API
 ```
-
-
-
-
-### Comparison MQTT Clients for iOS (incomplete)
-
-|Wrapper|---|----|MQTTKit  |Marquette|Moscapsule|Musqueteer|MQTT-Client|MqttSDK|CocoaMQTT|
-|-------|---|----|---------|---------|----------|----------|-----------|-------|---------|
-|       |   |    |Obj-C    |Obj-C    |Swift     |Obj-C     |Obj-C      |Obj-C  |Swift    |
-|Library|IBM|Paho|Mosquitto|Mosquitto|Mosquitto |Mosquitto |native     |native |native   |
-
 
