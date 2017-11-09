@@ -289,7 +289,7 @@
 - (void)webSocket:(SRWebSocket *)webSocket
 didReceiveMessage:(id)message {
     NSData *data = (NSData *)message;
-    DDLogVerbose(@"webSocket didReceiveMessage %ld", data.length);
+    DDLogVerbose(@"webSocket didReceiveMessage %ld", (unsigned long)data.length);
     self.next = true;
 }
 

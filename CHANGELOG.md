@@ -1,6 +1,21 @@
 MQTT-Client-Framework iOS/OSX/tvOS Release Notes
 ================================================
 
+## MQTT-Client-Framework 0.9.9
+> Release date 2017-09-21
+    [FIX] added connectTo: version for backward compatibility to MQTTSessionManager
+    Merge pull request #373 from kirillyakimovich/session_manager_reconnection_tests
+    Session manager reconnection test
+    Add run loop parameter
+    1. Removes conditional duplicated logic if on main thread - context.performAndWait is enough
+    2. Uses only one background context - Before even if this object was created from background queue it was using parent main context which would block main thread.
+    [session_manager_reconnection_tests] [UPD] if session manager is connected, we're not trying to connect again
+
+## MQTT-Client-Framework 0.9.8
+> Release date 2017-09-20
+    [FIX] Format string warnings #374
+    [FIX] Xcode9 warnings
+    [FIX] Cocoalumberjack upgrade
 
 ## MQTT-Client-Framework 0.9.7
 > Release date 2017-07-26

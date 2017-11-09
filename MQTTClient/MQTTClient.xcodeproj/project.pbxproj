@@ -265,6 +265,10 @@
 		C21D3CA21B1EC63E0012DD2F /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
 		C21D3CA41B1EC6420012DD2F /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
 		C21D3CA61B1EC6450012DD2F /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
+		C74489961FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
+		C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
+		C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
+		C74489991FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C7515EAC1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
 		C7515EAD1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
 		C7515EAE1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
@@ -503,6 +507,7 @@
 		C21D3CA51B1EC6450012DD2F /* adn_2.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_2.cer; path = ADN.net/ADNNetServerTrustChain/adn_2.cer; sourceTree = "<group>"; };
 		C21D3CA71B1ED2F40012DD2F /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
 		C53615C962DC60ED0FD7E799 /* Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientOSXTestsNOLumberjack/Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; sourceTree = "<group>"; };
+		C74489951FA74D58002751B2 /* MQTTSessionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionTests.m; sourceTree = "<group>"; };
 		C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReconnectTimer.m; sourceTree = "<group>"; };
 		C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReconnectTimer.h; sourceTree = "<group>"; };
 		C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReconnectTimerTests.m; sourceTree = "<group>"; };
@@ -809,6 +814,7 @@
 				8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */,
 				84B6A1881C133A9F00618573 /* MQTTTestWebsockets.m */,
 				C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */,
+				C74489951FA74D58002751B2 /* MQTTSessionTests.m */,
 				8442BEE81A97B15100D00E55 /* SwiftTests.swift */,
 				84B739B11A66F07900B103F4 /* MQTTClientTests-Bridging-Header.h */,
 				846191441883E56800101409 /* Supporting Files */,
@@ -1309,7 +1315,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Christoph Krey";
 				TargetAttributes = {
 					8404875D1C51212600569C79 = {
@@ -1317,10 +1323,14 @@
 					};
 					840716311BBEF13A00FBB3CB = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0900;
 					};
 					8425D7001BBE8D3D005AD733 = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0900;
+					};
+					846191391883E56800101409 = {
+						LastSwiftMigration = 0900;
 					};
 					DE9EF5C41C0628B1009EF667 = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -1728,6 +1738,7 @@
 				840716551BBEF19E00FBB3CB /* MQTTACLTests.m in Sources */,
 				840716561BBEF19E00FBB3CB /* MQTTClientOnlyTests.m in Sources */,
 				C7515EB91F4C51A60071CFFE /* ReconnectTimerTests.m in Sources */,
+				C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */,
 				840716581BBEF19E00FBB3CB /* MQTTClientPublishTests.m in Sources */,
 				84FED2171C35515800741A77 /* MQTTClientSubscriptionTests.m in Sources */,
 				840716591BBEF19E00FBB3CB /* MQTTTestSessionManager.m in Sources */,
@@ -1750,6 +1761,7 @@
 				840D3CFA1F28A7C20072019B /* MQTTACLTests.m in Sources */,
 				840D3CFB1F28A7C20072019B /* MQTTClientOnlyTests.m in Sources */,
 				C7515EB81F4C51A60071CFFE /* ReconnectTimerTests.m in Sources */,
+				C74489991FA74D58002751B2 /* MQTTSessionTests.m in Sources */,
 				840D3CFC1F28A7C20072019B /* MQTTClientPublishTests.m in Sources */,
 				840D3CFD1F28A7C20072019B /* MQTTClientSubscriptionTests.m in Sources */,
 				840D3CFE1F28A7C20072019B /* MQTTTestSessionManager.m in Sources */,
@@ -1772,6 +1784,7 @@
 				8425D70D1BBE8D68005AD733 /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				8425D70F1BBE8D68005AD733 /* MQTTClientTests.m in Sources */,
 				C7515EBA1F4C51A70071CFFE /* ReconnectTimerTests.m in Sources */,
+				C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */,
 				8425D7101BBE8D68005AD733 /* MQTTTestMultiThreading.m in Sources */,
 				8425D7111BBE8D68005AD733 /* MQTTACLTests.m in Sources */,
 				84517CF51C182F06006FE09B /* MQTTTestHelpers.m in Sources */,
@@ -1794,6 +1807,7 @@
 				844C93AB1A81645D00CA4A03 /* MQTTACLTests.m in Sources */,
 				84C845A41BDD8DB400FEC354 /* MQTTTestFlows.m in Sources */,
 				C7515EB71F4C51A00071CFFE /* ReconnectTimerTests.m in Sources */,
+				C74489961FA74D58002751B2 /* MQTTSessionTests.m in Sources */,
 				84B1AFEE196C7AF60056B959 /* MQTTTestMultiThreading.m in Sources */,
 				84FED2181C35515800741A77 /* MQTTClientSubscriptionTests.m in Sources */,
 				848BB8F3195FF7A2004FCAE2 /* MQTTClientOnlyTests.m in Sources */,
@@ -1977,7 +1991,8 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -2014,7 +2029,8 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -2030,7 +2046,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "MQTTClientOSXTests copy-Info.plist";
+				INFOPLIST_FILE = MQTTClientOSXTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -2058,7 +2074,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "MQTTClientOSXTests copy-Info.plist";
+				INFOPLIST_FILE = MQTTClientOSXTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -2103,7 +2119,8 @@
 				SDKROOT = appletvos;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
@@ -2138,7 +2155,8 @@
 				SDKROOT = appletvos;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
@@ -2151,14 +2169,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -2195,14 +2219,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -2254,7 +2284,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -2287,7 +2318,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.gmail.cky6201.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
