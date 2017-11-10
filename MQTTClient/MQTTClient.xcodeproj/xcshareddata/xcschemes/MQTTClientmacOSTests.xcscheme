@@ -5,22 +5,6 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
-      <BuildActionEntries>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "840D3CF01F28A7C20072019B"
-               BuildableName = "MQTTClientOSXTestsNOLumberjack.xctest"
-               BlueprintName = "MQTTClientOSXTestsNOLumberjack"
-               ReferencedContainer = "container:MQTTClient.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-      </BuildActionEntries>
    </BuildAction>
    <TestAction
       buildConfiguration = "Debug"
@@ -33,22 +17,13 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "840D3CF01F28A7C20072019B"
-               BuildableName = "MQTTClientOSXTestsNOLumberjack.xctest"
-               BlueprintName = "MQTTClientOSXTestsNOLumberjack"
+               BlueprintIdentifier = "840716311BBEF13A00FBB3CB"
+               BuildableName = "MQTTClientmacOSTests.xctest"
+               BlueprintName = "MQTTClientmacOSTests"
                ReferencedContainer = "container:MQTTClient.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "840D3CF01F28A7C20072019B"
-            BuildableName = "MQTTClientOSXTestsNOLumberjack.xctest"
-            BlueprintName = "MQTTClientOSXTestsNOLumberjack"
-            ReferencedContainer = "container:MQTTClient.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
