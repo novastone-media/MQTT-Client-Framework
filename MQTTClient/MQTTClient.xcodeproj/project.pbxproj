@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		723069959047DAD51633B3C1 /* Pods_MQTTClientTVTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A5988C96EB2FBC4DE9A4D2 /* Pods_MQTTClientTVTests.framework */; };
 		840487611C51212700569C79 /* MQTTFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 840487601C51212700569C79 /* MQTTFrameworkTests.m */; };
-		840487631C51212700569C79 /* MQTTFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9EF5C51C0628B1009EF667 /* MQTTFramework.framework */; };
 		840715FA1BBE999700FBB3CB /* mosquitto.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C91B49332700D81CC8 /* mosquitto.org.cer */; };
 		840715FD1BBE999700FBB3CB /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA71B1ED2F40012DD2F /* server.der */; };
 		840715FE1BBE999700FBB3CB /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
@@ -154,7 +152,6 @@
 		84E2C45D1EC34E9B00BC02CE /* MQTTProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E2C4561EC34E8500BC02CE /* MQTTProperties.m */; };
 		84FED2171C35515800741A77 /* MQTTClientSubscriptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21D3C6E1B1EBB0E0012DD2F /* MQTTClientSubscriptionTests.m */; };
 		9BC4560691BE083642C33714 /* Pods_MQTTClientmacOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4363EAF2CC08CADAF0C32A74 /* Pods_MQTTClientmacOSTests.framework */; };
-		A8FB4D838E1B6D3853844B7F /* Pods_MQTTClientOSXTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D452C341971F2656F6DAA3A /* Pods_MQTTClientOSXTests.framework */; };
 		BBB48A195845F32D80CE9E98 /* Pods_MQTTClienttvOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DBB809FAC57CA1CA903839 /* Pods_MQTTClienttvOSTests.framework */; };
 		C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
@@ -217,10 +214,27 @@
 		C7AA17C01FB634F600098AA9 /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7AA17C11FB634F600098AA9 /* ForegroundReconnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EBB1F4C6A710071CFFE /* ForegroundReconnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7AA17C21FB6374100098AA9 /* MQTTTestHelpers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84BE348F1C348BFD007EF8F3 /* MQTTTestHelpers.plist */; };
+		C7AA17C31FB6380E00098AA9 /* mosquitto.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C91B49332700D81CC8 /* mosquitto.org.cer */; };
+		C7AA17C41FB6381100098AA9 /* client.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 843713531E41E6B800868093 /* client.p12 */; };
+		C7AA17C51FB6381700098AA9 /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA71B1ED2F40012DD2F /* server.der */; };
+		C7AA17C61FB6381700098AA9 /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
+		C7AA17C71FB6381700098AA9 /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
+		C7AA17C81FB6381700098AA9 /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
+		C7AA17C91FB6382100098AA9 /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
+		C7AA17CA1FB6387A00098AA9 /* httpbinorg_01162016.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F79296C7162FC7094249 /* httpbinorg_01162016.cer */; };
+		C7AA17CB1FB6387A00098AA9 /* AddTrust_External_CA_Root.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE76A4BC8055ED6BE604 /* AddTrust_External_CA_Root.cer */; };
+		C7AA17CC1FB6387A00098AA9 /* COMODO_RSA_Certification_Authority.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FBB3707F74CF8A39DC5D /* COMODO_RSA_Certification_Authority.cer */; };
+		C7AA17CD1FB6387A00098AA9 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F89078C0CB2EE866B368 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer */; };
+		C7AA17CE1FB6387D00098AA9 /* HTTPBinOrgServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */; };
+		C7AA17CF1FB6388300098AA9 /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
+		C7AA17D01FB6388300098AA9 /* NoDomains.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FEBFE55BBF61F564981F /* NoDomains.cer */; };
+		C7AA17D11FB6388300098AA9 /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
+		C7AA17D21FB6399B00098AA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8461912D1883E56800101409 /* Foundation.framework */; };
+		C7AA17D31FB639A200098AA9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8462436B1ABEAAF900B72519 /* CoreData.framework */; };
+		C7AA17D41FB639AC00098AA9 /* Pods_MQTTClientiOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7AA17D51FB639AC00098AA9 /* Pods_MQTTClientiOSTests.framework */; };
 		C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
-		C9B95F0C7B9B3FB2D1EECCE8 /* Pods_MQTTClientiOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B717548201595EF5CBE9AB5 /* Pods_MQTTClientiOSTests.framework */; };
 		DE9EF5CE1C0628EB009EF667 /* MQTTDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 846191E81883E8B900101409 /* MQTTDecoder.m */; };
 		DE9EF5CF1C0628EB009EF667 /* MQTTCFSocketEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 846191E91883E8B900101409 /* MQTTCFSocketEncoder.m */; };
 		DE9EF5D01C0628EB009EF667 /* MQTTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 846191EA1883E8B900101409 /* MQTTMessage.m */; };
@@ -310,16 +324,6 @@
 		F6D090091E535F5600CD2566 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D090081E535F5600CD2566 /* CoreData.framework */; };
 		F6D0900B1E535F5B00CD2566 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D0900A1E535F5B00CD2566 /* Foundation.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		840487641C51212700569C79 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 846191221883E56800101409 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DE9EF5C41C0628B1009EF667;
-			remoteInfo = MQTTFramework;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		005146AC8752041647A13424 /* Pods-MQTTClienttvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClienttvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClienttvOSTests/Pods-MQTTClienttvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -444,6 +448,7 @@
 		C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReconnectTimerTests.m; sourceTree = "<group>"; };
 		C7515EBB1F4C6A710071CFFE /* ForegroundReconnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForegroundReconnection.h; sourceTree = "<group>"; };
 		C7515EBC1F4C6A710071CFFE /* ForegroundReconnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForegroundReconnection.m; sourceTree = "<group>"; };
+		C7AA17D51FB639AC00098AA9 /* Pods_MQTTClientiOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MQTTClientiOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7E397981F0F71F1000C512E /* MQTTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTLog.m; sourceTree = "<group>"; };
 		CCDD395E3B208DFCF6249B17 /* Pods-MQTTClientTVTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientTVTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientTVTests/Pods-MQTTClientTVTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D7A5988C96EB2FBC4DE9A4D2 /* Pods_MQTTClientTVTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTClientTVTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -462,8 +467,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				840487631C51212700569C79 /* MQTTFramework.framework in Frameworks */,
-				C9B95F0C7B9B3FB2D1EECCE8 /* Pods_MQTTClientiOSTests.framework in Frameworks */,
+				C7AA17D21FB6399B00098AA9 /* Foundation.framework in Frameworks */,
+				C7AA17D31FB639A200098AA9 /* CoreData.framework in Frameworks */,
+				C7AA17D41FB639AC00098AA9 /* Pods_MQTTClientiOSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,7 +479,6 @@
 			files = (
 				840716401BBEF17600FBB3CB /* Foundation.framework in Frameworks */,
 				8407163E1BBEF16E00FBB3CB /* CFNetwork.framework in Frameworks */,
-				A8FB4D838E1B6D3853844B7F /* Pods_MQTTClientOSXTests.framework in Frameworks */,
 				9BC4560691BE083642C33714 /* Pods_MQTTClientmacOSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -484,7 +489,6 @@
 			files = (
 				8425D71B1BBE8EF9005AD733 /* Foundation.framework in Frameworks */,
 				8425D7191BBE8EF1005AD733 /* CoreData.framework in Frameworks */,
-				723069959047DAD51633B3C1 /* Pods_MQTTClientTVTests.framework in Frameworks */,
 				BBB48A195845F32D80CE9E98 /* Pods_MQTTClienttvOSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -654,6 +658,7 @@
 		8461912C1883E56800101409 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C7AA17D51FB639AC00098AA9 /* Pods_MQTTClientiOSTests.framework */,
 				84A1AF7D1F32482300234C79 /* SocketRocket.framework */,
 				F6D0900A1E535F5B00CD2566 /* Foundation.framework */,
 				F6D090081E535F5600CD2566 /* CoreData.framework */,
@@ -1055,7 +1060,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				840487651C51212700569C79 /* PBXTargetDependency */,
 			);
 			name = MQTTClientiOSTests;
 			productName = MQTTFrameworkTests;
@@ -1221,7 +1225,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7AA17C41FB6381100098AA9 /* client.p12 in Resources */,
+				C7AA17C31FB6380E00098AA9 /* mosquitto.org.cer in Resources */,
+				C7AA17CE1FB6387D00098AA9 /* HTTPBinOrgServerTrustChain in Resources */,
+				C7AA17CF1FB6388300098AA9 /* AltName.cer in Resources */,
+				C7AA17CA1FB6387A00098AA9 /* httpbinorg_01162016.cer in Resources */,
+				C7AA17CC1FB6387A00098AA9 /* COMODO_RSA_Certification_Authority.cer in Resources */,
+				C7AA17C71FB6381700098AA9 /* adn_1.cer in Resources */,
+				C7AA17C51FB6381700098AA9 /* server.der in Resources */,
+				C7AA17C91FB6382100098AA9 /* ADNNetServerTrustChain in Resources */,
 				C7AA17C21FB6374100098AA9 /* MQTTTestHelpers.plist in Resources */,
+				C7AA17C61FB6381700098AA9 /* adn_0.cer in Resources */,
+				C7AA17CB1FB6387A00098AA9 /* AddTrust_External_CA_Root.cer in Resources */,
+				C7AA17D11FB6388300098AA9 /* foobar.com.cer in Resources */,
+				C7AA17C81FB6381700098AA9 /* adn_2.cer in Resources */,
+				C7AA17D01FB6388300098AA9 /* NoDomains.cer in Resources */,
+				C7AA17CD1FB6387A00098AA9 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1618,14 +1637,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		840487651C51212700569C79 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DE9EF5C41C0628B1009EF667 /* MQTTClientiOS */;
-			targetProxy = 840487641C51212700569C79 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		846191461883E56800101409 /* InfoPlist.strings */ = {
