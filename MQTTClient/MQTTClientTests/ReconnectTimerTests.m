@@ -27,7 +27,10 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@""];
     
     NSDate *startDate = [NSDate date];
-    ReconnectTimer *timer = [[ReconnectTimer alloc] initWithRetryInterval:1 maxRetryInterval:5 reconnectBlock:^{
+    ReconnectTimer *timer = [[ReconnectTimer alloc] initWithRetryInterval:1
+                                                         maxRetryInterval:5
+                                                                    queue:dispatch_get_main_queue()
+                                                           reconnectBlock:^{
         NSTimeInterval difference = [[NSDate date] timeIntervalSinceDate:startDate];
         XCTAssertEqualWithAccuracy(difference, 1, 0.1, "Reconnect block should be called after 1 second");
         [expectation fulfill];
@@ -42,7 +45,10 @@
     
     __block NSDate *startDate = [NSDate date];
     __block BOOL isFirst = YES;
-    ReconnectTimer *timer = [[ReconnectTimer alloc] initWithRetryInterval:1 maxRetryInterval:2 reconnectBlock:^{
+    ReconnectTimer *timer = [[ReconnectTimer alloc] initWithRetryInterval:1
+                                                         maxRetryInterval:2
+                                                                    queue:dispatch_get_main_queue()
+                                                           reconnectBlock:^{
         NSTimeInterval difference = [[NSDate date] timeIntervalSinceDate:startDate];
         if (isFirst) {
             isFirst = NO;

@@ -38,8 +38,7 @@
        withClientId:nil
      securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
        certificates:[MQTTTestHelpers clientCerts:parameters]
-      protocolLevel:[parameters[@"protocollevel"] intValue]
-            runLoop:[NSRunLoop currentRunLoop]];
+      protocolLevel:[parameters[@"protocollevel"] intValue]];
 }
 
 @end

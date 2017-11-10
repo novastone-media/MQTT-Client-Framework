@@ -155,6 +155,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  event, it will attempt to reconnect to the broker. The time in between connection attempts is doubled each time, until it remains at maxRetryInterval.
  Defaults to 64 seconds.
  * @param connectInForeground Whether or not to connect the MQTTSession when the app enters the foreground, and disconnect when it becomes inactive. When NO, the caller is responsible for calling -connectTo: and -disconnect. Defaults to YES.
+ * @param queue Queue for MQTTSession.
  * @return the initialized MQTTSessionManager object
  */
 
@@ -163,7 +164,8 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
                                 maxMessages:(NSUInteger)maxMessages
                                     maxSize:(NSUInteger)maxSize
                  maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
-                        connectInForeground:(BOOL)connectInForeground NS_DESIGNATED_INITIALIZER;
+                        connectInForeground:(BOOL)connectInForeground
+                                      queue:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
 
 /** initWithPersistence sets the MQTTPersistence properties other than default
  * @param persistent YES or NO (default) to establish file or in memory persistence.
@@ -171,6 +173,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param maxSize (a positive number of bytes, default is 64 MB) to limit the size of the persistence file. Messages published after the limit is reached are dropped.
  * @param maxMessages (a positive number, default is 1024) to limit the number of messages stored. Additional messages published are dropped.
  * @param connectInForeground Whether or not to connect the MQTTSession when the app enters the foreground, and disconnect when it becomes inactive. When NO, the caller is responsible for calling -connectTo: and -disconnect. Defaults to YES.
+ * @param queue Queue for MQTTSession.
  * @return the initialized MQTTSessionManager object
  */
 
@@ -178,7 +181,8 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
                               maxWindowSize:(NSUInteger)maxWindowSize
                                 maxMessages:(NSUInteger)maxMessages
                                     maxSize:(NSUInteger)maxSize
-                        connectInForeground:(BOOL)connectInForeground;
+                        connectInForeground:(BOOL)connectInForeground
+                                      queue:(dispatch_queue_t)queue;
 
 /** initWithPersistence sets the MQTTPersistence properties other than default
  * @param persistent YES or NO (default) to establish file or in memory persistence.
@@ -211,47 +215,6 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param securityPolicy A custom SSL security policy or nil.
  * @param certificates An NSArray of the pinned certificates to use or nil.
  * @param protocolLevel Protocol version of the connection.
- * @param runLoop Run loop for MQTTSession.
- */
-
-- (void)connectTo:(NSString *)host
-             port:(NSInteger)port
-              tls:(BOOL)tls
-        keepalive:(NSInteger)keepalive
-            clean:(BOOL)clean
-             auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
-             will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
-          willQos:(MQTTQosLevel)willQos
-   willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId
-   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-     certificates:(NSArray *)certificates
-    protocolLevel:(MQTTProtocolVersion)protocolLevel
-          runLoop:(NSRunLoop *)runLoop;
-
-
-/** Connects to the MQTT broker and stores the parameters for subsequent reconnects
- * @param host see connectTo description
- * @param port see connectTo description
- * @param tls see connectTo description
- * @param keepalive see connectTo description
- * @param clean see connectTo description
- * @param auth see connectTo description
- * @param user see connectTo description
- * @param pass see connectTo description
- * @param will see connectTo description
- * @param willTopic see connectTo description
- * @param willMsg see connectTo description
- * @param willQos see connectTo description
- * @param willRetainFlag see connectTo description
- * @param clientId see connectTo description
- * @param securityPolicy see connectTo description
- * @param certificates An see connectTo description
- * @param protocolLevel see connectTo description
  */
 
 - (void)connectTo:(NSString *)host
@@ -271,7 +234,6 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
    securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
      certificates:(NSArray *)certificates
     protocolLevel:(MQTTProtocolVersion)protocolLevel;
-
 
 /** Connects to the MQTT broker and stores the parameters for subsequent reconnects
  * @param host see connectTo description

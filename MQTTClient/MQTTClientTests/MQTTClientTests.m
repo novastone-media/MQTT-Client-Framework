@@ -66,8 +66,7 @@
                                                     password:nil
                                                    keepAlive:60
                                                 cleanSession:TRUE
-                                                     runLoop:nil
-                                                     forMode:nil];
+                                                     queue:dispatch_get_main_queue()];
         self.session.delegate = self;
         [self shutdown:parameters];
     }
