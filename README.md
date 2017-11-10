@@ -67,7 +67,7 @@ Or include the source from here.
 
 [Carthage](https://github.com/Carthage/Carthage)
 ```
-github "ckrey/MQTT-Client-Framework"
+github "novastone-media/MQTT-Client-Framework"
 ```
 
 ### Docs
