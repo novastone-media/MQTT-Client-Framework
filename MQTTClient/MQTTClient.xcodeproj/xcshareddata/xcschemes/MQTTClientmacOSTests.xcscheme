@@ -17,9 +17,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8425D7001BBE8D3D005AD733"
-               BuildableName = "MQTTClientTVTests.xctest"
-               BlueprintName = "MQTTClientTVTests"
+               BlueprintIdentifier = "840716311BBEF13A00FBB3CB"
+               BuildableName = "MQTTClientmacOSTests.xctest"
+               BlueprintName = "MQTTClientmacOSTests"
                ReferencedContainer = "container:MQTTClient.xcodeproj">
             </BuildableReference>
          </TestableReference>
