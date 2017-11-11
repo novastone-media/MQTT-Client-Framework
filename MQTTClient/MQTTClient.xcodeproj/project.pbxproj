@@ -51,49 +51,11 @@
 		840D3CED1F264AE20072019B /* MQTTStrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D3CEA1F264AD00072019B /* MQTTStrict.m */; };
 		840D3CEE1F264AE30072019B /* MQTTStrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D3CEA1F264AD00072019B /* MQTTStrict.m */; };
 		840D3CEF1F264AE40072019B /* MQTTStrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D3CEA1F264AD00072019B /* MQTTStrict.m */; };
-		841D0A521C358600006A82DC /* MQTTTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B6A18F1C14E1BB00618573 /* MQTTTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A571C358600006A82DC /* MQTTWebsocketTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B633BC1C176ECA0024CE2E /* MQTTWebsocketTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A581C358600006A82DC /* MQTTCFSocketEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FD1883E8FD00101409 /* MQTTCFSocketEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A591C358600006A82DC /* MQTTCFSocketDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B6A1971C15C2F600618573 /* MQTTCFSocketDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A5A1C358600006A82DC /* MQTTCFSocketTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B6A1931C14E7E700618573 /* MQTTCFSocketTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A5B1C358600006A82DC /* MQTTDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FC1883E8FD00101409 /* MQTTDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A5C1C358601006A82DC /* MQTTMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FE1883E8FD00101409 /* MQTTMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A5D1C358601006A82DC /* MQTTSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FF1883E8FD00101409 /* MQTTSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A5E1C358601006A82DC /* MQTTSessionSynchron.h in Headers */ = {isa = PBXBuildFile; fileRef = 84998C871C0EDBAA00119061 /* MQTTSessionSynchron.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A5F1C358601006A82DC /* MQTTSessionLegacy.h in Headers */ = {isa = PBXBuildFile; fileRef = 84998C801C0ED09700119061 /* MQTTSessionLegacy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A601C358601006A82DC /* MQTTPersistence.h in Headers */ = {isa = PBXBuildFile; fileRef = 846243671ABE9E5900B72519 /* MQTTPersistence.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A631C358601006A82DC /* MQTTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191321883E56800101409 /* MQTTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A641C358601006A82DC /* MQTTSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B1AFF0196D99170056B959 /* MQTTSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A661C35861D006A82DC /* MQTTTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B6A18F1C14E1BB00618573 /* MQTTTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A6B1C35861D006A82DC /* MQTTWebsocketTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B633BC1C176ECA0024CE2E /* MQTTWebsocketTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A6C1C35861D006A82DC /* MQTTCFSocketEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FD1883E8FD00101409 /* MQTTCFSocketEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A6D1C35861D006A82DC /* MQTTCFSocketDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B6A1971C15C2F600618573 /* MQTTCFSocketDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A6E1C35861D006A82DC /* MQTTCFSocketTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B6A1931C14E7E700618573 /* MQTTCFSocketTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A6F1C35861E006A82DC /* MQTTDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FC1883E8FD00101409 /* MQTTDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A701C35861E006A82DC /* MQTTMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FE1883E8FD00101409 /* MQTTMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A711C35861E006A82DC /* MQTTSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191FF1883E8FD00101409 /* MQTTSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A721C35861E006A82DC /* MQTTSessionSynchron.h in Headers */ = {isa = PBXBuildFile; fileRef = 84998C871C0EDBAA00119061 /* MQTTSessionSynchron.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A731C35861E006A82DC /* MQTTSessionLegacy.h in Headers */ = {isa = PBXBuildFile; fileRef = 84998C801C0ED09700119061 /* MQTTSessionLegacy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A741C35861E006A82DC /* MQTTPersistence.h in Headers */ = {isa = PBXBuildFile; fileRef = 846243671ABE9E5900B72519 /* MQTTPersistence.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A771C35861E006A82DC /* MQTTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 846191321883E56800101409 /* MQTTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A781C35861E006A82DC /* MQTTSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B1AFF0196D99170056B959 /* MQTTSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A911C35880A006A82DC /* MQTTSSLSecurityPolicyTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A7F1C35876E006A82DC /* MQTTSSLSecurityPolicyTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A921C35880B006A82DC /* MQTTSSLSecurityPolicyTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A7F1C35876E006A82DC /* MQTTSSLSecurityPolicyTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A931C358818006A82DC /* MQTTSSLSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A791C35876E006A82DC /* MQTTSSLSecurityPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A941C358819006A82DC /* MQTTSSLSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A791C35876E006A82DC /* MQTTSSLSecurityPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		841D0A951C35881A006A82DC /* MQTTSSLSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A791C35876E006A82DC /* MQTTSSLSecurityPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A961C35881D006A82DC /* MQTTSSLSecurityPolicyDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A7B1C35876E006A82DC /* MQTTSSLSecurityPolicyDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A971C35881E006A82DC /* MQTTSSLSecurityPolicyDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A7B1C35876E006A82DC /* MQTTSSLSecurityPolicyDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		841D0A981C35881F006A82DC /* MQTTSSLSecurityPolicyDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A7B1C35876E006A82DC /* MQTTSSLSecurityPolicyDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A991C358821006A82DC /* MQTTSSLSecurityPolicyEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A7D1C35876E006A82DC /* MQTTSSLSecurityPolicyEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A9A1C358822006A82DC /* MQTTSSLSecurityPolicyEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A7D1C35876E006A82DC /* MQTTSSLSecurityPolicyEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		841D0A9B1C358823006A82DC /* MQTTSSLSecurityPolicyEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A7D1C35876E006A82DC /* MQTTSSLSecurityPolicyEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		841D0A9C1C358826006A82DC /* MQTTSSLSecurityPolicyTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A7F1C35876E006A82DC /* MQTTSSLSecurityPolicyTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A9E1C35883E006A82DC /* MQTTCoreDataPersistence.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A891C358785006A82DC /* MQTTCoreDataPersistence.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0A9F1C35883F006A82DC /* MQTTCoreDataPersistence.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A891C358785006A82DC /* MQTTCoreDataPersistence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		841D0AA01C35883F006A82DC /* MQTTCoreDataPersistence.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A891C358785006A82DC /* MQTTCoreDataPersistence.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0AA11C358842006A82DC /* MQTTInMemoryPersistence.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A8D1C358793006A82DC /* MQTTInMemoryPersistence.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		841D0AA21C358843006A82DC /* MQTTInMemoryPersistence.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A8D1C358793006A82DC /* MQTTInMemoryPersistence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		841D0AA31C358843006A82DC /* MQTTInMemoryPersistence.h in Headers */ = {isa = PBXBuildFile; fileRef = 841D0A8D1C358793006A82DC /* MQTTInMemoryPersistence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8425D70D1BBE8D68005AD733 /* MQTTSSLSecurityPolicyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */; };
 		8425D70E1BBE8D68005AD733 /* MQTTClientSubscriptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21D3C6E1B1EBB0E0012DD2F /* MQTTClientSubscriptionTests.m */; };
@@ -136,8 +98,6 @@
 		84A5921B1C3C64A9008C5199 /* MQTTSSLSecurityPolicyTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 841D0A801C35876E006A82DC /* MQTTSSLSecurityPolicyTransport.m */; };
 		84A5921C1C3C64A9008C5199 /* MQTTCoreDataPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 841D0A8A1C358785006A82DC /* MQTTCoreDataPersistence.m */; };
 		84A5921D1C3C64A9008C5199 /* MQTTInMemoryPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 841D0A8E1C358793006A82DC /* MQTTInMemoryPersistence.m */; };
-		84AA232F1C6B910F009B153A /* MQTTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 84AA232D1C6B8BE5009B153A /* MQTTLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		84AA23301C6B910F009B153A /* MQTTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 84AA232D1C6B8BE5009B153A /* MQTTLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		84AA23321C6B913E009B153A /* MQTTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 84AA232D1C6B8BE5009B153A /* MQTTLog.h */; };
 		84B6A1A11C15E51300618573 /* MQTTTestWebsockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B6A1881C133A9F00618573 /* MQTTTestWebsockets.m */; };
 		84B7E60C1C09A87C00FD087E /* MQTTFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B7E60A1C09A7AB00FD087E /* MQTTFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -145,8 +105,6 @@
 		84BE34921C349063007EF8F3 /* MQTTTestHelpers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84BE348F1C348BFD007EF8F3 /* MQTTTestHelpers.plist */; };
 		84C845A51BDD8DD900FEC354 /* MQTTTestFlows.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C845A31BDD8DB400FEC354 /* MQTTTestFlows.m */; };
 		84C845A61BDD8DE300FEC354 /* MQTTTestFlows.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C845A31BDD8DB400FEC354 /* MQTTTestFlows.m */; };
-		84E2C4591EC34E9100BC02CE /* MQTTProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8436B1731E93EBAA00E24A4E /* MQTTProperties.h */; };
-		84E2C45A1EC34E9200BC02CE /* MQTTProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8436B1731E93EBAA00E24A4E /* MQTTProperties.h */; };
 		84E2C45B1EC34E9900BC02CE /* MQTTProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E2C4561EC34E8500BC02CE /* MQTTProperties.m */; };
 		84E2C45C1EC34E9A00BC02CE /* MQTTProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E2C4561EC34E8500BC02CE /* MQTTProperties.m */; };
 		84E2C45D1EC34E9B00BC02CE /* MQTTProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E2C4561EC34E8500BC02CE /* MQTTProperties.m */; };
@@ -157,8 +115,6 @@
 		C701E33B1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
 		C701E33C1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
 		C701E33D1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
-		C701E3451FB1AF5F00B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C701E3461FB1AF6000B0CEB5 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C7515EAC1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
@@ -167,8 +123,6 @@
 		C7515EAF1F4C51600071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7515EB01F4C51600071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7515EB11F4C51600071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C7515EB31F4C516C0071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C7515EB41F4C516C0071CFFE /* ReconnectTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7515EB91F4C51A60071CFFE /* ReconnectTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */; };
 		C7515EBA1F4C51A70071CFFE /* ReconnectTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */; };
 		C7515EBD1F4C6A710071CFFE /* ForegroundReconnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EBB1F4C6A710071CFFE /* ForegroundReconnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -177,8 +131,6 @@
 		C7515EC01F4C6A710071CFFE /* ForegroundReconnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EBC1F4C6A710071CFFE /* ForegroundReconnection.m */; };
 		C7515EC11F4C6A710071CFFE /* ForegroundReconnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EBC1F4C6A710071CFFE /* ForegroundReconnection.m */; };
 		C7515EC21F4C6A710071CFFE /* ForegroundReconnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EBC1F4C6A710071CFFE /* ForegroundReconnection.m */; };
-		C7515EC41F4C6BB70071CFFE /* ForegroundReconnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EBB1F4C6A710071CFFE /* ForegroundReconnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C7515EC51F4C6BB70071CFFE /* ForegroundReconnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C7515EBB1F4C6A710071CFFE /* ForegroundReconnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7AA17E31FB6F04800098AA9 /* MQTTTestHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 84517CF31C182F06006FE09B /* MQTTTestHelpers.m */; };
 		C7AA17E41FB6F04F00098AA9 /* MQTTTestHelpers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84BE348F1C348BFD007EF8F3 /* MQTTTestHelpers.plist */; };
 		C7AA17E51FB6F05200098AA9 /* MQTTTestBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */; };
@@ -212,6 +164,10 @@
 		C7AA18011FB6F0A000098AA9 /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
 		C7AA18031FB6F1B900098AA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8461912D1883E56800101409 /* Foundation.framework */; };
 		C7AA18041FB6F1BE00098AA9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8462436B1ABEAAF900B72519 /* CoreData.framework */; };
+		C7AA18051FB6F20D00098AA9 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests.swift */; };
+		C7AA18061FB6F20E00098AA9 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests.swift */; };
+		C7AA18071FB6F20F00098AA9 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests.swift */; };
+		C7AA18091FB6F31F00098AA9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7AA18081FB6F31F00098AA9 /* CoreData.framework */; };
 		C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
@@ -428,6 +384,7 @@
 		C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReconnectTimerTests.m; sourceTree = "<group>"; };
 		C7515EBB1F4C6A710071CFFE /* ForegroundReconnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForegroundReconnection.h; sourceTree = "<group>"; };
 		C7515EBC1F4C6A710071CFFE /* ForegroundReconnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForegroundReconnection.m; sourceTree = "<group>"; };
+		C7AA18081FB6F31F00098AA9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		C7E397981F0F71F1000C512E /* MQTTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTLog.m; sourceTree = "<group>"; };
 		C994F5E5702C079ADD68318C /* Pods_MQTTClienttvOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTClienttvOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCDD395E3B208DFCF6249B17 /* Pods-MQTTClientTVTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientTVTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientTVTests/Pods-MQTTClientTVTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -459,6 +416,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7AA18091FB6F31F00098AA9 /* CoreData.framework in Frameworks */,
 				840716401BBEF17600FBB3CB /* Foundation.framework in Frameworks */,
 				8407163E1BBEF16E00FBB3CB /* CFNetwork.framework in Frameworks */,
 				D0C451E21599510EE594E746 /* Pods_MQTTClientmacOSTests.framework in Frameworks */,
@@ -640,6 +598,7 @@
 		8461912C1883E56800101409 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C7AA18081FB6F31F00098AA9 /* CoreData.framework */,
 				84A1AF7D1F32482300234C79 /* SocketRocket.framework */,
 				F6D0900A1E535F5B00CD2566 /* Foundation.framework */,
 				F6D090081E535F5600CD2566 /* CoreData.framework */,
@@ -842,68 +801,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		841D0A511C3585E7006A82DC /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				841D0A521C358600006A82DC /* MQTTTransport.h in Headers */,
-				841D0A571C358600006A82DC /* MQTTWebsocketTransport.h in Headers */,
-				841D0A581C358600006A82DC /* MQTTCFSocketEncoder.h in Headers */,
-				841D0A591C358600006A82DC /* MQTTCFSocketDecoder.h in Headers */,
-				841D0A991C358821006A82DC /* MQTTSSLSecurityPolicyEncoder.h in Headers */,
-				841D0A5A1C358600006A82DC /* MQTTCFSocketTransport.h in Headers */,
-				C701E3461FB1AF6000B0CEB5 /* Timer.h in Headers */,
-				841D0A5B1C358600006A82DC /* MQTTDecoder.h in Headers */,
-				841D0AA11C358842006A82DC /* MQTTInMemoryPersistence.h in Headers */,
-				C7515EB41F4C516C0071CFFE /* ReconnectTimer.h in Headers */,
-				841D0A911C35880A006A82DC /* MQTTSSLSecurityPolicyTransport.h in Headers */,
-				841D0A5C1C358601006A82DC /* MQTTMessage.h in Headers */,
-				841D0A9E1C35883E006A82DC /* MQTTCoreDataPersistence.h in Headers */,
-				841D0A5D1C358601006A82DC /* MQTTSession.h in Headers */,
-				841D0A931C358818006A82DC /* MQTTSSLSecurityPolicy.h in Headers */,
-				841D0A961C35881D006A82DC /* MQTTSSLSecurityPolicyDecoder.h in Headers */,
-				841D0A5E1C358601006A82DC /* MQTTSessionSynchron.h in Headers */,
-				84E2C4591EC34E9100BC02CE /* MQTTProperties.h in Headers */,
-				841D0A5F1C358601006A82DC /* MQTTSessionLegacy.h in Headers */,
-				841D0A601C358601006A82DC /* MQTTPersistence.h in Headers */,
-				C7515EC51F4C6BB70071CFFE /* ForegroundReconnection.h in Headers */,
-				841D0A631C358601006A82DC /* MQTTClient.h in Headers */,
-				84AA232F1C6B910F009B153A /* MQTTLog.h in Headers */,
-				841D0A641C358601006A82DC /* MQTTSessionManager.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		841D0A651C358606006A82DC /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				841D0A661C35861D006A82DC /* MQTTTransport.h in Headers */,
-				841D0A6B1C35861D006A82DC /* MQTTWebsocketTransport.h in Headers */,
-				841D0A6C1C35861D006A82DC /* MQTTCFSocketEncoder.h in Headers */,
-				841D0A6D1C35861D006A82DC /* MQTTCFSocketDecoder.h in Headers */,
-				841D0A9A1C358822006A82DC /* MQTTSSLSecurityPolicyEncoder.h in Headers */,
-				841D0A6E1C35861D006A82DC /* MQTTCFSocketTransport.h in Headers */,
-				C701E3451FB1AF5F00B0CEB5 /* Timer.h in Headers */,
-				841D0A6F1C35861E006A82DC /* MQTTDecoder.h in Headers */,
-				841D0AA21C358843006A82DC /* MQTTInMemoryPersistence.h in Headers */,
-				C7515EB31F4C516C0071CFFE /* ReconnectTimer.h in Headers */,
-				841D0A921C35880B006A82DC /* MQTTSSLSecurityPolicyTransport.h in Headers */,
-				841D0A701C35861E006A82DC /* MQTTMessage.h in Headers */,
-				841D0A9F1C35883F006A82DC /* MQTTCoreDataPersistence.h in Headers */,
-				841D0A711C35861E006A82DC /* MQTTSession.h in Headers */,
-				841D0A941C358819006A82DC /* MQTTSSLSecurityPolicy.h in Headers */,
-				841D0A971C35881E006A82DC /* MQTTSSLSecurityPolicyDecoder.h in Headers */,
-				841D0A721C35861E006A82DC /* MQTTSessionSynchron.h in Headers */,
-				84E2C45A1EC34E9200BC02CE /* MQTTProperties.h in Headers */,
-				841D0A731C35861E006A82DC /* MQTTSessionLegacy.h in Headers */,
-				841D0A741C35861E006A82DC /* MQTTPersistence.h in Headers */,
-				C7515EC41F4C6BB70071CFFE /* ForegroundReconnection.h in Headers */,
-				84AA23301C6B910F009B153A /* MQTTLog.h in Headers */,
-				841D0A771C35861E006A82DC /* MQTTClient.h in Headers */,
-				841D0A781C35861E006A82DC /* MQTTSessionManager.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DE9EF5C21C0628B1009EF667 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1030,7 +927,6 @@
 				8407162E1BBEF13A00FBB3CB /* Sources */,
 				8407162F1BBEF13A00FBB3CB /* Frameworks */,
 				840716301BBEF13A00FBB3CB /* Resources */,
-				841D0A651C358606006A82DC /* Headers */,
 				FCD05701E6A805296E8D37CD /* [CP] Embed Pods Frameworks */,
 				8A4A849F6937D44BEC9C6CD0 /* [CP] Copy Pods Resources */,
 			);
@@ -1051,7 +947,6 @@
 				8425D6FD1BBE8D3D005AD733 /* Sources */,
 				8425D6FE1BBE8D3D005AD733 /* Frameworks */,
 				8425D6FF1BBE8D3D005AD733 /* Resources */,
-				841D0A511C3585E7006A82DC /* Headers */,
 				272E0C0ECBCA60D061290A28 /* [CP] Embed Pods Frameworks */,
 				256013084534CD67D4E1A7D6 /* [CP] Copy Pods Resources */,
 			);
@@ -1445,6 +1340,7 @@
 				C7AA17E91FB6F06200098AA9 /* MQTTClientTests.m in Sources */,
 				C7AA17F01FB6F07700098AA9 /* MQTTTestWebsockets.m in Sources */,
 				C7AA17EA1FB6F06700098AA9 /* MQTTClientTestsV5.m in Sources */,
+				C7AA18051FB6F20D00098AA9 /* SwiftTests.swift in Sources */,
 				C7AA17F11FB6F07900098AA9 /* MQTTSessionTests.m in Sources */,
 				C7AA17EC1FB6F06C00098AA9 /* MQTTACLTests.m in Sources */,
 				C7AA17F21FB6F07D00098AA9 /* ReconnectTimerTests.m in Sources */,
@@ -1476,6 +1372,7 @@
 				840716561BBEF19E00FBB3CB /* MQTTClientOnlyTests.m in Sources */,
 				C7515EB91F4C51A60071CFFE /* ReconnectTimerTests.m in Sources */,
 				C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */,
+				C7AA18071FB6F20F00098AA9 /* SwiftTests.swift in Sources */,
 				840716581BBEF19E00FBB3CB /* MQTTClientPublishTests.m in Sources */,
 				84FED2171C35515800741A77 /* MQTTClientSubscriptionTests.m in Sources */,
 				840716591BBEF19E00FBB3CB /* MQTTTestSessionManager.m in Sources */,
@@ -1498,6 +1395,7 @@
 				C7515EBA1F4C51A70071CFFE /* ReconnectTimerTests.m in Sources */,
 				C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */,
 				8425D7101BBE8D68005AD733 /* MQTTTestMultiThreading.m in Sources */,
+				C7AA18061FB6F20E00098AA9 /* SwiftTests.swift in Sources */,
 				8425D7111BBE8D68005AD733 /* MQTTACLTests.m in Sources */,
 				84517CF51C182F06006FE09B /* MQTTTestHelpers.m in Sources */,
 				8425D7121BBE8D68005AD733 /* MQTTClientOnlyTests.m in Sources */,
