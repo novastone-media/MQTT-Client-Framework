@@ -29,7 +29,26 @@
       language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "840716311BBEF13A00FBB3CB"
+               BuildableName = "MQTTClientmacOSTests.xctest"
+               BlueprintName = "MQTTClientmacOSTests"
+               ReferencedContainer = "container:MQTTClient.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F6D08FA31E535B6800CD2566"
+            BuildableName = "MQTTFramework.framework"
+            BlueprintName = "MQTTClientmacOS"
+            ReferencedContainer = "container:MQTTClient.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
