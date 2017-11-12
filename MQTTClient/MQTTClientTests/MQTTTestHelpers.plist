@@ -4,14 +4,14 @@
 <dict>
 	<key>brokerList</key>
 	<array>
-		<string>local</string>
+		<string>#local</string>
 		<string>#local-apollo</string>
 		<string>#local5</string>
 		<string>#localWS</string>
 		<string>#aWsBroker</string>
 		<string>#emqtt</string>
 		<string>#emqttWS</string>
-		<string>#mosquitto</string>
+		<string>mosquitto</string>
 		<string>#mosquittoTLS</string>
 		<string>#mosquittoTLSClient</string>
 		<string>#mosquittoWS</string>
@@ -43,8 +43,6 @@
 			<string>user</string>
 			<key>pass</key>
 			<string>pass</string>
-			<key>enabled</key>
-			<false/>
 		</dict>
 		<key>local-apollo</key>
 		<dict>
@@ -70,8 +68,6 @@
 			<string>admin</string>
 			<key>pass</key>
 			<string>password</string>
-			<key>enabled</key>
-			<false/>
 		</dict>
 		<key>local5</key>
 		<dict>
@@ -93,8 +89,6 @@
 			<true/>
 			<key>persistent</key>
 			<true/>
-			<key>enabled</key>
-			<false/>
 		</dict>
 		<key>localWS</key>
 		<dict>
@@ -111,8 +105,6 @@
 			<key>websocket</key>
 			<true/>
 			<key>allowUntrustedCertificates</key>
-			<false/>
-			<key>enabled</key>
 			<false/>
 		</dict>
 		<key>emqtt</key>
@@ -131,8 +123,6 @@
 			<string>user</string>
 			<key>pass</key>
 			<string>pass</string>
-			<key>enabled</key>
-			<true/>
 		</dict>
 		<key>emqttWS</key>
 		<dict>
@@ -152,8 +142,6 @@
 			<string>user</string>
 			<key>pass</key>
 			<string>pass</string>
-			<key>enabled</key>
-			<true/>
 		</dict>
 		<key>aWsBroker</key>
 		<dict>
@@ -171,8 +159,6 @@
 			<integer>4</integer>
 			<key>path</key>
 			<string>/control/startpulse?pulseid=control&amp;uid=1234</string>
-			<key>enabled</key>
-			<true/>
 		</dict>
 		<key>mosquitto</key>
 		<dict>
@@ -186,8 +172,6 @@
 			<false/>
 			<key>protocollevel</key>
 			<integer>4</integer>
-			<key>enabled</key>
-			<true/>
 		</dict>
 		<key>mosquittoWS</key>
 		<dict>
@@ -203,8 +187,6 @@
 			<true/>
 			<key>protocollevel</key>
 			<integer>4</integer>
-			<key>enabled</key>
-			<true/>
 		</dict>
 		<key>mosquittoTLS</key>
 		<dict>
@@ -228,8 +210,6 @@
 			<true/>
 			<key>protocollevel</key>
 			<integer>4</integer>
-			<key>enabled</key>
-			<true/>
 		</dict>
 		<key>mosquittoTLSClient</key>
 		<dict>
@@ -257,8 +237,6 @@
 			<true/>
 			<key>protocollevel</key>
 			<integer>4</integer>
-			<key>enabled</key>
-			<true/>
 		</dict>
 		<key>mosquittoWSS</key>
 		<dict>
@@ -276,8 +254,6 @@
 			<true/>
 			<key>protocollevel</key>
 			<integer>4</integer>
-			<key>enabled</key>
-			<true/>
 		</dict>
 	</dict>
 </dict>
