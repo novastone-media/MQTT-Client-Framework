@@ -164,7 +164,6 @@
 		C7AA18011FB6F0A000098AA9 /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
 		C7AA18031FB6F1B900098AA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8461912D1883E56800101409 /* Foundation.framework */; };
 		C7AA18041FB6F1BE00098AA9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8462436B1ABEAAF900B72519 /* CoreData.framework */; };
-		C7AA18051FB6F20D00098AA9 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests.swift */; };
 		C7AA18061FB6F20E00098AA9 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests.swift */; };
 		C7AA18071FB6F20F00098AA9 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests.swift */; };
 		C7AA18091FB6F31F00098AA9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7AA18081FB6F31F00098AA9 /* CoreData.framework */; };
@@ -1340,7 +1339,6 @@
 				C7AA17E91FB6F06200098AA9 /* MQTTClientTests.m in Sources */,
 				C7AA17F01FB6F07700098AA9 /* MQTTTestWebsockets.m in Sources */,
 				C7AA17EA1FB6F06700098AA9 /* MQTTClientTestsV5.m in Sources */,
-				C7AA18051FB6F20D00098AA9 /* SwiftTests.swift in Sources */,
 				C7AA17F11FB6F07900098AA9 /* MQTTSessionTests.m in Sources */,
 				C7AA17EC1FB6F06C00098AA9 /* MQTTACLTests.m in Sources */,
 				C7AA17F21FB6F07D00098AA9 /* ReconnectTimerTests.m in Sources */,
