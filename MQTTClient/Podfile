@@ -3,24 +3,21 @@ use_frameworks!
 
 target 'MQTTClientiOSTests' do
 	platform :ios, '6.1'
-	pod 'CocoaLumberjack'
-	pod 'MQTTClient/MinL', :path => '..'
-	pod 'MQTTClient/ManagerL', :path => '..'
-	pod 'MQTTClient/WebsocketL', :path => '..'
+	pod 'MQTTClient/Min', :path => '..'
+	pod 'MQTTClient/Manager', :path => '..'
+	pod 'MQTTClient/Websocket', :path => '..'
 end
 
 target 'MQTTClienttvOSTests' do
 	platform :tvos, '9.0'
-	pod 'CocoaLumberjack'
-	pod 'MQTTClient/MinL', :path => '..'
-	pod 'MQTTClient/ManagerL', :path => '..'
-	pod 'MQTTClient/WebsocketL', :path => '..'
+	pod 'MQTTClient/Min', :path => '..'
+	pod 'MQTTClient/Manager', :path => '..'
+	pod 'MQTTClient/Websocket', :path => '..'
 end
 
 target 'MQTTClientmacOSTests' do
 	platform :osx, '10.10'
-	pod 'CocoaLumberjack'
-	pod 'MQTTClient/MinL', :path => '..'
-	pod 'MQTTClient/ManagerL', :path => '..'
-	pod 'MQTTClient/WebsocketL', :path => '..'
+	pod 'MQTTClient/Min', :path => '..'
+	pod 'MQTTClient/Manager', :path => '..'
+	pod 'MQTTClient/Websocket', :path => '..'
 end

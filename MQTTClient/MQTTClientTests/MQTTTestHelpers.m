@@ -37,7 +37,8 @@
     self.brokers = [[NSMutableDictionary alloc] init];
     for (NSString *brokerName in brokerList) {
         NSDictionary *broker = brokers[brokerName];
-        if (broker) {
+        BOOL isEnabled = broker[@"enabled"];
+        if (broker && isEnabled) {
             (self.brokers)[brokerName] = broker;
         }
     }

@@ -102,12 +102,10 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack-tvOS/CocoaLumberjack.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MQTTClient-tvOS/MQTTClient.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SocketRocket-tvOS/SocketRocket.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack-tvOS/CocoaLumberjack.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MQTTClient-tvOS/MQTTClient.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SocketRocket-tvOS/SocketRocket.framework"
 fi
