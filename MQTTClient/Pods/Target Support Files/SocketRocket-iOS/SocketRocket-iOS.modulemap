@@ -1,6 +1,0 @@
-framework module SocketRocket {
-  umbrella header "SocketRocket-iOS-umbrella.h"
-
-  export *
-  module * { export * }
-}

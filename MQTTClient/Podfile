@@ -1,13 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-target 'MQTTClientiOSTests' do
-	platform :ios, '6.1'
-	pod 'MQTTClient/Min', :path => '..'
-	pod 'MQTTClient/Manager', :path => '..'
-	pod 'MQTTClient/Websocket', :path => '..'
-end
-
 target 'MQTTClienttvOSTests' do
 	platform :tvos, '9.0'
 	pod 'MQTTClient/Min', :path => '..'

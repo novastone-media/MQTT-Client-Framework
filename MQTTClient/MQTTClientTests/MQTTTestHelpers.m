@@ -11,7 +11,7 @@
 #import "MQTTCFSocketTransport.h"
 #import "MQTTInMemoryPersistence.h"
 #import "MQTTCoreDataPersistence.h"
-#import "MQTTWebsocketTransport.h"
+//#import "MQTTWebsocketTransport.h"
 #import "MQTTSSLSecurityPolicy.h"
 #import "MQTTSSLSecurityPolicyTransport.h"
 
@@ -277,6 +277,9 @@
     id<MQTTTransport> transport;
     
     if ([parameters[@"websocket"] boolValue]) {
+        NSException *exception = [NSException exceptionWithName:@"WebSockets tests currently disabled" reason:@"" userInfo:nil];
+        @throw exception;
+        /*
         MQTTWebsocketTransport *websocketTransport = [[MQTTWebsocketTransport alloc] init];
         websocketTransport.host = parameters[@"host"];
         websocketTransport.port = [parameters[@"port"] intValue];
@@ -287,6 +290,7 @@
         websocketTransport.allowUntrustedCertificates = [parameters[@"allowUntrustedCertificates"] boolValue];
 
         transport = websocketTransport;
+         */
     } else {
         MQTTSSLSecurityPolicy *securityPolicy = [MQTTTestHelpers securityPolicy:parameters];
         if (securityPolicy) {
