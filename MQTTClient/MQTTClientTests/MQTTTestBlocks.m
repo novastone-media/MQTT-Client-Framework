@@ -279,7 +279,7 @@
 - (void)testBlockConnectUnknownHost {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSMutableDictionary *parameters = self.brokers[broker];
+        NSMutableDictionary *parameters = [self.brokers[broker] mutableCopy];
         
         parameters[@"host"] = @"abc";
         self.session = [MQTTTestHelpers session:parameters];
@@ -305,7 +305,7 @@
 - (void)testBlockConnectRefused {
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSMutableDictionary *parameters = self.brokers[broker];
+        NSMutableDictionary *parameters = [self.brokers[broker] mutableCopy];
         
         parameters[@"port"] = @1998;
         self.session = [MQTTTestHelpers session:parameters];

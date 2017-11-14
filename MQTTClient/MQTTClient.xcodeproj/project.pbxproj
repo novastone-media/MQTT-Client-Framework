@@ -154,6 +154,7 @@
 		C7AA18071FB6F20F00098AA9 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442BEE81A97B15100D00E55 /* SwiftTests.swift */; };
 		C7AA18091FB6F31F00098AA9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7AA18081FB6F31F00098AA9 /* CoreData.framework */; };
 		C7C0640F1FBB3DED000B65C7 /* MQTTClientOnlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */; };
+		C7C064101FBB450E000B65C7 /* MQTTTestBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */; };
 		C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
@@ -1268,6 +1269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7AA17F11FB6F07900098AA9 /* MQTTSessionTests.m in Sources */,
+				C7C064101FBB450E000B65C7 /* MQTTTestBlocks.m in Sources */,
 				C7AA17F21FB6F07D00098AA9 /* ReconnectTimerTests.m in Sources */,
 				C7C0640F1FBB3DED000B65C7 /* MQTTClientOnlyTests.m in Sources */,
 				C7AA17E31FB6F04800098AA9 /* MQTTTestHelpers.m in Sources */,
