@@ -1,5 +1,4 @@
-MQTT-Client-Framework 
-=====================
+# MQTT-Client-Framework 
 
 | | |
 |---|:---:|
@@ -7,11 +6,13 @@ MQTT-Client-Framework
 |**macOS**||
 |**tvOS** ||
 
-an Objective-C native MQTT Framework http://mqtt.org
+**Welcome to MQTT-Client-Framework**
 
-* [Introduction](http://www.hivemq.com/blog/mqtt-client-library-encyclopedia-mqtt-client-framework)
+MQTT-Client-Framework is Objective-C native MQTT Framework http://mqtt.org
 
-### Tested with a long list of brokers
+You can read [introduction](http://www.hivemq.com/blog/mqtt-client-library-encyclopedia-mqtt-client-framework) to learn more about framework.
+
+MQTT-Client-Framework is tested with a long list of brokers:
 
 * mosquitto
 * paho
@@ -28,6 +29,8 @@ an Objective-C native MQTT Framework http://mqtt.org
 * aws
 * hbmqtt (MQTTv311 only, limitations)
 * [aedes](https://github.com/mcollina/aedes) 
+
+## Installation
 
 ### As a CocoaPod
 
@@ -75,7 +78,7 @@ Or include the source from here.
 github "novastone-media/MQTT-Client-Framework"
 ```
 
-### Docs
+## Docs
 
 Documentation generated with doxygen http://doxygen.org in the `./MQTTClient/dist/documentation` subdirectory.
 
@@ -85,7 +88,7 @@ You may open the HTML version of the documentation here  [index.html](MQTTClient
 
 Run `make install` in the `./MQTTClient/dist/documentation/html` subdirectory to install the the documentation as a DOCSET on your Mac.
 
-### Usage
+## Usage
 
 Create a new client and connect to a broker:
 
