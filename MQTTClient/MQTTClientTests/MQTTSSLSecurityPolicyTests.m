@@ -40,23 +40,15 @@ static SecTrustRef UTHTTPBinOrgServerTrust() {
 }
 
 static SecCertificateRef UTHTTPBinOrgCertificate() {
-    NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"httpbinorg_01162016" ofType:@"cer"];
+    NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"httpbinorg_08132017" ofType:@"cer"];
     NSCAssert(certPath != nil, @"Path for certificate should not be nil");
     NSData *certData = [NSData dataWithContentsOfFile:certPath];
 
     return SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
 }
 
-static SecCertificateRef UTCOMODORSADomainValidationSecureServerCertificate() {
-    NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"COMODO_RSA_Domain_Validation_Secure_Server_CA" ofType:@"cer"];
-    NSCAssert(certPath != nil, @"Path for certificate should not be nil");
-    NSData *certData = [NSData dataWithContentsOfFile:certPath];
-
-    return SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
-}
-
-static SecCertificateRef UTCOMODORSACertificate() {
-    NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"COMODO_RSA_Certification_Authority" ofType:@"cer"];
+static SecCertificateRef UTLetsEncryptCertificate() {
+    NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"Let's Encrypt Authority X3" ofType:@"cer"];
     NSCAssert(certPath != nil, @"Path for certificate should not be nil");
     NSData *certData = [NSData dataWithContentsOfFile:certPath];
 
@@ -64,7 +56,7 @@ static SecCertificateRef UTCOMODORSACertificate() {
 }
 
 static SecCertificateRef UTAddTrustExternalRootCertificate() {
-    NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"AddTrust_External_CA_Root" ofType:@"cer"];
+    NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"DST Root CA X3" ofType:@"cer"];
     NSCAssert(certPath != nil, @"Path for certificate should not be nil");
     NSData *certData = [NSData dataWithContentsOfFile:certPath];
 
@@ -140,18 +132,15 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
 
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
-    SecCertificateRef comodoRsaCACertificate = UTCOMODORSACertificate();
-    SecCertificateRef comodoRsaDomainValidationCertificate = UTCOMODORSADomainValidationSecureServerCertificate();
+    SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
 
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaDomainValidationCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
 
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
-    CFRelease(comodoRsaDomainValidationCertificate);
     CFRelease(httpBinCertificate);
 
     [policy setValidatesCertificateChain:NO];
@@ -178,18 +167,15 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
 
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
-    SecCertificateRef comodoRsaCACertificate = UTCOMODORSACertificate();
-    SecCertificateRef comodoRsaDomainValidationCertificate = UTCOMODORSADomainValidationSecureServerCertificate();
+    SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
 
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaDomainValidationCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
 
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
-    CFRelease(comodoRsaDomainValidationCertificate);
     CFRelease(httpBinCertificate);
 
     [policy setValidatesCertificateChain:NO];
@@ -237,18 +223,15 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
 
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
-    SecCertificateRef comodoRsaCACertificate = UTCOMODORSACertificate();
-    SecCertificateRef comodoRsaDomainValidationCertificate = UTCOMODORSADomainValidationSecureServerCertificate();
+    SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
 
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaDomainValidationCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
 
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
-    CFRelease(comodoRsaDomainValidationCertificate);
     CFRelease(httpBinCertificate);
 
     policy.validatesDomainName = YES;
@@ -262,18 +245,15 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
 
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
-    SecCertificateRef comodoRsaCACertificate = UTCOMODORSACertificate();
-    SecCertificateRef comodoRsaDomainValidationCertificate = UTCOMODORSADomainValidationSecureServerCertificate();
+    SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
 
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaDomainValidationCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
 
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
-    CFRelease(comodoRsaDomainValidationCertificate);
     CFRelease(httpBinCertificate);
 
     policy.validatesDomainName = YES;
@@ -287,18 +267,15 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode: MQTTSSLPinningModePublicKey];
 
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
-    SecCertificateRef comodoRsaCACertificate = UTCOMODORSACertificate();
-    SecCertificateRef comodoRsaDomainValidationCertificate = UTCOMODORSADomainValidationSecureServerCertificate();
+    SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
 
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaDomainValidationCertificate),
             (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
 
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
-    CFRelease(comodoRsaDomainValidationCertificate);
     CFRelease(httpBinCertificate);
 
     policy.validatesDomainName = YES;
@@ -582,7 +559,7 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testblockWithCustomPolicy {
     NSString *certificate = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]]
-                             pathForResource:@"httpbinorg_01162016" ofType:@"cer"];
+                             pathForResource:@"httpbinorg_08132017" ofType:@"cer"];
     MQTTSession *session = [[MQTTSession alloc] init];
     MQTTSSLSecurityPolicy *securityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
     securityPolicy.pinnedCertificates = @[[NSData dataWithContentsOfFile:certificate]];

@@ -12,10 +12,6 @@
 		840715FD1BBE999700FBB3CB /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA71B1ED2F40012DD2F /* server.der */; };
 		840715FE1BBE999700FBB3CB /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
 		840715FF1BBE999700FBB3CB /* HTTPBinOrgServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */; };
-		840716001BBE999700FBB3CB /* httpbinorg_01162016.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F79296C7162FC7094249 /* httpbinorg_01162016.cer */; };
-		840716011BBE999700FBB3CB /* AddTrust_External_CA_Root.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE76A4BC8055ED6BE604 /* AddTrust_External_CA_Root.cer */; };
-		840716021BBE999700FBB3CB /* COMODO_RSA_Certification_Authority.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FBB3707F74CF8A39DC5D /* COMODO_RSA_Certification_Authority.cer */; };
-		840716031BBE999700FBB3CB /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F89078C0CB2EE866B368 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer */; };
 		840716041BBE999700FBB3CB /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
 		840716051BBE999700FBB3CB /* NoDomains.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FEBFE55BBF61F564981F /* NoDomains.cer */; };
 		840716061BBE999700FBB3CB /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
@@ -32,10 +28,6 @@
 		840716471BBEF18B00FBB3CB /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
 		840716481BBEF18B00FBB3CB /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
 		840716491BBEF18B00FBB3CB /* HTTPBinOrgServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */; };
-		8407164A1BBEF18B00FBB3CB /* httpbinorg_01162016.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F79296C7162FC7094249 /* httpbinorg_01162016.cer */; };
-		8407164B1BBEF18B00FBB3CB /* AddTrust_External_CA_Root.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE76A4BC8055ED6BE604 /* AddTrust_External_CA_Root.cer */; };
-		8407164C1BBEF18B00FBB3CB /* COMODO_RSA_Certification_Authority.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FBB3707F74CF8A39DC5D /* COMODO_RSA_Certification_Authority.cer */; };
-		8407164D1BBEF18B00FBB3CB /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F89078C0CB2EE866B368 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer */; };
 		8407164E1BBEF18B00FBB3CB /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
 		8407164F1BBEF18B00FBB3CB /* NoDomains.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FEBFE55BBF61F564981F /* NoDomains.cer */; };
 		840716501BBEF18B00FBB3CB /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
@@ -113,6 +105,16 @@
 		C701E33B1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
 		C701E33C1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
 		C701E33D1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
+		C7095E7C1FBDD1E900D73DD9 /* MQTTSSLSecurityPolicyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */; };
+		C7095E801FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */; };
+		C7095E811FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */; };
+		C7095E821FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */; };
+		C7095E831FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */; };
+		C7095E841FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */; };
+		C7095E851FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */; };
+		C7095E861FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */; };
+		C7095E871FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */; };
+		C7095E881FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */; };
 		C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C7515EAC1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
@@ -141,10 +143,6 @@
 		C7AA17F81FB6F08F00098AA9 /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
 		C7AA17F91FB6F09300098AA9 /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
 		C7AA17FA1FB6F09800098AA9 /* HTTPBinOrgServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */; };
-		C7AA17FB1FB6F09B00098AA9 /* httpbinorg_01162016.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F79296C7162FC7094249 /* httpbinorg_01162016.cer */; };
-		C7AA17FC1FB6F09B00098AA9 /* AddTrust_External_CA_Root.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE76A4BC8055ED6BE604 /* AddTrust_External_CA_Root.cer */; };
-		C7AA17FD1FB6F09B00098AA9 /* COMODO_RSA_Certification_Authority.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FBB3707F74CF8A39DC5D /* COMODO_RSA_Certification_Authority.cer */; };
-		C7AA17FE1FB6F09B00098AA9 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F89078C0CB2EE866B368 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer */; };
 		C7AA17FF1FB6F0A000098AA9 /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
 		C7AA18001FB6F0A000098AA9 /* NoDomains.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FEBFE55BBF61F564981F /* NoDomains.cer */; };
 		C7AA18011FB6F0A000098AA9 /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
@@ -274,11 +272,7 @@
 		5FFB23F9BDBBA82BDFD37E71 /* Pods_MQTTClientTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTClientTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		627C296843E6EDB1D6AAA130 /* Pods-MQTTClientmacOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientmacOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientmacOSTests/Pods-MQTTClientmacOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = foobar.com.cer; sourceTree = "<group>"; };
-		6BC7F79296C7162FC7094249 /* httpbinorg_01162016.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = httpbinorg_01162016.cer; sourceTree = "<group>"; };
-		6BC7F89078C0CB2EE866B368 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = COMODO_RSA_Domain_Validation_Secure_Server_CA.cer; sourceTree = "<group>"; };
-		6BC7FBB3707F74CF8A39DC5D /* COMODO_RSA_Certification_Authority.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = COMODO_RSA_Certification_Authority.cer; sourceTree = "<group>"; };
 		6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = AltName.cer; sourceTree = "<group>"; };
-		6BC7FE76A4BC8055ED6BE604 /* AddTrust_External_CA_Root.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = AddTrust_External_CA_Root.cer; sourceTree = "<group>"; };
 		6BC7FEBFE55BBF61F564981F /* NoDomains.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = NoDomains.cer; sourceTree = "<group>"; };
 		75A8C04C6DB554B903549018 /* Pods-MQTTClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientTests/Pods-MQTTClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		83590E918CBB617D60A7840E /* Pods-MQTTClientOSXTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientOSXTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientOSXTests/Pods-MQTTClientOSXTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -375,6 +369,9 @@
 		C53615C962DC60ED0FD7E799 /* Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientOSXTestsNOLumberjack/Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; sourceTree = "<group>"; };
 		C701E3361FB0A70600B0CEB5 /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
 		C701E3371FB0A70600B0CEB5 /* Timer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Timer.m; sourceTree = "<group>"; };
+		C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Let's Encrypt Authority X3.cer"; sourceTree = "<group>"; };
+		C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DST Root CA X3.cer"; sourceTree = "<group>"; };
+		C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = httpbinorg_08132017.cer; sourceTree = "<group>"; };
 		C74489951FA74D58002751B2 /* MQTTSessionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionTests.m; sourceTree = "<group>"; };
 		C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReconnectTimer.m; sourceTree = "<group>"; };
 		C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReconnectTimer.h; sourceTree = "<group>"; };
@@ -478,11 +475,10 @@
 		6BC7F28A42D484BA33A2CDF7 /* HTTPBin.org */ = {
 			isa = PBXGroup;
 			children = (
+				C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */,
+				C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */,
+				C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */,
 				C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */,
-				6BC7F79296C7162FC7094249 /* httpbinorg_01162016.cer */,
-				6BC7FE76A4BC8055ED6BE604 /* AddTrust_External_CA_Root.cer */,
-				6BC7FBB3707F74CF8A39DC5D /* COMODO_RSA_Certification_Authority.cer */,
-				6BC7F89078C0CB2EE866B368 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer */,
 			);
 			path = HTTPBin.org;
 			sourceTree = "<group>";
@@ -1068,21 +1064,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7AA17FC1FB6F09B00098AA9 /* AddTrust_External_CA_Root.cer in Resources */,
 				C7AA17F41FB6F08F00098AA9 /* client.p12 in Resources */,
 				C7AA17F31FB6F08F00098AA9 /* mosquitto.org.cer in Resources */,
 				C7AA17FF1FB6F0A000098AA9 /* AltName.cer in Resources */,
-				C7AA17FB1FB6F09B00098AA9 /* httpbinorg_01162016.cer in Resources */,
 				C7AA17F71FB6F08F00098AA9 /* adn_1.cer in Resources */,
 				C7AA17F51FB6F08F00098AA9 /* server.der in Resources */,
 				C7AA17FA1FB6F09800098AA9 /* HTTPBinOrgServerTrustChain in Resources */,
-				C7AA17FD1FB6F09B00098AA9 /* COMODO_RSA_Certification_Authority.cer in Resources */,
-				C7AA17FE1FB6F09B00098AA9 /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */,
 				C7AA17F91FB6F09300098AA9 /* ADNNetServerTrustChain in Resources */,
 				C7AA17E41FB6F04F00098AA9 /* MQTTTestHelpers.plist in Resources */,
+				C7095E831FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */,
 				C7AA18011FB6F0A000098AA9 /* foobar.com.cer in Resources */,
+				C7095E861FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */,
 				C7AA17F61FB6F08F00098AA9 /* adn_0.cer in Resources */,
 				C7AA18001FB6F0A000098AA9 /* NoDomains.cer in Resources */,
+				C7095E801FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */,
 				C7AA17F81FB6F08F00098AA9 /* adn_2.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1099,13 +1094,12 @@
 				840716471BBEF18B00FBB3CB /* adn_2.cer in Resources */,
 				840716481BBEF18B00FBB3CB /* ADNNetServerTrustChain in Resources */,
 				840716491BBEF18B00FBB3CB /* HTTPBinOrgServerTrustChain in Resources */,
+				C7095E851FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */,
 				84BE34921C349063007EF8F3 /* MQTTTestHelpers.plist in Resources */,
-				8407164A1BBEF18B00FBB3CB /* httpbinorg_01162016.cer in Resources */,
-				8407164B1BBEF18B00FBB3CB /* AddTrust_External_CA_Root.cer in Resources */,
-				8407164C1BBEF18B00FBB3CB /* COMODO_RSA_Certification_Authority.cer in Resources */,
-				8407164D1BBEF18B00FBB3CB /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */,
+				C7095E881FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */,
 				8407164E1BBEF18B00FBB3CB /* AltName.cer in Resources */,
 				8407164F1BBEF18B00FBB3CB /* NoDomains.cer in Resources */,
+				C7095E821FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */,
 				840716501BBEF18B00FBB3CB /* foobar.com.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1122,13 +1116,12 @@
 				840715FD1BBE999700FBB3CB /* server.der in Resources */,
 				840715FE1BBE999700FBB3CB /* ADNNetServerTrustChain in Resources */,
 				840715FF1BBE999700FBB3CB /* HTTPBinOrgServerTrustChain in Resources */,
+				C7095E841FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */,
 				84BE34911C349063007EF8F3 /* MQTTTestHelpers.plist in Resources */,
-				840716001BBE999700FBB3CB /* httpbinorg_01162016.cer in Resources */,
-				840716011BBE999700FBB3CB /* AddTrust_External_CA_Root.cer in Resources */,
-				840716021BBE999700FBB3CB /* COMODO_RSA_Certification_Authority.cer in Resources */,
-				840716031BBE999700FBB3CB /* COMODO_RSA_Domain_Validation_Secure_Server_CA.cer in Resources */,
+				C7095E871FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */,
 				840716041BBE999700FBB3CB /* AltName.cer in Resources */,
 				840716051BBE999700FBB3CB /* NoDomains.cer in Resources */,
+				C7095E811FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */,
 				840716061BBE999700FBB3CB /* foobar.com.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1272,6 +1265,7 @@
 			files = (
 				C7AA17F11FB6F07900098AA9 /* MQTTSessionTests.m in Sources */,
 				C7C064171FBB4976000B65C7 /* MQTTTestSessionManager.m in Sources */,
+				C7095E7C1FBDD1E900D73DD9 /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				C7C064101FBB450E000B65C7 /* MQTTTestBlocks.m in Sources */,
 				C7AA17F21FB6F07D00098AA9 /* ReconnectTimerTests.m in Sources */,
 				C7C064151FBB48D7000B65C7 /* MQTTClientTestsV5.m in Sources */,
