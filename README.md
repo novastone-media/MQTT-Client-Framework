@@ -1,6 +1,11 @@
 MQTT-Client-Framework 
 =====================
-[![Build Status](https://travis-ci.org/novastone-media/MQTT-Client-Framework.svg?branch=master)](https://travis-ci.org/novastone-media/MQTT-Client-Framework)
+
+| | |
+|---|:---:|
+|**iOS**  |[![Build Status](https://travis-ci.org/novastone-media/MQTT-Client-Framework.svg?branch=master)](https://travis-ci.org/novastone-media/MQTT-Client-Framework)|
+|**macOS**||
+|**tvOS** ||
 
 an Objective-C native MQTT Framework http://mqtt.org
 
