@@ -10,24 +10,14 @@
 		64BA78F18CE4CF9C53123648 /* Pods_MQTTClienttvOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C994F5E5702C079ADD68318C /* Pods_MQTTClienttvOSTests.framework */; };
 		840715FA1BBE999700FBB3CB /* mosquitto.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C91B49332700D81CC8 /* mosquitto.org.cer */; };
 		840715FD1BBE999700FBB3CB /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA71B1ED2F40012DD2F /* server.der */; };
-		840715FE1BBE999700FBB3CB /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
-		840715FF1BBE999700FBB3CB /* HTTPBinOrgServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */; };
 		840716041BBE999700FBB3CB /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
 		840716051BBE999700FBB3CB /* NoDomains.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FEBFE55BBF61F564981F /* NoDomains.cer */; };
 		840716061BBE999700FBB3CB /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
-		840716071BBE99B000FBB3CB /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
-		840716081BBE99B000FBB3CB /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
-		840716091BBE99B000FBB3CB /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
 		8407160B1BBEE68900FBB3CB /* MQTTTestSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */; };
 		8407163E1BBEF16E00FBB3CB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8407163D1BBEF16E00FBB3CB /* CFNetwork.framework */; };
 		840716401BBEF17600FBB3CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8407163F1BBEF17600FBB3CB /* Foundation.framework */; };
 		840716411BBEF18B00FBB3CB /* mosquitto.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C91B49332700D81CC8 /* mosquitto.org.cer */; };
 		840716441BBEF18B00FBB3CB /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA71B1ED2F40012DD2F /* server.der */; };
-		840716451BBEF18B00FBB3CB /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
-		840716461BBEF18B00FBB3CB /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
-		840716471BBEF18B00FBB3CB /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
-		840716481BBEF18B00FBB3CB /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
-		840716491BBEF18B00FBB3CB /* HTTPBinOrgServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */; };
 		8407164E1BBEF18B00FBB3CB /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
 		8407164F1BBEF18B00FBB3CB /* NoDomains.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FEBFE55BBF61F564981F /* NoDomains.cer */; };
 		840716501BBEF18B00FBB3CB /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
@@ -106,15 +96,42 @@
 		C701E33C1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
 		C701E33D1FB0A70600B0CEB5 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = C701E3371FB0A70600B0CEB5 /* Timer.m */; };
 		C7095E7C1FBDD1E900D73DD9 /* MQTTSSLSecurityPolicyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */; };
-		C7095E801FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */; };
-		C7095E811FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */; };
-		C7095E821FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */; };
-		C7095E831FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */; };
-		C7095E841FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */; };
-		C7095E851FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */; };
-		C7095E861FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */; };
-		C7095E871FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */; };
-		C7095E881FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */; };
+		C7095F221FBF329500D73DD9 /* alamofire-root-ca.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F161FBF329500D73DD9 /* alamofire-root-ca.cer */; };
+		C7095F231FBF329500D73DD9 /* alamofire-root-ca.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F161FBF329500D73DD9 /* alamofire-root-ca.cer */; };
+		C7095F241FBF329500D73DD9 /* alamofire-root-ca.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F161FBF329500D73DD9 /* alamofire-root-ca.cer */; };
+		C7095F251FBF329500D73DD9 /* alamofire-signing-ca1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F171FBF329500D73DD9 /* alamofire-signing-ca1.cer */; };
+		C7095F261FBF329500D73DD9 /* alamofire-signing-ca1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F171FBF329500D73DD9 /* alamofire-signing-ca1.cer */; };
+		C7095F271FBF329500D73DD9 /* alamofire-signing-ca1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F171FBF329500D73DD9 /* alamofire-signing-ca1.cer */; };
+		C7095F281FBF329500D73DD9 /* alamofire-signing-ca2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F181FBF329500D73DD9 /* alamofire-signing-ca2.cer */; };
+		C7095F291FBF329500D73DD9 /* alamofire-signing-ca2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F181FBF329500D73DD9 /* alamofire-signing-ca2.cer */; };
+		C7095F2A1FBF329500D73DD9 /* alamofire-signing-ca2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F181FBF329500D73DD9 /* alamofire-signing-ca2.cer */; };
+		C7095F2B1FBF329500D73DD9 /* expired.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F191FBF329500D73DD9 /* expired.cer */; };
+		C7095F2C1FBF329500D73DD9 /* expired.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F191FBF329500D73DD9 /* expired.cer */; };
+		C7095F2D1FBF329500D73DD9 /* expired.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F191FBF329500D73DD9 /* expired.cer */; };
+		C7095F2E1FBF329500D73DD9 /* missing-dns-name-and-uri.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1A1FBF329500D73DD9 /* missing-dns-name-and-uri.cer */; };
+		C7095F2F1FBF329500D73DD9 /* missing-dns-name-and-uri.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1A1FBF329500D73DD9 /* missing-dns-name-and-uri.cer */; };
+		C7095F301FBF329500D73DD9 /* missing-dns-name-and-uri.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1A1FBF329500D73DD9 /* missing-dns-name-and-uri.cer */; };
+		C7095F311FBF329500D73DD9 /* multiple-dns-names.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1B1FBF329500D73DD9 /* multiple-dns-names.cer */; };
+		C7095F321FBF329500D73DD9 /* multiple-dns-names.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1B1FBF329500D73DD9 /* multiple-dns-names.cer */; };
+		C7095F331FBF329500D73DD9 /* multiple-dns-names.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1B1FBF329500D73DD9 /* multiple-dns-names.cer */; };
+		C7095F341FBF329500D73DD9 /* signed-by-ca1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1C1FBF329500D73DD9 /* signed-by-ca1.cer */; };
+		C7095F351FBF329500D73DD9 /* signed-by-ca1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1C1FBF329500D73DD9 /* signed-by-ca1.cer */; };
+		C7095F361FBF329500D73DD9 /* signed-by-ca1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1C1FBF329500D73DD9 /* signed-by-ca1.cer */; };
+		C7095F371FBF329500D73DD9 /* signed-by-ca2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1D1FBF329500D73DD9 /* signed-by-ca2.cer */; };
+		C7095F381FBF329500D73DD9 /* signed-by-ca2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1D1FBF329500D73DD9 /* signed-by-ca2.cer */; };
+		C7095F391FBF329500D73DD9 /* signed-by-ca2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1D1FBF329500D73DD9 /* signed-by-ca2.cer */; };
+		C7095F3A1FBF329500D73DD9 /* test.alamofire.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1E1FBF329500D73DD9 /* test.alamofire.org.cer */; };
+		C7095F3B1FBF329500D73DD9 /* test.alamofire.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1E1FBF329500D73DD9 /* test.alamofire.org.cer */; };
+		C7095F3C1FBF329500D73DD9 /* test.alamofire.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1E1FBF329500D73DD9 /* test.alamofire.org.cer */; };
+		C7095F3D1FBF329500D73DD9 /* valid-dns-name.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1F1FBF329500D73DD9 /* valid-dns-name.cer */; };
+		C7095F3E1FBF329500D73DD9 /* valid-dns-name.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1F1FBF329500D73DD9 /* valid-dns-name.cer */; };
+		C7095F3F1FBF329500D73DD9 /* valid-dns-name.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F1F1FBF329500D73DD9 /* valid-dns-name.cer */; };
+		C7095F401FBF329500D73DD9 /* valid-uri.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F201FBF329500D73DD9 /* valid-uri.cer */; };
+		C7095F411FBF329500D73DD9 /* valid-uri.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F201FBF329500D73DD9 /* valid-uri.cer */; };
+		C7095F421FBF329500D73DD9 /* valid-uri.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F201FBF329500D73DD9 /* valid-uri.cer */; };
+		C7095F431FBF329500D73DD9 /* wildcard.alamofire.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F211FBF329500D73DD9 /* wildcard.alamofire.org.cer */; };
+		C7095F441FBF329500D73DD9 /* wildcard.alamofire.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F211FBF329500D73DD9 /* wildcard.alamofire.org.cer */; };
+		C7095F451FBF329500D73DD9 /* wildcard.alamofire.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F211FBF329500D73DD9 /* wildcard.alamofire.org.cer */; };
 		C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C7515EAC1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
@@ -138,11 +155,6 @@
 		C7AA17F31FB6F08F00098AA9 /* mosquitto.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C91B49332700D81CC8 /* mosquitto.org.cer */; };
 		C7AA17F41FB6F08F00098AA9 /* client.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 843713531E41E6B800868093 /* client.p12 */; };
 		C7AA17F51FB6F08F00098AA9 /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA71B1ED2F40012DD2F /* server.der */; };
-		C7AA17F61FB6F08F00098AA9 /* adn_0.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA11B1EC63E0012DD2F /* adn_0.cer */; };
-		C7AA17F71FB6F08F00098AA9 /* adn_1.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA31B1EC6420012DD2F /* adn_1.cer */; };
-		C7AA17F81FB6F08F00098AA9 /* adn_2.cer in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA51B1EC6450012DD2F /* adn_2.cer */; };
-		C7AA17F91FB6F09300098AA9 /* ADNNetServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */; };
-		C7AA17FA1FB6F09800098AA9 /* HTTPBinOrgServerTrustChain in Resources */ = {isa = PBXBuildFile; fileRef = C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */; };
 		C7AA17FF1FB6F0A000098AA9 /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
 		C7AA18001FB6F0A000098AA9 /* NoDomains.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FEBFE55BBF61F564981F /* NoDomains.cer */; };
 		C7AA18011FB6F0A000098AA9 /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
@@ -360,18 +372,22 @@
 		84E2C4561EC34E8500BC02CE /* MQTTProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTProperties.m; sourceTree = "<group>"; };
 		C21D3C6E1B1EBB0E0012DD2F /* MQTTClientSubscriptionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientSubscriptionTests.m; sourceTree = "<group>"; };
 		C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSSLSecurityPolicyTests.m; sourceTree = "<group>"; };
-		C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ADNNetServerTrustChain; sourceTree = "<group>"; };
-		C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HTTPBinOrgServerTrustChain; sourceTree = "<group>"; };
-		C21D3CA11B1EC63E0012DD2F /* adn_0.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_0.cer; path = ADN.net/ADNNetServerTrustChain/adn_0.cer; sourceTree = "<group>"; };
-		C21D3CA31B1EC6420012DD2F /* adn_1.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_1.cer; path = ADN.net/ADNNetServerTrustChain/adn_1.cer; sourceTree = "<group>"; };
-		C21D3CA51B1EC6450012DD2F /* adn_2.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = adn_2.cer; path = ADN.net/ADNNetServerTrustChain/adn_2.cer; sourceTree = "<group>"; };
 		C21D3CA71B1ED2F40012DD2F /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
 		C53615C962DC60ED0FD7E799 /* Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientOSXTestsNOLumberjack/Pods-MQTTClientOSXTestsNOLumberjack.debug.xcconfig"; sourceTree = "<group>"; };
 		C701E3361FB0A70600B0CEB5 /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
 		C701E3371FB0A70600B0CEB5 /* Timer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Timer.m; sourceTree = "<group>"; };
-		C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Let's Encrypt Authority X3.cer"; sourceTree = "<group>"; };
-		C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DST Root CA X3.cer"; sourceTree = "<group>"; };
-		C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = httpbinorg_08132017.cer; sourceTree = "<group>"; };
+		C7095F161FBF329500D73DD9 /* alamofire-root-ca.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "alamofire-root-ca.cer"; sourceTree = "<group>"; };
+		C7095F171FBF329500D73DD9 /* alamofire-signing-ca1.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "alamofire-signing-ca1.cer"; sourceTree = "<group>"; };
+		C7095F181FBF329500D73DD9 /* alamofire-signing-ca2.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "alamofire-signing-ca2.cer"; sourceTree = "<group>"; };
+		C7095F191FBF329500D73DD9 /* expired.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = expired.cer; sourceTree = "<group>"; };
+		C7095F1A1FBF329500D73DD9 /* missing-dns-name-and-uri.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "missing-dns-name-and-uri.cer"; sourceTree = "<group>"; };
+		C7095F1B1FBF329500D73DD9 /* multiple-dns-names.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "multiple-dns-names.cer"; sourceTree = "<group>"; };
+		C7095F1C1FBF329500D73DD9 /* signed-by-ca1.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "signed-by-ca1.cer"; sourceTree = "<group>"; };
+		C7095F1D1FBF329500D73DD9 /* signed-by-ca2.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "signed-by-ca2.cer"; sourceTree = "<group>"; };
+		C7095F1E1FBF329500D73DD9 /* test.alamofire.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.alamofire.org.cer; sourceTree = "<group>"; };
+		C7095F1F1FBF329500D73DD9 /* valid-dns-name.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "valid-dns-name.cer"; sourceTree = "<group>"; };
+		C7095F201FBF329500D73DD9 /* valid-uri.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "valid-uri.cer"; sourceTree = "<group>"; };
+		C7095F211FBF329500D73DD9 /* wildcard.alamofire.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = wildcard.alamofire.org.cer; sourceTree = "<group>"; };
 		C74489951FA74D58002751B2 /* MQTTSessionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionTests.m; sourceTree = "<group>"; };
 		C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReconnectTimer.m; sourceTree = "<group>"; };
 		C7515EAB1F4C51600071CFFE /* ReconnectTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReconnectTimer.h; sourceTree = "<group>"; };
@@ -459,36 +475,13 @@
 		6BC7F2729125FE9CAD2DBEAD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C7095F151FBF329500D73DD9 /* alamofire.org */,
 				8482D3C91B49332700D81CC8 /* mosquitto.org.cer */,
 				843713531E41E6B800868093 /* client.p12 */,
 				C21D3CA71B1ED2F40012DD2F /* server.der */,
-				C21D3CA11B1EC63E0012DD2F /* adn_0.cer */,
-				C21D3CA31B1EC6420012DD2F /* adn_1.cer */,
-				C21D3CA51B1EC6450012DD2F /* adn_2.cer */,
-				6BC7F325461BF8B697FD80A9 /* ADN.net */,
-				6BC7F28A42D484BA33A2CDF7 /* HTTPBin.org */,
 				6BC7F6500E0B0ACB831C6F97 /* SelfSigned */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		6BC7F28A42D484BA33A2CDF7 /* HTTPBin.org */ = {
-			isa = PBXGroup;
-			children = (
-				C7095E7E1FBDD23900D73DD9 /* DST Root CA X3.cer */,
-				C7095E7F1FBDD23900D73DD9 /* httpbinorg_08132017.cer */,
-				C7095E7D1FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer */,
-				C21D3C9F1B1EC44A0012DD2F /* HTTPBinOrgServerTrustChain */,
-			);
-			path = HTTPBin.org;
-			sourceTree = "<group>";
-		};
-		6BC7F325461BF8B697FD80A9 /* ADN.net */ = {
-			isa = PBXGroup;
-			children = (
-				C21D3C9D1B1EC4400012DD2F /* ADNNetServerTrustChain */,
-			);
-			path = ADN.net;
 			sourceTree = "<group>";
 		};
 		6BC7F6500E0B0ACB831C6F97 /* SelfSigned */ = {
@@ -744,6 +737,25 @@
 				840621441C3069510096ABB3 /* InMemory */,
 			);
 			name = Persistence;
+			sourceTree = "<group>";
+		};
+		C7095F151FBF329500D73DD9 /* alamofire.org */ = {
+			isa = PBXGroup;
+			children = (
+				C7095F161FBF329500D73DD9 /* alamofire-root-ca.cer */,
+				C7095F171FBF329500D73DD9 /* alamofire-signing-ca1.cer */,
+				C7095F181FBF329500D73DD9 /* alamofire-signing-ca2.cer */,
+				C7095F191FBF329500D73DD9 /* expired.cer */,
+				C7095F1A1FBF329500D73DD9 /* missing-dns-name-and-uri.cer */,
+				C7095F1B1FBF329500D73DD9 /* multiple-dns-names.cer */,
+				C7095F1C1FBF329500D73DD9 /* signed-by-ca1.cer */,
+				C7095F1D1FBF329500D73DD9 /* signed-by-ca2.cer */,
+				C7095F1E1FBF329500D73DD9 /* test.alamofire.org.cer */,
+				C7095F1F1FBF329500D73DD9 /* valid-dns-name.cer */,
+				C7095F201FBF329500D73DD9 /* valid-uri.cer */,
+				C7095F211FBF329500D73DD9 /* wildcard.alamofire.org.cer */,
+			);
+			path = alamofire.org;
 			sourceTree = "<group>";
 		};
 		C7515E881F4B1BA80071CFFE /* SessionManager */ = {
@@ -1064,21 +1076,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7095F3D1FBF329500D73DD9 /* valid-dns-name.cer in Resources */,
+				C7095F2E1FBF329500D73DD9 /* missing-dns-name-and-uri.cer in Resources */,
+				C7095F431FBF329500D73DD9 /* wildcard.alamofire.org.cer in Resources */,
 				C7AA17F41FB6F08F00098AA9 /* client.p12 in Resources */,
 				C7AA17F31FB6F08F00098AA9 /* mosquitto.org.cer in Resources */,
+				C7095F3A1FBF329500D73DD9 /* test.alamofire.org.cer in Resources */,
 				C7AA17FF1FB6F0A000098AA9 /* AltName.cer in Resources */,
-				C7AA17F71FB6F08F00098AA9 /* adn_1.cer in Resources */,
 				C7AA17F51FB6F08F00098AA9 /* server.der in Resources */,
-				C7AA17FA1FB6F09800098AA9 /* HTTPBinOrgServerTrustChain in Resources */,
-				C7AA17F91FB6F09300098AA9 /* ADNNetServerTrustChain in Resources */,
+				C7095F251FBF329500D73DD9 /* alamofire-signing-ca1.cer in Resources */,
 				C7AA17E41FB6F04F00098AA9 /* MQTTTestHelpers.plist in Resources */,
-				C7095E831FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */,
+				C7095F341FBF329500D73DD9 /* signed-by-ca1.cer in Resources */,
+				C7095F311FBF329500D73DD9 /* multiple-dns-names.cer in Resources */,
+				C7095F281FBF329500D73DD9 /* alamofire-signing-ca2.cer in Resources */,
+				C7095F221FBF329500D73DD9 /* alamofire-root-ca.cer in Resources */,
 				C7AA18011FB6F0A000098AA9 /* foobar.com.cer in Resources */,
-				C7095E861FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */,
-				C7AA17F61FB6F08F00098AA9 /* adn_0.cer in Resources */,
+				C7095F2B1FBF329500D73DD9 /* expired.cer in Resources */,
 				C7AA18001FB6F0A000098AA9 /* NoDomains.cer in Resources */,
-				C7095E801FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */,
-				C7AA17F81FB6F08F00098AA9 /* adn_2.cer in Resources */,
+				C7095F401FBF329500D73DD9 /* valid-uri.cer in Resources */,
+				C7095F371FBF329500D73DD9 /* signed-by-ca2.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1086,21 +1102,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7095F3F1FBF329500D73DD9 /* valid-dns-name.cer in Resources */,
+				C7095F301FBF329500D73DD9 /* missing-dns-name-and-uri.cer in Resources */,
+				C7095F451FBF329500D73DD9 /* wildcard.alamofire.org.cer in Resources */,
 				843713551E41E80500868093 /* client.p12 in Resources */,
 				840716411BBEF18B00FBB3CB /* mosquitto.org.cer in Resources */,
+				C7095F3C1FBF329500D73DD9 /* test.alamofire.org.cer in Resources */,
 				840716441BBEF18B00FBB3CB /* server.der in Resources */,
-				840716451BBEF18B00FBB3CB /* adn_0.cer in Resources */,
-				840716461BBEF18B00FBB3CB /* adn_1.cer in Resources */,
-				840716471BBEF18B00FBB3CB /* adn_2.cer in Resources */,
-				840716481BBEF18B00FBB3CB /* ADNNetServerTrustChain in Resources */,
-				840716491BBEF18B00FBB3CB /* HTTPBinOrgServerTrustChain in Resources */,
-				C7095E851FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */,
 				84BE34921C349063007EF8F3 /* MQTTTestHelpers.plist in Resources */,
-				C7095E881FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */,
+				C7095F271FBF329500D73DD9 /* alamofire-signing-ca1.cer in Resources */,
 				8407164E1BBEF18B00FBB3CB /* AltName.cer in Resources */,
+				C7095F361FBF329500D73DD9 /* signed-by-ca1.cer in Resources */,
+				C7095F331FBF329500D73DD9 /* multiple-dns-names.cer in Resources */,
+				C7095F2A1FBF329500D73DD9 /* alamofire-signing-ca2.cer in Resources */,
+				C7095F241FBF329500D73DD9 /* alamofire-root-ca.cer in Resources */,
 				8407164F1BBEF18B00FBB3CB /* NoDomains.cer in Resources */,
-				C7095E821FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */,
+				C7095F2D1FBF329500D73DD9 /* expired.cer in Resources */,
 				840716501BBEF18B00FBB3CB /* foobar.com.cer in Resources */,
+				C7095F421FBF329500D73DD9 /* valid-uri.cer in Resources */,
+				C7095F391FBF329500D73DD9 /* signed-by-ca2.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1108,21 +1128,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7095F3E1FBF329500D73DD9 /* valid-dns-name.cer in Resources */,
+				C7095F2F1FBF329500D73DD9 /* missing-dns-name-and-uri.cer in Resources */,
+				C7095F441FBF329500D73DD9 /* wildcard.alamofire.org.cer in Resources */,
 				843713561E41E81600868093 /* client.p12 in Resources */,
-				840716071BBE99B000FBB3CB /* adn_0.cer in Resources */,
-				840716081BBE99B000FBB3CB /* adn_1.cer in Resources */,
-				840716091BBE99B000FBB3CB /* adn_2.cer in Resources */,
 				840715FA1BBE999700FBB3CB /* mosquitto.org.cer in Resources */,
+				C7095F3B1FBF329500D73DD9 /* test.alamofire.org.cer in Resources */,
 				840715FD1BBE999700FBB3CB /* server.der in Resources */,
-				840715FE1BBE999700FBB3CB /* ADNNetServerTrustChain in Resources */,
-				840715FF1BBE999700FBB3CB /* HTTPBinOrgServerTrustChain in Resources */,
-				C7095E841FBDD23900D73DD9 /* DST Root CA X3.cer in Resources */,
 				84BE34911C349063007EF8F3 /* MQTTTestHelpers.plist in Resources */,
-				C7095E871FBDD23900D73DD9 /* httpbinorg_08132017.cer in Resources */,
+				C7095F261FBF329500D73DD9 /* alamofire-signing-ca1.cer in Resources */,
 				840716041BBE999700FBB3CB /* AltName.cer in Resources */,
+				C7095F351FBF329500D73DD9 /* signed-by-ca1.cer in Resources */,
+				C7095F321FBF329500D73DD9 /* multiple-dns-names.cer in Resources */,
+				C7095F291FBF329500D73DD9 /* alamofire-signing-ca2.cer in Resources */,
+				C7095F231FBF329500D73DD9 /* alamofire-root-ca.cer in Resources */,
 				840716051BBE999700FBB3CB /* NoDomains.cer in Resources */,
-				C7095E811FBDD23900D73DD9 /* Let's Encrypt Authority X3.cer in Resources */,
+				C7095F2C1FBF329500D73DD9 /* expired.cer in Resources */,
 				840716061BBE999700FBB3CB /* foobar.com.cer in Resources */,
+				C7095F411FBF329500D73DD9 /* valid-uri.cer in Resources */,
+				C7095F381FBF329500D73DD9 /* signed-by-ca2.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
