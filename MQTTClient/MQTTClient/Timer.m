@@ -34,7 +34,7 @@
     self = [super init];
     if (self) {
         self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-        dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, interval * NSEC_PER_SEC, 0);
+        dispatch_source_set_timer(self.timer, dispatch_time(DISPATCH_TIME_NOW, interval * NSEC_PER_SEC), interval * NSEC_PER_SEC, 0);
         dispatch_source_set_event_handler(self.timer, ^{
             if (!repeats) {
                 dispatch_source_cancel(self.timer);

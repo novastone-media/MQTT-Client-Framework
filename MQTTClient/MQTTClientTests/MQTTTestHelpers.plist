@@ -4,14 +4,14 @@
 <dict>
 	<key>brokerList</key>
 	<array>
-		<string>local</string>
+		<string>#local</string>
 		<string>#local-apollo</string>
 		<string>#local5</string>
 		<string>#localWS</string>
 		<string>#aWsBroker</string>
 		<string>#emqtt</string>
 		<string>#emqttWS</string>
-		<string>#mosquitto</string>
+		<string>mosquitto</string>
 		<string>#mosquittoTLS</string>
 		<string>#mosquittoTLSClient</string>
 		<string>#mosquittoWS</string>

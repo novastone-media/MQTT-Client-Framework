@@ -11,7 +11,7 @@
 #import "MQTTCFSocketTransport.h"
 #import "MQTTInMemoryPersistence.h"
 #import "MQTTCoreDataPersistence.h"
-#import "MQTTWebsocketTransport.h"
+//#import "MQTTWebsocketTransport.h"
 #import "MQTTSSLSecurityPolicy.h"
 #import "MQTTSSLSecurityPolicyTransport.h"
 
@@ -19,14 +19,6 @@
 
 - (void)setUp {
     [super setUp];
-
-#ifdef LUMBERJACK
-#ifdef DEBUG
-    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelVerbose];
-#else
-    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelWarning];
-#endif
-#endif
     
     NSURL *url = [[NSBundle bundleForClass:[MQTTTestHelpers class]] URLForResource:@"MQTTTestHelpers"
                                                                      withExtension:@"plist"];
@@ -277,6 +269,9 @@
     id<MQTTTransport> transport;
     
     if ([parameters[@"websocket"] boolValue]) {
+        NSException *exception = [NSException exceptionWithName:@"WebSockets tests currently disabled" reason:@"" userInfo:nil];
+        @throw exception;
+        /*
         MQTTWebsocketTransport *websocketTransport = [[MQTTWebsocketTransport alloc] init];
         websocketTransport.host = parameters[@"host"];
         websocketTransport.port = [parameters[@"port"] intValue];
@@ -287,6 +282,7 @@
         websocketTransport.allowUntrustedCertificates = [parameters[@"allowUntrustedCertificates"] boolValue];
 
         transport = websocketTransport;
+         */
     } else {
         MQTTSSLSecurityPolicy *securityPolicy = [MQTTTestHelpers securityPolicy:parameters];
         if (securityPolicy) {
