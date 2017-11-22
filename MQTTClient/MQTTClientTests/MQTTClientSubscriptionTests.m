@@ -59,6 +59,7 @@
 }
 
 - (void)testSubscribeWMultipleTopics_One {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -69,6 +70,7 @@
 }
 
 - (void)testSubscribeWMultipleTopics_more {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -79,6 +81,7 @@
 }
 
 - (void)testSubscribeWMultipleTopics_16_to_256 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -96,6 +99,7 @@
 }
 
 - (void)testSubscribeQoS0 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -106,6 +110,7 @@
 }
 
 - (void)testSubscribeQoS1 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -116,6 +121,7 @@
 }
 
 - (void)testSubscribeQoS2 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -126,6 +132,7 @@
 }
 
 - (void)testSubscribeTopicPlain {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -136,6 +143,7 @@
 }
 
 - (void)testSubscribeTopicHash {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -146,6 +154,7 @@
 }
 
 - (void)testSubscribeTopicHashnotalone_MQTT_4_7_1_2 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -158,6 +167,7 @@
 }
 
 - (void)testSubscribeTopicEmpty_MQTT_4_7_3_1 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -168,6 +178,7 @@
 }
 
 - (void)testSubscribeTopicHashnotlast_MQTT_4_7_1_2 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -195,6 +206,7 @@
 }
 
 - (void)testSubscribeTopicPlus {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -205,6 +217,7 @@
 }
 
 - (void)testSubscribeTopicSlash {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -215,6 +228,7 @@
 }
 
 - (void)testSubscribeTopicPlusnotalone_MQTT_4_7_1_3 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -227,6 +241,7 @@
 }
 
 - (void)testSubscribeTopicNone_MQTT_3_8_3_3 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -237,6 +252,7 @@
 }
 
 - (void)testSubscribeWildcardSYS_MQTT_4_7_2_1 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -263,6 +279,7 @@
 }
 
 - (void)testSubscribeLong_MQTT_4_7_3_3 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -323,6 +340,7 @@
 
 
 - (void)testSubscribeSameTopicDifferentQoS_MQTT_3_8_4_3 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -341,6 +359,7 @@
  * The Server MUST deliver the message to the Client respecting the maximum QoS of all the matching subscriptions.
  */
 - (void)test_delivery_max_QoS_MQTT_3_3_5_1 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -363,6 +382,7 @@
  * is deleted, otherwise no additional processing occurs.
  */
 - (void)test_unsubscribe_byte_by_byte_MQTT_3_10_4_1 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -378,6 +398,7 @@
  * If a Server deletes a Subscription It MUST stop adding any new messages for delivery to the Client.
  */
 - (void)test_stop_delivering_after_unsubscribe_MQTT_3_10_4_2 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -402,6 +423,7 @@
  * QoS 2 messages which it has started to send to the Client.
  */
 - (void)test_complete_delivering_qos12_after_unsubscribe_MQTT_3_10_4_3 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -422,6 +444,7 @@
 
 
 - (void)testUnsubscribeTopicPlain {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -432,6 +455,7 @@
 }
 
 - (void)testUnubscribeTopicHash {
+    MQTTStrict.strict = NO;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -442,6 +466,7 @@
 }
 
 - (void)testUnsubscribeTopicHashnotalone_MQTT_4_7_1_2 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -470,6 +495,7 @@
 }
 
 - (void)testUnsubscribeTopicPlus {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -480,6 +506,7 @@
 }
 
 - (void)testUnsubscribeTopicEmpty_MQTT_4_7_3_1 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -490,6 +517,7 @@
 }
 
 - (void)testUnsubscribeTopicNone_MQTT_3_10_3_2 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -500,6 +528,7 @@
 }
 
 - (void)testUnsubscribeTopicZero_MQTT_4_7_3_1 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -510,6 +539,7 @@
 }
 
 - (void)testMultiUnsubscribe_None_MQTT_3_10_3_2 {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -520,6 +550,7 @@
 }
 
 - (void)testMultiUnsubscribe_One {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -530,6 +561,7 @@
 }
 
 - (void)testMultiUnsubscribe_more {
+    MQTTStrict.strict = FALSE;
     for (NSString *broker in self.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = self.brokers[broker];
@@ -574,9 +606,8 @@
     [self testSubscribe:topic atLevel:qos];
     XCTAssertFalse(self.timedout, @"No close within %f seconds", self.timeoutValue);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if (self.event == MQTTSessionEventConnectionClosedByBroker) {
+    if (self.event == MQTTSessionEventConnectionClosedByBroker || self.event == MQTTSessionEventConnectionClosed) {
         XCTAssert(self.subMid == 0, @"SUBACK received");
-        XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
     } else {
         XCTAssertEqual(self.subMid, self.sentSubMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.subMid, self.sentSubMid);
         for (NSNumber *qos in self.qoss) {
@@ -590,13 +621,13 @@
     [self testMultiSubscribe:topics];
     XCTAssertFalse(self.timedout, @"No close within %f seconds", self.timeoutValue);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if (self.event == MQTTSessionEventConnectionClosedByBroker) {
+    if (self.event == MQTTSessionEventConnectionClosedByBroker || self.event == MQTTSessionEventConnectionClosed) {
         XCTAssert(self.subMid == 0, @"SUBACK received");
-        XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
-    }
-    XCTAssertEqual(self.subMid, self.sentSubMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.subMid, self.sentSubMid);
-    for (NSNumber *qos in self.qoss) {
-        XCTAssertEqual([qos intValue], 0x80, @"Returncode in SUBACK is not 0x80");
+    } else {
+        XCTAssertEqual(self.subMid, self.sentSubMid, @"msgID(%d) in SUBACK does not match msgID(%d) in SUBSCRIBE [MQTT-3.8.4-2]", self.subMid, self.sentSubMid);
+        for (NSNumber *qos in self.qoss) {
+            XCTAssertEqual([qos intValue], 0x80, @"Returncode in SUBACK is not 0x80");
+        }
     }
 }
 
@@ -682,7 +713,7 @@
     }
     XCTAssertFalse(self.timedout, @"No close within %f seconds",self.timeoutValue);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
+    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker || self.event == MQTTSessionEventConnectionClosed, @"Event %ld happened", (long)self.event);
 }
 
 - (void)testMultiUnsubscribeTopic:(NSArray *)topics
@@ -720,7 +751,7 @@
     }
     XCTAssertFalse(self.timedout, @"No close within %f seconds",self.timeoutValue);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker, @"Event %ld happened", (long)self.event);
+    XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker || self.event == MQTTSessionEventConnectionClosed, @"Event %ld happened", (long)self.event);
 }
 
 - (void)connect:(NSDictionary *)parameters {
