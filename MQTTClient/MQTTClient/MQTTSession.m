@@ -1454,7 +1454,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         ![self.userName dataUsingEncoding:NSUTF8StringEncoding]) {
         NSException* myException = [NSException
                                     exceptionWithName:@"userName must not contain non-UTF8 characters"
-                                    reason:[NSString stringWithFormat:@"password = %@", self.userName]
+                                    reason:[NSString stringWithFormat:@"userName = %@", self.userName]
                                     userInfo:nil];
         @throw myException;
     }
