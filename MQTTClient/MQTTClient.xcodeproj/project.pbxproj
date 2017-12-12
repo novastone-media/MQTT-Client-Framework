@@ -132,6 +132,7 @@
 		C7095F431FBF329500D73DD9 /* wildcard.alamofire.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F211FBF329500D73DD9 /* wildcard.alamofire.org.cer */; };
 		C7095F441FBF329500D73DD9 /* wildcard.alamofire.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F211FBF329500D73DD9 /* wildcard.alamofire.org.cer */; };
 		C7095F451FBF329500D73DD9 /* wildcard.alamofire.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7095F211FBF329500D73DD9 /* wildcard.alamofire.org.cer */; };
+		C71DDA911FBFA831001152DF /* MQTTClientSubscriptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21D3C6E1B1EBB0E0012DD2F /* MQTTClientSubscriptionTests.m */; };
 		C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C74489951FA74D58002751B2 /* MQTTSessionTests.m */; };
 		C7515EAC1F4C51600071CFFE /* ReconnectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EAA1F4C51600071CFFE /* ReconnectTimer.m */; };
@@ -650,14 +651,14 @@
 				C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */,
 				848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */,
 				8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */,
-				84C845A31BDD8DB400FEC354 /* MQTTTestFlows.m */,
+				8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */,
 				C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */,
+				84C845A31BDD8DB400FEC354 /* MQTTTestFlows.m */,
 				C21D3C6E1B1EBB0E0012DD2F /* MQTTClientSubscriptionTests.m */,
 				846191491883E56800101409 /* MQTTClientTests.m */,
 				84B1AFED196C7AF60056B959 /* MQTTTestMultiThreading.m */,
 				844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */,
 				840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */,
-				8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */,
 				84B6A1881C133A9F00618573 /* MQTTTestWebsockets.m */,
 				8442BEE81A97B15100D00E55 /* SwiftTests.swift */,
 				84B739B11A66F07900B103F4 /* MQTTClientTests-Bridging-Header.h */,
@@ -1290,6 +1291,7 @@
 				C7AA17F11FB6F07900098AA9 /* MQTTSessionTests.m in Sources */,
 				C7C064171FBB4976000B65C7 /* MQTTTestSessionManager.m in Sources */,
 				C7095E7C1FBDD1E900D73DD9 /* MQTTSSLSecurityPolicyTests.m in Sources */,
+				C71DDA911FBFA831001152DF /* MQTTClientSubscriptionTests.m in Sources */,
 				C7C064101FBB450E000B65C7 /* MQTTTestBlocks.m in Sources */,
 				C7AA17F21FB6F07D00098AA9 /* ReconnectTimerTests.m in Sources */,
 				C7C064151FBB48D7000B65C7 /* MQTTClientTestsV5.m in Sources */,
