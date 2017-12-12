@@ -74,9 +74,9 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 
 - (void)sessionManager:(MQTTSessionManager *)sessionManager didReceiveErrorEvent:(MQTTSessionManagerState)newState;
 
-/** let user to decide wheather trigger reconnect,sometime when `error.code` == MQTTSessionErrorConnackBadUsernameOrPassword | MQTTSessionErrorConnackServeUnavailable,reconnect is unnecessary.
+/** let user to decide wheather trigger reconnect,sometime when `error.code` == MQTTSessionErrorConnackBadUsernameOrPassword | MQTTSessionErrorConnackNotAuthorized,reconnect is unnecessary.
  @param sessionManager the instance of MQTTSessionManager whose state changed
- @param error 
+ @param error
  */
 - (BOOL)sessionManager:(MQTTSessionManager *)sessionManager didTriggerDelayedReconnectWithError:(NSError *)error;
 
