@@ -47,6 +47,7 @@ typedef NS_ENUM(unsigned int, MQTTDecoderState) {
 
 
 @interface MQTTDecoder: NSObject <NSStreamDelegate>
+
 @property (nonatomic) MQTTDecoderState state;
 @property (strong, nonatomic) dispatch_queue_t queue;
 @property (nonatomic) UInt32 length;

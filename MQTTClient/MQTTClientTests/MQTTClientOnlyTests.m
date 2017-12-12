@@ -29,10 +29,10 @@
 }
 
 - (void)testConnectToWrongHostResultsInError {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         XCTestExpectation *expectation = [self expectationWithDescription:@""];
         DDLogVerbose(@"testing broker %@", broker);
-        NSMutableDictionary *parameters = [self.brokers[broker] mutableCopy];
+        NSMutableDictionary *parameters = [MQTTTestHelpers.brokers[broker] mutableCopy];
         
         parameters[@"host"] = @"abc";
         self.session = [MQTTTestHelpers session:parameters];
@@ -45,12 +45,11 @@
     }
 }
 
-
 - (void)testConnectToWrongPort1884ResultsInError {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         XCTestExpectation *expectation = [self expectationWithDescription:@""];
         DDLogVerbose(@"testing broker %@", broker);
-        NSMutableDictionary *parameters = [self.brokers[broker] mutableCopy];
+        NSMutableDictionary *parameters = [MQTTTestHelpers.brokers[broker] mutableCopy];
         
         parameters[@"port"] = @1884;
         self.session = [MQTTTestHelpers session:parameters];
