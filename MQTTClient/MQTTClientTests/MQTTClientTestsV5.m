@@ -25,9 +25,9 @@
 @implementation MQTTClientTestsV5
 
 - (void)test_complete_v5 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
             self.session.sessionExpiryInterval = @60U;
@@ -52,9 +52,9 @@
 }
 
 - (void)test_v5_sessionExpiryInterval_5 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
             self.session.sessionExpiryInterval = @5U;
@@ -70,9 +70,9 @@
 }
 
 - (void)test_v5_sessionExpiryInterval_0 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
             self.session.sessionExpiryInterval = @0U;
@@ -88,9 +88,9 @@
 }
 
 - (void)test_v5_sessionExpiryInterval_none {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
             [self connect:parameters];
@@ -105,9 +105,9 @@
 }
 
 - (void)test_v5_willDelayInterval_5 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
             self.session.sessionExpiryInterval = @10U;
@@ -128,9 +128,9 @@
     }
 }
 - (void)test_v5_willDelayInterval_0 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
             self.session.sessionExpiryInterval = @5U;
@@ -152,9 +152,9 @@
 }
 
 - (void)test_v5_willDelayInterval_None {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         if ([parameters[@"protocollevel"] integerValue] == MQTTProtocolVersion50) {
             self.session = [MQTTTestHelpers session:parameters];
             self.session.sessionExpiryInterval = @0U;
@@ -178,9 +178,9 @@
 #pragma mark helpers
 
 - (void)no_cleansession:(MQTTQosLevel)qos {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         DDLogVerbose(@"Cleaning topic");
         
@@ -248,9 +248,9 @@
 }
 
 - (void)cleansession:(MQTTQosLevel)qos {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         DDLogVerbose(@"Cleaning topic");
         MQTTSession *sendingSession = [MQTTTestHelpers session:parameters];

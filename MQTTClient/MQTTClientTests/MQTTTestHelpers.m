@@ -17,22 +17,34 @@
 
 @implementation MQTTTestHelpers
 
-- (void)setUp {
-    [super setUp];
-    
+static NSDictionary *brokers = nil;
+
++ (NSDictionary *)brokers {
+    if (brokers == nil) {
+        brokers = [MQTTTestHelpers loadBrokers];
+    }
+    return brokers;
+}
+
++ (NSDictionary *)loadBrokers {
     NSURL *url = [[NSBundle bundleForClass:[MQTTTestHelpers class]] URLForResource:@"MQTTTestHelpers"
                                                                      withExtension:@"plist"];
     NSDictionary *plist = [NSDictionary dictionaryWithContentsOfURL:url];
     NSArray *brokerList = plist[@"brokerList"];
-    NSDictionary *brokers = plist[@"brokers"];
-
-    self.brokers = [[NSMutableDictionary alloc] init];
+    NSDictionary *plistBrokers = plist[@"brokers"];
+    
+    NSMutableDictionary *brokers = [[NSMutableDictionary alloc] init];
     for (NSString *brokerName in brokerList) {
-        NSDictionary *broker = brokers[brokerName];
+        NSDictionary *broker = plistBrokers[brokerName];
         if (broker) {
-            (self.brokers)[brokerName] = broker;
+            brokers[brokerName] = broker;
         }
     }
+    return brokers;
+}
+
+- (void)setUp {
+    [super setUp];
 
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1
                                                   target:self

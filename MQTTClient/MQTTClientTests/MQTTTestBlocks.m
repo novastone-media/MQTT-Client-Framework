@@ -17,9 +17,9 @@
 @implementation MQTTTestBlocks
 
 - (void)testBlockPublishSuccess {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
         self.timedout = FALSE;
@@ -110,9 +110,9 @@
 }
 
 - (void)testBlockSubscribeSuccess {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
@@ -175,9 +175,9 @@
 }
 
 - (void)testBlockQueued {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
@@ -211,9 +211,9 @@
 }
 
 - (void)testBlockSubscribeFail {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
@@ -249,9 +249,9 @@
 }
 
 - (void)testBlockConnect {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.delegate = self;
@@ -277,9 +277,9 @@
 }
 
 - (void)testBlockConnectUnknownHost {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSMutableDictionary *parameters = [self.brokers[broker] mutableCopy];
+        NSMutableDictionary *parameters = [MQTTTestHelpers.brokers[broker] mutableCopy];
         
         parameters[@"host"] = @"abc";
         self.session = [MQTTTestHelpers session:parameters];
@@ -303,9 +303,9 @@
 }
 
 - (void)testBlockConnectRefused {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSMutableDictionary *parameters = [self.brokers[broker] mutableCopy];
+        NSMutableDictionary *parameters = [MQTTTestHelpers.brokers[broker] mutableCopy];
         
         parameters[@"port"] = @1998;
         self.session = [MQTTTestHelpers session:parameters];

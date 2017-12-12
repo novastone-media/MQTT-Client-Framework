@@ -24,7 +24,19 @@
 }
 
 - (void)dealloc {
-    [self close];
+    // https://github.com/novastone-media/MQTT-Client-Framework/issues/325
+    // It is probably not the best solution to use deprecated API
+    // but it is bug that happens quite often so it is important to fix it
+    // and if we find better solution we can change it later
+    
+    // We need to make sure that we are closing streams on their queue
+    // Otherwise, we end up with race condition where delegate is deallocated
+    // but still used by run loop event
+    if (self.queue != dispatch_get_current_queue()) {
+        dispatch_sync(self.queue, ^{
+            [self close];
+        });
+    }
 }
 
 - (void)decodeMessage:(NSData *)data {
@@ -34,7 +46,7 @@
     [self openStream:stream];
 }
 
-- (void)openStream:(NSInputStream*)stream {
+- (void)openStream:(NSInputStream *)stream {
     [self.streams addObject:stream];
     stream.delegate = self;
     DDLogVerbose(@"[MQTTDecoder] #streams=%lu", (unsigned long)self.streams.count);
@@ -57,7 +69,7 @@
     }
 }
 
-- (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
+- (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode {
     NSInputStream *stream = (NSInputStream *)sender;
     
     if (eventCode & NSStreamEventOpenCompleted) {

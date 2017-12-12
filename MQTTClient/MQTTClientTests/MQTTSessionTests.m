@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "MQTTSession.h"
 #import "MQTTSSLSecurityPolicyTransport.h"
+#import "MQTTTestHelpers.h"
 
 @interface MQTTSessionTests : XCTestCase
 
@@ -22,6 +23,29 @@
 
 - (void)tearDown {
     [super tearDown];
+}
+
+- (void)testConnectDisconnectMultipleTimes {
+    // Test for https://github.com/novastone-media/MQTT-Client-Framework/issues/325
+    // Connection is performed on background queue
+    // We set session = nil on main queue which releases session and makes it dealloc
+    for (int i = 0; i < 20; i++) {
+        XCTestExpectation *expectation = [self expectationWithDescription:@""];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[@"mosquitto"];
+        dispatch_queue_t background = dispatch_queue_create("background", NULL);
+        
+        __block MQTTSession *session = [MQTTTestHelpers session:parameters];
+        session.queue = background;
+        [session connectWithConnectHandler:^(NSError *error) {
+            XCTAssertNil(error);
+            XCTAssertEqual(session.status, MQTTSessionStatusConnected);
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                session = nil;
+                [expectation fulfill];
+            }];
+        }];
+        [self waitForExpectationsWithTimeout:10 handler:nil];
+    }
 }
 
 - (void)testMQTTSessionDestroyedWhenDeallocated {
