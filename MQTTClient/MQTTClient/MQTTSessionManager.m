@@ -395,7 +395,7 @@
             self.lastErrorCode = error;
             [self updateState:MQTTSessionManagerStateError];
             
-            if([self.delegate respondsToSelector:@selector(sessionManager:didTriggerDelayedReconnectWithError:)] && ![self.delegate sessionManager:self didTriggerDelayedReconnectWithError:error]){
+            if([self.delegate respondsToSelector:@selector(sessionManager:shouldTriggerDelayedReconnectForError:)] && ![self.delegate sessionManager:self shouldTriggerDelayedReconnectForError:error]){
                 //do nothing
             }else {
                 [self triggerDelayedReconnect];

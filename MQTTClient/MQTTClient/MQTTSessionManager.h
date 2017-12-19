@@ -78,7 +78,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @param sessionManager the instance of MQTTSessionManager whose state changed
  @param error
  */
-- (BOOL)sessionManager:(MQTTSessionManager *)sessionManager didTriggerDelayedReconnectWithError:(NSError *)error;
+- (BOOL)sessionManager:(MQTTSessionManager *)sessionManager shouldTriggerDelayedReconnectForError:(NSError *)error;
 
 
 @end
