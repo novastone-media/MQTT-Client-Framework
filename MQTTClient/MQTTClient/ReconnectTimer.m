@@ -7,11 +7,11 @@
 //
 
 #import "ReconnectTimer.h"
-#import "Timer.h"
+#import "GCDTimer.h"
 
 @interface ReconnectTimer()
 
-@property (strong, nonatomic) Timer *timer;
+@property (strong, nonatomic) GCDTimer *timer;
 @property (assign, nonatomic) NSTimeInterval retryInterval;
 @property (assign, nonatomic) NSTimeInterval currentRetryInterval;
 @property (assign, nonatomic) NSTimeInterval maxRetryInterval;
@@ -39,12 +39,12 @@
 
 - (void)schedule {
     __weak typeof(self) weakSelf = self;
-    self.timer = [Timer scheduledTimerWithTimeInterval:self.currentRetryInterval
-                                               repeats:NO
-                                                 queue:self.queue
-                                                 block:^{
-                                                     [weakSelf reconnect];
-                                                 }];
+    self.timer = [GCDTimer scheduledTimerWithTimeInterval:self.currentRetryInterval
+                                                  repeats:NO
+                                                    queue:self.queue
+                                                    block:^{
+                                                        [weakSelf reconnect];
+                                                    }];
 }
 
 - (void)stop {

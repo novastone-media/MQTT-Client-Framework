@@ -6,24 +6,24 @@
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 
-#import "Timer.h"
+#import "GCDTimer.h"
 
-@interface Timer ()
+@interface GCDTimer ()
 
 @property (strong, nonatomic) dispatch_source_t timer;
 
 @end
 
-@implementation Timer
+@implementation GCDTimer
 
-+ (Timer *)scheduledTimerWithTimeInterval:(NSTimeInterval)interval
-                                  repeats:(BOOL)repeats
-                                    queue:(dispatch_queue_t)queue
-                                    block:(void (^)(void))block {
-    Timer *timer = [[Timer alloc] initWithInterval:interval
-                                           repeats:repeats
-                                             queue:queue
-                                             block:block];
++ (GCDTimer *)scheduledTimerWithTimeInterval:(NSTimeInterval)interval
+                                     repeats:(BOOL)repeats
+                                       queue:(dispatch_queue_t)queue
+                                       block:(void (^)(void))block {
+    GCDTimer *timer = [[GCDTimer alloc] initWithInterval:interval
+                                                 repeats:repeats
+                                                   queue:queue
+                                                   block:block];
     return timer;
 }
 
