@@ -16,6 +16,7 @@
 #import <Foundation/Foundation.h>
 
 #import <MQTTClient/MQTTSession.h>
+#import <MQTTClient/MQTTDecoder.h>
 #import <MQTTClient/MQTTSessionLegacy.h>
 #import <MQTTClient/MQTTSessionSynchron.h>
 #import <MQTTClient/MQTTProperties.h>
@@ -24,3 +25,11 @@
 #import <MQTTClient/MQTTCFSocketTransport.h>
 #import <MQTTClient/MQTTCoreDataPersistence.h>
 #import <MQTTClient/MQTTSSLSecurityPolicyTransport.h>
+#import <MQTTClient/MQTTSessionManager.h>
+
+//! Project version number for MQTTClient.
+FOUNDATION_EXPORT double MQTTClientVersionNumber;
+
+//! Project version string for MQTTClient&lt;.
+FOUNDATION_EXPORT const unsigned char MQTTClientVersionString[];
+
