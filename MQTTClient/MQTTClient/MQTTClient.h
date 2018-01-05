@@ -16,6 +16,7 @@
 #import <Foundation/Foundation.h>
 
 #import <MQTTClient/MQTTSession.h>
+#import <MQTTClient/MQTTSessionManager.h>
 #import <MQTTClient/MQTTSessionLegacy.h>
 #import <MQTTClient/MQTTSessionSynchron.h>
 #import <MQTTClient/MQTTProperties.h>
