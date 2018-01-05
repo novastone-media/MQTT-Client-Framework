@@ -28,8 +28,8 @@
 #import <MQTTClient/MQTTSessionManager.h>
 
 //! Project version number for MQTTClient.
-FOUNDATION_EXPORT double MQTTFrameworkVersionNumber;
+FOUNDATION_EXPORT double MQTTClientVersionNumber;
 
 //! Project version string for MQTTClient&lt;.
-FOUNDATION_EXPORT const unsigned char MQTTFrameworkVersionString[];
+FOUNDATION_EXPORT const unsigned char MQTTClientVersionString[];
 

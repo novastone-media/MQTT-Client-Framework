@@ -286,7 +286,7 @@
 		6BC7FEBFE55BBF61F564981F /* NoDomains.cer */ = {isa = PBXFileReference; lastKnownFileType = file.cer; path = NoDomains.cer; sourceTree = "<group>"; };
 		75A8C04C6DB554B903549018 /* Pods-MQTTClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientTests/Pods-MQTTClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		83590E918CBB617D60A7840E /* Pods-MQTTClientOSXTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientOSXTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientOSXTests/Pods-MQTTClientOSXTests.release.xcconfig"; sourceTree = "<group>"; };
-		8404875E1C51212600569C79 /* MQTTFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MQTTFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8404875E1C51212600569C79 /* MQTTClientiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MQTTClientiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		840487601C51212700569C79 /* MQTTFrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTFrameworkTests.m; sourceTree = "<group>"; };
 		840487621C51212700569C79 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		840507C2193DCE4B002EBBD2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -570,7 +570,7 @@
 				8425D7011BBE8D3D005AD733 /* MQTTClienttvOSTests.xctest */,
 				840716321BBEF13A00FBB3CB /* MQTTClientmacOSTests.xctest */,
 				DE9EF5C51C0628B1009EF667 /* MQTTClient.framework */,
-				8404875E1C51212600569C79 /* MQTTFrameworkTests.xctest */,
+				8404875E1C51212600569C79 /* MQTTClientiOSTests.xctest */,
 				F6D08FA41E535B6800CD2566 /* MQTTClient.framework */,
 				F6D08FD81E535E9900CD2566 /* MQTTClient.framework */,
 			);
@@ -909,7 +909,7 @@
 			);
 			name = MQTTClientiOSTests;
 			productName = MQTTFrameworkTests;
-			productReference = 8404875E1C51212600569C79 /* MQTTFrameworkTests.xctest */;
+			productReference = 8404875E1C51212600569C79 /* MQTTClientiOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		840716311BBEF13A00FBB3CB /* MQTTClientmacOSTests */ = {
@@ -1461,7 +1461,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFrameworkTests;
-				PRODUCT_NAME = MQTTFrameworkTests;
+				PRODUCT_NAME = MQTTClientiOSTests;
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};
@@ -1482,7 +1482,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFrameworkTests;
-				PRODUCT_NAME = MQTTFrameworkTests;
+				PRODUCT_NAME = MQTTClientiOSTests;
 				SWIFT_OBJC_BRIDGING_HEADER = "MQTTClientTests/MQTTClientTests-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};
@@ -1750,7 +1750,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTClient;
 				PRODUCT_NAME = MQTTClient;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1781,7 +1781,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTClient;
 				PRODUCT_NAME = MQTTClient;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1810,7 +1810,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTClient;
 				PRODUCT_NAME = MQTTClient;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -1840,7 +1840,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTClient;
 				PRODUCT_NAME = MQTTClient;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -1867,7 +1867,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTClient;
 				PRODUCT_NAME = MQTTClient;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -1897,7 +1897,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
+				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTClient;
 				PRODUCT_NAME = MQTTClient;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;

@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "MQTTFramework.h"
+#import "MQTTClient.h"
 
 @interface MQTTFrameworkTests : XCTestCase
 @property (strong, nonatomic) MQTTSession *session;
