@@ -27,3 +27,9 @@
 #import <MQTTClient/MQTTSSLSecurityPolicyTransport.h>
 #import <MQTTClient/MQTTSessionManager.h>
 
+//! Project version number for MQTTClient.
+FOUNDATION_EXPORT double MQTTFrameworkVersionNumber;
+
+//! Project version string for MQTTClient&lt;.
+FOUNDATION_EXPORT const unsigned char MQTTFrameworkVersionString[];
+
