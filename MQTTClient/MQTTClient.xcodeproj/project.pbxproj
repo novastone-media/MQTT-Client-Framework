@@ -400,11 +400,11 @@
 		C994F5E5702C079ADD68318C /* Pods_MQTTClienttvOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTClienttvOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCDD395E3B208DFCF6249B17 /* Pods-MQTTClientTVTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientTVTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientTVTests/Pods-MQTTClientTVTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D7A5988C96EB2FBC4DE9A4D2 /* Pods_MQTTClientTVTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTClientTVTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE9EF5C51C0628B1009EF667 /* MQTTFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MQTTFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE9EF5C51C0628B1009EF667 /* MQTTClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MQTTClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7FFC8BAAE995E7EE7B7843A /* Pods_MQTTClientOSXTestsNOLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTClientOSXTestsNOLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E98894DB6716E80E5B55C976 /* Pods-MQTTClientmacOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientmacOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientmacOSTests/Pods-MQTTClientmacOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		F6D08FA41E535B6800CD2566 /* MQTTFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MQTTFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F6D08FD81E535E9900CD2566 /* MQTTFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MQTTFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6D08FA41E535B6800CD2566 /* MQTTClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MQTTClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6D08FD81E535E9900CD2566 /* MQTTClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MQTTClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6D090041E535F4A00CD2566 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS10.1.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		F6D090061E535F4F00CD2566 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS10.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		F6D090081E535F5600CD2566 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
@@ -573,10 +573,10 @@
 			children = (
 				8425D7011BBE8D3D005AD733 /* MQTTClienttvOSTests.xctest */,
 				840716321BBEF13A00FBB3CB /* MQTTClientmacOSTests.xctest */,
-				DE9EF5C51C0628B1009EF667 /* MQTTFramework.framework */,
+				DE9EF5C51C0628B1009EF667 /* MQTTClient.framework */,
 				8404875E1C51212600569C79 /* MQTTFrameworkTests.xctest */,
-				F6D08FA41E535B6800CD2566 /* MQTTFramework.framework */,
-				F6D08FD81E535E9900CD2566 /* MQTTFramework.framework */,
+				F6D08FA41E535B6800CD2566 /* MQTTClient.framework */,
+				F6D08FD81E535E9900CD2566 /* MQTTClient.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -975,7 +975,7 @@
 			);
 			name = MQTTClientiOS;
 			productName = MQTT;
-			productReference = DE9EF5C51C0628B1009EF667 /* MQTTFramework.framework */;
+			productReference = DE9EF5C51C0628B1009EF667 /* MQTTClient.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		F6D08FA31E535B6800CD2566 /* MQTTClientmacOS */ = {
@@ -993,7 +993,7 @@
 			);
 			name = MQTTClientmacOS;
 			productName = MQTTFramework;
-			productReference = F6D08FA41E535B6800CD2566 /* MQTTFramework.framework */;
+			productReference = F6D08FA41E535B6800CD2566 /* MQTTClient.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		F6D08FD71E535E9900CD2566 /* MQTTClienttvOS */ = {
@@ -1011,7 +1011,7 @@
 			);
 			name = MQTTClienttvOS;
 			productName = MQTTFramework;
-			productReference = F6D08FD81E535E9900CD2566 /* MQTTFramework.framework */;
+			productReference = F6D08FD81E535E9900CD2566 /* MQTTClient.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -1759,7 +1759,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
-				PRODUCT_NAME = MQTTFramework;
+				PRODUCT_NAME = MQTTClient;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1790,7 +1790,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
-				PRODUCT_NAME = MQTTFramework;
+				PRODUCT_NAME = MQTTClient;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1819,7 +1819,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
-				PRODUCT_NAME = MQTTFramework;
+				PRODUCT_NAME = MQTTClient;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1849,7 +1849,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
-				PRODUCT_NAME = MQTTFramework;
+				PRODUCT_NAME = MQTTClient;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1876,7 +1876,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
-				PRODUCT_NAME = MQTTFramework;
+				PRODUCT_NAME = MQTTClient;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1906,7 +1906,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTFramework;
-				PRODUCT_NAME = MQTTFramework;
+				PRODUCT_NAME = MQTTClient;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
