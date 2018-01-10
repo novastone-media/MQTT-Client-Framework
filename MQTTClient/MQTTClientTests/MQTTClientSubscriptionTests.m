@@ -41,12 +41,12 @@
 }
 
 - (void)testSubscribeWMultipleTopics_None_strict {
-    MQTTStrict.strict = TRUE;
-
     for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
+        MQTTStrict.strict = NO;
         [self connect:parameters];
+        MQTTStrict.strict = YES;
         @try {
             [self testMultiSubscribeCloseExpected:@{}];
         } @catch (NSException *exception) {
