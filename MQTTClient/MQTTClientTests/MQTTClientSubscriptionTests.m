@@ -189,11 +189,13 @@
 }
 
 - (void)testSubscribeTopicHashnotlast_strict {
-    MQTTStrict.strict = TRUE;
     for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
         NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
+        // Set it to no to allow to connect in non strict mode
+        MQTTStrict.strict = NO;
         [self connect:parameters];
+        MQTTStrict.strict = YES;
         @try {
             [self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0];
         } @catch (NSException *exception) {
