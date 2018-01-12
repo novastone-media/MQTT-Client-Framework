@@ -24,9 +24,9 @@
  * If the Password Flag is set to 1, a password MUST be present in the payload.
  */
 - (void)test_connect_user_pwd_MQTT_3_1_2_19_MQTT_3_1_2_21 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.userName = @"user";
         self.session.password = @"password";
@@ -43,9 +43,9 @@
  * If the Password Flag is set to 0, a password MUST NOT be present in the payload.
  */
 - (void)test_connect_user_no_pwd_MQTT_3_1_2_19_MQTT_3_1_2_20 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.userName = @"user w/o password";
         self.session.password = nil;
@@ -63,9 +63,9 @@
  * If the Password Flag is set to 0, a password MUST NOT be present in the payload.
  */
 - (void)test_connect_no_user_no_pwd_MQTT_3_1_2_18_MQTT_3_1_2_20 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.userName = nil;
         self.session.password = nil;
@@ -82,9 +82,9 @@
  */
 
 - (void)test_connect_no_user_but_pwd_MQTT_3_1_2_22 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.userName = nil;
         self.session.password = @"password w/o user";
@@ -105,9 +105,9 @@
 - (void)test_connect_no_user_but_pwd_strict {
     MQTTStrict.strict = TRUE;
 
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.userName = nil;
         @try {
@@ -130,9 +130,9 @@
 - (void)test_connect_long_user_strict {
     MQTTStrict.strict = TRUE;
 
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.userName = @"long user";
         self.session.password = @"password";
@@ -157,9 +157,9 @@
 - (void)test_connect_user_nonUTF8_strict {
     MQTTStrict.strict = TRUE;
 
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.userName = @"user";
 
