@@ -520,13 +520,14 @@
 
 - (void)testUnsubscribeTopicNone_MQTT_3_10_3_2 {
     MQTTStrict.strict = FALSE;
-    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
-        [self connect:parameters];
-        [self testUnsubscribeTopicCloseExpected:nil];
-        [self shutdown:parameters];
-    }
+    // Test specifically with emqtt because there is a bug
+    // in mosquitto: https://github.com/eclipse/mosquitto/issues/665
+    NSString *broker = @"emqtt";
+    DDLogVerbose(@"testing broker %@", broker);
+    NSDictionary *parameters = MQTTTestHelpers.allBrokers[broker];
+    [self connect:parameters];
+    [self testUnsubscribeTopicCloseExpected:nil];
+    [self shutdown:parameters];
 }
 
 - (void)testUnsubscribeTopicZero_MQTT_4_7_3_1 {
@@ -542,13 +543,14 @@
 
 - (void)testMultiUnsubscribe_None_MQTT_3_10_3_2 {
     MQTTStrict.strict = FALSE;
-    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
-        [self connect:parameters];
-        [self testMultiUnsubscribeTopicCloseExpected:@[]];
-        [self shutdown:parameters];
-    }
+    // Test specifically with emqtt because there is a bug
+    // in mosquitto: https://github.com/eclipse/mosquitto/issues/665
+    NSString *broker = @"emqtt";
+    DDLogVerbose(@"testing broker %@", broker);
+    NSDictionary *parameters = MQTTTestHelpers.allBrokers[broker];
+    [self connect:parameters];
+    [self testMultiUnsubscribeTopicCloseExpected:@[]];
+    [self shutdown:parameters];
 }
 
 - (void)testMultiUnsubscribe_One {
