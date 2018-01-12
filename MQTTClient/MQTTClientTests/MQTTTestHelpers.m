@@ -18,12 +18,28 @@
 @implementation MQTTTestHelpers
 
 static NSDictionary *brokers = nil;
+static NSDictionary *allBrokers = nil;
 
 + (NSDictionary *)brokers {
     if (brokers == nil) {
         brokers = [MQTTTestHelpers loadBrokers];
     }
     return brokers;
+}
+
++ (NSDictionary *)allBrokers {
+    if (allBrokers == nil) {
+        allBrokers = [MQTTTestHelpers loadAllBrokers];
+    }
+    return allBrokers;
+}
+
++ (NSDictionary *)loadAllBrokers {
+    NSURL *url = [[NSBundle bundleForClass:[MQTTTestHelpers class]] URLForResource:@"MQTTTestHelpers"
+                                                                     withExtension:@"plist"];
+    NSDictionary *plist = [NSDictionary dictionaryWithContentsOfURL:url];
+    NSDictionary *plistBrokers = plist[@"brokers"];
+    return plistBrokers;
 }
 
 + (NSDictionary *)loadBrokers {

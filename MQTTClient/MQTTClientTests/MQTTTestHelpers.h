@@ -26,6 +26,7 @@
 + (NSArray *)clientCerts:(NSDictionary *)parameters;
 + (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters;
 + (NSDictionary *)brokers;
++ (NSDictionary *)allBrokers;
 
 @property (strong, nonatomic) MQTTSession *session;
 
