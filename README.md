@@ -135,3 +135,6 @@ Publish a message to a topic:
 	                qos:MQTTQosLevelAtLeastOnce]; // this is part of the asynchronous API
 ```
 
+## Thanks
+
+This project was originally written by [Christoph Krey](https://github.com/ckrey).
