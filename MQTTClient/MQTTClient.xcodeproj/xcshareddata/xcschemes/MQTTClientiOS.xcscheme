@@ -34,7 +34,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8404875D1C51212600569C79"
-               BuildableName = "MQTTFrameworkTests.xctest"
+               BuildableName = "MQTTClientiOSTests.xctest"
                BlueprintName = "MQTTClientiOSTests"
                ReferencedContainer = "container:MQTTClient.xcodeproj">
             </BuildableReference>

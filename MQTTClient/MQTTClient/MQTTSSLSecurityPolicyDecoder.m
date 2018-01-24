@@ -25,16 +25,16 @@
 }
 
 - (BOOL)applySSLSecurityPolicy:(NSStream *)readStream withEvent:(NSStreamEvent)eventCode{
-    if(!self.securityPolicy){
+    if (!self.securityPolicy) {
         return YES;
     }
 
-    if(self.securityPolicyApplied){
+    if (self.securityPolicyApplied) {
         return YES;
     }
 
     SecTrustRef serverTrust = (__bridge SecTrustRef) [readStream propertyForKey: (__bridge NSString *)kCFStreamPropertySSLPeerTrust];
-    if(!serverTrust){
+    if (!serverTrust) {
         return NO;
     }
 
@@ -42,18 +42,18 @@
     return self.securityPolicyApplied;
 }
 
-- (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
-    
-    if (eventCode &  NSStreamEventHasBytesAvailable) {
+- (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode {    
+    if (eventCode & NSStreamEventHasBytesAvailable) {
         DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventHasBytesAvailable");
         if (![self applySSLSecurityPolicy:sender withEvent:eventCode]){
             self.state = MQTTCFSocketDecoderStateError;
             self.error = [NSError errorWithDomain:@"MQTT"
                                              code:errSSLXCertChainInvalid
                                          userInfo:@{NSLocalizedDescriptionKey: @"Unable to apply security policy, the SSL connection is insecure!"}];
+            [self.delegate decoder:self didFailWithError:self.error];
+            return;
         }
     }
-    
     [super stream:sender handleEvent:eventCode];
 }
 
