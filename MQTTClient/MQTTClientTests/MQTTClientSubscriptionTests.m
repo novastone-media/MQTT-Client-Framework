@@ -166,7 +166,8 @@
     }
 }
 
-- (void)testSubscribeTopicEmpty_MQTT_4_7_3_1 {
+// All Topic Names and Topic Filters MUST be at least one character long [MQTT-4.7.3-1]
+- (void)testSubscribeEmptyTopicClosesConnection {
     MQTTStrict.strict = FALSE;
     for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
@@ -605,8 +606,7 @@
     }
 }
 
-- (void)testSubscribeCloseExpected:(NSString *)topic atLevel:(UInt8)qos
-{
+- (void)testSubscribeCloseExpected:(NSString *)topic atLevel:(UInt8)qos {
     [self testSubscribe:topic atLevel:qos];
     XCTAssertFalse(self.timedout, @"No close within %f seconds", self.timeoutValue);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
