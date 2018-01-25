@@ -347,9 +347,9 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
     self.processingTime = processingTime;
     self.timeout = timeout;
     
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogInfo(@"testing broker %@", broker);
-        self.parameters = self.brokers[broker];
+        self.parameters = MQTTTestHelpers.brokers[broker];
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         self.timedout = FALSE;
@@ -407,9 +407,9 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
     self.processingTime = processingTime;
     self.timeout = timeout;
     
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogInfo(@"testing broker %@", broker);
-        self.parameters = self.brokers[broker];
+        self.parameters = MQTTTestHelpers.brokers[broker];
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         self.timedout = FALSE;

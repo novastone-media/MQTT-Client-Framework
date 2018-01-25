@@ -127,25 +127,25 @@
 }
 
 - (void)testAsync {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         [self runAsync:parameters];
     }
 }
 
 - (void)testSync {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         [self runSync:parameters];
     }
 }
 
 - (void)testMultiConnect {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         NSMutableArray *connections = [[NSMutableArray alloc] initWithCapacity:MULTI];
 
         for (int i = 0; i < MULTI; i++) {
@@ -192,9 +192,9 @@
 }
 
 - (void)testAsyncThreads {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
 
         NSMutableArray *threads = [[NSMutableArray alloc] initWithCapacity:MULTI];
 
@@ -216,9 +216,9 @@
 }
 
 - (void)testSyncThreads {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
 
         NSMutableArray *threads = [[NSMutableArray alloc] initWithCapacity:MULTI];
 

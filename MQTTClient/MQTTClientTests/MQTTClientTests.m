@@ -25,10 +25,15 @@
 
 @implementation MQTTClientTests
 
+- (void)setUp {
+    [super setUp];
+    MQTTStrict.strict = NO;
+}
+
 - (void)test_init {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         [self connect:parameters];
         XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
@@ -37,9 +42,9 @@
 }
 
 - (void)test_init_zero_clientId_clean {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"";
         self.session.cleanSessionFlag = TRUE;
@@ -57,9 +62,9 @@
 }
 
 - (void)test_legacy {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [[MQTTSession alloc] initWithClientId:nil
                                                     userName:nil
@@ -74,9 +79,9 @@
 
 
 - (void)test_example {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
         transport.host = parameters[@"host"];
@@ -102,9 +107,9 @@
  * CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection.
  */
 - (void)test_init_zero_clientId_noclean_MQTT_3_1_3_8_MQTT_3_1_3_9 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"";
         self.session.cleanSessionFlag = FALSE;
@@ -127,9 +132,9 @@
  */
 - (void)test_init_zero_clientId_noclean_strict {
     MQTTStrict.strict = TRUE;
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         @try {
             self.session.cleanSessionFlag = FALSE;
@@ -145,9 +150,9 @@
 }
 
 - (void)test_init_long_clientId {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"123456789.123456789.1234";
         [self connect:parameters];
@@ -158,9 +163,9 @@
 }
 
 - (void)test_init_nonrestricted_clientId {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"123456789.123456789.123";
         [self connect:parameters];
@@ -171,9 +176,9 @@
 }
 
 - (void)test_init_no_clientId {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = nil;
         [self connect:parameters];
@@ -194,9 +199,9 @@
  * Message as a non-retained message.
  */
 - (void)test_connect_will_non_retained_MQTT_3_1_2_8_MQTT_3_1_2_16 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         MQTTSession *subscribingSession = [MQTTTestHelpers session:parameters];
         subscribingSession.clientId = @"MQTTClient-sub";
@@ -232,9 +237,9 @@
  * Message as a retained message.
  */
 - (void)test_connect_will_retained_MQTT_3_1_2_8_MQTT_3_1_2_17 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         MQTTSession *subscribingSession = [MQTTTestHelpers session:parameters];
         subscribingSession.clientId = @"MQTTClient-sub";
@@ -266,9 +271,9 @@
  */
 
 - (void)test_connect_will_unflagged_but_retain_not_0_MQTT_3_1_2_15 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willRetainFlag = TRUE;
@@ -289,9 +294,9 @@
  * If the Will Flag is set to 0, then the Will QoS MUST be set to 0 (0x00).
  */
 - (void)test_connect_will_unflagged_but_qos_not_0_MQTT_3_1_2_13 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willQoS = MQTTQosLevelExactlyOnce;
@@ -312,9 +317,9 @@
  * If the Will Flag is set to 1, the value of Will QoS can be 0 (0x00), 1 (0x01), or 2 (0x02). It MUST NOT be 3 (0x03).
  */
 - (void)test_connect_will_flagged_but_qos_3_MQTT_3_1_2_14 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willFlag = TRUE;
@@ -339,9 +344,9 @@
  * MUST be set to zero and the Will Topic and Will Message fields MUST NOT be present in the payload.
  */
 - (void)test_connect_will_unflagged_but_willMsg_MQTT_3_1_2_11 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willMsg = [@"test_connect_will_unflagged_but_willMsg" dataUsingEncoding:NSUTF8StringEncoding];
@@ -363,9 +368,9 @@
  */
 
 - (void)test_connect_will_unflagged_but_willTopic_MQTT_3_1_2_11 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willTopic = @"MQTTClient";
@@ -387,9 +392,9 @@
  */
 
 - (void)test_connect_will_unflagged_but_willMsg_and_willTopic_MQTT_3_1_2_11 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willTopic = @"MQTTClient";
@@ -411,9 +416,9 @@
  * be used by the Server, and the Will Topic and Will Message fields MUST be present in the payload.
  */
 - (void)test_connect_will_flagged_but_no_willTopic_nor_willMsg_MQTT_3_1_2_9 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willFlag = TRUE;
@@ -434,9 +439,9 @@
  * be used by the Server, and the Will Topic and Will Message fields MUST be present in the payload.
  */
 - (void)test_connect_will_flagged_but_no_willTopic_MQTT_3_1_2_9 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willFlag = TRUE;
@@ -458,9 +463,9 @@
  * be used by the Server, and the Will Topic and Will Message fields MUST be present in the payload.
  */
 - (void)test_connect_will_flagged_but_no_willMsg_MQTT_3_1_2_9 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session =  [MQTTTestHelpers session:parameters];
         self.session.willFlag = TRUE;
@@ -482,9 +487,9 @@
  */
 
 - (void)test_disconnect_when_same_clientID_connects_MQTT_3_1_4_2 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"MQTTClient";
@@ -511,9 +516,9 @@
  * These fields, if present, MUST appear in the order Client Identifier, Will Topic, Will Message, User Name, Password.
  */
 - (void)test_connect_all_fields_MQTT_3_1_3_1 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.clientId = @"ClientID";
@@ -537,9 +542,9 @@
  * In the latter case, the Server MUST NOT continue to process the CONNECT packet in line with this specification.
  */
 - (void)test_connect_protocollevel3__MQTT_3_1_2_1 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
 
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = MQTTProtocolVersion31;
@@ -558,9 +563,9 @@
  * In the latter case, the Server MUST NOT continue to process the CONNECT packet in line with this specification.
  */
 - (void)test_connect_protocollevel4__MQTT_3_1_2_1 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
 
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = MQTTProtocolVersion311;
@@ -579,9 +584,9 @@
  * In the latter case, the Server MUST NOT continue to process the CONNECT packet in line with this specification.
  */
 - (void)test_connect_protocollevel5__MQTT_3_1_2_1 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
 
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = MQTTProtocolVersion50;
@@ -603,9 +608,9 @@
  * If a server sends a CONNACK packet containing a non-zero return code it MUST then close the Network Connection.
  */
 - (void)test_connect_illegal_protocollevel88_MQTT_3_1_2_2_MQTT_3_2_2_5 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
 
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = 88;
@@ -630,9 +635,9 @@
 - (void)test_connect_illegal_protocollevel88_strict {
     MQTTStrict.strict = TRUE;
 
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
 
         self.session = [MQTTTestHelpers session:parameters];
         @try {
@@ -654,9 +659,9 @@
  * In the latter case, the Server MUST NOT continue to process the CONNECT packet in line with this specification.
  */
 - (void)test_connect_illegal_protocollevel0_and_protocolname_MQTT_3_1_2_1 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = 0;
@@ -684,9 +689,9 @@
 }
 
 - (void)test_ping {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.keepAliveInterval = [parameters[@"timeout"] intValue] / 2;
@@ -771,9 +776,9 @@
  * If the Server rejects the CONNECT, it MUST NOT process any data sent by the Client after the CONNECT Packet.
  */
 - (void)test_dont_process_after_reject_MQTT_3_1_4_5 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         self.session.protocolLevel = 88;
@@ -793,9 +798,9 @@
 #define SYSTOPIC @"$SYS/#"
 
 - (void)test_systopic {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         
@@ -826,9 +831,9 @@
 #define PROCESSING_TIMEOUT 30
 
 - (void)test_throttling_incoming_q0 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         
@@ -871,9 +876,9 @@
 }
 
 - (void)test_throttling_incoming_q1 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         
@@ -917,9 +922,9 @@
 }
 
 - (void)test_throttling_incoming_q2 {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         self.session = [MQTTTestHelpers session:parameters];
         
@@ -971,9 +976,9 @@
 #pragma mark helpers
 
 - (void)no_cleansession:(MQTTQosLevel)qos {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         DDLogVerbose(@"Cleaning topic");
         
@@ -1029,9 +1034,9 @@
 }
 
 - (void)cleansession:(MQTTQosLevel)qos {
-    for (NSString *broker in self.brokers.allKeys) {
+    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
         DDLogVerbose(@"testing broker %@", broker);
-        NSDictionary *parameters = self.brokers[broker];
+        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
         
         DDLogVerbose(@"Cleaning topic");
         MQTTSession *sendingSession = [MQTTTestHelpers session:parameters];
