@@ -35,7 +35,7 @@
         XCTAssertEqual(session.status, MQTTSessionStatusConnected);
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:10 handler:nil];
+    [self waitForExpectationsWithTimeout:40 handler:nil];
 }
 
 - (void)testErrorWhenConnectsToTLSServerWithoutCertificate {
@@ -49,7 +49,7 @@
         XCTAssertEqual(session.status, MQTTSessionStatusClosed);
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:10 handler:nil];
+    [self waitForExpectationsWithTimeout:40 handler:nil];
 }
 
 - (void)testConnectDisconnectMultipleTimes {
@@ -71,7 +71,7 @@
                 [expectation fulfill];
             }];
         }];
-        [self waitForExpectationsWithTimeout:10 handler:nil];
+        [self waitForExpectationsWithTimeout:40 handler:nil];
     }
 }
 
