@@ -25,6 +25,33 @@
     [super tearDown];
 }
 
+- (void)testConnectToTLSServer {
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"mosquittoTLS"];
+    
+    __block MQTTSession *session = [MQTTTestHelpers session:parameters];
+    [session connectWithConnectHandler:^(NSError *error) {
+        XCTAssertNil(error);
+        XCTAssertEqual(session.status, MQTTSessionStatusConnected);
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
+}
+
+- (void)testErrorWhenConnectsToTLSServerWithoutCertificate {
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"mosquittoTLS"];
+    
+    __block MQTTSession *session = [MQTTTestHelpers session:parameters];
+    ((MQTTSSLSecurityPolicyTransport *)session.transport).securityPolicy.pinnedCertificates = @[];
+    [session connectWithConnectHandler:^(NSError *error) {
+        XCTAssertNotNil(error);
+        XCTAssertEqual(session.status, MQTTSessionStatusClosed);
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
+}
+
 - (void)testConnectDisconnectMultipleTimes {
     // Test for https://github.com/novastone-media/MQTT-Client-Framework/issues/325
     // Connection is performed on background queue
