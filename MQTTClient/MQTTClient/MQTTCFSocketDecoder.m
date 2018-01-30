@@ -39,15 +39,14 @@
     [self.stream setDelegate:nil];
 }
 
-- (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
-    
+- (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode {
     if (eventCode & NSStreamEventOpenCompleted) {
         DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventOpenCompleted");
         self.state = MQTTCFSocketDecoderStateReady;
         [self.delegate decoderDidOpen:self];
     }
     
-    if (eventCode &  NSStreamEventHasBytesAvailable) {
+    if (eventCode & NSStreamEventHasBytesAvailable) {
         DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventHasBytesAvailable");
         if (self.state == MQTTCFSocketDecoderStateInitializing) {
             self.state = MQTTCFSocketDecoderStateReady;
@@ -69,18 +68,18 @@
             }
         }
     }
-    if (eventCode &  NSStreamEventHasSpaceAvailable) {
+    if (eventCode & NSStreamEventHasSpaceAvailable) {
         DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventHasSpaceAvailable");
     }
     
-    if (eventCode &  NSStreamEventEndEncountered) {
+    if (eventCode & NSStreamEventEndEncountered) {
         DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventEndEncountered");
         self.state = MQTTCFSocketDecoderStateInitializing;
         self.error = nil;
         [self.delegate decoderdidClose:self];
     }
     
-    if (eventCode &  NSStreamEventErrorOccurred) {
+    if (eventCode & NSStreamEventErrorOccurred) {
         DDLogVerbose(@"[MQTTCFSocketDecoder] NSStreamEventErrorOccurred");
         self.state = MQTTCFSocketDecoderStateError;
         self.error = self.stream.streamError;

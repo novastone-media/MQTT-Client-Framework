@@ -9,6 +9,7 @@
 #import "MQTTProperties.h"
 
 @implementation MQTTProperties
+
 - (instancetype)init {
     return [self initFromData:[[NSData alloc] init]];
 }

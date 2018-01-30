@@ -68,6 +68,7 @@ typedef NS_ENUM(UInt8, MQTTPropertyIdentifier) {
 @property (strong, nonatomic) NSNumber *wildcardSubscriptionAvailable;
 @property (strong, nonatomic) NSNumber *subscriptionIdentifiersAvailable;
 @property (strong, nonatomic) NSNumber *sharedSubscriptionAvailable;
+
 - (instancetype)initFromData:(NSData *)data NS_DESIGNATED_INITIALIZER;
 + (int)getVariableLength:(NSData *)data;
 + (int)variableIntLength:(int)length;

@@ -59,6 +59,7 @@ typedef NS_ENUM(UInt8, MQTTCommandType) {
 };
 
 @interface MQTTMessage : NSObject
+
 @property (nonatomic) MQTTCommandType type;
 @property (nonatomic) MQTTQosLevel qos;
 @property (nonatomic) BOOL retainFlag;
