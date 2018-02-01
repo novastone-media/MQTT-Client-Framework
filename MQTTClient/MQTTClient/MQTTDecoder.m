@@ -24,19 +24,7 @@
 }
 
 - (void)dealloc {
-    // https://github.com/novastone-media/MQTT-Client-Framework/issues/325
-    // It is probably not the best solution to use deprecated API
-    // but it is bug that happens quite often so it is important to fix it
-    // and if we find better solution we can change it later
-    
-    // We need to make sure that we are closing streams on their queue
-    // Otherwise, we end up with race condition where delegate is deallocated
-    // but still used by run loop event
-    if (self.queue != dispatch_get_current_queue()) {
-        dispatch_sync(self.queue, ^{
-            [self close];
-        });
-    }
+    [self close];
 }
 
 - (void)decodeMessage:(NSData *)data {
@@ -60,12 +48,24 @@
 }
 
 - (void)close {
-    if (self.streams) {
-        for (NSInputStream *stream in self.streams) {
-            [stream close];
-            [stream setDelegate:nil];
-        }
-        [self.streams removeAllObjects];
+    // https://github.com/novastone-media/MQTT-Client-Framework/issues/325
+    // It is probably not the best solution to use deprecated API
+    // but it is bug that happens quite often so it is important to fix it
+    // and if we find better solution we can change it later
+    
+    // We need to make sure that we are closing streams on their queue
+    // Otherwise, we end up with race condition where delegate is deallocated
+    // but still used by run loop event
+    if (self.queue != dispatch_get_current_queue()) {
+        dispatch_sync(self.queue, ^{
+            if (self.streams) {
+                for (NSInputStream *stream in self.streams) {
+                    [stream close];
+                    [stream setDelegate:nil];
+                }
+                [self.streams removeAllObjects];
+            }
+        });
     }
 }
 
