@@ -68,7 +68,7 @@
 }
 
 - (void)appDidBecomeActive {
-    [self.sessionManager connectToLast];
+    [self.sessionManager connectToLast:nil];
 }
 
 - (void)endBackgroundTask {
