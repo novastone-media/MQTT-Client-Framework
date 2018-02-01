@@ -47,6 +47,16 @@
     self.state = MQTTDecoderStateDecodingHeader;
 }
 
+- (void)internalClose {
+    if (self.streams) {
+        for (NSInputStream *stream in self.streams) {
+            [stream close];
+            [stream setDelegate:nil];
+        }
+        [self.streams removeAllObjects];
+    }
+}
+
 - (void)close {
     // https://github.com/novastone-media/MQTT-Client-Framework/issues/325
     // It is probably not the best solution to use deprecated API
@@ -58,14 +68,10 @@
     // but still used by run loop event
     if (self.queue != dispatch_get_current_queue()) {
         dispatch_sync(self.queue, ^{
-            if (self.streams) {
-                for (NSInputStream *stream in self.streams) {
-                    [stream close];
-                    [stream setDelegate:nil];
-                }
-                [self.streams removeAllObjects];
-            }
+            [self internalClose];
         });
+    } else {
+        [self internalClose];
     }
 }
 
