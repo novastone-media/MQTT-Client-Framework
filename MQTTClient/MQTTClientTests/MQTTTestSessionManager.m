@@ -15,13 +15,13 @@
 
 @interface MQTTSessionManager (Tests)
 
-- (void)connectWithParameters:(NSDictionary *)parameters clean:(BOOL)clean;
+- (void)connectWithParameters:(NSDictionary *)parameters clean:(BOOL)clean connectHandler:(MQTTConnectHandler)connectHandler;
 
 @end
 
 @implementation MQTTSessionManager (Tests)
 
-- (void)connectWithParameters:(NSDictionary *)parameters clean:(BOOL)clean {
+- (void)connectWithParameters:(NSDictionary *)parameters clean:(BOOL)clean connectHandler:(MQTTConnectHandler)connectHandler {
     [self connectTo:parameters[@"host"]
                port:[parameters[@"port"] intValue]
                 tls:[parameters[@"tls"] boolValue]
@@ -38,7 +38,8 @@
        withClientId:nil
      securityPolicy:[MQTTTestHelpers securityPolicy:parameters]
        certificates:[MQTTTestHelpers clientCerts:parameters]
-      protocolLevel:[parameters[@"protocollevel"] intValue]];
+      protocolLevel:[parameters[@"protocollevel"] intValue]
+     connectHandler:connectHandler];
 }
 
 @end
@@ -86,7 +87,7 @@
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                      context:nil];
         manager.subscriptions = [@{TOPIC: @(0)} mutableCopy];
-        [manager connectWithParameters:parameters clean:clean];
+        [manager connectWithParameters:parameters clean:clean connectHandler:nil];
         
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"[testMQTTSessionManager] waiting for connect %d", manager.state);
@@ -172,7 +173,10 @@
         MQTTSessionManager *manager = [[MQTTSessionManager alloc] initWithPersistence:true
                                                                         maxWindowSize:2
                                                                           maxMessages:1024
-                                                                              maxSize:64*1024*1024];
+                                                                              maxSize:64*1024*1024
+                                                           maxConnectionRetryInterval:64
+                                                                  connectInForeground:NO
+                                                                                queue:dispatch_get_main_queue()];
         manager.delegate = self;
         [manager addObserver:self
                   forKeyPath:@"effectiveSubscriptions"
@@ -180,7 +184,7 @@
                      context:nil];
         
         manager.subscriptions = [@{TOPIC: @(0)} mutableCopy];
-        [manager connectWithParameters:parameters clean:YES];
+        [manager connectWithParameters:parameters clean:YES connectHandler:nil];
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"[testMQTTSessionManagerPersistent] waiting for connect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
@@ -267,7 +271,7 @@
         
         
         manager.subscriptions = @{TOPIC: @(MQTTQosLevelExactlyOnce)};
-        [manager connectWithParameters:parameters clean:YES];
+        [manager connectWithParameters:parameters clean:YES connectHandler:nil];
 
         while (!self.timedout && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"waiting for connect %d", manager.state);
@@ -401,7 +405,7 @@
                                                         userInfo:nil
                                                          repeats:false];
 
-        [manager connectWithParameters:parameters clean:YES];
+        [manager connectWithParameters:parameters clean:YES connectHandler:nil];
         
         while (!self.timedout && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"waiting for connect %d", manager.state);
@@ -636,7 +640,7 @@
         MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
         manager.delegate = self;
 
-        [manager connectWithParameters:parameters clean:YES];
+        [manager connectWithParameters:parameters clean:YES connectHandler:nil];
 
         while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
             DDLogInfo(@"[testMQTTSessionManager] waiting for connect %d", manager.state);
@@ -653,7 +657,7 @@
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
 
-        [manager connectToLast];
+        [manager connectToLast:nil];
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
 
         XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
