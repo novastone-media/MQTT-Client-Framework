@@ -121,6 +121,7 @@
 }
 
 - (void)close {
+    // https://github.com/novastone-media/MQTT-Client-Framework/issues/325
     // We need to make sure that we are closing streams on their queue
     // Otherwise, we end up with race condition where delegate is deallocated
     // but still used by run loop event
