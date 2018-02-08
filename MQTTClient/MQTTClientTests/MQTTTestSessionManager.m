@@ -134,7 +134,7 @@
         
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         
-        [manager disconnect];
+        [manager disconnectWithDisconnectHandler:nil];
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         
         while (self.step <= 4) {
@@ -220,7 +220,7 @@
         }
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         
-        [manager disconnect];
+        [manager disconnectWithDisconnectHandler:nil];
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         
         while (self.step <= 4) {
@@ -290,7 +290,7 @@
                                                userInfo:nil
                                                 repeats:false];
         
-        [manager disconnect];
+        [manager disconnectWithDisconnectHandler:nil];
         while (!self.timedout && manager.state != MQTTSessionStatusClosed) {
             DDLogInfo(@"waiting for disconnect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
@@ -582,7 +582,7 @@
                                                userInfo:nil
                                                 repeats:false];
         
-        [manager disconnect];
+        [manager disconnectWithDisconnectHandler:nil];
         while (!self.timedout && manager.state != MQTTSessionStatusClosed) {
             DDLogInfo(@"waiting for disconnect %d", manager.state);
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
@@ -602,50 +602,33 @@
 }
 
 - (void)testMQTTSessionManagerRecconnectionWithConnectToLast {
-    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
-        DDLogInfo(@"testing broker %@", broker);
-        NSDictionary *parameters = MQTTTestHelpers.brokers[broker];
-        if ([parameters[@"websocket"] boolValue]) {
-            continue;
-        }
-        self.step = -1;
-        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:[parameters[@"timeout"] intValue]
-                                                          target:self
-                                                        selector:@selector(stepper:)
-                                                        userInfo:nil
-                                                         repeats:true];
+    NSDictionary *parameters = MQTTTestHelpers.brokers[@"mosquitto"];
 
-        MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
-        manager.delegate = self;
+    MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
+    
+    XCTestExpectation *expectation1 = [self expectationWithDescription:@"Connect Expectation"];
+    [manager connectWithParameters:parameters clean:YES connectHandler:^(NSError *error) {
+        [expectation1 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:30 handler:nil];
 
-        [manager connectWithParameters:parameters clean:YES connectHandler:nil];
+    XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
+    
+    XCTestExpectation *expectation2 = [self expectationWithDescription:@"Disconnect Expectation"];
+    [manager disconnectWithDisconnectHandler:^(NSError *error) {
+        [expectation2 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:30 handler:nil];
 
-        while (self.step == -1 && manager.state != MQTTSessionManagerStateConnected) {
-            DDLogInfo(@"[testMQTTSessionManager] waiting for connect %d", manager.state);
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-        }
-        XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
-
-        [manager disconnect];
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-
-        XCTAssertEqual(manager.state, MQTTSessionManagerStateClosed);
-
-        while (self.step <= 0) {
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-        }
-
-        [manager connectToLast:nil];
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-
-        XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
-
-        while (self.step <= 1) {
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-        }
-        
-        [timer invalidate];
-    }
+    XCTAssertEqual(manager.state, MQTTSessionManagerStateClosed);
+    
+    XCTestExpectation *expectation3 = [self expectationWithDescription:@"Connect To Last Expectation"];
+    [manager connectToLast:^(NSError *error) {
+        [expectation3 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:30 handler:nil];
+    
+    XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
 }
 
 #pragma mark - helpers

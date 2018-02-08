@@ -190,7 +190,7 @@
     }
     if (shouldReconnect) {
         DDLogVerbose(@"[MQTTSessionManager] reconnecting");
-        [self disconnect];
+        [self disconnectWithDisconnectHandler:nil];
         [self reconnect:connectHandler];
     } else {
         DDLogVerbose(@"[MQTTSessionManager] connecting");
@@ -209,9 +209,9 @@
     return msgId;
 }
 
-- (void)disconnect {
+- (void)disconnectWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler {
     [self updateState:MQTTSessionManagerStateClosing];
-    [self.session close];
+    [self.session closeWithDisconnectHandler:disconnectHandler];
     [self.reconnectTimer stop];
 }
 

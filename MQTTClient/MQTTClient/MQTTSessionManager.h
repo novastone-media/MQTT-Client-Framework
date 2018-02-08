@@ -225,6 +225,6 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 
 /** Disconnects gracefully from the MQTT broker
  */
-- (void)disconnect;
+- (void)disconnectWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler;
 
 @end
