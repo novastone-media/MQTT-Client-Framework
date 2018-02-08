@@ -608,6 +608,7 @@
     
     XCTestExpectation *expectation1 = [self expectationWithDescription:@"Connect Expectation"];
     [manager connectWithParameters:parameters clean:YES connectHandler:^(NSError *error) {
+        XCTAssertNil(error);
         [expectation1 fulfill];
     }];
     [self waitForExpectationsWithTimeout:30 handler:nil];
@@ -616,6 +617,7 @@
     
     XCTestExpectation *expectation2 = [self expectationWithDescription:@"Disconnect Expectation"];
     [manager disconnectWithDisconnectHandler:^(NSError *error) {
+        XCTAssertNil(error);
         [expectation2 fulfill];
     }];
     [self waitForExpectationsWithTimeout:30 handler:nil];
@@ -624,6 +626,7 @@
     
     XCTestExpectation *expectation3 = [self expectationWithDescription:@"Connect To Last Expectation"];
     [manager connectToLast:^(NSError *error) {
+        XCTAssertNil(error);
         [expectation3 fulfill];
     }];
     [self waitForExpectationsWithTimeout:30 handler:nil];
