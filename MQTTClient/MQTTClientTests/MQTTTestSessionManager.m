@@ -82,10 +82,6 @@
         MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
         manager.delegate = self;
         
-        [manager addObserver:self
-                  forKeyPath:@"effectiveSubscriptions"
-                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                     context:nil];
         manager.subscriptions = [@{TOPIC: @(0)} mutableCopy];
         [manager connectWithParameters:parameters clean:clean connectHandler:nil];
         
@@ -148,7 +144,6 @@
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
         }
         XCTAssertEqual(self.received, self.sent);
-        [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
         [timer invalidate];
     }
 }
@@ -178,10 +173,6 @@
                                                                   connectInForeground:NO
                                                                                 queue:dispatch_get_main_queue()];
         manager.delegate = self;
-        [manager addObserver:self
-                  forKeyPath:@"effectiveSubscriptions"
-                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                     context:nil];
         
         manager.subscriptions = [@{TOPIC: @(0)} mutableCopy];
         [manager connectWithParameters:parameters clean:YES connectHandler:nil];
@@ -239,7 +230,6 @@
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
         XCTAssertEqual(self.received, self.sent);
-        [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
         
         [timer invalidate];
     }
@@ -256,10 +246,6 @@
         
         MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
         manager.delegate = self;
-        [manager addObserver:self
-                  forKeyPath:@"effectiveSubscriptions"
-                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                     context:nil];
         
         // allow 5 sec for connect
         self.timedout = false;
@@ -310,7 +296,6 @@
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
         }
         if (timer.valid) [timer invalidate];
-        [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
     }
 }
 
@@ -325,11 +310,6 @@
         
         MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
         manager.delegate = self;
-        
-        [manager addObserver:self
-                  forKeyPath:@"effectiveSubscriptions"
-                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                     context:nil];
         
         NSMutableDictionary *subscriptions = [@{TOPIC: @(0),
                                                 @"a0": @(1),
@@ -609,8 +589,6 @@
         }
         
         if (timer.valid) [timer invalidate];
-        
-        [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
     }
 }
 
@@ -700,13 +678,6 @@
 - (void)stepper:(NSTimer *)timer {
     DDLogVerbose(@"[MQTTSessionManager] stepper s:%d", self.step);
     self.step++;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"effectiveSubscriptions"]) {
-        MQTTSessionManager *manager = (MQTTSessionManager *)object;
-        DDLogInfo(@"[MQTTSessionManager] effectiveSubscriptions changed: %@", manager.effectiveSubscriptions);
-    }
 }
 
 @end
