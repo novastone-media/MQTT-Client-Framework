@@ -39,6 +39,10 @@
 
     CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)self.host, self.port, &readStream, &writeStream);
 
+    // As documentation states, we need to set this propery first
+    CFReadStreamSetProperty(readStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
+    CFWriteStreamSetProperty(writeStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
+    
     CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
     CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
 
