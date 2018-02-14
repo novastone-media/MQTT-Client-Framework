@@ -70,15 +70,15 @@
     CFWriteStreamRef writeStream;
 
     CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)self.host, self.port, &readStream, &writeStream);
-    
-    // As documentation states, we need to set this propery first
-    CFReadStreamSetProperty(readStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
-    CFWriteStreamSetProperty(writeStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
 
     CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
     CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
     
     if (self.tls) {
+        // As documentation states, we need to set this propery first
+        CFReadStreamSetProperty(readStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
+        CFWriteStreamSetProperty(writeStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
+        
         NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
         
         sslOptions[(NSString*)kCFStreamSSLLevel] = (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL;
@@ -87,12 +87,12 @@
             sslOptions[(NSString *)kCFStreamSSLCertificates] = self.certificates;
         }
         
-        if(!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
+        if (!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))) {
             connectError = [NSError errorWithDomain:@"MQTT"
                                                code:errSSLInternal
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl input stream!"}];
         }
-        if(!CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
+        if (!CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))) {
             connectError = [NSError errorWithDomain:@"MQTT"
                                                code:errSSLInternal
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl output stream!"}];

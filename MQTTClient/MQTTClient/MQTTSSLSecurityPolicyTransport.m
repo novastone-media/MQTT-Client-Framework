@@ -38,15 +38,15 @@
     CFWriteStreamRef writeStream;
 
     CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)self.host, self.port, &readStream, &writeStream);
-
-    // As documentation states, we need to set this propery first
-    CFReadStreamSetProperty(readStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
-    CFWriteStreamSetProperty(writeStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
     
     CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
     CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
 
     if (self.tls) {
+        // As documentation states, we need to set this propery first
+        CFReadStreamSetProperty(readStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
+        CFWriteStreamSetProperty(writeStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
+        
         NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
         
         // delegate certificates verify operation to our secure policy.
