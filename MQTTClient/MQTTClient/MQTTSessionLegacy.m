@@ -323,27 +323,20 @@
     DDLogVerbose(@"MQTTSessionLegacy connectToHost:%@ port:%d usingSSL:%d connectHandler:%p",
                  host, (unsigned int)port, usingSSL, connectHandler);
     
+    MQTTCFSocketTransport *transport;
     if (self.securityPolicy) {
-        MQTTSSLSecurityPolicyTransport *transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
-        transport.host = host;
-        transport.port = port;
-        transport.tls = usingSSL;
-        transport.securityPolicy = self.securityPolicy;
-        transport.certificates = self.certificates;
-        transport.voip = self.voip;
-        transport.queue = self.queue;
-        self.transport = transport;
-        
+        transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
+        ((MQTTSSLSecurityPolicyTransport *)transport).securityPolicy = self.securityPolicy;
     } else {
-        MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
-        transport.host = host;
-        transport.port = port;
-        transport.tls = usingSSL;
-        transport.certificates = self.certificates;
-        transport.voip = self.voip;
-        transport.queue = self.queue;
-        self.transport = transport;
+        transport = [[MQTTCFSocketTransport alloc] init];
     }
+    transport.host = host;
+    transport.port = port;
+    transport.tls = usingSSL;
+    transport.certificates = self.certificates;
+    transport.voip = self.voip;
+    transport.queue = self.queue;
+    self.transport = transport;
     
     [self connectWithConnectHandler:connectHandler];
 }
