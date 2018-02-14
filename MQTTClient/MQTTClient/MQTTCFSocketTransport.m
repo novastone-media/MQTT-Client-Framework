@@ -24,6 +24,7 @@
 @synthesize state;
 @synthesize delegate;
 @synthesize queue = _queue;
+@dynamic streamSocketSecurityLevel;
 @dynamic host;
 @dynamic port;
 

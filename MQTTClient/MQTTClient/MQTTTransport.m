@@ -13,6 +13,7 @@
 @implementation MQTTTransport
 @synthesize state;
 @synthesize queue;
+@synthesize streamSocketSecurityLevel;
 @synthesize delegate;
 @synthesize host;
 @synthesize port;

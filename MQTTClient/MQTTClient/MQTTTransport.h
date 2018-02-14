@@ -37,10 +37,15 @@
  };
 
 /** queue The queue where the streams are scheduled. */
-@property (strong, nonatomic) dispatch_queue_t _Nonnull queue;
+@property (strong, nonatomic, nonnull) dispatch_queue_t queue;
+
+/** streamSocketSecurityLevel an NSString containing the security level for read and write streams
+ * defaults to @"kCFStreamSocketSecurityLevelTLSv1_2"
+ */
+@property (strong, nonatomic, nonnull) NSString *streamSocketSecurityLevel;
 
 /** host an NSString containing the hostName or IP address of the host to connect to */
-@property (strong, nonatomic) NSString * _Nonnull host;
+@property (strong, nonatomic, nonnull) NSString *host;
 
 /** port an unsigned 32 bit integer containing the IP port number to connect to */
 @property (nonatomic) UInt32 port;

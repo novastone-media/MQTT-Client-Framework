@@ -114,6 +114,11 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     _clientId = clientId;
 }
 
+- (void)setStreamSocketSecurityLevel:(NSString *)streamSocketSecurityLevel {
+    _streamSocketSecurityLevel = streamSocketSecurityLevel;
+    self.transport.streamSocketSecurityLevel = self.streamSocketSecurityLevel;
+}
+
 - (UInt16)subscribeToTopic:(NSString *)topic
                    atLevel:(MQTTQosLevel)qosLevel {
     return [self subscribeToTopic:topic atLevel:qosLevel subscribeHandler:nil];
