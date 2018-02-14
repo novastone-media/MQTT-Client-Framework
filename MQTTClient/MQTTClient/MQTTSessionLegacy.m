@@ -336,6 +336,7 @@
     transport.certificates = self.certificates;
     transport.voip = self.voip;
     transport.queue = self.queue;
+    transport.streamSocketSecurityLevel = self.streamSocketSecurityLevel;
     self.transport = transport;
     
     [self connectWithConnectHandler:connectHandler];

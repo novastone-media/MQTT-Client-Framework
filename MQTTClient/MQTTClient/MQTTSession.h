@@ -350,6 +350,11 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 @property (nonatomic, readonly) BOOL sessionPresent;
 
+/** streamSocketSecurityLevel an NSString containing the security level for read and write streams
+ * defaults to @"kCFStreamSocketSecurityLevelTLSv1_2"
+ */
+@property (strong, nonatomic) NSString *streamSocketSecurityLevel;
+
 /** host an NSString containing the hostName or IP address of the Server
  */
 @property (readonly) NSString *host;

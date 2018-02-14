@@ -89,6 +89,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.protocolLevel = MQTTProtocolVersion311;
     self.queue = dispatch_get_main_queue();
     self.status = MQTTSessionStatusCreated;
+    self.streamSocketSecurityLevel = @"kCFStreamSocketSecurityLevelTLSv1_2";
     return self;
 }
 
