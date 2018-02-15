@@ -27,6 +27,10 @@
 #import <MQTTClient/MQTTSSLSecurityPolicyTransport.h>
 #import <MQTTClient/MQTTSessionManager.h>
 
+#if __has_include(<MQTTClient/MQTTSessionManager.h>)
+#import <MQTTClient/MQTTSessionManager.h>
+#endif
+
 //! Project version number for MQTTClient.
 FOUNDATION_EXPORT double MQTTClientVersionNumber;
 
