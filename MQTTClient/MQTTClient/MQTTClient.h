@@ -25,7 +25,6 @@
 #import <MQTTClient/MQTTCFSocketTransport.h>
 #import <MQTTClient/MQTTCoreDataPersistence.h>
 #import <MQTTClient/MQTTSSLSecurityPolicyTransport.h>
-#import <MQTTClient/MQTTSessionManager.h>
 
 #if __has_include(<MQTTClient/MQTTSessionManager.h>)
 #import <MQTTClient/MQTTSessionManager.h>
