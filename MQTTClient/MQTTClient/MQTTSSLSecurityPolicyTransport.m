@@ -43,18 +43,14 @@
     CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
 
     if (self.tls) {
-        // As documentation states, we need to set this propery first
-        CFReadStreamSetProperty(readStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
-        CFWriteStreamSetProperty(writeStream, kCFStreamPropertySocketSecurityLevel, (__bridge CFStringRef)self.streamSocketSecurityLevel);
-        
         NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
         
-        // delegate certificates verify operation to our secure policy.
+        // Delegate certificates verify operation to our secure policy.
         // by disabling chain validation, it becomes our responsibility to verify that the host at the other end can be trusted.
         // the server's certificates will be verified during MQTT encoder/decoder processing.
-        sslOptions[(NSString*)kCFStreamSSLLevel] = (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL;
         sslOptions[(NSString *)kCFStreamSSLValidatesCertificateChain] = @NO;
-        
+        sslOptions[(NSString *)kCFStreamSSLLevel] = self.streamSocketSecurityLevel;
+
         if (self.certificates) {
             sslOptions[(NSString *)kCFStreamSSLCertificates] = self.certificates;
         }
