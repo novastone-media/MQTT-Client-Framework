@@ -15,10 +15,10 @@
  */
 @interface MQTTCFSocketTransport : MQTTTransport <MQTTTransport, MQTTCFSocketDecoderDelegate, MQTTCFSocketEncoderDelegate>
 
-/** streamSocketSecurityLevel an NSString containing the security level for read and write streams
+/** streamSSLLevel an NSString containing the security level for read and write streams
  * defaults to @"kCFStreamSocketSecurityLevelTLSv1_2"
  */
-@property (strong, nonatomic) NSString *streamSocketSecurityLevel;
+@property (strong, nonatomic) NSString *streamSSLLevel;
 
 /** host an NSString containing the hostName or IP address of the host to connect to
  * defaults to @"localhost"

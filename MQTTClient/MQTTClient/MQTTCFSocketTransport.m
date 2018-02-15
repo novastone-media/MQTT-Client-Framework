@@ -24,7 +24,7 @@
 @synthesize state;
 @synthesize delegate;
 @synthesize queue = _queue;
-@synthesize streamSocketSecurityLevel;
+@synthesize streamSSLLevel;
 @synthesize host;
 @synthesize port;
 
@@ -36,7 +36,7 @@
     self.voip = false;
     self.certificates = nil;
     self.queue = dispatch_get_main_queue();
-    self.streamSocketSecurityLevel = @"kCFStreamSocketSecurityLevelTLSv1_2";
+    self.streamSSLLevel = @"kCFStreamSocketSecurityLevelTLSv1_2";
     return self;
 }
 
@@ -78,7 +78,7 @@
     if (self.tls) {
         NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
         
-        sslOptions[(NSString *)kCFStreamSSLLevel] = self.streamSocketSecurityLevel;
+        sslOptions[(NSString *)kCFStreamSSLLevel] = self.streamSSLLevel;
         
         if (self.certificates) {
             sslOptions[(NSString *)kCFStreamSSLCertificates] = self.certificates;

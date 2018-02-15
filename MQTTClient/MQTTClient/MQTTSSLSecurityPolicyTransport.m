@@ -49,7 +49,7 @@
         // by disabling chain validation, it becomes our responsibility to verify that the host at the other end can be trusted.
         // the server's certificates will be verified during MQTT encoder/decoder processing.
         sslOptions[(NSString *)kCFStreamSSLValidatesCertificateChain] = @NO;
-        sslOptions[(NSString *)kCFStreamSSLLevel] = self.streamSocketSecurityLevel;
+        sslOptions[(NSString *)kCFStreamSSLLevel] = self.streamSSLLevel;
 
         if (self.certificates) {
             sslOptions[(NSString *)kCFStreamSSLCertificates] = self.certificates;
