@@ -78,7 +78,7 @@
     if (self.tls) {
         NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
         
-        sslOptions[(NSString*)kCFStreamSSLLevel] = self.streamSocketSecurityLevel;
+        sslOptions[(NSString *)kCFStreamSSLLevel] = self.streamSocketSecurityLevel;
         
         if (self.certificates) {
             sslOptions[(NSString *)kCFStreamSSLCertificates] = self.certificates;
