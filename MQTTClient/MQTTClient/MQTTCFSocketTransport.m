@@ -36,7 +36,7 @@
     self.voip = false;
     self.certificates = nil;
     self.queue = dispatch_get_main_queue();
-    self.streamSSLLevel = @"kCFStreamSocketSecurityLevelTLSv1_2";
+    self.streamSSLLevel = (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL;
     return self;
 }
 
