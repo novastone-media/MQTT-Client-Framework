@@ -24,8 +24,9 @@
 @synthesize state;
 @synthesize delegate;
 @synthesize queue = _queue;
-@dynamic host;
-@dynamic port;
+@synthesize streamSSLLevel;
+@synthesize host;
+@synthesize port;
 
 - (instancetype)init {
     self = [super init];
@@ -35,6 +36,7 @@
     self.voip = false;
     self.certificates = nil;
     self.queue = dispatch_get_main_queue();
+    self.streamSSLLevel = (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL;
     return self;
 }
 
@@ -76,18 +78,18 @@
     if (self.tls) {
         NSMutableDictionary *sslOptions = [[NSMutableDictionary alloc] init];
         
-        sslOptions[(NSString*)kCFStreamSSLLevel] = (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL;
+        sslOptions[(NSString *)kCFStreamSSLLevel] = self.streamSSLLevel;
         
         if (self.certificates) {
             sslOptions[(NSString *)kCFStreamSSLCertificates] = self.certificates;
         }
         
-        if(!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
+        if (!CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))) {
             connectError = [NSError errorWithDomain:@"MQTT"
                                                code:errSSLInternal
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl input stream!"}];
         }
-        if(!CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))){
+        if (!CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)(sslOptions))) {
             connectError = [NSError errorWithDomain:@"MQTT"
                                                code:errSSLInternal
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl output stream!"}];
@@ -114,7 +116,6 @@
             [self.decoder.stream setProperty:NSStreamNetworkServiceTypeVoIP forKey:NSStreamNetworkServiceType];
         }
         [self.decoder open];
-        
     } else {
         [self close];
     }

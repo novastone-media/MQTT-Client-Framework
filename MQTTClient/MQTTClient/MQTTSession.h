@@ -350,6 +350,15 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 @property (nonatomic, readonly) BOOL sessionPresent;
 
+/** streamSSLLevel an NSString containing the security level for read and write streams
+ * For list of possible values see:
+ * https://developer.apple.com/documentation/corefoundation/cfstream/cfstream_socket_security_level_constants
+ * Please also note that kCFStreamSocketSecurityLevelTLSv1_2 is not in a list
+ * and cannot be used as constant, but you can use it as a string value
+ * defaults to kCFStreamSocketSecurityLevelNegotiatedSSL
+ */
+@property (strong, nonatomic) NSString *streamSSLLevel;
+
 /** host an NSString containing the hostName or IP address of the Server
  */
 @property (readonly) NSString *host;

@@ -89,6 +89,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.protocolLevel = MQTTProtocolVersion311;
     self.queue = dispatch_get_main_queue();
     self.status = MQTTSessionStatusCreated;
+    self.streamSSLLevel = (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL;
     return self;
 }
 
@@ -111,6 +112,11 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
 
     _clientId = clientId;
+}
+
+- (void)setStreamSSLLevel:(NSString *)streamSSLLevel {
+    _streamSSLLevel = streamSSLLevel;
+    self.transport.streamSSLLevel = self.streamSSLLevel;
 }
 
 - (UInt16)subscribeToTopic:(NSString *)topic
