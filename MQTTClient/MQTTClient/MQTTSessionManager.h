@@ -155,6 +155,12 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  event, it will attempt to reconnect to the broker. The time in between connection attempts is doubled each time, until it remains at maxRetryInterval.
  Defaults to 64 seconds.
  * @param connectInForeground Whether or not to connect the MQTTSession when the app enters the foreground, and disconnect when it becomes inactive. When NO, the caller is responsible for calling -connectTo: and -disconnect. Defaults to YES.
+ * @param streamSSLLevel an NSString containing the security level for read and write streams
+ * For list of possible values see:
+ * https://developer.apple.com/documentation/corefoundation/cfstream/cfstream_socket_security_level_constants
+ * Please also note that kCFStreamSocketSecurityLevelTLSv1_2 is not in a list
+ * and cannot be used as constant, but you can use it as a string value
+ * defaults to kCFStreamSocketSecurityLevelNegotiatedSSL
  * @param queue Queue for MQTTSession.
  * @return the initialized MQTTSessionManager object
  */
@@ -165,6 +171,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
                                     maxSize:(NSUInteger)maxSize
                  maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
                         connectInForeground:(BOOL)connectInForeground
+                             streamSSLLevel:(NSString *)streamSSLLevel
                                       queue:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
 
 /** Connects to the MQTT broker and stores the parameters for subsequent reconnects

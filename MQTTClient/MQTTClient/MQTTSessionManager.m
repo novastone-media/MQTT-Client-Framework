@@ -49,6 +49,7 @@
 @property (nonatomic) NSUInteger maxWindowSize;
 @property (nonatomic) NSUInteger maxSize;
 @property (nonatomic) NSUInteger maxMessages;
+@property (strong, nonatomic) NSString *streamSSLLevel;
 
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *internalSubscriptions;
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
@@ -68,6 +69,7 @@
                              maxSize:MQTT_MAX_SIZE
           maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
                  connectInForeground:YES
+                      streamSSLLevel:kCFStreamSocketSecurityLevelNegotiatedSSL
                                queue:dispatch_get_main_queue()];
     return self;
 }
@@ -78,9 +80,10 @@
                                     maxSize:(NSUInteger)maxSize
                  maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
                         connectInForeground:(BOOL)connectInForeground
+                             streamSSLLevel:(NSString *)streamSSLLevel
                                       queue:(dispatch_queue_t)queue {
     self = [super init];
-    
+    self.streamSSLLevel = streamSSLLevel;
     self.queue = queue;
     [self updateState:MQTTSessionManagerStateStarting];
     self.internalSubscriptions = [[NSMutableDictionary alloc] init];
@@ -172,19 +175,19 @@
                                                      willQoS:willQos
                                               willRetainFlag:willRetainFlag
                                                protocolLevel:protocolLevel
-                                                     queue:self.queue
+                                                       queue:self.queue
                                               securityPolicy:securityPolicy
                                                 certificates:certificates];
-
+        self.session.streamSSLLevel = self.streamSSLLevel;
         MQTTCoreDataPersistence *persistence = [[MQTTCoreDataPersistence alloc] init];
-
+        
         persistence.persistent = self.persistent;
         persistence.maxWindowSize = self.maxWindowSize;
         persistence.maxSize = self.maxSize;
         persistence.maxMessages = self.maxMessages;
-
+        
         self.session.persistence = persistence;
-
+        
         self.session.delegate = self;
         self.reconnectFlag = FALSE;
     }
