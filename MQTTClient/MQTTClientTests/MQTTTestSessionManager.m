@@ -171,6 +171,7 @@
                                                                               maxSize:64*1024*1024
                                                            maxConnectionRetryInterval:64
                                                                   connectInForeground:NO
+                                                                       streamSSLLevel:(NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
                                                                                 queue:dispatch_get_main_queue()];
         manager.delegate = self;
         

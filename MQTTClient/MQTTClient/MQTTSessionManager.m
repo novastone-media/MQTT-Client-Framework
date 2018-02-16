@@ -69,7 +69,7 @@
                              maxSize:MQTT_MAX_SIZE
           maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
                  connectInForeground:YES
-                      streamSSLLevel:kCFStreamSocketSecurityLevelNegotiatedSSL
+                      streamSSLLevel:(NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
                                queue:dispatch_get_main_queue()];
     return self;
 }
