@@ -25,6 +25,12 @@
 #import <MQTTClient/MQTTCFSocketTransport.h>
 #import <MQTTClient/MQTTCoreDataPersistence.h>
 #import <MQTTClient/MQTTSSLSecurityPolicyTransport.h>
+#import <MQTTClient/MQTTInMemoryPersistence.h>
+#import <MQTTClient/MQTTSSLSecurityPolicyDecoder.h>
+#import <MQTTClient/MQTTSSLSecurityPolicyEncoder.h>
+#import <MQTTClient/ForegroundReconnection.h>
+#import <MQTTClient/ReconnectTimer.h>
+
 
 #if __has_include(<MQTTClient/MQTTSessionManager.h>)
 #import <MQTTClient/MQTTSessionManager.h>
