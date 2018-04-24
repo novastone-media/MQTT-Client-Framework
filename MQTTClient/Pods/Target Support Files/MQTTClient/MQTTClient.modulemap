@@ -1,5 +1,5 @@
 framework module MQTTClient {
-  umbrella header "MQTTClient-tvOS-umbrella.h"
+  umbrella header "MQTTClient-umbrella.h"
 
   export *
   module * { export * }
