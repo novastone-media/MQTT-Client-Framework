@@ -129,12 +129,10 @@
         self.session.cleanSessionFlag = FALSE;
         self.session.clientId = @"";
         [self.session connect];
+        XCTFail(@"Should not get here but throw exception before");
     } @catch (NSException *exception) {
-        continue;
     } @finally {
-        //
     }
-    XCTFail(@"Should not get here but throw exception before");
 }
 
 - (void)test_init_long_clientId {
@@ -188,7 +186,7 @@
     subscribingSession.clientId = @"MQTTClient-sub";
     
     if (![subscribingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for sub to %@", broker);
+        XCTFail(@"no connection for sub to broker");
     }
     [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
     
@@ -223,7 +221,7 @@
     MQTTSession *subscribingSession = [MQTTTestHelpers session:parameters];
     subscribingSession.clientId = @"MQTTClient-sub";
     if (![subscribingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for sub to %@", broker);
+        XCTFail(@"no connection for sub to broker");
     }
     [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
     
@@ -466,7 +464,7 @@
     sameSession.clientId = @"MQTTClient";
     
     if (![sameSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for same Session to %@", broker);
+        XCTFail(@"no connection for same Session to broker");
     }
     
     [self shutdown:parameters];
@@ -606,12 +604,10 @@
     @try {
         self.session.protocolLevel = 88;
         [self.session connect];
+        XCTFail(@"Should not get here but throw exception before");
     } @catch (NSException *exception) {
-        continue;
     } @finally {
-        //
     }
-    XCTFail(@"Should not get here but throw exception before");
     
 }
 
@@ -947,7 +943,7 @@
     MQTTSession *sendingSession = [MQTTTestHelpers session:parameters];
     sendingSession.clientId = @"MQTTClient-pub";
     if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for pub to %@", broker);
+        XCTFail(@"no connection for pub to broker");
     }
     [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos];
     
@@ -1004,7 +1000,7 @@
     sendingSession.clientId = @"MQTTClient-pub";
     
     if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for pub to %@", broker);
+        XCTFail(@"no connection for pub to broker");
     }
     [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos];
     
