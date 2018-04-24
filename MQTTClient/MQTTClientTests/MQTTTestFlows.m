@@ -200,7 +200,7 @@ secondPublisherWindow:512
               timeout:300];
 }
 
-- (void)testFlow2 {
+- (void)SLOWtestFlow2 {
     [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelExactlyOnce
          publisherQos:MQTTQosLevelExactlyOnce
@@ -227,7 +227,7 @@ secondPublisherWindow:64
     
 }
 
-- (void)testFlowUnreliableSubscriber {
+- (void)SLOWtestFlowUnreliableSubscriber {
     [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelExactlyOnce
          publisherQos:MQTTQosLevelExactlyOnce
@@ -240,7 +240,7 @@ secondPublisherWindow:32
               timeout:500];
 }
 
-- (void)testFlowUnreliableSubscriberQos1and2 {
+- (void)SLOWtestFlowUnreliableSubscriberQos1and2 {
     [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelExactlyOnce
          publisherQos:MQTTQosLevelExactlyOnce
@@ -253,7 +253,7 @@ secondPublisherWindow:32
               timeout:500];
 }
 
-- (void)testFlowSlowSubscriberQos1and2 {
+- (void)SLOWtestFlowSlowSubscriberQos1and2 {
     [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelExactlyOnce
          publisherQos:MQTTQosLevelExactlyOnce

@@ -214,7 +214,7 @@
     [self shutdown:parameters];
 }
 
-- (void)testSubscribeWildcardSYS_MQTT_4_7_2_1 {
+- (void)SLOWtestSubscribeWildcardSYS_MQTT_4_7_2_1 {
     MQTTStrict.strict = FALSE;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;

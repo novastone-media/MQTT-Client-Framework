@@ -32,7 +32,7 @@
 }
 
 
-- (void)testPublish_r0_q0_noPayload {
+- (void)SLOWtestPublish_r0_q0_noPayload {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:nil
@@ -52,7 +52,7 @@
     [self shutdown:parameters];
 }
 
-- (void)testPublish_r1_q0_zeroLengthPayload {
+- (void)SLOWtestPublish_r1_q0_zeroLengthPayload {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
@@ -70,7 +70,7 @@
     [self shutdown:parameters];
 }
 
-- (void)testPublish_r0_q0 {
+- (void)SLOWtestPublish_r0_q0 {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -87,7 +87,7 @@
  * U+FEFF ("ZERO WIDTH NO-BREAK SPACE") wherever it appears in a string and
  * MUST NOT be skipped over or stripped off by a packet receiver.
  */
-- (void)testPublish_r0_q0_0xFEFF_MQTT_1_5_3_3 {
+- (void)SLOWtestPublish_r0_q0_0xFEFF_MQTT_1_5_3_3 {
     unichar feff = 0xFEFF;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
@@ -129,7 +129,7 @@
  * include encodings of code points between U+D800 and U+DFFF. If a Server or Client receives a Control
  * Packet containing ill-formed UTF-8 it MUST close the Network Connection.
  */
-- (void)testPublish_r0_q0_0x9c_MQTT_1_5_3_1 {
+- (void)SLOWtestPublish_r0_q0_0x9c_MQTT_1_5_3_1 {
     NSData *data = [NSData dataWithBytes:"MQTTClient/abc\x9c\x9dxyz" length:19];
     NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
     DDLogVerbose(@"stringWith9c(%lu) %@", (unsigned long)stringWith9c.length, stringWith9c.description);
@@ -149,7 +149,7 @@
  * A UTF-8 encoded string MUST NOT include an encoding of the null character U+0000.
  * If a receiver (Server or Client) receives a Control Packet containing U+0000 it MUST close the Network Connection.
  */
-- (void)testPublish_r0_q0_0x0000_MQTT_1_5_3_2 {
+- (void)SLOWtestPublish_r0_q0_0x0000_MQTT_1_5_3_2 {
     NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
     DDLogVerbose(@"stringWithNull(%lu) %@", (unsigned long)stringWithNull.length, stringWithNull.description);
     
@@ -168,7 +168,7 @@
  * A UTF-8 encoded string MUST NOT include an encoding of the null character U+0000.
  * If a receiver (Server or Client) receives a Control Packet containing U+0000 it MUST close the Network Connection.
  */
-- (void)testPublish_r0_q0_illegal_topic_strict {
+- (void)SLOWtestPublish_r0_q0_illegal_topic_strict {
     MQTTStrict.strict = YES;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
@@ -193,8 +193,8 @@
         [self.session publishData:[[NSData alloc] init]
                           onTopic:stringWithD800 retain:0 qos:0];
         [self.session connect];
-    } @catch (NSException *exception) {
         XCTFail(@"Should not get here but throw exception before");
+    } @catch (NSException *exception) {
     } @finally {
     }
     
@@ -331,8 +331,8 @@
                   onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
                    retain:NO
                   atLevel:3];
-    } @catch (NSException *exception) {
         XCTFail(@"Should not get here but throw exception before");
+    } @catch (NSException *exception) {
     } @finally {
     }
 }
@@ -524,7 +524,7 @@
  [MQTT-3.3.1-1]
  The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- deliver a PUBLISH Packet.
  */
-- (void)testPublish_q2_dup_MQTT_3_3_1_1 {
+- (void)SLOWtestPublish_q2_dup_MQTT_3_3_1_1 {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     self.timeoutValue= 90;
@@ -557,7 +557,8 @@
     DDLogVerbose(@"testPublishCloseExpected event:%ld", (long)self.event);
     XCTAssert(
               (self.event == MQTTSessionEventConnectionClosedByBroker) ||
-              (self.event == MQTTSessionEventConnectionError),
+              (self.event == MQTTSessionEventConnectionError) ||
+              (self.event == MQTTSessionEventConnectionClosed),
               @"No MQTTSessionEventConnectionClosedByBroker or MQTTSessionEventConnectionError happened");
 }
 

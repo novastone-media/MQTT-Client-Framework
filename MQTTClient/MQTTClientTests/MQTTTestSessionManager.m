@@ -291,7 +291,7 @@
     if (timer.valid) [timer invalidate];
 }
 
-- (void)testSessionManagerALotSubscriptions {
+- (void)SLOWtestSessionManagerALotSubscriptions {
     [MQTTLog setLogLevel:DDLogLevelInfo];
     NSDictionary *parameters = MQTTTestHelpers.broker;
     if ([parameters[@"websocket"] boolValue]) {
