@@ -1,8 +1,8 @@
 language: objective-c
-osx_image: xcode9
+osx_image: xcode9.3
 env:
   matrix:
-    - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 6 Plus,OS=11.0'
+    - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 8,OS=11.3'
     - SCHEME=MQTTClientmacOS DESTINATION='platform=macOS'
 before_install:
   - gem install xcpretty
