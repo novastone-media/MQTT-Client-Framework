@@ -24,7 +24,7 @@
 
 - (void)testWSTRANSPORT {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"websocket"] boolValue]) {
             
@@ -80,7 +80,7 @@
 
 - (void)testWSConnect {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"websocket"] boolValue]) {
             
@@ -103,7 +103,7 @@
 
 - (void)testWSSubscribe {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"websocket"] boolValue]) {
             
@@ -153,7 +153,7 @@
 
 - (void)testWSSubscribeLong {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"websocket"] boolValue]) {
             
@@ -205,7 +205,7 @@
 
 - (void)testWSLowLevel {
     for (NSString *broker in self.brokers.allKeys) {
-        DDLogVerbose(@"testing broker %@", broker);
+        
         NSDictionary *parameters = self.brokers[broker];
         if ([parameters[@"websocket"] boolValue]) {
             
@@ -308,7 +308,7 @@ didReceiveMessage:(id)message {
            reason:(NSString *)reason
          wasClean:(BOOL)wasClean {
     DDLogVerbose(@"webSocket didCloseWithCode: %ld %@ %d",
-          (long)code, reason, wasClean);
+                 (long)code, reason, wasClean);
     self.next = true;
 }
 

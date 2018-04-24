@@ -58,7 +58,7 @@
     // We set session = nil on main queue which releases session and makes it dealloc
     for (int i = 0; i < 20; i++) {
         XCTestExpectation *expectation = [self expectationWithDescription:@""];
-        NSDictionary *parameters = MQTTTestHelpers.brokers[@"mosquitto"];
+        NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"local"];
         dispatch_queue_t background = dispatch_queue_create("background", NULL);
         
         __block MQTTSession *session = [MQTTTestHelpers session:parameters];

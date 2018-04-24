@@ -25,7 +25,7 @@
 + (id<MQTTPersistence>)persistence:(NSDictionary *)parameters;
 + (NSArray *)clientCerts:(NSDictionary *)parameters;
 + (MQTTSSLSecurityPolicy *)securityPolicy:(NSDictionary *)parameters;
-+ (NSDictionary *)brokers;
++ (NSDictionary *)broker;
 + (NSDictionary *)allBrokers;
 
 @property (strong, nonatomic) MQTTSession *session;
