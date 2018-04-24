@@ -8,5 +8,5 @@ before_install:
   - gem install xcpretty
   - brew install mosquitto
 before_script: ./brokers/mosquitto/start.sh
-script: xcodebuild clean test -project MQTTClient/MQTTClient.xcodeproj -scheme $SCHEME -destination $DESTINATION | xcpretty && exit ${PIPESTATUS[0]}
+script: xcodebuild clean test -project MQTTClient/MQTTClient.xcodeproj -scheme $SCHEME -destination "$DESTINATION" | xcpretty && exit ${PIPESTATUS[0]}
 after_script: ./brokers/mosquitto/stop.sh
