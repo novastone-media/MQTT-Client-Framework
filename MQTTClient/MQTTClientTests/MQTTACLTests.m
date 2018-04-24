@@ -17,6 +17,10 @@
 
 @implementation MQTTACLTests
 
+- (void)setUp {
+    [super setUp];
+    MQTTStrict.strict = NO;
+}
 /*
  * [MQTT-3.1.2-19]
  * If the User Name Flag is set to 1, a user name MUST be present in the payload.
@@ -24,8 +28,6 @@
  * If the Password Flag is set to 1, a password MUST be present in the payload.
  */
 - (void)test_connect_user_pwd_MQTT_3_1_2_19_MQTT_3_1_2_21 {
-    
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
     self.session.userName = @"user";
@@ -43,7 +45,6 @@
  * If the Password Flag is set to 0, a password MUST NOT be present in the payload.
  */
 - (void)test_connect_user_no_pwd_MQTT_3_1_2_19_MQTT_3_1_2_20 {
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
     self.session.userName = @"user w/o password";
@@ -61,7 +62,6 @@
  * If the Password Flag is set to 0, a password MUST NOT be present in the payload.
  */
 - (void)test_connect_no_user_no_pwd_MQTT_3_1_2_18_MQTT_3_1_2_20 {
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
     self.session.userName = nil;
@@ -78,7 +78,6 @@
  */
 
 - (void)test_connect_no_user_but_pwd_MQTT_3_1_2_22 {
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
     self.session.userName = nil;
@@ -86,7 +85,8 @@
     
     [self connect:self.session parameters:parameters];
     XCTAssert(self.event == MQTTSessionEventConnectionClosedByBroker ||
-              self.event == MQTTSessionEventProtocolError,
+              self.event == MQTTSessionEventProtocolError ||
+              self.event == MQTTSessionEventConnectionClosed,
               @"Not Rejected %ld %@", (long)self.event, self.error);
     [self shutdown:parameters];
 }
@@ -98,20 +98,16 @@
 
 - (void)test_connect_no_user_but_pwd_strict {
     MQTTStrict.strict = TRUE;
-    
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
     self.session.userName = nil;
     @try {
         self.session.password = @"password w/o user";
         [self.session connect];
+        XCTFail(@"Should not get here but throw exception before");
     } @catch (NSException *exception) {
-        continue;
     } @finally {
-        //
     }
-    XCTFail(@"Should not get here but throw exception before");
 }
 
 /*
@@ -121,8 +117,6 @@
 
 - (void)test_connect_long_user_strict {
     MQTTStrict.strict = TRUE;
-    
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
     self.session.userName = @"long user";
@@ -136,12 +130,10 @@
     
     @try {
         [self.session connect];
+        XCTFail(@"Should not get here but throw exception before");
     } @catch (NSException *exception) {
-        continue;
     } @finally {
-        //
     }
-    XCTFail(@"Should not get here but throw exception before");
 }
 
 - (void)test_connect_user_nonUTF8_strict {
@@ -162,15 +154,13 @@
         //NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
         //self.session.userName = stringWithNull;
         [self.session connect];
+        XCTFail(@"Should not get here but throw exception before");
     } @catch (NSException *exception) {
-        continue;
     } @finally {
-        //
     }
-    XCTFail(@"Should not get here but throw exception before");
 }
 
-- (void)connect:(MQTTSession *)session parameters:(NSDictionary *)parameters{
+- (void)connect:(MQTTSession *)session parameters:(NSDictionary *)parameters {
     session.delegate = self;
     self.event = -1;
     self.timedout = FALSE;
