@@ -171,6 +171,7 @@
 		C7C24D3E208F65AE00DFF5F9 /* localhost.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7C24D3D208F65AE00DFF5F9 /* localhost.cer */; };
 		C7C24D3F208F65AE00DFF5F9 /* localhost.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7C24D3D208F65AE00DFF5F9 /* localhost.cer */; };
 		C7C24D40208F65AE00DFF5F9 /* localhost.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7C24D3D208F65AE00DFF5F9 /* localhost.cer */; };
+		C7C24D41208F731800DFF5F9 /* MQTTTestFlows.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C845A31BDD8DB400FEC354 /* MQTTTestFlows.m */; };
 		C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
@@ -1297,6 +1298,7 @@
 				C7095E7C1FBDD1E900D73DD9 /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				C71DDA911FBFA831001152DF /* MQTTClientSubscriptionTests.m in Sources */,
 				C7C064101FBB450E000B65C7 /* MQTTTestBlocks.m in Sources */,
+				C7C24D41208F731800DFF5F9 /* MQTTTestFlows.m in Sources */,
 				C7AA17F21FB6F07D00098AA9 /* ReconnectTimerTests.m in Sources */,
 				C7C064151FBB48D7000B65C7 /* MQTTClientTestsV5.m in Sources */,
 				C7C0640F1FBB3DED000B65C7 /* MQTTClientOnlyTests.m in Sources */,
