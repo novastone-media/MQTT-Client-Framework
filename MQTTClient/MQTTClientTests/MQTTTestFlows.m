@@ -334,7 +334,6 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
      processingTime:(NSTimeInterval)processingTime
             timeout:(NSTimeInterval)timeout {
     
-    [MQTTLog setLogLevel:DDLogLevelInfo];
     
     self.subscriberQos = subscriberQos;
     self.publisherQos = publisherQos;
@@ -390,9 +389,7 @@ secondPublisherWindow:(NSInteger)secondPublisherWindow
                 processingBuffer:(NSInteger)processingBuffer
                   processingTime:(NSTimeInterval)processingTime
                          timeout:(NSTimeInterval)timeout {
-    
-    [MQTTLog setLogLevel:DDLogLevelInfo];
-    
+        
     self.subscriberQos = subscriberQos;
     self.publisherQos = publisherQos;
     self.secondPublisherQos = secondPublisherQos;
