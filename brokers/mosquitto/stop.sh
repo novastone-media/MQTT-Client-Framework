@@ -1,3 +1,3 @@
 #!/bin/sh
 
-brew services stop mosquitto
+pkill mosquitto
