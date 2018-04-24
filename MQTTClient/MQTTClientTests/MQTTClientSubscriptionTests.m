@@ -298,7 +298,7 @@
 }
 
 
-- (void)testSubscribeSameTopicDifferentQoS_MQTT_3_8_4_3 {
+- (void)SLOWtestSubscribeSameTopicDifferentQoS_MQTT_3_8_4_3 {
     MQTTStrict.strict = FALSE;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
