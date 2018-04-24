@@ -17,14 +17,6 @@
 
 @implementation MQTTSessionTests
 
-- (void)setUp {
-    [super setUp];
-}
-
-- (void)tearDown {
-    [super tearDown];
-}
-
 - (void)testConnectToTLSServer {
     XCTestExpectation *expectation = [self expectationWithDescription:@""];
     NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"mosquittoTLS"];

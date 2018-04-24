@@ -54,12 +54,12 @@
 
 @implementation MQTTTestSessionManager
 
-- (void)testMQTTSessionManagerClean {
+- (void)SLOWtestMQTTSessionManagerClean {
     [MQTTLog setLogLevel:DDLogLevelInfo];
     [self testMQTTSessionManager:true];
 }
 
-- (void)testMQTTSessionManagerNoClean {
+- (void)SLOWtestMQTTSessionManagerNoClean {
     [MQTTLog setLogLevel:DDLogLevelInfo];
     [self testMQTTSessionManager:false];
 }
@@ -145,7 +145,7 @@
     [timer invalidate];
 }
 
-- (void)testMQTTSessionManagerPersistent {
+- (void)SLOWtestMQTTSessionManagerPersistent {
     [MQTTLog setLogLevel:DDLogLevelInfo];
     NSDictionary *parameters = MQTTTestHelpers.broker;
     if ([parameters[@"websocket"] boolValue]) {
