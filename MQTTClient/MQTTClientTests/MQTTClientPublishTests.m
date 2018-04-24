@@ -33,7 +33,6 @@
 
 
 - (void)testPublish_r0_q0_noPayload {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:nil
@@ -44,7 +43,6 @@
 }
 
 - (void)testPublish_r0_q0_zeroLengthPayload {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self.session publishData:[[NSData alloc] init]
@@ -55,7 +53,6 @@
 }
 
 - (void)testPublish_r1_q0_zeroLengthPayload {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
@@ -74,7 +71,6 @@
 }
 
 - (void)testPublish_r0_q0 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -94,7 +90,6 @@
 - (void)testPublish_r0_q0_0xFEFF_MQTT_1_5_3_3 {
     unichar feff = 0xFEFF;
     
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -117,7 +112,6 @@
     NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
     DDLogVerbose(@"stringWithD800(%lu) %@", (unsigned long)stringWithD800.length, stringWithD800.description);
     
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -140,7 +134,6 @@
     NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
     DDLogVerbose(@"stringWith9c(%lu) %@", (unsigned long)stringWith9c.length, stringWith9c.description);
     
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -160,7 +153,6 @@
     NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
     DDLogVerbose(@"stringWithNull(%lu) %@", (unsigned long)stringWithNull.length, stringWithNull.description);
     
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -179,7 +171,6 @@
 - (void)testPublish_r0_q0_illegal_topic_strict {
     MQTTStrict.strict = YES;
     
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     
@@ -203,17 +194,14 @@
                           onTopic:stringWithD800 retain:0 qos:0];
         [self.session connect];
     } @catch (NSException *exception) {
-        continue;
+        XCTFail(@"Should not get here but throw exception before");
     } @finally {
-        //
     }
-    XCTFail(@"Should not get here but throw exception before");
     
 }
 
 
 - (void)testPublish_r0_q1 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -224,7 +212,6 @@
 }
 
 - (void)testPublish_a_lot_of_q0 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     for (int i = 0; i < ALOT; i++) {
@@ -237,7 +224,6 @@
 }
 
 - (void)testPublish_a_lot_of_q1 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     
@@ -269,7 +255,6 @@
 }
 
 - (void)testPublish_a_lot_of_q2 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     
@@ -303,7 +288,6 @@
  * A zero byte retained message MUST NOT be stored as a retained message on the Server.
  */
 - (void)testPublish_r1_MQTT_3_3_1_11 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -318,7 +302,6 @@
 }
 
 - (void)testPublish_r0_q2 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -329,7 +312,6 @@
 }
 
 - (void)testPublish_r0_q3 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -340,7 +322,6 @@
 }
 
 - (void)testPublish_r0_q3_strict {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     MQTTStrict.strict = NO;
     [self connect:parameters];
@@ -351,15 +332,12 @@
                    retain:NO
                   atLevel:3];
     } @catch (NSException *exception) {
-        continue;
+        XCTFail(@"Should not get here but throw exception before");
     } @finally {
-        //
     }
-    XCTFail(@"Should not get here but throw exception before");
 }
 
 - (void)testPublish_r1_q2 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -370,7 +348,6 @@
 }
 
 - (void)testPublish_r1_q2_long_topic {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     
@@ -388,7 +365,6 @@
 }
 
 - (void)testPublish_r1_q2_long_payload {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     
@@ -421,7 +397,6 @@
  * The Topic Name in the PUBLISH Packet MUST NOT contain wildcard characters.
  */
 - (void)testPublishWithPlus_MQTT_3_3_2_2 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     
@@ -441,7 +416,6 @@
  * The Topic Name in the PUBLISH Packet MUST NOT contain wildcard characters.
  */
 - (void)testPublishWithHash_MQTT_3_3_2_2 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     NSString *topic = [NSString stringWithFormat:@"%@/#%s", TOPIC, __FUNCTION__];
@@ -460,7 +434,6 @@
  * All Topic Names and Topic Filters MUST be at least one character long.
  */
 - (void)testPublishEmptyTopic_MQTT_4_7_3_1 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -471,7 +444,6 @@
 }
 
 - (void)testPublish_q1 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -482,7 +454,6 @@
 }
 
 - (void)testPublish_q1_x2 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -508,7 +479,6 @@
 }
 
 - (void)testPublish_q2 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -519,7 +489,6 @@
 }
 
 - (void)testPublish_q2_x2 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
@@ -556,7 +525,6 @@
  The DUP flag MUST be set to 1 by the Client or Server when it attempts to re- deliver a PUBLISH Packet.
  */
 - (void)testPublish_q2_dup_MQTT_3_3_1_1 {
-    DDLogInfo(@"testing broker %@", broker);
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     self.timeoutValue= 90;
