@@ -455,9 +455,7 @@
     MQTTStrict.strict = FALSE;
     // Test specifically with emqtt because there is a bug
     // in mosquitto: https://github.com/eclipse/mosquitto/issues/665
-    NSString *broker = @"emqtt";
-    
-    NSDictionary *parameters = MQTTTestHelpers.allBrokers[broker];
+    NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"emqtt"];
     [self connect:parameters];
     [self testUnsubscribeTopicCloseExpected:nil];
     [self shutdown:parameters];
@@ -476,9 +474,7 @@
     MQTTStrict.strict = FALSE;
     // Test specifically with emqtt because there is a bug
     // in mosquitto: https://github.com/eclipse/mosquitto/issues/665
-    NSString *broker = @"emqtt";
-    
-    NSDictionary *parameters = MQTTTestHelpers.allBrokers[broker];
+    NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"emqtt"];
     [self connect:parameters];
     [self testMultiUnsubscribeTopicCloseExpected:@[]];
     [self shutdown:parameters];
