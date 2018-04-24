@@ -168,6 +168,9 @@
 		C7C064151FBB48D7000B65C7 /* MQTTClientTestsV5.m in Sources */ = {isa = PBXBuildFile; fileRef = 842AF2A71ECF2973000F77D8 /* MQTTClientTestsV5.m */; };
 		C7C064171FBB4976000B65C7 /* MQTTTestSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */; };
 		C7C24D38208F13BF00DFF5F9 /* MQTTCoreDataPersistenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7C24D37208F13BF00DFF5F9 /* MQTTCoreDataPersistenceTests.m */; };
+		C7C24D3E208F65AE00DFF5F9 /* localhost.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7C24D3D208F65AE00DFF5F9 /* localhost.cer */; };
+		C7C24D3F208F65AE00DFF5F9 /* localhost.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7C24D3D208F65AE00DFF5F9 /* localhost.cer */; };
+		C7C24D40208F65AE00DFF5F9 /* localhost.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7C24D3D208F65AE00DFF5F9 /* localhost.cer */; };
 		C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
@@ -394,6 +397,7 @@
 		C7515EBC1F4C6A710071CFFE /* ForegroundReconnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForegroundReconnection.m; sourceTree = "<group>"; };
 		C7AA18081FB6F31F00098AA9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		C7C24D37208F13BF00DFF5F9 /* MQTTCoreDataPersistenceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTCoreDataPersistenceTests.m; sourceTree = "<group>"; };
+		C7C24D3D208F65AE00DFF5F9 /* localhost.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = localhost.cer; sourceTree = "<group>"; };
 		C7E397981F0F71F1000C512E /* MQTTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTLog.m; sourceTree = "<group>"; };
 		C994F5E5702C079ADD68318C /* Pods_MQTTClienttvOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTClienttvOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCDD395E3B208DFCF6249B17 /* Pods-MQTTClientTVTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTClientTVTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTClientTVTests/Pods-MQTTClientTVTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -477,6 +481,7 @@
 				C7095F151FBF329500D73DD9 /* alamofire.org */,
 				8482D3C91B49332700D81CC8 /* mosquitto.org.cer */,
 				843713531E41E6B800868093 /* client.p12 */,
+				C7C24D3D208F65AE00DFF5F9 /* localhost.cer */,
 				C21D3CA71B1ED2F40012DD2F /* server.der */,
 				6BC7F6500E0B0ACB831C6F97 /* SelfSigned */,
 			);
@@ -1082,6 +1087,7 @@
 				C7AA17F51FB6F08F00098AA9 /* server.der in Resources */,
 				C7095F251FBF329500D73DD9 /* alamofire-signing-ca1.cer in Resources */,
 				C7AA17E41FB6F04F00098AA9 /* MQTTTestHelpers.plist in Resources */,
+				C7C24D3E208F65AE00DFF5F9 /* localhost.cer in Resources */,
 				C7095F341FBF329500D73DD9 /* signed-by-ca1.cer in Resources */,
 				C7095F311FBF329500D73DD9 /* multiple-dns-names.cer in Resources */,
 				C7095F281FBF329500D73DD9 /* alamofire-signing-ca2.cer in Resources */,
@@ -1108,6 +1114,7 @@
 				84BE34921C349063007EF8F3 /* MQTTTestHelpers.plist in Resources */,
 				C7095F271FBF329500D73DD9 /* alamofire-signing-ca1.cer in Resources */,
 				8407164E1BBEF18B00FBB3CB /* AltName.cer in Resources */,
+				C7C24D40208F65AE00DFF5F9 /* localhost.cer in Resources */,
 				C7095F361FBF329500D73DD9 /* signed-by-ca1.cer in Resources */,
 				C7095F331FBF329500D73DD9 /* multiple-dns-names.cer in Resources */,
 				C7095F2A1FBF329500D73DD9 /* alamofire-signing-ca2.cer in Resources */,
@@ -1134,6 +1141,7 @@
 				84BE34911C349063007EF8F3 /* MQTTTestHelpers.plist in Resources */,
 				C7095F261FBF329500D73DD9 /* alamofire-signing-ca1.cer in Resources */,
 				840716041BBE999700FBB3CB /* AltName.cer in Resources */,
+				C7C24D3F208F65AE00DFF5F9 /* localhost.cer in Resources */,
 				C7095F351FBF329500D73DD9 /* signed-by-ca1.cer in Resources */,
 				C7095F321FBF329500D73DD9 /* multiple-dns-names.cer in Resources */,
 				C7095F291FBF329500D73DD9 /* alamofire-signing-ca2.cer in Resources */,
