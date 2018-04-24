@@ -2,4 +2,4 @@
 
 directory="${0%/*}";
 cd "$directory"
-/usr/local/opt/mosquitto/sbin/mosquitto -c mosquitto.conf
+/usr/local/opt/mosquitto/sbin/mosquitto -c mosquitto.conf &
