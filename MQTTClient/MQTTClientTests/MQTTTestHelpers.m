@@ -41,7 +41,7 @@ static NSDictionary *allBrokers = nil;
 
 - (void)setUp {
     [super setUp];
-    
+    [MQTTLog setLogLevel:DDLogLevelOff];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1
                                                   target:self
                                                 selector:@selector(ticker:)

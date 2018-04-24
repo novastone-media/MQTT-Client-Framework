@@ -24,13 +24,7 @@
 - (void)setUp {
     [super setUp];
     MQTTStrict.strict = NO;
-    [MQTTLog setLogLevel:DDLogLevelInfo];
 }
-
-- (void)tearDown {
-    [super tearDown];
-}
-
 
 - (void)SLOWtestPublish_r0_q0_noPayload {
     NSDictionary *parameters = MQTTTestHelpers.broker;
