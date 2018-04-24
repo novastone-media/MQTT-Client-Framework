@@ -174,7 +174,7 @@
 
 @implementation MQTTTestFlows
 
-- (void)testFlow0 {
+- (void)SLOWtestFlow0 {
     [self testAnyFlow:COUNT
         subscriberQos:MQTTQosLevelAtMostOnce
          publisherQos:MQTTQosLevelAtMostOnce
