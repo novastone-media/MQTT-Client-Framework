@@ -2,7 +2,6 @@ language: objective-c
 osx_image: xcode9
 before_install:
   - gem install xcpretty
-  - brew update
-  - brew outdated mosquitto || brew upgrade mosquitto
+  - brew install mosquitto
 before_script: ./brokers/mosquitto/mosquitto.sh
 script: xcodebuild clean test -project MQTTClient/MQTTClient.xcodeproj -scheme MQTTClientiOS -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6 Plus,OS=11.0' | tee xcodebuild.log | xcpretty && exit ${PIPESTATUS[0]}
