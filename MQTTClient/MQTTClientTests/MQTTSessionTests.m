@@ -19,7 +19,7 @@
 
 - (void)testConnectToTLSServer {
     XCTestExpectation *expectation = [self expectationWithDescription:@""];
-    NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"mosquittoTLS"];
+    NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"localTLS"];
     
     __block MQTTSession *session = [MQTTTestHelpers session:parameters];
     [session connectWithConnectHandler:^(NSError *error) {
@@ -32,7 +32,7 @@
 
 - (void)testErrorWhenConnectsToTLSServerWithoutCertificate {
     XCTestExpectation *expectation = [self expectationWithDescription:@""];
-    NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"mosquittoTLS"];
+    NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"localTLS"];
     
     __block MQTTSession *session = [MQTTTestHelpers session:parameters];
     ((MQTTSSLSecurityPolicyTransport *)session.transport).securityPolicy.pinnedCertificates = @[];
@@ -50,7 +50,7 @@
     // We set session = nil on main queue which releases session and makes it dealloc
     for (int i = 0; i < 20; i++) {
         XCTestExpectation *expectation = [self expectationWithDescription:@""];
-        NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"local"];
+        NSDictionary *parameters = MQTTTestHelpers.broker;
         dispatch_queue_t background = dispatch_queue_create("background", NULL);
         
         __block MQTTSession *session = [MQTTTestHelpers session:parameters];
