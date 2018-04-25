@@ -1329,8 +1329,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if (error) {
         dict[@"Error"] = error;
     }
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(onConnectExecute:) object:dict];
-    [thread start];
+    [self onConnectExecute:dict];
 }
 
 - (void)onConnectExecute:(NSDictionary *)dict {
@@ -1344,8 +1343,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if (error) {
         dict[@"Error"] = error;
     }
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(onDisconnectExecute:) object:dict];
-    [thread start];
+    [self onDisconnectExecute:dict];
 }
 
 - (void)onDisconnectExecute:(NSDictionary *)dict {
@@ -1362,8 +1360,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if (gqoss) {
         dict[@"GQoss"] = gqoss;
     }
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(onSubscribeExecute:) object:dict];
-    [thread start];
+    [self onSubscribeExecute:dict];
 }
 
 - (void)onSubscribeExecute:(NSDictionary *)dict {
@@ -1378,8 +1375,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if (error) {
         dict[@"Error"] = error;
     }
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(onUnsubscribeExecute:) object:dict];
-    [thread start];
+    [self onUnsubscribeExecute:dict];
 }
 
 - (void)onUnsubscribeExecute:(NSDictionary *)dict {
@@ -1393,8 +1389,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     if (error) {
         dict[@"Error"] = error;
     }
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(onPublishExecute:) object:dict];
-    [thread start];
+    [self onPublishExecute:dict];
 }
 
 - (void)onPublishExecute:(NSDictionary *)dict {
