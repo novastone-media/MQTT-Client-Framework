@@ -56,15 +56,20 @@
         dispatch_queue_t background = dispatch_queue_create("background", NULL);
         
         __block MQTTSession *session = [MQTTTestHelpers session:parameters];
+        session.cleanSessionFlag = YES;
         session.queue = background;
+        NSLog(@"[XY] connect");
         [session connectWithConnectHandler:^(NSError *error) {
+            NSLog(@"[XY] connected");
             XCTAssertNil(error);
             XCTAssertEqual(session.status, MQTTSessionStatusConnected);
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                NSLog(@"[XY] destory session");
                 session = nil;
                 [expectation fulfill];
             }];
         }];
+        NSLog(@"[XY] wait for expecation");
         [self waitForExpectationsWithTimeout:40 handler:nil];
     }
     [MQTTLog setLogLevel:DDLogLevelOff];
