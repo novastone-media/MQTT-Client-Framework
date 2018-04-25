@@ -30,51 +30,59 @@ MQTT-Client-Framework is tested with a long list of brokers:
 
 ## Installation
 
-### As a CocoaPod
-
-Use the CocoaPod MQTTClient! 
+### CocoaPods 
 
 Add this to your Podfile:
 
 ```
 pod 'MQTTClient'
 ```
-which is a short for
+which is a short for:
+
 ```
 pod 'MQTTClient/Min'
 pod 'MQTTClient/Manager'
 ```
 
-The Manager subspec includes the MQTTSessionManager class.
+The Manager subspec includes the `MQTTSessionManager` class.
 
-Additionally add this subspec if you want to use MQTT over Websockets:
+If you want to use MQTT over Websockets:
 
 ```
 pod 'MQTTClient/Websocket'
 ```
 
-If you want to do your logging with CocoaLumberjack (my suggestion), use
+If you want to do your logging with CocoaLumberjack (recommended):
+
 ```
 pod 'MQTTClient/MinL'
 pod 'MQTTClient/ManagerL'
 pod 'MQTTClient/WebsocketL'
 ```
-instead.
 
-### As a dynamic library
+### Carthage
 
-Or use the dynamic library created in the MQTTFramework target.
+In your Cartfile:
 
-### As source
-
-Or include the source from here.
-
-### With Carthage
-
-[Carthage](https://github.com/Carthage/Carthage)
 ```
 github "novastone-media/MQTT-Client-Framework"
 ```
+
+### Manually
+
+#### Git submodule
+
+1. Add MQTT-Client-Framework as a git submodule into your top-level project directory or simply copy whole folder
+2. Find MQTTClient.xcodeproj and drag it into the file navigator of your app project.
+3. In Xcode, navigate to the target configuration window by clicking on the blue project icon, and selecting the application target under the "Targets" heading in the sidebar.
+4. Under "General" panel go to "Linked Frameworks and Libraries" and add MQTTClient.framework
+
+#### Framework
+
+1. Download MQTT-Client-Framework
+2. Build it and you should find MQTTClient.framework under "Products" group.
+3. Right click on it and select "Show in Finder" option.
+4. Just drag and drop MQTTClient.framework to your project
 
 ## Usage
 
