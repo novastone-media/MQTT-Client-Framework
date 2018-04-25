@@ -300,7 +300,7 @@ secondPublisherWindow:2000
                            timeout:600];
 }
 
-- (void)testFlowSharedSession2 {
+- (void)SLOWtestFlowSharedSession2 {
     [self testAnyFlowSharedSession:COUNT
                      subscriberQos:MQTTQosLevelExactlyOnce
                       publisherQos:MQTTQosLevelExactlyOnce
