@@ -7,10 +7,3 @@ target 'MQTTClienttvOSTests' do
 	pod 'MQTTClient/Manager', :path => '..'
 	pod 'MQTTClient/Websocket', :path => '..'
 end
-
-target 'MQTTClientmacOSTests' do
-	platform :osx, '10.10'
-	pod 'MQTTClient/Min', :path => '..'
-	pod 'MQTTClient/Manager', :path => '..'
-	pod 'MQTTClient/Websocket', :path => '..'
-end

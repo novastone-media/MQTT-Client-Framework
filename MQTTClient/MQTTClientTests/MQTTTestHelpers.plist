@@ -2,27 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>brokerList</key>
-	<array>
-		<string>#local</string>
-		<string>#local-apollo</string>
-		<string>#local5</string>
-		<string>#localWS</string>
-		<string>#aWsBroker</string>
-		<string>#emqtt</string>
-		<string>#emqttWS</string>
-		<string>mosquitto</string>
-		<string>#mosquittoTLS</string>
-		<string>#mosquittoTLSClient</string>
-		<string>#mosquittoWS</string>
-		<string>#mosquittoWSS</string>
-	</array>
 	<key>brokers</key>
 	<dict>
 		<key>local</key>
 		<dict>
 			<key>host</key>
-			<string>localhost</string>
+			<string>0.0.0.0</string>
 			<key>timeout</key>
 			<integer>60</integer>
 			<key>port</key>
@@ -31,18 +16,29 @@
 			<false/>
 			<key>protocollevel</key>
 			<integer>4</integer>
-			<key>websocket</key>
-			<false/>
+		</dict>
+		<key>localTLS</key>
+		<dict>
+			<key>host</key>
+			<string>0.0.0.0</string>
+			<key>timeout</key>
+			<integer>60</integer>
+			<key>port</key>
+			<real>8883</real>
+			<key>tls</key>
+			<true/>
+			<key>protocollevel</key>
+			<integer>4</integer>
 			<key>allowUntrustedCertificates</key>
+			<true/>
+			<key>validatesCertificateChain</key>
 			<false/>
-			<key>CoreData</key>
+			<key>validatesDomainName</key>
+			<false/>
+			<key>serverCER</key>
+			<string>localhost</string>
+			<key>secpol</key>
 			<true/>
-			<key>persistent</key>
-			<true/>
-			<key>user</key>
-			<string>user</string>
-			<key>pass</key>
-			<string>pass</string>
 		</dict>
 		<key>local-apollo</key>
 		<dict>

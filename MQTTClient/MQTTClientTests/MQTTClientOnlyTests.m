@@ -24,42 +24,40 @@
                     disconnectHandler:nil];
     self.session.delegate = nil;
     self.session = nil;
-
+    
     [super tearDown];
 }
 
 - (void)testConnectToWrongHostResultsInError {
-    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
-        XCTestExpectation *expectation = [self expectationWithDescription:@""];
-        DDLogVerbose(@"testing broker %@", broker);
-        NSMutableDictionary *parameters = [MQTTTestHelpers.brokers[broker] mutableCopy];
-        
-        parameters[@"host"] = @"abc";
-        self.session = [MQTTTestHelpers session:parameters];
-        [self.session connectWithConnectHandler:^(NSError *error) {
-            XCTAssertNotNil(error);
-            XCTAssertEqual(self.session.status, MQTTSessionStatusClosed);
-            [expectation fulfill];
-        }];
-        [self waitForExpectationsWithTimeout:10 handler:nil];
-    }
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    
+    NSMutableDictionary *parameters = [MQTTTestHelpers.broker mutableCopy];
+    
+    parameters[@"host"] = @"abc";
+    self.session = [MQTTTestHelpers session:parameters];
+    [self.session connectWithConnectHandler:^(NSError *error) {
+        XCTAssertNotNil(error);
+        XCTAssertEqual(self.session.status, MQTTSessionStatusClosed);
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
+    
 }
 
 - (void)testConnectToWrongPort1884ResultsInError {
-    for (NSString *broker in MQTTTestHelpers.brokers.allKeys) {
-        XCTestExpectation *expectation = [self expectationWithDescription:@""];
-        DDLogVerbose(@"testing broker %@", broker);
-        NSMutableDictionary *parameters = [MQTTTestHelpers.brokers[broker] mutableCopy];
-        
-        parameters[@"port"] = @1884;
-        self.session = [MQTTTestHelpers session:parameters];
-        [self.session connectWithConnectHandler:^(NSError *error) {
-            XCTAssertNotNil(error);
-            XCTAssertEqual(self.session.status, MQTTSessionStatusClosed);
-            [expectation fulfill];
-        }];
-        [self waitForExpectationsWithTimeout:10 handler:nil];
-    }
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    
+    NSMutableDictionary *parameters = [MQTTTestHelpers.broker mutableCopy];
+    
+    parameters[@"port"] = @1884;
+    self.session = [MQTTTestHelpers session:parameters];
+    [self.session connectWithConnectHandler:^(NSError *error) {
+        XCTAssertNotNil(error);
+        XCTAssertEqual(self.session.status, MQTTSessionStatusClosed);
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
+    
 }
 
 @end

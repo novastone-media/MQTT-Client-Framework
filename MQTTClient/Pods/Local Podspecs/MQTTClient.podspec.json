@@ -1,6 +1,6 @@
 {
   "name": "MQTTClient",
-  "version": "0.9.9",
+  "version": "0.13.1",
   "summary": "iOS, macOS and tvOS native ObjectiveC MQTT Client Framework",
   "homepage": "https://github.com/novastone-media/MQTT-Client-Framework",
   "license": {
@@ -11,8 +11,8 @@
     "novastonemedia": "ios@novastonemedia.com"
   },
   "source": {
-    "git": "https://github.com/yyyy/zzz.git",
-    "tag": "0.9.9",
+    "git": "https://github.com/novastone-media/MQTT-Client-Framework.git",
+    "tag": "0.13.1",
     "submodules": true
   },
   "requires_arc": true,
@@ -57,7 +57,7 @@
         "MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
         "MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
         "MQTTClient/MQTTClient/MQTTTransport.{h,m}",
-        "MQTTClient/MQTTClient/Timer.{h,m}"
+        "MQTTClient/MQTTClient/GCDTimer.{h,m}"
       ]
     },
     {
@@ -88,7 +88,7 @@
         "MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
         "MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
         "MQTTClient/MQTTClient/MQTTTransport.{h,m}",
-        "MQTTClient/MQTTClient/Timer.{h,m}"
+        "MQTTClient/MQTTClient/GCDTimer.{h,m}"
       ],
       "xcconfig": {
         "GCC_PREPROCESSOR_DEFINITIONS": "LUMBERJACK=1"

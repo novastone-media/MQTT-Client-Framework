@@ -31,10 +31,10 @@
                                                          maxRetryInterval:5
                                                                     queue:dispatch_get_main_queue()
                                                            reconnectBlock:^{
-        NSTimeInterval difference = [[NSDate date] timeIntervalSinceDate:startDate];
-        XCTAssertEqualWithAccuracy(difference, 1, 0.1, "Reconnect block should be called after 1 second");
-        [expectation fulfill];
-    }];
+                                                               NSTimeInterval difference = [[NSDate date] timeIntervalSinceDate:startDate];
+                                                               XCTAssertEqualWithAccuracy(difference, 1, 0.1, "Reconnect block should be called after 1 second");
+                                                               [expectation fulfill];
+                                                           }];
     [timer schedule];
     
     [self waitForExpectationsWithTimeout:2 handler:nil];
@@ -49,20 +49,20 @@
                                                          maxRetryInterval:2
                                                                     queue:dispatch_get_main_queue()
                                                            reconnectBlock:^{
-        NSTimeInterval difference = [[NSDate date] timeIntervalSinceDate:startDate];
-        if (isFirst) {
-            isFirst = NO;
-        } else {
-            XCTAssertEqualWithAccuracy(difference, 2, 0.1, "Reconnect block should be called after 2 second next time");
-            [expectation fulfill];
-        }
-    }];
+                                                               NSTimeInterval difference = [[NSDate date] timeIntervalSinceDate:startDate];
+                                                               if (isFirst) {
+                                                                   isFirst = NO;
+                                                               } else {
+                                                                   XCTAssertEqualWithAccuracy(difference, 2, 0.1, "Reconnect block should be called after 2 second next time");
+                                                                   [expectation fulfill];
+                                                               }
+                                                           }];
     [timer schedule];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         startDate = [NSDate date];
         [timer schedule];
     });
-
+    
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
 

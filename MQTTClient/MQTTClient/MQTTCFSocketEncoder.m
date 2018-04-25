@@ -10,6 +10,7 @@
 #import "MQTTLog.h"
 
 @interface MQTTCFSocketEncoder()
+
 @property (strong, nonatomic) NSMutableData *buffer;
 
 @end
@@ -43,16 +44,13 @@
     _state = state;
 }
 
-- (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
-    
+- (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode {
     if (eventCode & NSStreamEventOpenCompleted) {
         DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventOpenCompleted");
-
     }
     if (eventCode & NSStreamEventHasBytesAvailable) {
         DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventHasBytesAvailable");
     }
-    
     if (eventCode & NSStreamEventHasSpaceAvailable) {
         DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventHasSpaceAvailable");
         if (self.state == MQTTCFSocketEncoderStateInitializing) {
@@ -66,15 +64,13 @@
             }
         }
     }
-    
-    if (eventCode &  NSStreamEventEndEncountered) {
+    if (eventCode & NSStreamEventEndEncountered) {
         DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventEndEncountered");
         self.state = MQTTCFSocketEncoderStateInitializing;
         self.error = nil;
         [self.delegate encoderdidClose:self];
     }
-    
-    if (eventCode &  NSStreamEventErrorOccurred) {
+    if (eventCode & NSStreamEventErrorOccurred) {
         DDLogVerbose(@"[MQTTCFSocketEncoder] NSStreamEventErrorOccurred");
         self.state = MQTTCFSocketEncoderStateError;
         self.error = self.stream.streamError;
@@ -86,7 +82,7 @@
     @synchronized(self) {
         if (self.state != MQTTCFSocketEncoderStateReady) {
             DDLogInfo(@"[MQTTCFSocketEncoder] not MQTTCFSocketEncoderStateReady");
-            return FALSE;
+            return NO;
         }
         
         if (data) {
@@ -104,7 +100,7 @@
                 DDLogVerbose(@"[MQTTCFSocketEncoder] streamError: %@", self.error);
                 self.state = MQTTCFSocketEncoderStateError;
                 self.error = self.stream.streamError;
-                return FALSE;
+                return NO;
             } else {
                 if (n < self.buffer.length) {
                     DDLogVerbose(@"[MQTTCFSocketEncoder] buffer partially written: %ld", (long)n);
@@ -112,7 +108,7 @@
                 [self.buffer replaceBytesInRange:NSMakeRange(0, n) withBytes:NULL length:0];
             }
         }
-        return TRUE;
+        return YES;
     }
 }
 

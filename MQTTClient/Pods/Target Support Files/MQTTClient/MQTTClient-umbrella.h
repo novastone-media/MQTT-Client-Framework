@@ -1,5 +1,5 @@
 #ifdef __OBJC__
-#import <Cocoa/Cocoa.h>
+#import <UIKit/UIKit.h>
 #else
 #ifndef FOUNDATION_EXPORT
 #if defined(__cplusplus)
@@ -33,7 +33,7 @@
 #import "MQTTSessionLegacy.h"
 #import "MQTTSessionSynchron.h"
 #import "MQTTTransport.h"
-#import "Timer.h"
+#import "GCDTimer.h"
 #import "MQTTWebsocketTransport.h"
 
 FOUNDATION_EXPORT double MQTTClientVersionNumber;

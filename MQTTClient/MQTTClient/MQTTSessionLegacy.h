@@ -355,7 +355,7 @@
  @deprecated as not all connection parameters are supported, use connect
 
  */
-- (void)connectToHost:(NSString*)ip
+- (void)connectToHost:(NSString *)ip
                  port:(UInt32)port
 withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
        messageHandler:(void (^)(NSData* data, NSString* topic))messHandler

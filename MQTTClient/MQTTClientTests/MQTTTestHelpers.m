@@ -20,11 +20,8 @@
 static NSDictionary *brokers = nil;
 static NSDictionary *allBrokers = nil;
 
-+ (NSDictionary *)brokers {
-    if (brokers == nil) {
-        brokers = [MQTTTestHelpers loadBrokers];
-    }
-    return brokers;
++ (NSDictionary *)broker {
+    return [MQTTTestHelpers allBrokers][@"local"];
 }
 
 + (NSDictionary *)allBrokers {
@@ -42,26 +39,9 @@ static NSDictionary *allBrokers = nil;
     return plistBrokers;
 }
 
-+ (NSDictionary *)loadBrokers {
-    NSURL *url = [[NSBundle bundleForClass:[MQTTTestHelpers class]] URLForResource:@"MQTTTestHelpers"
-                                                                     withExtension:@"plist"];
-    NSDictionary *plist = [NSDictionary dictionaryWithContentsOfURL:url];
-    NSArray *brokerList = plist[@"brokerList"];
-    NSDictionary *plistBrokers = plist[@"brokers"];
-    
-    NSMutableDictionary *brokers = [[NSMutableDictionary alloc] init];
-    for (NSString *brokerName in brokerList) {
-        NSDictionary *broker = plistBrokers[brokerName];
-        if (broker) {
-            brokers[brokerName] = broker;
-        }
-    }
-    return brokers;
-}
-
 - (void)setUp {
     [super setUp];
-
+    [MQTTLog setLogLevel:DDLogLevelOff];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1
                                                   target:self
                                                 selector:@selector(ticker:)
@@ -300,16 +280,16 @@ static NSDictionary *allBrokers = nil;
         NSException *exception = [NSException exceptionWithName:@"WebSockets tests currently disabled" reason:@"" userInfo:nil];
         @throw exception;
         /*
-        MQTTWebsocketTransport *websocketTransport = [[MQTTWebsocketTransport alloc] init];
-        websocketTransport.host = parameters[@"host"];
-        websocketTransport.port = [parameters[@"port"] intValue];
-        websocketTransport.tls = [parameters[@"tls"] boolValue];
-        if (parameters[@"path"]) {
-            websocketTransport.path = parameters[@"path"];
-        }
-        websocketTransport.allowUntrustedCertificates = [parameters[@"allowUntrustedCertificates"] boolValue];
-
-        transport = websocketTransport;
+         MQTTWebsocketTransport *websocketTransport = [[MQTTWebsocketTransport alloc] init];
+         websocketTransport.host = parameters[@"host"];
+         websocketTransport.port = [parameters[@"port"] intValue];
+         websocketTransport.tls = [parameters[@"tls"] boolValue];
+         if (parameters[@"path"]) {
+         websocketTransport.path = parameters[@"path"];
+         }
+         websocketTransport.allowUntrustedCertificates = [parameters[@"allowUntrustedCertificates"] boolValue];
+         
+         transport = websocketTransport;
          */
     } else {
         MQTTSSLSecurityPolicy *securityPolicy = [MQTTTestHelpers securityPolicy:parameters];
@@ -320,7 +300,7 @@ static NSDictionary *allBrokers = nil;
             sslSecPolTransport.tls = [parameters[@"tls"] boolValue];
             sslSecPolTransport.certificates = [MQTTTestHelpers clientCerts:parameters];
             sslSecPolTransport.securityPolicy = securityPolicy;
-
+            
             transport = sslSecPolTransport;
         } else {
             MQTTCFSocketTransport *cfSocketTransport = [[MQTTCFSocketTransport alloc] init];

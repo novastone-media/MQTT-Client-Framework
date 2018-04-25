@@ -19,7 +19,7 @@ static SecCertificateRef UTHTTPBinOrgCertificate() {
     NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"wildcard.alamofire.org" ofType:@"cer"];
     NSCAssert(certPath != nil, @"Path for certificate should not be nil");
     NSData *certData = [NSData dataWithContentsOfFile:certPath];
-
+    
     return SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
 }
 
@@ -27,7 +27,7 @@ static SecCertificateRef UTLetsEncryptCertificate() {
     NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"alamofire-signing-ca1" ofType:@"cer"];
     NSCAssert(certPath != nil, @"Path for certificate should not be nil");
     NSData *certData = [NSData dataWithContentsOfFile:certPath];
-
+    
     return SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
 }
 
@@ -35,7 +35,7 @@ static SecCertificateRef UTAddTrustExternalRootCertificate() {
     NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"alamofire-root-ca" ofType:@"cer"];
     NSCAssert(certPath != nil, @"Path for certificate should not be nil");
     NSData *certData = [NSData dataWithContentsOfFile:certPath];
-
+    
     return SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
 }
 
@@ -69,7 +69,7 @@ static SecCertificateRef UTSelfSignedCertificateWithoutDomain() {
     NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"NoDomains" ofType:@"cer"];
     NSCAssert(certPath != nil, @"Path for certificate should not be nil");
     NSData *certData = [NSData dataWithContentsOfFile:certPath];
-
+    
     return SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
 }
 
@@ -77,7 +77,7 @@ static SecCertificateRef UTSelfSignedCertificateWithCommonNameDomain() {
     NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"foobar.com" ofType:@"cer"];
     NSCAssert(certPath != nil, @"Path for certificate should not be nil");
     NSData *certData = [NSData dataWithContentsOfFile:certPath];
-
+    
     return SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
 }
 
@@ -85,30 +85,30 @@ static SecCertificateRef UTSelfSignedCertificateWithDNSNameDomain() {
     NSString *certPath = [[NSBundle bundleForClass:[MQTTSSLSecurityPolicyTests class]] pathForResource:@"AltName" ofType:@"cer"];
     NSCAssert(certPath != nil, @"Path for certificate should not be nil");
     NSData *certData = [NSData dataWithContentsOfFile:certPath];
-
+    
     return SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
 }
 
 static NSArray * CertificateTrustChainForServerTrust(SecTrustRef serverTrust) {
     CFIndex certificateCount = SecTrustGetCertificateCount(serverTrust);
     NSMutableArray *trustChain = [NSMutableArray arrayWithCapacity:(NSUInteger)certificateCount];
-
+    
     for (CFIndex i = 0; i < certificateCount; i++) {
         SecCertificateRef certificate = SecTrustGetCertificateAtIndex(serverTrust, i);
         [trustChain addObject:(__bridge_transfer NSData *)SecCertificateCopyData(certificate)];
     }
-
+    
     return [NSArray arrayWithArray:trustChain];
 }
 
 static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     NSArray *certs  = @[(__bridge id) (certificate)];
-
+    
     SecPolicyRef policy = SecPolicyCreateBasicX509();
     SecTrustRef trust = NULL;
     SecTrustCreateWithCertificates((__bridge CFTypeRef)(certs), policy, &trust);
     CFRelease(policy);
-
+    
     return trust;
 }
 
@@ -146,21 +146,21 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testLeafPublicKeyPinningIsEnforcedForHTTPBinOrgPinnedCertificateAgainstHTTPBinOrgServerTrust {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
-
+    
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
     SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
-
+    
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
-
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
+    
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
     CFRelease(httpBinCertificate);
-
+    
     [policy setValidatesCertificateChain:NO];
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"HTTPBin.org Public Key Pinning Mode Failed");
@@ -169,12 +169,12 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testPublicKeyChainPinningIsEnforcedForHTTPBinOrgPinnedCertificateAgainstHTTPBinOrgServerTrust {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
-
+    
     SecTrustRef clientTrust = UTHTTPBinOrgServerTrust();
     NSArray * certificates = CertificateTrustChainForServerTrust(clientTrust);
     CFRelease(clientTrust);
     policy.pinnedCertificates = certificates;
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"test.alamofire.org"], @"HTTPBin.org Public Key Pinning Mode Failed");
@@ -183,21 +183,21 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testLeafCertificatePinningIsEnforcedForHTTPBinOrgPinnedCertificateAgainstHTTPBinOrgServerTrust {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-
+    
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
     SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
-
+    
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
-
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
+    
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
     CFRelease(httpBinCertificate);
-
+    
     [policy setValidatesCertificateChain:NO];
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:nil], @"HTTPBin.org Public Key Pinning Mode Failed");
@@ -210,7 +210,7 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     NSArray * certificates = CertificateTrustChainForServerTrust(clientTrust);
     CFRelease(clientTrust);
     policy.pinnedCertificates = certificates;
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     
@@ -220,12 +220,12 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testNoPinningIsEnforcedForHTTPBinOrgPinnedCertificateAgainstHTTPBinOrgServerTrust {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeNone];
-
+    
     SecCertificateRef certificate = UTHTTPBinOrgCertificate();
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(certificate)];
     CFRelease(certificate);
     [policy setAllowInvalidCertificates:YES];
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"test.alamofire.org"], @"HTTPBin.org Pinning should not have been enforced");
@@ -235,7 +235,7 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 - (void)testPublicKeyPinningFailsForHTTPBinOrgIfNoCertificateIsPinned {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
     policy.pinnedCertificates = @[];
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"test.alamofire.org"] == NO, @"HTTPBin.org Public Key Pinning Should have failed with no pinned certificate");
@@ -244,21 +244,21 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testCertificatePinningIsEnforcedForHTTPBinOrgPinnedCertificateWithDomainNameValidationAgainstHTTPBinOrgServerTrust {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-
+    
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
     SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
-
+    
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
-
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
+    
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
     CFRelease(httpBinCertificate);
-
+    
     policy.validatesDomainName = YES;
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"test.alamofire.org"], @"HTTPBin.org Public Key Pinning Mode Failed");
@@ -267,21 +267,21 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testCertificatePinningIsEnforcedForHTTPBinOrgPinnedCertificateWithCaseInsensitiveDomainNameValidationAgainstHTTPBinOrgServerTrust {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
-
+    
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
     SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
-
+    
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
-
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
+    
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
     CFRelease(httpBinCertificate);
-
+    
     policy.validatesDomainName = YES;
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"test.alamoFire.org"], @"HTTPBin.org Public Key Pinning Mode Failed");
@@ -290,21 +290,21 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testCertificatePinningIsEnforcedForHTTPBinOrgPinnedPublicKeyWithDomainNameValidationAgainstHTTPBinOrgServerTrust {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode: MQTTSSLPinningModePublicKey];
-
+    
     SecCertificateRef addtrustRootCertificate = UTAddTrustExternalRootCertificate();
     SecCertificateRef comodoRsaCACertificate = UTLetsEncryptCertificate();
     SecCertificateRef httpBinCertificate = UTHTTPBinOrgCertificate();
-
+    
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(addtrustRootCertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
-            (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
-
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(comodoRsaCACertificate),
+                                  (__bridge_transfer NSData *)SecCertificateCopyData(httpBinCertificate)];
+    
     CFRelease(addtrustRootCertificate);
     CFRelease(comodoRsaCACertificate);
     CFRelease(httpBinCertificate);
-
+    
     policy.validatesDomainName = YES;
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"test.alamofire.org"], @"HTTPBin.org Public Key Pinning Mode Failed");
@@ -314,7 +314,7 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 - (void)testCertificatePinningFailsForHTTPBinOrgIfNoCertificateIsPinned {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
     policy.pinnedCertificates = @[];
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"test.alamofire.org"] == NO, @"HTTPBin.org Certificate Pinning Should have failed with no pinned certificate");
@@ -327,7 +327,7 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     policy.pinnedCertificates = @[(__bridge_transfer NSData *)SecCertificateCopyData(certificate)];
     CFRelease(certificate);
     policy.validatesDomainName = YES;
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"www.alamofire.org"] == NO, @"HTTPBin.org Certificate Pinning Should have failed with no pinned certificate");
@@ -337,7 +337,7 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 - (void)testNoPinningIsEnforcedForHTTPBinOrgIfNoCertificateIsPinned {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeNone];
     policy.pinnedCertificates = @[];
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"test.alamofire.org"], @"HTTPBin.org Pinning should not have been enforced");
@@ -352,21 +352,21 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     NSInteger index = [policy.pinnedCertificates indexOfObjectPassingTest:^BOOL(NSData *data, NSUInteger idx, BOOL *stop) {
         return [data isEqualToData:certData];
     }];
-
+    
     XCTAssert(index!=NSNotFound, @"HTTPBin.org certificate not found in the default certificates");
 }
 
 - (void)testCertificatePinningIsEnforcedWhenPinningSelfSignedCertificateWithoutDomain {
     SecCertificateRef certificate = UTSelfSignedCertificateWithoutDomain();
     SecTrustRef trust = UTTrustWithCertificate(certificate);
-
+    
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
     policy.pinnedCertificates = @[ (__bridge_transfer id)SecCertificateCopyData(certificate) ];
     policy.allowInvalidCertificates = YES;
     policy.validatesDomainName = NO;
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"foo.bar"], @"Certificate should be trusted");
-
+    
     CFRelease(trust);
     CFRelease(certificate);
 }
@@ -374,14 +374,14 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 - (void)testCertificatePinningWhenPinningSelfSignedCertificateWithoutDomain {
     SecCertificateRef certificate = UTSelfSignedCertificateWithoutDomain();
     SecTrustRef trust = UTTrustWithCertificate(certificate);
-
+    
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
     policy.pinnedCertificates = @[ (__bridge_transfer id)SecCertificateCopyData(certificate) ];
     policy.allowInvalidCertificates = YES;
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"foo.bar"] == NO, @"Certificate should not be trusted");
-
+    
     CFRelease(trust);
     CFRelease(certificate);
 }
@@ -389,13 +389,13 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 - (void)testCertificatePinningIsEnforcedWhenPinningSelfSignedCertificateWithCommonNameDomain {
     SecCertificateRef certificate = UTSelfSignedCertificateWithCommonNameDomain();
     SecTrustRef trust = UTTrustWithCertificate(certificate);
-
+    
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
     policy.pinnedCertificates = @[ (__bridge_transfer id)SecCertificateCopyData(certificate) ];
     policy.allowInvalidCertificates = YES;
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"foobar.com"], @"Certificate should be trusted");
-
+    
     CFRelease(trust);
     CFRelease(certificate);
 }
@@ -403,13 +403,13 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 - (void)testCertificatePinningWhenPinningSelfSignedCertificateWithCommonNameDomain {
     SecCertificateRef certificate = UTSelfSignedCertificateWithCommonNameDomain();
     SecTrustRef trust = UTTrustWithCertificate(certificate);
-
+    
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
     policy.pinnedCertificates = @[ (__bridge_transfer id)SecCertificateCopyData(certificate) ];
     policy.allowInvalidCertificates = YES;
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"foo.bar"] == NO, @"Certificate should not be trusted");
-
+    
     CFRelease(trust);
     CFRelease(certificate);
 }
@@ -417,13 +417,13 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 - (void)testCertificatePinningIsEnforcedWhenPinningSelfSignedCertificateWithDNSNameDomain {
     SecCertificateRef certificate = UTSelfSignedCertificateWithDNSNameDomain();
     SecTrustRef trust = UTTrustWithCertificate(certificate);
-
+    
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
     policy.pinnedCertificates = @[ (__bridge_transfer id)SecCertificateCopyData(certificate) ];
     policy.allowInvalidCertificates = YES;
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"foobar.com"], @"Certificate should be trusted");
-
+    
     CFRelease(trust);
     CFRelease(certificate);
 }
@@ -431,13 +431,13 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 - (void)testCertificatePinningWhenPinningSelfSignedCertificateWithDNSNameDomain {
     SecCertificateRef certificate = UTSelfSignedCertificateWithDNSNameDomain();
     SecTrustRef trust = UTTrustWithCertificate(certificate);
-
+    
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
     policy.pinnedCertificates = @[ (__bridge_transfer id)SecCertificateCopyData(certificate) ];
     policy.allowInvalidCertificates = YES;
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"foo.bar"] == NO, @"Certificate should not be trusted");
-
+    
     CFRelease(trust);
     CFRelease(certificate);
 }
@@ -460,10 +460,10 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testDefaultPolicySetToCertificateChainFailsWithMissingChain {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-
+    
     // By default the cer files are picked up from the bundle, this forces them to be cleared to emulate having none available
     policy.pinnedCertificates = @[];
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:nil] == NO, @"Pinning with Certificate Chain Mode and Missing Chain should have failed");
@@ -472,10 +472,10 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testDefaultPolicySetToPublicKeyChainFailsWithMissingChain {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModePublicKey];
-
+    
     // By default the cer files are picked up from the bundle, this forces them to be cleared to emulate having none available
     policy.pinnedCertificates = @[];
-
+    
     SecTrustRef trust = UTHTTPBinOrgServerTrust();
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:nil] == NO, @"Pinning with Public Key Chain Mode and Missing Chain should have failed");
@@ -484,7 +484,7 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testDefaultPolicyIsSetToAFSSLPinningModeNone {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy defaultPolicy];
-
+    
     XCTAssert(policy.SSLPinningMode==MQTTSSLPinningModeNone, @"Default policy is not set to AFSSLPinningModeNone.");
 }
 
@@ -525,19 +525,19 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
 
 - (void)testDefaultPolicyIsSetToNotAllowInvalidSSLCertificates {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy defaultPolicy];
-
+    
     XCTAssert(policy.allowInvalidCertificates == NO, @"Default policy should not allow invalid ssl certificates");
 }
 
 - (void)testPolicyWithPinningModeIsSetToNotAllowInvalidSSLCertificates {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeNone];
-
+    
     XCTAssert(policy.allowInvalidCertificates == NO, @"policyWithPinningMode: should not allow invalid ssl certificates by default.");
 }
 
 - (void)testPolicyWithPinningModeIsSetToValidatesDomainName {
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeNone];
-
+    
     XCTAssert(policy.validatesDomainName == YES, @"policyWithPinningMode: should validate domain names by default.");
 }
 
@@ -562,9 +562,9 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     MQTTSSLSecurityPolicyTransport *transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
     transport.securityPolicy = securityPolicy;
     session.transport = transport;
-
+    
     __block BOOL handled = FALSE;
-
+    
     [session connectToHost:@"localhost"
                       port:1883
                   usingSSL:TRUE
@@ -577,13 +577,13 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
                 handled = TRUE;
             }
      ];
-
+    
     while (!handled) {
         DDLogVerbose(@"waiting for connect");
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
-
-
+    
+    
 }
 
 

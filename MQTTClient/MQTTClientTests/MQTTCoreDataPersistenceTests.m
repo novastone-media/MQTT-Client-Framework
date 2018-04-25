@@ -15,6 +15,18 @@
 
 @implementation MQTTCoreDataPersistenceTests
 
+- (void)setUp {
+    [super setUp];
+    // Create Documents directory if it doesn't exist
+    NSError *error = nil;
+    [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
+                                           inDomain:NSUserDomainMask
+                                  appropriateForURL:nil
+                                             create:YES
+                                              error:&error];
+    XCTAssertNil(error);
+}
+
 - (void)testSQLiteStoreTypeWhenPersistenceYES {
     MQTTCoreDataPersistence *persistence = [[MQTTCoreDataPersistence alloc] init];
     persistence.persistent = YES;
