@@ -166,9 +166,6 @@
 		C7C24D47208F8FE800DFF5F9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7AA18081FB6F31F00098AA9 /* CoreData.framework */; };
 		C7C24D49208F8FF100DFF5F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C24D48208F8FF000DFF5F9 /* Foundation.framework */; };
 		C7C24D4A208F915200DFF5F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C24D48208F8FF000DFF5F9 /* Foundation.framework */; };
-		C7C24D51208FB9EA00DFF5F9 /* MQTTTestFlows.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C845A31BDD8DB400FEC354 /* MQTTTestFlows.m */; };
-		C7C24D52208FB9EB00DFF5F9 /* MQTTTestFlows.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C845A31BDD8DB400FEC354 /* MQTTTestFlows.m */; };
-		C7C24D53208FB9EC00DFF5F9 /* MQTTTestFlows.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C845A31BDD8DB400FEC354 /* MQTTTestFlows.m */; };
 		C7E397991F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979A1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
 		C7E3979B1F0F71F1000C512E /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C7E397981F0F71F1000C512E /* MQTTLog.m */; };
@@ -1239,7 +1236,6 @@
 				C7C24D38208F13BF00DFF5F9 /* MQTTCoreDataPersistenceTests.m in Sources */,
 				C7095E7C1FBDD1E900D73DD9 /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				C71DDA911FBFA831001152DF /* MQTTClientSubscriptionTests.m in Sources */,
-				C7C24D52208FB9EB00DFF5F9 /* MQTTTestFlows.m in Sources */,
 				C7C064101FBB450E000B65C7 /* MQTTTestBlocks.m in Sources */,
 				C7AA17F21FB6F07D00098AA9 /* ReconnectTimerTests.m in Sources */,
 				C7C064151FBB48D7000B65C7 /* MQTTClientTestsV5.m in Sources */,
@@ -1259,7 +1255,6 @@
 				842AF2AA1ECF297C000F77D8 /* MQTTClientTestsV5.m in Sources */,
 				840716551BBEF19E00FBB3CB /* MQTTACLTests.m in Sources */,
 				840716561BBEF19E00FBB3CB /* MQTTClientOnlyTests.m in Sources */,
-				C7C24D53208FB9EC00DFF5F9 /* MQTTTestFlows.m in Sources */,
 				C7515EB91F4C51A60071CFFE /* ReconnectTimerTests.m in Sources */,
 				C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */,
 				840716581BBEF19E00FBB3CB /* MQTTClientPublishTests.m in Sources */,
@@ -1279,7 +1274,6 @@
 				842AF2A91ECF297B000F77D8 /* MQTTClientTestsV5.m in Sources */,
 				8407160B1BBEE68900FBB3CB /* MQTTTestSessionManager.m in Sources */,
 				8425D70D1BBE8D68005AD733 /* MQTTSSLSecurityPolicyTests.m in Sources */,
-				C7C24D51208FB9EA00DFF5F9 /* MQTTTestFlows.m in Sources */,
 				C7515EBA1F4C51A70071CFFE /* ReconnectTimerTests.m in Sources */,
 				C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */,
 				8425D7111BBE8D68005AD733 /* MQTTACLTests.m in Sources */,
