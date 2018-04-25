@@ -48,35 +48,29 @@ session.transport = transport;
 Subscribe to a topic:
 
 ```objective-c
-[session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
+[session subscribeToTopic:@"example/#" atLevel:MQTTQosLevelExactlyOnce subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
     if (error) {
         NSLog(@"Subscription failed %@", error.localizedDescription);
     } else {
         NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
     }
- }]; // this is part of the block API
+ }];
 
 ```
 
-Add the following to receive messages for the subscribed topics
+In your `MQTTSession` delegate, add the following to receive messages for the subscribed topics:
+
 ```objective-c
- - (void)newMessage:(MQTTSession *)session
-	data:(NSData *)data
-	onTopic:(NSString *)topic
-	qos:(MQTTQosLevel)qos
-	retained:(BOOL)retained
-	mid:(unsigned int)mid {
-	// this is one of the delegate callbacks
+- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
+    // New message received in topic
 }
 ```
 
 Publish a message to a topic:
 
 ```objective-c
-[session publishAndWaitData:data
-                    onTopic:@"topic"
-                     retain:NO
-	                qos:MQTTQosLevelAtLeastOnce]; // this is part of the asynchronous API
+[session publishData:someData onTopic:@"example/#" retain:NO qos:MQTTQosLevelAtMostOnce publishHandler:^(NSError *error) {
+}];
 ```
 
 ## Installation
