@@ -93,6 +93,13 @@
 }
 
 - (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode {
+    // We contact our delegate, MQTTSession at some point in this method
+    // This call can cause MQTTSession to dealloc and thus, MQTTDecoder to dealloc
+    // So we end up with invalid object in the middle of the method
+    // To prevent this we retain self for duration of this method call
+    MQTTDecoder *strongDecoder = self;
+    (void)strongDecoder;
+    
     NSInputStream *stream = (NSInputStream *)sender;
     
     if (eventCode & NSStreamEventOpenCompleted) {
