@@ -1321,9 +1321,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
 }
 
-/*
- * Threaded block callbacks
- */
 - (void)onConnect:(MQTTConnectHandler)connectHandler error:(NSError *)error {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObject:connectHandler forKey:@"Block"];
     if (error) {
