@@ -27,6 +27,57 @@ MQTT-Client-Framework is tested with a long list of brokers:
 * [aedes](https://github.com/mcollina/aedes) 
 * [flespi](https://flespi.com/mqtt-broker) 
 
+## Usage
+
+Create a new client and connect to a broker:
+
+```objective-c
+#import "MQTTClient.h"
+
+MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
+transport.host = @"test.mosquitto.org";
+transport.port = 1883;
+    
+MQTTSession *session = [[MQTTSession alloc] init];
+session.transport = transport;
+[session connectWithConnectHandler:^(NSError *error) {
+	// Do some work
+}];
+```
+
+Subscribe to a topic:
+
+```objective-c
+[session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
+    if (error) {
+        NSLog(@"Subscription failed %@", error.localizedDescription);
+    } else {
+        NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
+    }
+ }]; // this is part of the block API
+
+```
+
+Add the following to receive messages for the subscribed topics
+```objective-c
+ - (void)newMessage:(MQTTSession *)session
+	data:(NSData *)data
+	onTopic:(NSString *)topic
+	qos:(MQTTQosLevel)qos
+	retained:(BOOL)retained
+	mid:(unsigned int)mid {
+	// this is one of the delegate callbacks
+}
+```
+
+Publish a message to a topic:
+
+```objective-c
+[session publishAndWaitData:data
+                    onTopic:@"topic"
+                     retain:NO
+	                qos:MQTTQosLevelAtLeastOnce]; // this is part of the asynchronous API
+```
 
 ## Installation
 
@@ -83,63 +134,6 @@ github "novastone-media/MQTT-Client-Framework"
 2. Build it and you should find MQTTClient.framework under "Products" group.
 3. Right click on it and select "Show in Finder" option.
 4. Just drag and drop MQTTClient.framework to your project
-
-## Usage
-
-Create a new client and connect to a broker:
-
-```objective-c
-#import "MQTTClient.h"
-
-@interface MyDelegate : ... <MQTTSessionDelegate>
-...
-
-        MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
-        transport.host = @"localhost";
-        transport.port = 1883;
-
-        MQTTSession *session = [[MQTTSession alloc] init];
-        session.transport = transport;
-        
-	session.delegate = self;
-
-	[session connectAndWaitTimeout:30];  //this is part of the synchronous API
-
-```
-
-Subscribe to a topic:
-
-```objective-c
-[session subscribeToTopic:@"example/#" atLevel:2 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss){
-    if (error) {
-        NSLog(@"Subscription failed %@", error.localizedDescription);
-    } else {
-        NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
-    }
- }]; // this is part of the block API
-
-```
-
-Add the following to receive messages for the subscribed topics
-```objective-c
- - (void)newMessage:(MQTTSession *)session
-	data:(NSData *)data
-	onTopic:(NSString *)topic
-	qos:(MQTTQosLevel)qos
-	retained:(BOOL)retained
-	mid:(unsigned int)mid {
-	// this is one of the delegate callbacks
-}
-```
-
-Publish a message to a topic:
-
-```objective-c
-[session publishAndWaitData:data
-                    onTopic:@"topic"
-                     retain:NO
-	                qos:MQTTQosLevelAtLeastOnce]; // this is part of the asynchronous API
-```
 
 ## Thanks
 
