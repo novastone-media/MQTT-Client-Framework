@@ -9,9 +9,9 @@
 			<key>host</key>
 			<string>0.0.0.0</string>
 			<key>timeout</key>
-			<integer>60</integer>
+			<integer>20</integer>
 			<key>port</key>
-			<integer>1883</integer>
+			<real>1883</real>
 			<key>tls</key>
 			<false/>
 			<key>protocollevel</key>
