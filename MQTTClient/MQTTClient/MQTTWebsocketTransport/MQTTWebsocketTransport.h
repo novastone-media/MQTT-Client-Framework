@@ -20,6 +20,11 @@
 */
 @property (strong, nonatomic) NSString *host;
 
+/** url an NSString containing the websocketurl
+ * defaults to @""
+ */
+@property (strong, nonatomic) NSString *url;
+
 /** port an unsigned 32 bit integer containing the IP port number to connect to
  * defaults to 80
  */

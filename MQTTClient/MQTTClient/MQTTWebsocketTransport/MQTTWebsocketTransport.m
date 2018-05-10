@@ -19,11 +19,13 @@
 @synthesize delegate;
 @dynamic host;
 @dynamic port;
+@dynamic url;
 
 - (instancetype)init {
     self = [super init];
     self.host = @"localhost";
     self.port = 80;
+    self.url = @"";
     self.path = @"/mqtt";
     self.tls = false;
     self.allowUntrustedCertificates = false;
@@ -34,8 +36,15 @@
 - (void)open {
     DDLogVerbose(@"[MQTTWebsocketTransport] open");
     self.state = MQTTTransportOpening;
+    NSMutableURLRequest *urlRequest = nil;
     
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[self endpointURL]];
+    if ([self.url length] == 0) {
+        urlRequest = [NSMutableURLRequest requestWithURL:[self endpointURL]];
+    } else {
+        NSURL *url = [NSURL URLWithString: self.url];
+        urlRequest = [NSMutableURLRequest requestWithURL:url];
+    }
+    
     urlRequest.SR_SSLPinnedCertificates = self.pinnedCertificates;
     NSArray <NSString *> *protocols = @[@"mqtt"];
     
