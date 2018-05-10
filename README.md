@@ -129,6 +129,10 @@ github "novastone-media/MQTT-Client-Framework"
 3. Right click on it and select "Show in Finder" option.
 4. Just drag and drop MQTTClient.framework to your project
 
+## Security Disclosure
+
+If you believe you have identified a security vulnerability with MQTT-Client-Framework, please report it to ios@novastonemedia.com and do not post it to a public issue tracker.
+
 ## Thanks
 
 This project was originally written by [Christoph Krey](https://github.com/ckrey).
