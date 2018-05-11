@@ -25,7 +25,7 @@
     self = [super init];
     self.host = @"localhost";
     self.port = 80;
-    self.url = @"";
+    self.url = nil;
     self.path = @"/mqtt";
     self.tls = false;
     self.allowUntrustedCertificates = false;
@@ -36,15 +36,8 @@
 - (void)open {
     DDLogVerbose(@"[MQTTWebsocketTransport] open");
     self.state = MQTTTransportOpening;
-    NSMutableURLRequest *urlRequest = nil;
     
-    if ([self.url length] == 0) {
-        urlRequest = [NSMutableURLRequest requestWithURL:[self endpointURL]];
-    } else {
-        NSURL *url = [NSURL URLWithString: self.url];
-        urlRequest = [NSMutableURLRequest requestWithURL:url];
-    }
-    
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[self endpointURL]];
     urlRequest.SR_SSLPinnedCertificates = self.pinnedCertificates;
     NSArray <NSString *> *protocols = @[@"mqtt"];
     
@@ -57,6 +50,9 @@
 }
 
 - (NSURL*) endpointURL {
+    if(self.url != nil) {
+        return self.url;
+    }
     NSString *protocol = (self.tls) ? @"wss" : @"ws";
     NSString *portString = (self.port == 0) ? @"" : [NSString stringWithFormat:@":%d",(unsigned int)self.port];
     NSString *path = self.path;
