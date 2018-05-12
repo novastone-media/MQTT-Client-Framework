@@ -46,7 +46,6 @@
 }
 
 - (void)testConnectDisconnectMultipleTimes {
-    [MQTTLog setLogLevel:DDLogLevelAll];
     // Test for https://github.com/novastone-media/MQTT-Client-Framework/issues/325
     // Connection is performed on background queue
     // We set session = nil on main queue which releases session and makes it dealloc
@@ -72,7 +71,6 @@
         NSLog(@"[XY] wait for expecation");
         [self waitForExpectationsWithTimeout:40 handler:nil];
     }
-    [MQTTLog setLogLevel:DDLogLevelOff];
 }
 
 - (void)testMQTTSessionDestroyedWhenDeallocated {
