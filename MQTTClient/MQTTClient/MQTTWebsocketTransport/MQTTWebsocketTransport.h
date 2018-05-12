@@ -20,6 +20,11 @@
 */
 @property (strong, nonatomic) NSString *host;
 
+/** url an NSURL containing the presigned URL
+ * defaults to nil
+ */
+@property (strong, nonatomic) NSURL *url;
+
 /** port an unsigned 32 bit integer containing the IP port number to connect to
  * defaults to 80
  */

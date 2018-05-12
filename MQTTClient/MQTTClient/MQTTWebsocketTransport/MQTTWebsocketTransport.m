@@ -19,11 +19,13 @@
 @synthesize delegate;
 @dynamic host;
 @dynamic port;
+@dynamic url;
 
 - (instancetype)init {
     self = [super init];
     self.host = @"localhost";
     self.port = 80;
+    self.url = nil;
     self.path = @"/mqtt";
     self.tls = false;
     self.allowUntrustedCertificates = false;
@@ -48,6 +50,9 @@
 }
 
 - (NSURL*) endpointURL {
+    if(self.url != nil) {
+        return self.url;
+    }
     NSString *protocol = (self.tls) ? @"wss" : @"ws";
     NSString *portString = (self.port == 0) ? @"" : [NSString stringWithFormat:@":%d",(unsigned int)self.port];
     NSString *path = self.path;
