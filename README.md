@@ -83,7 +83,7 @@ session.transport = transport;
 [session connectWithConnectHandler:^(NSError *error) {
 // Do some work
 }];
-
+```
 
 ## Installation
 
