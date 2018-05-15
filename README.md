@@ -73,6 +73,18 @@ Publish a message to a topic:
 }];
 ```
 
+If you already have a self signed URL from broker like AWS IoT endpoint, use the `url` property of `MQTTWebsocketTransport`:
+```objective-c
+MQTTWebsocketTransport *transport = [[MQTTWebsocketTransport alloc] init];
+transport.url = @"wss://aws.iot-amazonaws.com/mqtt?expiry='2018-05-01T23:12:32.950Z'"
+
+MQTTSession *session = [[MQTTSession alloc] init];
+session.transport = transport;
+[session connectWithConnectHandler:^(NSError *error) {
+    // Do some work
+}];
+```
+
 ## Installation
 
 ### CocoaPods 
