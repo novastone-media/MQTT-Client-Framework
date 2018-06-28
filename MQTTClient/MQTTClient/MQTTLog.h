@@ -107,7 +107,7 @@ extern DDLogLevel ddLogLevel;
  *  @param logLevel as follows:
  *
  *  default for DEBUG builds is DDLogLevelVerbose
- *  default for RELEAE builds is DDLogLevelWarning
+ *  default for RELEASE builds is DDLogLevelWarning
  *
  *  Available log levels:
  *  DDLogLevelAll
