@@ -50,7 +50,7 @@
  */
 @property (strong, nonatomic) NSArray *pinnedCertificates;
   
-/** additionalHeaders an NSDictionary containing extra headers sent when stablishing the websocket connection. Useful for custom authorization protocols. e.g. AWS IoT Custom Auth.
+/** additionalHeaders an NSDictionary containing extra headers sent when establishing the websocket connection. Useful for custom authorization protocols. e.g. AWS IoT Custom Auth.
  * defaults to an empty dictionary
  */
 @property (nonatomic, strong) NSDictionary<NSString *, NSString*> *additionalHeaders;
