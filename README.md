@@ -1,7 +1,7 @@
 # MQTT-Client-Framework 
 
 [![Build Status](https://travis-ci.org/novastone-media/MQTT-Client-Framework.svg?branch=master)](https://travis-ci.org/novastone-media/MQTT-Client-Framework)
-[![CocoaPods Version](https://img.shields.io/cocoapods/v/MQTTClient.svg)
+[![CocoaPods Version](https://img.shields.io/cocoapods/v/MQTTClient.svg)](https://img.shields.io/cocoapods/v/MQTTClient.svg)
 
 **Welcome to MQTT-Client-Framework**
 
