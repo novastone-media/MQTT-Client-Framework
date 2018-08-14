@@ -386,45 +386,6 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
 - (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic;
 
 /** for mqttio-OBJC backward compatibility
- @param theData see publishData for description
- @param theTopic see publishData for description
- */
-- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic;
-
-/** for mqttio-OBJC backward compatibility
- @param theData see publishData for description
- @param theTopic see publishData for description
- @param retainFlag see publishData for description
- */
-- (void)publishDataAtLeastOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
-
-/** for mqttio-OBJC backward compatibility
- @param theData see publishData for description
- @param theTopic see publishData for description
- */
-- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic;
-
-/** for mqttio-OBJC backward compatibility
- @param theData see publishData for description
- @param theTopic see publishData for description
- @param retainFlag see publishData for description
- */
-- (void)publishDataAtMostOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
-
-/** for mqttio-OBJC backward compatibility
- @param theData see publishData for description
- @param theTopic see publishData for description
- */
-- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic;
-
-/** for mqttio-OBJC backward compatibility
- @param theData see publishData for description
- @param theTopic see publishData for description
- @param retainFlag see publishData for description
- */
-- (void)publishDataExactlyOnce:(NSData*)theData onTopic:(NSString*)theTopic retain:(BOOL)retainFlag;
-
-/** for mqttio-OBJC backward compatibility
  @param payload JSON payload is converted to NSData and then send. See publishData for description
  @param theTopic see publishData for description
  */
