@@ -91,6 +91,7 @@
                          userName:(NSString *)userName
                          password:(NSString *)password
                         keepAlive:(UInt16)keepAliveInterval
+                   connectMessage:(MQTTMessage *)theConnectMessage
                      cleanSession:(BOOL)cleanSessionFlag
                              will:(BOOL)willFlag
                         willTopic:(NSString *)willTopic

@@ -168,6 +168,7 @@
                                                     userName:auth ? user : nil
                                                     password:auth ? pass : nil
                                                    keepAlive:keepalive
+                                              connectMessage:nil
                                                 cleanSession:clean
                                                         will:will
                                                    willTopic:willTopic
