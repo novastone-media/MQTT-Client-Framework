@@ -45,7 +45,7 @@
     [self waitForExpectationsWithTimeout:40 handler:nil];
 }
 
-- (void)testConnectDisconnectMultipleTimes {
+- (void)DISABLEtestConnectDisconnectMultipleTimes {
     // Test for https://github.com/novastone-media/MQTT-Client-Framework/issues/325
     // Connection is performed on background queue
     // We set session = nil on main queue which releases session and makes it dealloc
