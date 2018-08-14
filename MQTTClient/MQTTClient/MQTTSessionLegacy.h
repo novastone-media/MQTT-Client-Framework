@@ -345,21 +345,7 @@
  @param port see connectToHost for description
  @deprecated as not all connection parameters are supported, use connect
  */
-- (void)connectToHost:(NSString*)ip port:(UInt32)port __attribute__((deprecated));
-
-/** for mqttio-OBJC backward compatibility
- @param ip see connectToHost for description
- @param port see connectToHost for description
- @param connHandler event handler block
- @param messHandler message handler block
- @deprecated as not all connection parameters are supported, use connect
-
- */
-- (void)connectToHost:(NSString *)ip
-                 port:(UInt32)port
-withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
-       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler
-__attribute__((deprecated));
+- (void)connectToHost:(NSString *)ip port:(UInt32)port __attribute__((deprecated));
 
 /** for mqttio-OBJC backward compatibility
  @param ip see connectToHost for description

@@ -348,17 +348,8 @@
     [self connectToHost:ip port:port usingSSL:NO];
 }
 
-- (void)connectToHost:(NSString*)ip
+- (void)connectToHost:(NSString *)ip
                  port:(UInt32)port
-withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
-       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler {
-    self.messageHandler = messHandler;
-    self.connectionHandler = connHandler;
-    
-    [self connectToHost:ip port:port usingSSL:NO];
-}
-
-- (void)connectToHost:(NSString*)ip port:(UInt32)port
              usingSSL:(BOOL)usingSSL
 withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
        messageHandler:(void (^)(NSData* data, NSString* topic))messHandler {
