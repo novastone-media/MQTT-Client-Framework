@@ -7,7 +7,7 @@
 
 **Welcome to MQTT-Client-Framework**
 
-MQTT-Client-Framework is Objective-C native MQTT Framework http://mqtt.org
+MQTT-Client-Framework is a native Objective-C iOS library. It uses `CFNetwork` for networking and `CoreData` for persistence. It is a complete implementation of MQTT 3.1.1 and supports TLS.
 
 You can read [introduction](http://www.hivemq.com/blog/mqtt-client-library-encyclopedia-mqtt-client-framework) to learn more about framework.
 
