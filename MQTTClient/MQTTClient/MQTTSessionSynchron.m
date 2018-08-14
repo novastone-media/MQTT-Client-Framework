@@ -67,7 +67,7 @@
     NSDate *started = [NSDate date];
     self.synchronConnect = TRUE;
     
-    [self connectToHost:host port:port usingSSL:usingSSL];
+    [self connectToHost:host port:port usingSSL:usingSSL connectHandler:nil];
     
     [[NSRunLoop currentRunLoop] addPort:[NSMachPort port] forMode:NSRunLoopCommonModes];
     

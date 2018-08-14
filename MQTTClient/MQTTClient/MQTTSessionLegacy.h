@@ -25,64 +25,6 @@
 
 @interface MQTTSession(Create)
 
-/** convenience initializer
- @param clientId see clientId for description.
- @param userName see username for description.
- @param password see password for description.
- @param keepAliveInterval see keepAliveInterval for description.
- @param cleanSessionFlag see cleanSessionFlag for description.
- @param willFlag see willFlag for description.
- @param willTopic see willTopic for description.
- @param willMsg see willMsg for description.
- @param willQoS see willQos for description.
- @param willRetainFlag see willRetainFlg for description.
- @param protocolLevel see protocolLevel for description.
- @param queue see queue for description.
- @return the initialised MQTTSession object
- */
-- (MQTTSession *)initWithClientId:(NSString *)clientId
-                         userName:(NSString *)userName
-                         password:(NSString *)password
-                        keepAlive:(UInt16)keepAliveInterval
-                     cleanSession:(BOOL)cleanSessionFlag
-                             will:(BOOL)willFlag
-                        willTopic:(NSString *)willTopic
-                          willMsg:(NSData *)willMsg
-                          willQoS:(MQTTQosLevel)willQoS
-                   willRetainFlag:(BOOL)willRetainFlag
-                    protocolLevel:(UInt8)protocolLevel
-                            queue:(dispatch_queue_t)queue;
-
-/** alternative initializer
- @param clientId see initWithClientId for description.
- @param userName see initWithClientId for description.
- @param password see initWithClientId for description.
- @param keepAliveInterval see initWithClientId for description.
- @param cleanSessionFlag see initWithClientId for description.
- @param willFlag see initWithClientId for description.
- @param willTopic see initWithClientId for description.
- @param willMsg see initWithClientId for description.
- @param willQoS see initWithClientId for description.
- @param willRetainFlag see initWithClientId for description.
- @param protocolLevel see initWithClientId for description.
- @param queue see initWithClientId for description.
- @param securityPolicy see initWithClientId for description.
- @return the initialised MQTTSession object
- */
-- (MQTTSession *)initWithClientId:(NSString *)clientId
-                         userName:(NSString *)userName
-                         password:(NSString *)password
-                        keepAlive:(UInt16)keepAliveInterval
-                     cleanSession:(BOOL)cleanSessionFlag
-                             will:(BOOL)willFlag
-                        willTopic:(NSString *)willTopic
-                          willMsg:(NSData *)willMsg
-                          willQoS:(MQTTQosLevel)willQoS
-                   willRetainFlag:(BOOL)willRetainFlag
-                    protocolLevel:(UInt8)protocolLevel
-                            queue:(dispatch_queue_t)queue
-                   securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy;
-
 /** initialises the MQTT session
  *
  * this constructor can specifies SSL securityPolicy. the default value of securityPolicy is nil(which do nothing).
@@ -160,140 +102,6 @@
                    securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
                      certificates:(NSArray *)certificates;
 
-/**
-* for mqttio-OBJC backward compatibility
-* @param theClientId see initWithClientId for description.
-* @return the initialised MQTTSession object
-* All other parameters are set to defaults
-*/
-- (instancetype)initWithClientId:(NSString *)theClientId;
-
-/** for mqttio-OBJC backward compatibility
- @param theClientId see initWithClientId for description.
- @param queue see initWithClientId for description.
- @return the initialised MQTTSession object
- All other parameters are set to defaults
- */
-- (instancetype)initWithClientId:(NSString *)theClientId
-                           queue:(dispatch_queue_t)queue;
-
-/** for mqttio-OBJC backward compatibility
- @param theClientId see initWithClientId for description.
- @param theUsername see initWithClientId for description.
- @param thePassword see initWithClientId for description.
- @return the initialised MQTTSession object
- All other parameters are set to defaults
- */
-- (instancetype)initWithClientId:(NSString *)theClientId
-                        userName:(NSString *)theUsername
-                        password:(NSString *)thePassword;
-
-/** for mqttio-OBJC backward compatibility
- @param theClientId see initWithClientId for description.
- @param theUserName see initWithClientId for description.
- @param thePassword see initWithClientId for description.
- @param queue see initWithClientId for description.
- @return the initialised MQTTSession object
- All other parameters are set to defaults
- */
-- (instancetype)initWithClientId:(NSString *)theClientId
-                        userName:(NSString *)theUserName
-                        password:(NSString *)thePassword
-                           queue:(dispatch_queue_t)queue;
-
-/** for mqttio-OBJC backward compatibility
- @param theClientId see initWithClientId for description.
- @param theUsername see initWithClientId for description.
- @param thePassword see initWithClientId for description.
- @param theKeepAliveInterval see initWithClientId for description.
- @param cleanSessionFlag see initWithClientId for description.
- @return the initialised MQTTSession object
- All other parameters are set to defaults
- */
-- (instancetype)initWithClientId:(NSString *)theClientId
-              userName:(NSString *)theUsername
-              password:(NSString *)thePassword
-             keepAlive:(UInt16)theKeepAliveInterval
-          cleanSession:(BOOL)cleanSessionFlag;
-
-/** for mqttio-OBJC backward compatibility
- @param theClientId see initWithClientId for description.
- @param theUsername see initWithClientId for description.
- @param thePassword see initWithClientId for description.
- @param theKeepAlive see initWithClientId for description.
- @param theCleanSessionFlag see initWithClientId for description.
- @param queue see initWithClientId for description.
- @return the initialised MQTTSession object
- All other parameters are set to defaults
- */
-- (instancetype)initWithClientId:(NSString *)theClientId
-                        userName:(NSString *)theUsername
-                        password:(NSString *)thePassword
-                       keepAlive:(UInt16)theKeepAlive
-                    cleanSession:(BOOL)theCleanSessionFlag
-                           queue:(dispatch_queue_t)queue;
-
-/** for mqttio-OBJC backward compatibility
- @param theClientId see initWithClientId for description.
- @param theUserName see initWithClientId for description.
- @param thePassword see initWithClientId for description.
- @param theKeepAliveInterval see initWithClientId for description.
- @param theCleanSessionFlag see initWithClientId for description.
- @param willTopic see initWithClientId for description.
- @param willMsg see initWithClientId for description.
- @param willQoS see initWithClientId for description.
- @param willRetainFlag see initWithClientId for description.
- @return the initialised MQTTSession object
- All other parameters are set to defaults
- */
-- (instancetype)initWithClientId:(NSString *)theClientId
-                        userName:(NSString *)theUserName
-                        password:(NSString *)thePassword
-                       keepAlive:(UInt16)theKeepAliveInterval
-                    cleanSession:(BOOL)theCleanSessionFlag
-                       willTopic:(NSString *)willTopic
-                         willMsg:(NSData *)willMsg
-                         willQoS:(UInt8)willQoS
-                  willRetainFlag:(BOOL)willRetainFlag;
-
-/** for mqttio-OBJC backward compatibility
- @param theClientId see initWithClientId for description.
- @param theUserName see initWithClientId for description.
- @param thePassword see initWithClientId for description.
- @param theKeepAliveInterval see initWithClientId for description.
- @param theCleanSessionFlag see initWithClientId for description.
- @param willTopic see initWithClientId for description.
- @param willMsg see initWithClientId for description.
- @param willQoS see initWithClientId for description.
- @param willRetainFlag see initWithClientId for description.
- @param queue see initWithClientId for description.
- @return the initialised MQTTSession object
- All other parameters are set to defaults
- */
-- (instancetype)initWithClientId:(NSString *)theClientId
-                        userName:(NSString *)theUserName
-                        password:(NSString *)thePassword
-                       keepAlive:(UInt16)theKeepAliveInterval
-                    cleanSession:(BOOL)theCleanSessionFlag
-                       willTopic:(NSString *)willTopic
-                         willMsg:(NSData *)willMsg
-                         willQoS:(UInt8)willQoS
-                  willRetainFlag:(BOOL)willRetainFlag
-                           queue:(dispatch_queue_t)queue;
-
-/** for mqttio-OBJC backward compatibility
- @param theClientId see initWithClientId for description.
- @param theKeepAliveInterval see initWithClientId for description.
- @param theConnectMessage has to be constructed using MQTTMessage connectMessage...
- @param queue see initWithClientId for description.
- @return the initialised MQTTSession object
- All other parameters are set to defaults
- */
-- (instancetype)initWithClientId:(NSString*)theClientId
-                       keepAlive:(UInt16)theKeepAliveInterval
-                  connectMessage:(MQTTMessage*)theConnectMessage
-                           queue:(dispatch_queue_t)queue;
-
 /** connects to the specified MQTT server
  
  @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
@@ -329,24 +137,6 @@
              usingSSL:(BOOL)usingSSL
        connectHandler:(MQTTConnectHandler)connectHandler;
 
-/** connects to the specified MQTT server
- 
- @param host see connectToHost for description
- @param port see connectToHost for description
- @param usingSSL see connectToHost for description
- returns see connectToHost for description
-
- */
-- (void)connectToHost:(NSString *)host port:(UInt32)port usingSSL:(BOOL)usingSSL;
-
-
-/** for mqttio-OBJC backward compatibility
- @param ip see connectToHost for description
- @param port see connectToHost for description
- @deprecated as not all connection parameters are supported, use connect
- */
-- (void)connectToHost:(NSString *)ip port:(UInt32)port __attribute__((deprecated));
-
 /** for mqttio-OBJC backward compatibility
  @param ip see connectToHost for description
  @param port see connectToHost for description
@@ -354,16 +144,16 @@
  @param connHandler event handler block
  @param messHandler message handler block
  */
-- (void)connectToHost:(NSString*)ip
+- (void)connectToHost:(NSString *)ip
                  port:(UInt32)port
              usingSSL:(BOOL)usingSSL
 withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
-       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
+       messageHandler:(void (^)(NSData *data, NSString *topic))messHandler;
 
 /** for mqttio-OBJC backward compatibility
  @param payload JSON payload is converted to NSData and then send. See publishData for description
  @param theTopic see publishData for description
  */
-- (void)publishJson:(id)payload onTopic:(NSString*)theTopic;
+- (void)publishJson:(id)payload onTopic:(NSString *)theTopic;
 
 @end
