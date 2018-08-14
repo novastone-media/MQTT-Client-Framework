@@ -665,8 +665,7 @@
     XCTAssertEqual(self.unsubMid, self.sentUnsubMid, @"msgID(%d) in UNSUBACK does not match msgID(%d) in UNSUBSCRIBE [MQTT-3.10.3-4]", self.unsubMid, self.sentUnsubMid);
 }
 
-- (void)testMultiUnsubscribeTopicCloseExpected:(NSArray *)topics
-{
+- (void)testMultiUnsubscribeTopicCloseExpected:(NSArray *)topics {
     self.unsubMid = 0;
     self.event = -1;
     self.timedout = false;

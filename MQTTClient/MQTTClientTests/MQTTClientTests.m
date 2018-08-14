@@ -30,65 +30,6 @@
     MQTTStrict.strict = NO;
 }
 
-- (void)test_init {
-    
-    NSDictionary *parameters = MQTTTestHelpers.broker;
-    self.session = [MQTTTestHelpers session:parameters];
-    [self connect:parameters];
-    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
-    [self shutdown:parameters];
-}
-
-- (void)test_init_zero_clientId_clean {
-    
-    NSDictionary *parameters = MQTTTestHelpers.broker;
-    self.session = [MQTTTestHelpers session:parameters];
-    self.session.clientId = @"";
-    self.session.cleanSessionFlag = TRUE;
-    [self connect:parameters];
-    XCTAssert(!self.timedout, @"timeout");
-    if (self.event == MQTTSessionEventConnected) {
-        // ok
-    } else if (self.event == MQTTSessionEventConnectionRefused) {
-        XCTAssert(self.error.code == 0x02, @"error = %@", self.error);
-    } else {
-        XCTFail(@"Not Connected %ld %@", (long)self.event, self.error);
-    }
-    [self shutdown:parameters];
-}
-
-- (void)test_legacy {
-    
-    NSDictionary *parameters = MQTTTestHelpers.broker;
-    
-    self.session = [[MQTTSession alloc] initWithClientId:nil
-                                                userName:nil
-                                                password:nil
-                                               keepAlive:60
-                                            cleanSession:TRUE
-                                                   queue:dispatch_get_main_queue()];
-    self.session.delegate = self;
-    [self shutdown:parameters];
-}
-
-
-- (void)test_example {
-    
-    NSDictionary *parameters = MQTTTestHelpers.broker;
-    
-    MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
-    transport.host = parameters[@"host"];
-    transport.port = [parameters[@"port"] unsignedIntValue];
-    
-    self.session = [[MQTTSession alloc] init];
-    self.session.transport = transport;
-    
-    self.session.delegate = self;
-    [self.session connectAndWaitTimeout:30];
-    [self shutdown:parameters];
-}
-
-
 /*
  * [MQTT-3.1.3-8]
  * If the Client supplies a zero-byte ClientId with CleanSession set to 0, the Server MUST
@@ -188,7 +129,7 @@
     if (![subscribingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
         XCTFail(@"no connection for sub to broker");
     }
-    [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
+    [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0 timeout:0];
     
     self.session =  [MQTTTestHelpers session:parameters];
     self.session.willFlag = TRUE;
@@ -201,7 +142,7 @@
     
     self.ungraceful = TRUE;
     [self shutdown:parameters];
-    [subscribingSession closeAndWait];
+    [subscribingSession closeAndWait:0];
 }
 
 /*
@@ -223,7 +164,7 @@
     if (![subscribingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
         XCTFail(@"no connection for sub to broker");
     }
-    [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0];
+    [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0 timeout:0];
     
     self.session =  [MQTTTestHelpers session:parameters];
     self.session.willFlag = TRUE;
@@ -238,7 +179,7 @@
     
     self.ungraceful = TRUE;
     [self shutdown:parameters];
-    [subscribingSession closeAndWait];
+    [subscribingSession closeAndWait:0];
 }
 
 /*
@@ -468,7 +409,7 @@
     }
     
     [self shutdown:parameters];
-    [sameSession closeAndWait];
+    [sameSession closeAndWait:0];
     
 }
 
@@ -709,25 +650,13 @@
 - (void)test_pub_sub_cleansession_qos2_MQTT_4_3_3_2 {
     [self cleansession:MQTTQosLevelExactlyOnce];
 }
+
 - (void)test_pub_sub_cleansession_qos1_MQTT_4_3_3_2 {
     [self cleansession:MQTTQosLevelAtLeastOnce];
 }
+
 - (void)test_pub_sub_cleansession_qos0_MQTT_4_3_3_2 {
     [self cleansession:MQTTQosLevelAtMostOnce];
-}
-
-
-/*
- * [MQTT-3.14.1-1]
- * The Server MUST validate that reserved bits are set to zero and disconnect the Client if they are not zero.
- */
-- (void)test_disconnect_wrong_flags_MQTT_3_14_1_1 {
-    DDLogVerbose(@"can't test [MQTT-3.14.1-1]");
-    /*
-     '[MQTT-4.3.2-2]',
-     '[MQTT-4.3.2-3]',
-     
-     */
 }
 
 /*
@@ -744,8 +673,8 @@
     
     [self connect:parameters];
     
-    [self.session subscribeTopic:TOPIC];
-    [self.session publishData:[@"Data" dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC];
+    [self.session unsubscribeTopic:TOPIC];
+    [self.session publishData:[@"Data" dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:FALSE qos:MQTTQosLevelAtMostOnce];
     
     XCTAssert(!self.timedout, @"timeout");
     XCTAssertEqual(self.event, MQTTSessionEventConnectionRefused, @"MQTTSessionEventConnectionRefused %@", self.error);
@@ -945,7 +874,7 @@
     if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
         XCTFail(@"no connection for pub to broker");
     }
-    [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos];
+    [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos timeout:0];
     
     DDLogVerbose(@"Clearing old subs");
     self.session = [MQTTTestHelpers session:parameters];
@@ -959,15 +888,15 @@
     self.session.cleanSessionFlag = FALSE;
     
     [self connect:parameters];
-    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos];
+    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos timeout:0];
     [self shutdown:parameters];
     
     for (int i = 1; i < BULK; i++) {
         DDLogVerbose(@"publishing to topic %d", i);
         NSString *payload = [NSString stringWithFormat:@"payload %d", i];
-        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos];
+        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos timeout:0];
     }
-    [sendingSession closeAndWait];
+    [sendingSession closeAndWait:0];
     
     DDLogVerbose(@"receiving from topic");
     self.session = [MQTTTestHelpers session:parameters];
@@ -1002,7 +931,11 @@
     if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
         XCTFail(@"no connection for pub to broker");
     }
-    [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos];
+    [sendingSession publishAndWaitData:[[NSData alloc] init]
+                               onTopic:TOPIC
+                                retain:true
+                                   qos:qos
+                               timeout:0];
     
     DDLogVerbose(@"Clearing old subs");
     self.session = [MQTTTestHelpers session:parameters];
@@ -1014,14 +947,14 @@
     self.session = [MQTTTestHelpers session:parameters];
     self.session.clientId = @"MQTTClient-sub";
     [self connect:parameters];
-    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos];
+    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos timeout:0];
     
     for (int i = 1; i < BULK; i++) {
         DDLogVerbose(@"publishing to topic %d", i);
         NSString *payload = [NSString stringWithFormat:@"payload %d", i];
-        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos];
+        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos timeout:0];
     }
-    [sendingSession closeAndWait];
+    [sendingSession closeAndWait:0];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     self.timedout = FALSE;
