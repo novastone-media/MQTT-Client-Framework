@@ -325,7 +325,8 @@
     [self.session publishAndWaitData:[@"Should be delivered with qos 1" dataUsingEncoding:NSUTF8StringEncoding]
                              onTopic:[NSString stringWithFormat:@"%@/2", TOPIC]
                               retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce];
+                                 qos:MQTTQosLevelAtLeastOnce
+                             timeout:0];
     [self shutdown:parameters];
 }
 
@@ -359,12 +360,14 @@
     [self.session publishAndWaitData:[@"Should be delivered" dataUsingEncoding:NSUTF8StringEncoding]
                              onTopic:TOPIC
                               retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce];
+                                 qos:MQTTQosLevelAtLeastOnce
+                             timeout:0];
     [self testUnsubscribeTopic:TOPIC];
     [self.session publishAndWaitData:[@"Should not be delivered" dataUsingEncoding:NSUTF8StringEncoding]
                              onTopic:TOPIC
                               retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce];
+                                 qos:MQTTQosLevelAtLeastOnce
+                             timeout:0];
     [self shutdown:parameters];
 }
 
@@ -382,12 +385,14 @@
     [self.session publishAndWaitData:[@"Should be delivered" dataUsingEncoding:NSUTF8StringEncoding]
                              onTopic:TOPIC
                               retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce];
+                                 qos:MQTTQosLevelAtLeastOnce
+                             timeout:0];
     [self testUnsubscribeTopic:TOPIC];
     [self.session publishAndWaitData:[@"Should not be delivered" dataUsingEncoding:NSUTF8StringEncoding]
                              onTopic:TOPIC
                               retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce];
+                                 qos:MQTTQosLevelAtLeastOnce
+                             timeout:0];
     [self shutdown:parameters];
 }
 

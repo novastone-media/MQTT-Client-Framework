@@ -167,7 +167,7 @@
     if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
         XCTFail(@"no connection for pub to broker");
     }
-    [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos];
+    [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos timeout:0];
     
     DDLogVerbose(@"Clearing old subs");
     self.session = [MQTTTestHelpers session:parameters];
@@ -185,7 +185,7 @@ sessionExpiryInterval:nil
     self.session.cleanSessionFlag = FALSE;
     
     [self connect:parameters];
-    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos];
+    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos timeout:0];
     [self shutdown:parameters
         returnCode:MQTTSuccess
 sessionExpiryInterval:nil
@@ -195,9 +195,9 @@ sessionExpiryInterval:nil
     for (int i = 1; i < BULK; i++) {
         DDLogVerbose(@"publishing to topic %d", i);
         NSString *payload = [NSString stringWithFormat:@"payload %d", i];
-        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos];
+        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos timeout:0];
     }
-    [sendingSession closeAndWait];
+    [sendingSession closeAndWait:0];
     
     DDLogVerbose(@"receiving from topic");
     self.session = [MQTTTestHelpers session:parameters];
@@ -235,7 +235,7 @@ sessionExpiryInterval:nil
     if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
         XCTFail(@"no connection for pub to broker");
     }
-    [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos];
+    [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos timeout:0];
     
     DDLogVerbose(@"Clearing old subs");
     self.session = [MQTTTestHelpers session:parameters];
@@ -251,14 +251,14 @@ sessionExpiryInterval:nil
     self.session = [MQTTTestHelpers session:parameters];
     self.session.clientId = @"MQTTClient-sub";
     [self connect:parameters];
-    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos];
+    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos timeout:0];
     
     for (int i = 1; i < BULK; i++) {
         DDLogVerbose(@"publishing to topic %d", i);
         NSString *payload = [NSString stringWithFormat:@"payload %d", i];
-        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos];
+        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos timeout:0];
     }
-    [sendingSession closeAndWait];
+    [sendingSession closeAndWait:0];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     self.timedout = FALSE;
