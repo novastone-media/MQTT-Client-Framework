@@ -478,11 +478,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     return msgId;
 }
 
-
-- (void)close {
-    [self closeWithDisconnectHandler:nil];
-}
-
 - (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler {
     [self closeWithReturnCode:MQTTSuccess
         sessionExpiryInterval:nil

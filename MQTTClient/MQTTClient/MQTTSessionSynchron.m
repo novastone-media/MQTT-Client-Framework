@@ -178,7 +178,7 @@
 - (void)closeAndWait:(NSTimeInterval)timeout {
     NSDate *started = [NSDate date];
     self.synchronDisconnect = TRUE;
-    [self close];
+    [self closeWithDisconnectHandler:nil];
     
     [[NSRunLoop currentRunLoop] addPort:[NSMachPort port] forMode:NSRunLoopCommonModes];
     
