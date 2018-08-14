@@ -295,16 +295,12 @@ sessionExpiryInterval:nil
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     self.timedout = FALSE;
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:[parameters[@"timeout"] intValue]];
-    
-    [self.session connect];
-    
-    while (!self.timedout && self.event == -1) {
-        DDLogVerbose(@"waiting for connection");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
+    XCTestExpectation *connectExpectation = [self expectationWithDescription:@""];
+    [self.session connectWithConnectHandler:^(NSError *error) {
+        [connectExpectation fulfill];
+    }];
+    NSTimeInterval timeout = [parameters[@"timeout"] doubleValue];
+    [self waitForExpectationsWithTimeout:timeout handler:nil];
 }
 
 - (void)shutdown:(NSDictionary *)parameters
@@ -316,25 +312,19 @@ sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
         self.event = -1;
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        self.timedout = FALSE;
-        [self performSelector:@selector(timedout:)
-                   withObject:nil
-                   afterDelay:[parameters[@"timeout"] intValue]];
-        
+        XCTestExpectation *expectation = [self expectationWithDescription:@""];
         [self.session closeWithReturnCode:returnCode
                     sessionExpiryInterval:sessionExpiryInterval
                              reasonString:reasonString
                              userProperty:userProperty
-                        disconnectHandler:nil];
+                        disconnectHandler:^(NSError *error) {
+                            XCTAssertNil(error);
+                            [expectation fulfill];
+                        }];
+        int timeout = [parameters[@"timeout"] intValue];
+        [self waitForExpectationsWithTimeout:timeout handler:nil];
         
-        while (self.event == -1 && !self.timedout) {
-            DDLogVerbose(@"waiting for disconnect");
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-        }
-        
-        XCTAssert(!self.timedout, @"timeout");
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];        
         self.session.delegate = nil;
         self.session = nil;
     }
