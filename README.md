@@ -1,6 +1,7 @@
 # MQTT-Client-Framework 
 
 [![Build Status](https://travis-ci.org/novastone-media/MQTT-Client-Framework.svg?branch=master)](https://travis-ci.org/novastone-media/MQTT-Client-Framework)
+[![codecov](https://codecov.io/gh/novastone-media/MQTT-Client-Framework/branch/master/graph/badge.svg)](https://codecov.io/gh/novastone-media/MQTT-Client-Framework)
 [![CocoaPods Version](https://img.shields.io/cocoapods/v/MQTTClient.svg)](https://img.shields.io/cocoapods/v/MQTTClient.svg)
 [![Platform](https://img.shields.io/cocoapods/p/MQTTClient.svg?style=flat)](https://img.shields.io/cocoapods/p/MQTTClient.svg?style=flat)
 
