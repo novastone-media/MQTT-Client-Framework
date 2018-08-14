@@ -375,17 +375,6 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
        messageHandler:(void (^)(NSData* data, NSString* topic))messHandler;
 
 /** for mqttio-OBJC backward compatibility
- @param theTopic see subscribeToTopic for description
- */
-- (void)subscribeTopic:(NSString*)theTopic;
-
-/** for mqttio-OBJC backward compatibility
- @param theData see publishData for description
- @param theTopic see publishData for description
-  */
-- (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic;
-
-/** for mqttio-OBJC backward compatibility
  @param payload JSON payload is converted to NSData and then send. See publishData for description
  @param theTopic see publishData for description
  */

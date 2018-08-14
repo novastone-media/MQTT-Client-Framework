@@ -368,14 +368,6 @@ withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
     [self connectToHost:ip port:port usingSSL:usingSSL];
 }
 
-- (void)subscribeTopic:(NSString*)theTopic {
-    [self subscribeToTopic:theTopic atLevel:MQTTQosLevelAtLeastOnce];
-}
-
-- (void)publishData:(NSData*)theData onTopic:(NSString*)theTopic {
-    [self publishData:theData onTopic:theTopic retain:NO qos:MQTTQosLevelAtLeastOnce];
-}
-
 - (void)publishJson:(id)payload onTopic:(NSString*)theTopic {
     NSData *data = [NSJSONSerialization dataWithJSONObject:payload options:0 error:nil];
     if (data) {
