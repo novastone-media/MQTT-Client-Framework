@@ -73,24 +73,6 @@ static NSDictionary *allBrokers = nil;
  * all #defines in TargetConditionals.h
  */
 
-- (void)test_preprocessor {
-#if TARGET_OS_MAC == 1
-    DDLogVerbose(@"TARGET_OS_MAC==1");
-#endif
-#if TARGET_OS_MAC == 0
-    DDLogVerbose(@"TARGET_OS_MAC==0");
-#endif
-    DDLogVerbose(@"TARGET_OS_MAC %d", TARGET_OS_MAC);
-    DDLogVerbose(@"TARGET_OS_WIN32 %d", TARGET_OS_WIN32);
-    DDLogVerbose(@"TARGET_OS_UNIX %d", TARGET_OS_UNIX);
-    DDLogVerbose(@"TARGET_OS_IPHONE %d", TARGET_OS_IPHONE);
-    DDLogVerbose(@"TARGET_OS_IOS %d", TARGET_OS_IOS);
-    DDLogVerbose(@"TARGET_OS_WATCH %d", TARGET_OS_WATCH);
-    DDLogVerbose(@"TARGET_OS_TV %d", TARGET_OS_TV);
-    DDLogVerbose(@"TARGET_OS_SIMULATOR %d", TARGET_OS_SIMULATOR);
-    DDLogVerbose(@"TARGET_OS_EMBEDDED %d", TARGET_OS_EMBEDDED);
-}
-
 - (void)ticker:(NSTimer *)timer {
     DDLogVerbose(@"[MQTTTestHelpers] ticker");
 }
