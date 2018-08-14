@@ -17,27 +17,17 @@
 @implementation MQTTTestBlocks
 
 - (void)testBlockPublishSuccess {
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
     self.session.delegate = self;
-    self.timedout = FALSE;
-    [self performSelector:@selector(timedout:) withObject:nil afterDelay:60];
     
-    __block BOOL connected = false;
-    
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
     [self.session connectWithConnectHandler:^(NSError *error) {
         DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
         XCTAssertEqual(error, nil, @"Connect error %@", error.localizedDescription);
-        if (!error) {
-            connected = true;
-        }
+        [expectation fulfill];
     }];
-    
-    while (!connected && !self.timedout) {
-        DDLogVerbose(@"waiting for connect");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
+    [self waitForExpectationsWithTimeout:60 handler:nil];
     
     int pubs = 0;
     __block int delivered = 0;
@@ -95,28 +85,20 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     
-    __block BOOL closed = false;
-    [self.session closeWithDisconnectHandler:^(NSError *error){
-        DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-        closed = true;
+    XCTestExpectation *closeExpectation = [self expectationWithDescription:@""];
+    [self.session closeWithDisconnectHandler:^(NSError *error) {
+        [closeExpectation fulfill];
     }];
-    
-    while (!closed && !self.timedout) {
-        DDLogVerbose(@"waiting for close");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
+    [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 - (void)testBlockSubscribeSuccess {
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     
     self.session = [MQTTTestHelpers session:parameters];
     self.session.delegate = self;
     
     __block int subs = 0;
-    __block BOOL closed = false;
     
     [self.session connectWithConnectHandler:^(NSError *error) {
         DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
@@ -160,15 +142,11 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     
-    [self.session closeWithDisconnectHandler:^(NSError *error){
-        DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-        closed = true;
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    [self.session closeWithDisconnectHandler:^(NSError *error) {
+        [expectation fulfill];
     }];
-    
-    while (!closed) {
-        DDLogVerbose(@"waiting for close");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
+    [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 - (void)testBlockQueued {
@@ -205,39 +183,33 @@
 }
 
 - (void)testBlockSubscribeFail {
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     
     self.session = [MQTTTestHelpers session:parameters];
     self.session.delegate = self;
     
-    __block BOOL closed = false;
-    
+    XCTestExpectation *expectation1 = [self expectationWithDescription:@""];
     [self.session connectWithConnectHandler:^(NSError *error) {
-        DDLogVerbose(@"connectHandler error:%@", error.localizedDescription);
-        XCTAssertEqual(error, nil, @"Connect error %@", error.localizedDescription);
-        if (!error) {
-            __block UInt16 mid = [self.session subscribeToTopic:@"$SYS/#/ABC"
-                                                        atLevel:2
-                                               subscribeHandler:^(NSError *error, NSArray *grantedQos) {
-                                                   if (!error) {
-                                                       DDLogVerbose(@"%d Granted qoss:%@", mid, grantedQos);
-                                                   } else {
-                                                       DDLogVerbose(@"%d Subscribe with error:%@", mid, error.localizedDescription);
-                                                   }
-                                                   
-                                                   [self.session closeWithDisconnectHandler:^(NSError *error){
-                                                       DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-                                                       closed = true;
-                                                   }];
-                                               }];
-        }
+        XCTAssertNil(error);
+        [expectation1 fulfill];
     }];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
     
-    while (!closed) {
-        DDLogVerbose(@"waiting for close");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
+    XCTestExpectation *expectation2 = [self expectationWithDescription:@""];
+    [self.session subscribeToTopic:@"$SYS/#/ABC"
+                           atLevel:2
+                  subscribeHandler:^(NSError *error, NSArray *grantedQos) {
+                      [expectation2 fulfill];
+                      XCTAssertNotNil(error);
+                  }];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
+    
+    XCTestExpectation *expectation3 = [self expectationWithDescription:@""];
+    [self.session closeWithDisconnectHandler:^(NSError *error){
+        XCTAssertNil(error);
+        [expectation3 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 - (void)testBlockConnect {
