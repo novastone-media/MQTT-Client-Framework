@@ -470,7 +470,7 @@
     [self shutdown:parameters];
 }
 
-- (void)testMultiUnsubscribe_None_MQTT_3_10_3_2 {
+- (void)DISABLEtestMultiUnsubscribe_None_MQTT_3_10_3_2 {
     MQTTStrict.strict = FALSE;
     // Test specifically with emqtt because there is a bug
     // in mosquitto: https://github.com/eclipse/mosquitto/issues/665
