@@ -77,43 +77,6 @@
     return self;
 }
 
-- (void)connectToHost:(NSString *)host
-                 port:(UInt32)port
-             usingSSL:(BOOL)usingSSL
-       connectHandler:(MQTTConnectHandler)connectHandler {
-    DDLogVerbose(@"MQTTSessionLegacy connectToHost:%@ port:%d usingSSL:%d connectHandler:%p",
-                 host, (unsigned int)port, usingSSL, connectHandler);
-    
-    MQTTCFSocketTransport *transport;
-    if (self.securityPolicy) {
-        transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
-        ((MQTTSSLSecurityPolicyTransport *)transport).securityPolicy = self.securityPolicy;
-    } else {
-        transport = [[MQTTCFSocketTransport alloc] init];
-    }
-    transport.host = host;
-    transport.port = port;
-    transport.tls = usingSSL;
-    transport.certificates = self.certificates;
-    transport.voip = self.voip;
-    transport.queue = self.queue;
-    transport.streamSSLLevel = self.streamSSLLevel;
-    self.transport = transport;
-    
-    [self connectWithConnectHandler:connectHandler];
-}
-
-- (void)connectToHost:(NSString *)ip
-                 port:(UInt32)port
-             usingSSL:(BOOL)usingSSL
-withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
-       messageHandler:(void (^)(NSData* data, NSString* topic))messHandler {
-    self.messageHandler = messHandler;
-    self.connectionHandler = connHandler;
-    
-    [self connectToHost:ip port:port usingSSL:usingSSL connectHandler:nil];
-}
-
 - (void)publishJson:(id)payload onTopic:(NSString*)theTopic {
     NSData *data = [NSJSONSerialization dataWithJSONObject:payload options:0 error:nil];
     if (data) {

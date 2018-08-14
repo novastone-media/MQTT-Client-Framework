@@ -102,54 +102,6 @@
                    securityPolicy:(MQTTSSLSecurityPolicy *) securityPolicy
                      certificates:(NSArray *)certificates;
 
-/** connects to the specified MQTT server
- 
- @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
- @param port specifies the port to connect to
- @param usingSSL specifies whether to use SSL or not
- @param connectHandler identifies a block which is executed on successfull or unsuccessfull connect. Might be nil
- error is nil in the case of a successful connect
- sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
- returns nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and
- - watch for events
- - watch for connect or connectionRefused messages
- - watch for error messages
- or use the connectHandler block
- 
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectToHost:@"192.168.0.1" port:1883 usingSSL:NO connectHandler:^(NSError *error, BOOL sessionPresent) {
- if (error) {
- NSLog(@"Error Connect %@", error.localizedDescription);
- } else {
- NSLog(@"Connected sessionPresent:%d", sessionPresent);
- }
- }];
- @endcode
- 
- */
-
-- (void)connectToHost:(NSString *)host
-                 port:(UInt32)port
-             usingSSL:(BOOL)usingSSL
-       connectHandler:(MQTTConnectHandler)connectHandler;
-
-/** for mqttio-OBJC backward compatibility
- @param ip see connectToHost for description
- @param port see connectToHost for description
- @param usingSSL indicator to use TLS
- @param connHandler event handler block
- @param messHandler message handler block
- */
-- (void)connectToHost:(NSString *)ip
-                 port:(UInt32)port
-             usingSSL:(BOOL)usingSSL
-withConnectionHandler:(void (^)(MQTTSessionEvent event))connHandler
-       messageHandler:(void (^)(NSData *data, NSString *topic))messHandler;
-
 /** for mqttio-OBJC backward compatibility
  @param payload JSON payload is converted to NSData and then send. See publishData for description
  @param theTopic see publishData for description

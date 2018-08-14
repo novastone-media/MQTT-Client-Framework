@@ -34,57 +34,6 @@
  */
 - (BOOL)connectAndWaitTimeout:(NSTimeInterval)timeout;
 
-
-/** connects to the specified MQTT server synchronously
- 
- @param host see connectAndWaitToHost:port:usingSSL:timeout: for details
- @param port see connectAndWaitToHost:port:usingSSL:timeout: for details
- @param usingSSL see connectAndWaitToHost:port:usingSSL:timeout: for details
- 
- @return true if the connection was established
- 
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectAndWaitToHost:@"192.168.0.1" port:1883 usingSSL:NO];
- @endcode
- 
- @deprecated as not all connection parameters are supported, use connectAndWaitTimeout
-
- */
-- (BOOL)connectAndWaitToHost:(NSString *)host
-                        port:(UInt32)port
-                    usingSSL:(BOOL)usingSSL
-__attribute__((deprecated));
-
-/** connects to the specified MQTT server synchronously
- 
- @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
- @param port spefifies the port to connect to
- @param usingSSL specifies whether to use SSL or not
- @param timeout defines the maximum time to wait
- 
- @return true if the connection was established
- 
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectAndWaitToHost:@"192.168.0.1" port:1883 usingSSL:NO];
- @endcode
- @deprecated as not all connection parameters are supported, use connectAndWaitTimeout
-
- */
-
-- (BOOL)connectAndWaitToHost:(NSString *)host
-                        port:(UInt32)port
-                    usingSSL:(BOOL)usingSSL
-                     timeout:(NSTimeInterval)timeout
-__attribute__((deprecated));
-
 /** subscribes to a topic at a specific QoS level synchronously
  
  @param topic the Topic Filter to subscribe to.

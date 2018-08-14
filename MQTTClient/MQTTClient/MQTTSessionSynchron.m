@@ -53,34 +53,6 @@
     return (self.status == MQTTSessionStatusConnected);
 }
 
-/**
- * @deprecated
- */
- - (BOOL)connectAndWaitToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL {
-    return [self connectAndWaitToHost:host port:port usingSSL:usingSSL timeout:0];
-}
-
-/**
- * @deprecated
- */
-- (BOOL)connectAndWaitToHost:(NSString*)host port:(UInt32)port usingSSL:(BOOL)usingSSL timeout:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-    self.synchronConnect = TRUE;
-    
-    [self connectToHost:host port:port usingSSL:usingSSL connectHandler:nil];
-    
-    [[NSRunLoop currentRunLoop] addPort:[NSMachPort port] forMode:NSRunLoopCommonModes];
-    
-    while (self.synchronConnect && (timeout == 0 || started.timeIntervalSince1970 + timeout > [NSDate date].timeIntervalSince1970)) {
-        DDLogVerbose(@"[MQTTSessionSynchron] waiting for connect");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    
-    DDLogVerbose(@"[MQTTSessionSynchron] end connect");
-    
-    return (self.status == MQTTSessionStatusConnected);
-}
-
 - (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel {
     return [self subscribeAndWaitToTopic:topic atLevel:qosLevel timeout:0];
 }
