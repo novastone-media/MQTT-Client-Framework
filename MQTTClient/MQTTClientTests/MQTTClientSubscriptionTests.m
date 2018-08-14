@@ -690,21 +690,13 @@
     self.event = -1;
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    self.timedout = FALSE;
     self.timeoutValue = [parameters[@"timeout"] doubleValue];
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:self.timeoutValue];
-    
-    [self.session connect];
-    
-    while (self.event == -1 && !self.timedout) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    XCTAssert(!self.timedout, @"timedout");
-    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
-    
+    XCTestExpectation *connectExpectation = [self expectationWithDescription:@""];
+    [self.session connectWithConnectHandler:^(NSError *error) {
+        XCTAssertNil(error);
+        [connectExpectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:self.timeoutValue handler:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 
