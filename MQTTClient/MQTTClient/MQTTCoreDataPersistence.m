@@ -45,28 +45,28 @@
 - (NSString *)clientId {
     __block NSString *_clientId;
     [context performBlockAndWait:^{
-        _clientId = object.clientId;
+        _clientId = self.object.clientId;
     }];
     return _clientId;
 }
 
 - (void)setClientId:(NSString *)clientId {
     [context performBlockAndWait:^{
-        object.clientId = clientId;
+        self.object.clientId = clientId;
     }];
 }
 
 - (NSNumber *)incomingFlag {
     __block NSNumber *_incomingFlag;
     [context performBlockAndWait:^{
-        _incomingFlag = object.incomingFlag;
+        _incomingFlag = self.object.incomingFlag;
     }];
     return _incomingFlag;
 }
 
 - (void)setIncomingFlag:(NSNumber *)incomingFlag {
     [context performBlockAndWait:^{
-        object.incomingFlag = incomingFlag;
+        self.object.incomingFlag = incomingFlag;
     }];
 }
 
@@ -74,98 +74,98 @@
 - (NSNumber *)retainedFlag {
     __block NSNumber *_retainedFlag;
     [context performBlockAndWait:^{
-        _retainedFlag = object.retainedFlag;
+        _retainedFlag = self.object.retainedFlag;
     }];
     return _retainedFlag;
 }
 
 - (void)setRetainedFlag:(NSNumber *)retainedFlag {
     [context performBlockAndWait:^{
-        object.retainedFlag = retainedFlag;
+        self.object.retainedFlag = retainedFlag;
     }];
 }
 
 - (NSNumber *)commandType {
     __block NSNumber *_commandType;
     [context performBlockAndWait:^{
-        _commandType = object.commandType;
+        _commandType = self.object.commandType;
     }];
     return _commandType;
 }
 
 - (void)setCommandType:(NSNumber *)commandType {
     [context performBlockAndWait:^{
-        object.commandType = commandType;
+        self.object.commandType = commandType;
     }];
 }
 
 - (NSNumber *)qosLevel {
     __block NSNumber *_qosLevel;
     [context performBlockAndWait:^{
-        _qosLevel = object.qosLevel;
+        _qosLevel = self.object.qosLevel;
     }];
     return _qosLevel;
 }
 
 - (void)setQosLevel:(NSNumber *)qosLevel {
     [context performBlockAndWait:^{
-        object.qosLevel = qosLevel;
+        self.object.qosLevel = qosLevel;
     }];
 }
 
 - (NSNumber *)messageId {
     __block NSNumber *_messageId;
     [context performBlockAndWait:^{
-        _messageId = object.messageId;
+        _messageId = self.object.messageId;
     }];
     return _messageId;
 }
 
 - (void)setMessageId:(NSNumber *)messageId {
     [context performBlockAndWait:^{
-        object.messageId = messageId;
+        self.object.messageId = messageId;
     }];
 }
 
 - (NSString *)topic {
     __block NSString *_topic;
     [context performBlockAndWait:^{
-        _topic = object.topic;
+        _topic = self.object.topic;
     }];
     return _topic;
 }
 
 - (void)setTopic:(NSString *)topic {
     [context performBlockAndWait:^{
-        object.topic = topic;
+        self.object.topic = topic;
     }];
 }
 
 - (NSData *)data {
     __block NSData *_data;
     [context performBlockAndWait:^{
-        _data = object.data;
+        _data = self.object.data;
     }];
     return _data;
 }
 
 - (void)setData:(NSData *)data {
     [context performBlockAndWait:^{
-        object.data = data;
+        self.object.data = data;
     }];
 }
 
 - (NSDate *)deadline {
     __block NSDate *_deadline;
     [context performBlockAndWait:^{
-        _deadline = object.deadline;
+        _deadline = self.object.deadline;
     }];
     return _deadline;
 }
 
 - (void)setDeadline:(NSDate *)deadline {
     [context performBlockAndWait:^{
-        object.deadline = deadline;
+        self.object.deadline = deadline;
     }];
 }
 
