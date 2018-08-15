@@ -263,27 +263,20 @@
 }
 
 - (void)testBlockConnectRefused {
-    
     NSMutableDictionary *parameters = [MQTTTestHelpers.broker mutableCopy];
-    
     parameters[@"port"] = @1998;
     self.session = [MQTTTestHelpers session:parameters];
     self.session.delegate = self;
     
-    __block BOOL closed = false;
-    
-    [self.session connectWithConnectHandler:^(NSError *error){
-        XCTAssertNotEqual(error, nil, @"No error detected");
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    [self.session connectWithConnectHandler:^(NSError *error) {
+        XCTAssertNotNil(error);
         [self.session closeWithDisconnectHandler:^(NSError *error){
             DDLogVerbose(@"Closed with error:%@", error ? error.localizedDescription : @"none");
-            closed = true;
+            [expectation fulfill];
         }];
     }];
-    
-    while (!closed) {
-        DDLogVerbose(@"waiting for connect and close");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
+    [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 @end
