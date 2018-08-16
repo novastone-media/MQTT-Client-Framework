@@ -14,6 +14,7 @@ If this is a bug report, use the following part of the the template and delete t
  - Operating system:  iOS, tvOS, macOS <!-- delete the ones that do not apply -->
  - Software version: 
  - Package Manager: Cocoapods, Carthage, Manual <!-- delete the ones that do not apply -->
+ - MQTTClient version: 
  - MQTT Broker used: mosquitto, HiveMQ, vernemq, ... <!-- delete the ones that do not apply -->
 
 ### Steps to reproduce
