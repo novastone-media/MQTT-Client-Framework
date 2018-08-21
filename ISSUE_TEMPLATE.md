@@ -17,6 +17,11 @@ If this is a bug report, use the following part of the the template and delete t
  - MQTTClient version: 
  - MQTT Broker used: mosquitto, HiveMQ, vernemq, ... <!-- delete the ones that do not apply -->
 
+### Link to logs
+
+Create a [GIST](https://gist.github.com) which is a paste of your logs, and link them here. 
+Please do _NOT_ paste your full logs here, it will make issue very long and hard to read! 
+
 ### Steps to reproduce
 <!-- Tell us step-by-step how the issue can be triggered. Please include connection details to your test broker -->
 1. <!-- step 1 -->
