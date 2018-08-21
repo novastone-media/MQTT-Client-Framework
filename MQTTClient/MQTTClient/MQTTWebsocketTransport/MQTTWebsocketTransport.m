@@ -17,9 +17,9 @@
 @implementation MQTTWebsocketTransport
 @synthesize state;
 @synthesize delegate;
+@synthesize url;
 @dynamic host;
 @dynamic port;
-@dynamic url;
 
 - (instancetype)init {
     self = [super init];
