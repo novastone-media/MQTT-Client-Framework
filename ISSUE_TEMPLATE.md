@@ -3,12 +3,6 @@
 ### Short description
 <!-- Explain in a few sentences what the issue/request is -->
 
-
-
-
-<!--
-If this is a bug report, use the following part of the the template and delete the part at the bottom
--->
 ### Environment
 <!-- Tell us about the environment -->
  - Operating system:  iOS, tvOS, macOS <!-- delete the ones that do not apply -->
