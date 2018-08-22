@@ -26,7 +26,9 @@
 }
 
 - (void)dealloc {
-    [self close];
+    if (self.stream.streamStatus == NSStreamStatusOpen) {
+        [self.stream close];
+    }
 }
 
 - (void)open {
@@ -35,8 +37,10 @@
 }
 
 - (void)close {
-    [self.stream close];
-    [self.stream setDelegate:nil];
+    if (self.stream.streamStatus == NSStreamStatusOpen) {
+        [self.stream close];
+        [self.stream setDelegate:nil];
+    }
 }
 
 - (void)setState:(MQTTCFSocketEncoderState)state {

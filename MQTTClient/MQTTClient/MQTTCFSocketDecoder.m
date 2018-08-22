@@ -31,12 +31,16 @@
 }
 
 - (void)dealloc {
-    [self close];
+    if (self.stream.streamStatus == NSStreamStatusOpen) {
+        [self.stream close];
+    }
 }
 
 - (void)close {
-    [self.stream close];
-    [self.stream setDelegate:nil];
+    if (self.stream.streamStatus == NSStreamStatusOpen) {
+        [self.stream close];
+        [self.stream setDelegate:nil];
+    }
 }
 
 - (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode {
