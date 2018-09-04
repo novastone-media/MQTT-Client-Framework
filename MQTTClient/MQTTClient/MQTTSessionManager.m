@@ -11,6 +11,7 @@
 #import "MQTTLog.h"
 #import "ReconnectTimer.h"
 #import "ForegroundReconnection.h"
+#import "MQTTSSLSecurityPolicyTransport.h"
 
 @interface MQTTSessionManager()
 
@@ -226,7 +227,7 @@
 
 - (void)updateState:(MQTTSessionManagerState)newState {
     self.state = newState;
-
+    
     if ([self.delegate respondsToSelector:@selector(sessionManager:didChangeState:)]) {
         [self.delegate sessionManager:self didChangeState:newState];
     }
@@ -264,7 +265,7 @@
             }
             [self updateState:MQTTSessionManagerStateClosed];
             break;
-
+            
         case MQTTSessionEventProtocolError:
         case MQTTSessionEventConnectionRefused:
         case MQTTSessionEventConnectionError:
@@ -272,7 +273,7 @@
             self.lastErrorCode = error;
             [self updateState:MQTTSessionManagerStateError];
             break;
-
+            
         default:
             break;
     }
@@ -312,7 +313,7 @@
                     }
                 }
             }];
-
+            
         }
         self.reconnectFlag = TRUE;
     }
@@ -333,6 +334,21 @@
 - (void)connectToInternal:(MQTTConnectHandler)connectHandler {
     if (self.session && self.state == MQTTSessionManagerStateStarting) {
         [self updateState:MQTTSessionManagerStateConnecting];
+        MQTTCFSocketTransport *transport;
+        if (self.securityPolicy) {
+            transport = [[MQTTSSLSecurityPolicyTransport alloc] init];
+            ((MQTTSSLSecurityPolicyTransport *)transport).securityPolicy = self.securityPolicy;
+        } else {
+            transport = [[MQTTCFSocketTransport alloc] init];
+        }
+        transport.host = self.host;
+        transport.port = self.port;
+        transport.tls = self.tls;
+        transport.certificates = self.certificates;
+        transport.voip = self.session.voip;
+        transport.queue = self.queue;
+        transport.streamSSLLevel = self.streamSSLLevel;
+        self.session.transport = transport;
         [self.session connectWithConnectHandler:connectHandler];
     }
 }
@@ -361,7 +377,7 @@
 - (void)setSubscriptions:(NSDictionary<NSString *, NSNumber *> *)newSubscriptions {
     if (self.state == MQTTSessionManagerStateConnected) {
         NSDictionary *currentSubscriptions = [self.effectiveSubscriptions copy];
-
+        
         for (NSString *topicFilter in currentSubscriptions) {
             if (!newSubscriptions[topicFilter]) {
                 __weak MQTTSessionManager *weakSelf = self;
@@ -377,7 +393,7 @@
                 }];
             }
         }
-
+        
         for (NSString *topicFilter in newSubscriptions) {
             if (!currentSubscriptions[topicFilter]) {
                 NSNumber *number = newSubscriptions[topicFilter];
