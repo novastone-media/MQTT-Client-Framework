@@ -227,66 +227,6 @@
     [timer invalidate];
 }
 
-- (void)testSessionManagerShort {
-    NSDictionary *parameters = MQTTTestHelpers.broker;
-    if ([parameters[@"websocket"] boolValue]) {
-        return;
-    }
-    
-    MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
-    manager.delegate = self;
-    
-    // allow 5 sec for connect
-    self.timedout = false;
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5
-                                                      target:self
-                                                    selector:@selector(timedout:)
-                                                    userInfo:nil
-                                                     repeats:false];
-    
-    
-    manager.subscriptions = @{TOPIC: @(MQTTQosLevelExactlyOnce)};
-    [manager connectWithParameters:parameters clean:YES connectHandler:nil];
-    
-    while (!self.timedout && manager.state != MQTTSessionManagerStateConnected) {
-        DDLogInfo(@"waiting for connect %d", manager.state);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    if (timer.valid) [timer invalidate];
-    
-    // allow 5 sec for sending and receiving
-    self.timedout = false;
-    timer = [NSTimer scheduledTimerWithTimeInterval:5
-                                             target:self
-                                           selector:@selector(timedout:)
-                                           userInfo:nil
-                                            repeats:false];
-    
-    
-    while (!self.timedout) {
-        [manager sendData:[[NSDate date].description dataUsingEncoding:NSUTF8StringEncoding]
-                    topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:FALSE];
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    if (timer.valid) [timer invalidate];
-    [manager sendData:[[NSData alloc] init] topic:TOPIC qos:MQTTQosLevelExactlyOnce retain:true];
-    
-    // allow 3 sec for disconnect
-    self.timedout = false;
-    timer = [NSTimer scheduledTimerWithTimeInterval:3
-                                             target:self
-                                           selector:@selector(timedout:)
-                                           userInfo:nil
-                                            repeats:false];
-    
-    [manager disconnectWithDisconnectHandler:nil];
-    while (!self.timedout && manager.state != MQTTSessionStatusClosed) {
-        DDLogInfo(@"waiting for disconnect %d", manager.state);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    if (timer.valid) [timer invalidate];
-}
-
 - (void)SLOWtestSessionManagerALotSubscriptions {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     if ([parameters[@"websocket"] boolValue]) {
@@ -585,10 +525,8 @@
     XCTAssertNil(weakManager);
 }
 
-// Disable this test for now because it is failing. We need to figure out why
-// and rewrite it in a better way or remove it completely
-- (void)DISABLEtestMQTTSessionManagerRecconnectionWithConnectToLast {
-    NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"mosquitto"];
+- (void)testMQTTSessionManagerRecconnectionWithConnectToLast {
+    NSDictionary *parameters = MQTTTestHelpers.broker;
     
     MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
     
@@ -618,6 +556,16 @@
     [self waitForExpectationsWithTimeout:30 handler:nil];
     
     XCTAssertEqual(manager.state, MQTTSessionManagerStateConnected);
+    
+    XCTestExpectation *expectation4 = [self expectationWithDescription:@"Disconnect Expectation"];
+    [manager disconnectWithDisconnectHandler:^(NSError *error) {
+        XCTAssertNil(error);
+        [expectation4 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:30 handler:nil];
+    
+    XCTAssertEqual(manager.state, MQTTSessionManagerStateClosed);
+
 }
 
 #pragma mark - helpers
