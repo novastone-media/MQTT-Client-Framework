@@ -13,7 +13,7 @@
 		840716041BBE999700FBB3CB /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
 		840716051BBE999700FBB3CB /* NoDomains.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FEBFE55BBF61F564981F /* NoDomains.cer */; };
 		840716061BBE999700FBB3CB /* foobar.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7F5C2E599BA5BD018C8AB /* foobar.com.cer */; };
-		8407160B1BBEE68900FBB3CB /* MQTTTestSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */; };
+		8407160B1BBEE68900FBB3CB /* MQTTSessionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTSessionManagerTests.m */; };
 		840716411BBEF18B00FBB3CB /* mosquitto.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = 8482D3C91B49332700D81CC8 /* mosquitto.org.cer */; };
 		840716441BBEF18B00FBB3CB /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = C21D3CA71B1ED2F40012DD2F /* server.der */; };
 		8407164E1BBEF18B00FBB3CB /* AltName.cer in Resources */ = {isa = PBXBuildFile; fileRef = 6BC7FE28E1F56DDCC029E7B9 /* AltName.cer */; };
@@ -23,7 +23,7 @@
 		840716551BBEF19E00FBB3CB /* MQTTACLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 844C93AA1A81645D00CA4A03 /* MQTTACLTests.m */; };
 		840716561BBEF19E00FBB3CB /* MQTTClientOnlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */; };
 		840716581BBEF19E00FBB3CB /* MQTTClientPublishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 840785A818A2AA26009158D5 /* MQTTClientPublishTests.m */; };
-		840716591BBEF19E00FBB3CB /* MQTTTestSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */; };
+		840716591BBEF19E00FBB3CB /* MQTTSessionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTSessionManagerTests.m */; };
 		840D3CED1F264AE20072019B /* MQTTStrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D3CEA1F264AD00072019B /* MQTTStrict.m */; };
 		840D3CEE1F264AE30072019B /* MQTTStrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D3CEA1F264AD00072019B /* MQTTStrict.m */; };
 		840D3CEF1F264AE40072019B /* MQTTStrict.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D3CEA1F264AD00072019B /* MQTTStrict.m */; };
@@ -154,7 +154,7 @@
 		C7C0640F1FBB3DED000B65C7 /* MQTTClientOnlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */; };
 		C7C064101FBB450E000B65C7 /* MQTTTestBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */; };
 		C7C064151FBB48D7000B65C7 /* MQTTClientTestsV5.m in Sources */ = {isa = PBXBuildFile; fileRef = 842AF2A71ECF2973000F77D8 /* MQTTClientTestsV5.m */; };
-		C7C064171FBB4976000B65C7 /* MQTTTestSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */; };
+		C7C064171FBB4976000B65C7 /* MQTTSessionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429773E1B87CEF600A119FB /* MQTTSessionManagerTests.m */; };
 		C7C24D38208F13BF00DFF5F9 /* MQTTCoreDataPersistenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7C24D37208F13BF00DFF5F9 /* MQTTCoreDataPersistenceTests.m */; };
 		C7C24D3E208F65AE00DFF5F9 /* localhost.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7C24D3D208F65AE00DFF5F9 /* localhost.cer */; };
 		C7C24D3F208F65AE00DFF5F9 /* localhost.cer in Resources */ = {isa = PBXBuildFile; fileRef = C7C24D3D208F65AE00DFF5F9 /* localhost.cer */; };
@@ -317,7 +317,7 @@
 		8425D7051BBE8D3D005AD733 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8425D7181BBE8EF1005AD733 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		8425D71A1BBE8EF9005AD733 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTTestSessionManager.m; sourceTree = "<group>"; };
+		8429773E1B87CEF600A119FB /* MQTTSessionManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSessionManagerTests.m; sourceTree = "<group>"; };
 		842AF2A71ECF2973000F77D8 /* MQTTClientTestsV5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTClientTestsV5.m; sourceTree = "<group>"; };
 		8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTTestBlocks.m; sourceTree = "<group>"; };
 		8436B1731E93EBAA00E24A4E /* MQTTProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTProperties.h; sourceTree = "<group>"; };
@@ -651,7 +651,7 @@
 				C7515EB61F4C51A00071CFFE /* ReconnectTimerTests.m */,
 				848BB8F2195FF7A2004FCAE2 /* MQTTClientOnlyTests.m */,
 				8435A25C1BF3C69200D2BF33 /* MQTTTestBlocks.m */,
-				8429773E1B87CEF600A119FB /* MQTTTestSessionManager.m */,
+				8429773E1B87CEF600A119FB /* MQTTSessionManagerTests.m */,
 				C21D3C701B1EBD730012DD2F /* MQTTSSLSecurityPolicyTests.m */,
 				84C845A31BDD8DB400FEC354 /* MQTTTestFlows.m */,
 				C21D3C6E1B1EBB0E0012DD2F /* MQTTClientSubscriptionTests.m */,
@@ -1232,7 +1232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7AA17F11FB6F07900098AA9 /* MQTTSessionTests.m in Sources */,
-				C7C064171FBB4976000B65C7 /* MQTTTestSessionManager.m in Sources */,
+				C7C064171FBB4976000B65C7 /* MQTTSessionManagerTests.m in Sources */,
 				C7C24D38208F13BF00DFF5F9 /* MQTTCoreDataPersistenceTests.m in Sources */,
 				C7095E7C1FBDD1E900D73DD9 /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				C71DDA911FBFA831001152DF /* MQTTClientSubscriptionTests.m in Sources */,
@@ -1259,7 +1259,7 @@
 				C74489981FA74D58002751B2 /* MQTTSessionTests.m in Sources */,
 				840716581BBEF19E00FBB3CB /* MQTTClientPublishTests.m in Sources */,
 				84FED2171C35515800741A77 /* MQTTClientSubscriptionTests.m in Sources */,
-				840716591BBEF19E00FBB3CB /* MQTTTestSessionManager.m in Sources */,
+				840716591BBEF19E00FBB3CB /* MQTTSessionManagerTests.m in Sources */,
 				84517CF61C182F06006FE09B /* MQTTTestHelpers.m in Sources */,
 				C7C24D46208F7BB300DFF5F9 /* MQTTCoreDataPersistenceTests.m in Sources */,
 			);
@@ -1272,7 +1272,7 @@
 				8435A25E1BF3C69200D2BF33 /* MQTTTestBlocks.m in Sources */,
 				8425D70E1BBE8D68005AD733 /* MQTTClientSubscriptionTests.m in Sources */,
 				842AF2A91ECF297B000F77D8 /* MQTTClientTestsV5.m in Sources */,
-				8407160B1BBEE68900FBB3CB /* MQTTTestSessionManager.m in Sources */,
+				8407160B1BBEE68900FBB3CB /* MQTTSessionManagerTests.m in Sources */,
 				8425D70D1BBE8D68005AD733 /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				C7515EBA1F4C51A70071CFFE /* ReconnectTimerTests.m in Sources */,
 				C74489971FA74D58002751B2 /* MQTTSessionTests.m in Sources */,

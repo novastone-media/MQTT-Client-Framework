@@ -1,5 +1,5 @@
 //
-//  MQTTMQTTTestSessionManager.m
+//  MQTTSessionManagerTests.m
 //  MQTTClient
 //
 //  Created by Christoph Krey on 21.08.15.
@@ -44,7 +44,7 @@
 
 @end
 
-@interface MQTTTestSessionManager : MQTTTestHelpers <MQTTSessionManagerDelegate>
+@interface MQTTSessionManagerTests : MQTTTestHelpers <MQTTSessionManagerDelegate>
 @property (nonatomic) int step;
 @property (nonatomic) int sent;
 @property (nonatomic) int received;
@@ -52,7 +52,7 @@
 
 @end
 
-@implementation MQTTTestSessionManager
+@implementation MQTTSessionManagerTests
 
 - (void)SLOWtestMQTTSessionManagerClean {
     [self testMQTTSessionManager:true];
