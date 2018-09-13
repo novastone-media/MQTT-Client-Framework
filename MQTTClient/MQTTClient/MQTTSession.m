@@ -604,6 +604,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 - (void)keepAlive {
     DDLogVerbose(@"[MQTTSession] keepAlive %@ @%.0f", self.clientId, [[NSDate date] timeIntervalSince1970]);
     (void)[self encode:[MQTTMessage pingreqMessage]];
+    if([self.delegate respondsToSelector:@selector(handleKeepAliveEvent:)]) {
+        [self.delegate handleKeepAliveEvent:self];
+    }
 }
 
 - (void)checkDup {
@@ -1596,9 +1599,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 - (void)mqttTransportDidClose:(id<MQTTTransport>)mqttTransport {
     DDLogVerbose(@"[MQTTSession] mqttTransport mqttTransportDidClose");
-
-    [self error:MQTTSessionEventConnectionClosedByBroker error:nil];
-
+    dispatch_async(self.queue, ^{
+        [self error:MQTTSessionEventConnectionClosedByBroker error:nil];
+    });
 }
 
 - (void)mqttTransportDidOpen:(id<MQTTTransport>)mqttTransport {

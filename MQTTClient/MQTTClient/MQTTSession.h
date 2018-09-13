@@ -85,6 +85,13 @@ typedef NS_ENUM(NSInteger, MQTTSessionError) {
 
 @optional
 
+
+/**
+ gets called when a effectiveKeepAlive execute
+ @param session 
+ */
+- (void)handleKeepAliveEvent:(MQTTSession *)session;
+
 /** gets called when a new message was received
  @param session the MQTTSession reporting the new message
  @param data the data received, might be zero length
