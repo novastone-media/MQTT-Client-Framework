@@ -16,10 +16,8 @@
 
 @interface MQTTClientTests : MQTTTestHelpers
 @property (nonatomic) BOOL ungraceful;
-@property (strong, nonatomic) NSTimer *processingSimulationTimer;
 @property (nonatomic) int sent;
 @property (nonatomic) int received;
-@property (nonatomic) int processed;
 
 @end
 
@@ -505,7 +503,6 @@
     XCTAssert(self.connectionError.code == MQTTSessionErrorConnackUnacceptableProtocolVersion, @"error = %@", self.connectionError);
     
     [self shutdown:parameters];
-    
 }
 
 /*
@@ -565,7 +562,7 @@
     DDLogVerbose(@"can't test [MQTT-3.1.0-1]");
 }
 
-- (void)test_ping {
+- (void)testPing {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     
     self.session = [MQTTTestHelpers session:parameters];
@@ -645,143 +642,61 @@
 }
 
 #define PROCESSING_NUMBER 20
-#define PROCESSING_INTERVAL 0.1
 #define PROCESSING_TIMEOUT 30
 
-- (void)test_throttling_incoming_q0 {
+- (void)testThrottlingIncomingAtLeastOnce {
     NSDictionary *parameters = MQTTTestHelpers.broker;
-    
     self.session = [MQTTTestHelpers session:parameters];
-    
-    [self connect:parameters];
-    XCTAssertFalse(self.timedout);
-    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-    
-    self.processed = 0;
-    self.received = 0;
-    
-    self.processingSimulationTimer = [NSTimer scheduledTimerWithTimeInterval:PROCESSING_INTERVAL
-                                                                      target:self
-                                                                    selector:@selector(processingSimulation:)
-                                                                    userInfo:nil
-                                                                     repeats:true];
-    [self.session subscribeToTopic:TOPIC atLevel:MQTTQosLevelAtMostOnce];
-    
-    for (int i = 0; i < PROCESSING_NUMBER; i++) {
-        NSString *payload = [NSString stringWithFormat:@"Data %d", i];
-        [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:MQTTQosLevelAtMostOnce];
-    }
-    
-    self.timedout = FALSE;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:PROCESSING_TIMEOUT];
-    
-    while ((self.processed != self.received || self.received == 0) && !self.timedout) {
-        DDLogVerbose(@"[test_throttling_incoming_q0] waiting for processing %lu/%lu/%d",
-                     (unsigned long)self.processed, (unsigned long)self.received, PROCESSING_NUMBER);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    XCTAssertFalse(self.timedout);
-    [self.processingSimulationTimer invalidate];
-    
-    [self shutdown:parameters];
-    
-}
-
-- (void)test_throttling_incoming_q1 {
-    NSDictionary *parameters = MQTTTestHelpers.broker;
-    
-    self.session = [MQTTTestHelpers session:parameters];
-    
     [self connect:parameters];
     
     XCTAssertFalse(self.timedout);
-    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+    XCTAssertEqual(self.event, MQTTSessionEventConnected);
     
-    self.processed = 0;
     self.received = 0;
     
-    self.processingSimulationTimer = [NSTimer scheduledTimerWithTimeInterval:PROCESSING_INTERVAL
-                                                                      target:self
-                                                                    selector:@selector(processingSimulation:)
-                                                                    userInfo:nil
-                                                                     repeats:true];
     [self.session subscribeToTopic:TOPIC atLevel:MQTTQosLevelAtLeastOnce];
     
     for (int i = 0; i < PROCESSING_NUMBER; i++) {
         NSString *payload = [NSString stringWithFormat:@"Data %d", i];
-        [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:MQTTQosLevelAtLeastOnce];
+        [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding]
+                          onTopic:TOPIC
+                           retain:false
+                              qos:MQTTQosLevelAtLeastOnce];
     }
-    
-    self.timedout = FALSE;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:PROCESSING_TIMEOUT];
-    
-    while ((self.processed != self.received || self.received != PROCESSING_NUMBER) && !self.timedout) {
-        DDLogVerbose(@"[test_throttling_incoming_q1] waiting for processing %lu/%lu/%d",
-                     (unsigned long)self.processed, (unsigned long)self.received, PROCESSING_NUMBER);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    XCTAssertFalse(self.timedout);
-    [self.processingSimulationTimer invalidate];
-    
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return self.received == PROCESSING_NUMBER;
+    }];
+    XCTNSPredicateExpectation *expectation = [[XCTNSPredicateExpectation alloc] initWithPredicate:predicate object:self];
+    [self waitForExpectations:@[expectation] timeout:PROCESSING_TIMEOUT];
     [self shutdown:parameters];
-    
 }
 
-- (void)test_throttling_incoming_q2 {
+- (void)testThrottlingIncomingExactlyOnce {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     
     self.session = [MQTTTestHelpers session:parameters];
     
     [self connect:parameters];
     XCTAssertFalse(self.timedout);
-    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
+    XCTAssertEqual(self.event, MQTTSessionEventConnected);
     
-    self.processed = 0;
     self.received = 0;
     
-    self.processingSimulationTimer = [NSTimer scheduledTimerWithTimeInterval:PROCESSING_INTERVAL
-                                                                      target:self
-                                                                    selector:@selector(processingSimulation:)
-                                                                    userInfo:nil
-                                                                     repeats:true];
     [self.session subscribeToTopic:TOPIC atLevel:MQTTQosLevelExactlyOnce];
     
     for (int i = 0; i < PROCESSING_NUMBER; i++) {
         NSString *payload = [NSString stringWithFormat:@"Data %d", i];
-        [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:MQTTQosLevelExactlyOnce];
+        [self.session publishData:[payload dataUsingEncoding:NSUTF8StringEncoding]
+                          onTopic:TOPIC
+                           retain:false
+                              qos:MQTTQosLevelExactlyOnce];
     }
-    
-    self.timedout = FALSE;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:PROCESSING_TIMEOUT];
-    
-    while ((self.processed != self.received || self.received != PROCESSING_NUMBER) && !self.timedout) {
-        DDLogVerbose(@"[test_throttling_incoming_q2] waiting for processing %lu/%lu/%d",
-                     (unsigned long)self.processed, (unsigned long)self.received, PROCESSING_NUMBER);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    XCTAssertFalse(self.timedout);
-    [self.processingSimulationTimer invalidate];
-    
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return self.received == PROCESSING_NUMBER;
+    }];
+    XCTNSPredicateExpectation *expectation = [[XCTNSPredicateExpectation alloc] initWithPredicate:predicate object:self];
+    [self waitForExpectations:@[expectation] timeout:PROCESSING_TIMEOUT];
     [self shutdown:parameters];
-}
-
-- (void)processingSimulation:(id)userInfo {
-    DDLogVerbose(@"processingSimulation %lu/%lu", (unsigned long)self.processed, (unsigned long)self.received);
-    if (self.received > self.processed) {
-        self.processed++;
-    }
 }
 
 #pragma mark helpers
@@ -890,8 +805,10 @@
 }
 
 - (BOOL)newMessageWithFeedback:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
-    DDLogVerbose(@"newMessageWithFeedback(%lu):%@ onTopic:%@ qos:%d retained:%d mid:%d", (unsigned long)self.processed, data, topic, qos, retained, mid);
-    if (self.processed > self.received - 10) {
+    DDLogVerbose(@"newMessageWithFeedback:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
+    // Randomly reject messages to simulate throttling
+    int r = arc4random_uniform(1);
+    if (r == 0) {
         if (!retained && [topic isEqualToString:TOPIC]) {
             self.received++;
         }
