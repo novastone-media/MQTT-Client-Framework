@@ -644,35 +644,6 @@
     
 }
 
-#define SYSTOPIC @"$SYS/#"
-
-- (void)test_systopic {
-    NSDictionary *parameters = MQTTTestHelpers.broker;
-    
-    self.session = [MQTTTestHelpers session:parameters];
-    
-    [self connect:parameters];
-    XCTAssertFalse(self.timedout);
-    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"MQTTSessionEventConnected %@", self.error);
-    
-    [self.session subscribeToTopic:SYSTOPIC atLevel:MQTTQosLevelAtMostOnce];
-    
-    self.timedout = FALSE;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:[parameters[@"timeout"] intValue]];
-    
-    while (!self.timedout) {
-        DDLogVerbose(@"waiting for incoming %@ messages", SYSTOPIC);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    [self shutdown:parameters];
-    
-}
-
-
 #define PROCESSING_NUMBER 20
 #define PROCESSING_INTERVAL 0.1
 #define PROCESSING_TIMEOUT 30
