@@ -1,4 +1,7 @@
-# MQTT-Client-Framework 
+<p align="center">
+	<img src="Logo/logo.svg" alt="MQTT-Client-Framework"/>
+	<br/><br/>
+</p> 
 
 [![Build Status](https://travis-ci.org/novastone-media/MQTT-Client-Framework.svg?branch=master)](https://travis-ci.org/novastone-media/MQTT-Client-Framework)
 [![codecov](https://codecov.io/gh/novastone-media/MQTT-Client-Framework/branch/master/graph/badge.svg)](https://codecov.io/gh/novastone-media/MQTT-Client-Framework)
