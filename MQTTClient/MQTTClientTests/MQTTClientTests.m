@@ -16,7 +16,6 @@
 
 @interface MQTTClientTests : MQTTTestHelpers
 @property (nonatomic) BOOL ungraceful;
-@property (nonatomic) int sent;
 @property (nonatomic) int received;
 
 @end
@@ -579,47 +578,6 @@
 }
 
 /*
- * [MQTT-3.1.2-5]
- * After the disconnection of a Session that had CleanSession set to 0,
- * the Server MUST store further QoS 1 and QoS 2 messages that match any
- * subscriptions that the client had at the time of disconnection as part of the Session state .
- */
-- (void)SLOWtest_pub_sub_no_cleansession_qos2_MQTT_3_1_2_5 {
-    [self no_cleansession:MQTTQosLevelExactlyOnce];
-}
-- (void)SLOWtest_pub_sub_no_cleansession_qos1_MQTT_3_1_2_5 {
-    [self no_cleansession:MQTTQosLevelAtLeastOnce];
-}
-- (void)SLOWtest_pub_sub_no_cleansession_qos0_MQTT_3_1_2_5 {
-    [self no_cleansession:MQTTQosLevelAtMostOnce];
-}
-
-/*
- * [MQTT-4.3.3-2]
- * In the QoS 2 delivery protocol, the Receiver
- ** MUST respond with a PUBREC containing the Packet Identifier from the incoming PUBLISH Packet,
- *  having accepted ownership of the Application Message.
- ** Until it has received the corresponding PUBREL packet, the Receiver MUST acknowledge any
- *  subsequent PUBLISH packet with the same Packet Identifier by sending a PUBREC. It MUST NOT
- *  cause duplicate messages to be delivered to any onward recipients in this case.
- ** MUST respond to a PUBREL packet by sending a PUBCOMP packet containing the same Packet Identifier as the PUBREL.
- ** After it has sent a PUBCOMP, the receiver MUST treat any subsequent PUBLISH packet that
- *  contains that Packet Identifier as being a new publication.
- */
-
-- (void)SLOWtest_pub_sub_cleansession_qos2_MQTT_4_3_3_2 {
-    [self cleansession:MQTTQosLevelExactlyOnce];
-}
-
-- (void)SLOWtest_pub_sub_cleansession_qos1_MQTT_4_3_3_2 {
-    [self cleansession:MQTTQosLevelAtLeastOnce];
-}
-
-- (void)SLOWtest_pub_sub_cleansession_qos0_MQTT_4_3_3_2 {
-    [self cleansession:MQTTQosLevelAtMostOnce];
-}
-
-/*
  * [MQTT-3.1.4-5]
  * If the Server rejects the CONNECT, it MUST NOT process any data sent by the Client after the CONNECT Packet.
  */
@@ -700,109 +658,6 @@
 }
 
 #pragma mark helpers
-
-- (void)no_cleansession:(MQTTQosLevel)qos {
-    NSDictionary *parameters = MQTTTestHelpers.broker;
-    
-    DDLogVerbose(@"Cleaning topic");
-    
-    MQTTSession *sendingSession = [MQTTTestHelpers session:parameters];
-    sendingSession.clientId = @"MQTTClient-pub";
-    if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for pub to broker");
-    }
-    [sendingSession publishAndWaitData:[[NSData alloc] init] onTopic:TOPIC retain:true qos:qos timeout:0];
-    
-    DDLogVerbose(@"Clearing old subs");
-    self.session = [MQTTTestHelpers session:parameters];
-    self.session.clientId = @"MQTTClient-sub";
-    [self connect:parameters];
-    [self shutdown:parameters];
-    
-    DDLogVerbose(@"Subscribing to topic");
-    self.session = [MQTTTestHelpers session:parameters];
-    self.session.clientId = @"MQTTClient-sub";
-    self.session.cleanSessionFlag = FALSE;
-    
-    [self connect:parameters];
-    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos timeout:0];
-    [self shutdown:parameters];
-    
-    for (int i = 1; i < BULK; i++) {
-        DDLogVerbose(@"publishing to topic %d", i);
-        NSString *payload = [NSString stringWithFormat:@"payload %d", i];
-        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos timeout:0];
-    }
-    [sendingSession closeAndWait:0];
-    
-    DDLogVerbose(@"receiving from topic");
-    self.session = [MQTTTestHelpers session:parameters];
-    self.session.clientId = @"MQTTClient-sub";
-    self.session.cleanSessionFlag = FALSE;
-    
-    [self connect:parameters];
-    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
-    
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    self.timedout = FALSE;
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:[parameters[@"timeout"] intValue]];
-    
-    while (!self.timedout) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    [self shutdown:parameters];
-}
-
-- (void)cleansession:(MQTTQosLevel)qos {
-    NSDictionary *parameters = MQTTTestHelpers.broker;
-    
-    DDLogVerbose(@"Cleaning topic");
-    MQTTSession *sendingSession = [MQTTTestHelpers session:parameters];
-    sendingSession.clientId = @"MQTTClient-pub";
-    
-    if (![sendingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for pub to broker");
-    }
-    [sendingSession publishAndWaitData:[[NSData alloc] init]
-                               onTopic:TOPIC
-                                retain:true
-                                   qos:qos
-                               timeout:0];
-    
-    DDLogVerbose(@"Clearing old subs");
-    self.session = [MQTTTestHelpers session:parameters];
-    self.session.clientId = @"MQTTClient-sub";
-    [self connect:parameters];
-    [self shutdown:parameters];
-    
-    DDLogVerbose(@"Subscribing to topic");
-    self.session = [MQTTTestHelpers session:parameters];
-    self.session.clientId = @"MQTTClient-sub";
-    [self connect:parameters];
-    [self.session subscribeAndWaitToTopic:TOPIC atLevel:qos timeout:0];
-    
-    for (int i = 1; i < BULK; i++) {
-        DDLogVerbose(@"publishing to topic %d", i);
-        NSString *payload = [NSString stringWithFormat:@"payload %d", i];
-        [sendingSession publishAndWaitData:[payload dataUsingEncoding:NSUTF8StringEncoding] onTopic:TOPIC retain:false qos:qos timeout:0];
-    }
-    [sendingSession closeAndWait:0];
-    
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    self.timedout = FALSE;
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:[parameters[@"timeout"] intValue]];
-    
-    while (!self.timedout) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    [self shutdown:parameters];
-}
 
 - (BOOL)newMessageWithFeedback:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
     DDLogVerbose(@"newMessageWithFeedback:%@ onTopic:%@ qos:%d retained:%d mid:%d", data, topic, qos, retained, mid);
