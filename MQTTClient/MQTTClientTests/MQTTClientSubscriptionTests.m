@@ -607,28 +607,19 @@
     }
 }
 
-- (void)testUnsubscribeTopic:(NSString *)topic
-{
+- (void)testUnsubscribeTopic:(NSString *)topic {
     self.unsubMid = 0;
     self.event = -1;
     self.timedout = false;
-    self.sentUnsubMid = [self.session unsubscribeTopic:topic];
-    DDLogVerbose(@"sent mid(UNSUBSCRIBE): %d", self.sentUnsubMid);
-    
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:self.timeoutValue];
-    
-    while (self.unsubMid == 0 && !self.timedout && self.event == -1) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertFalse(self.timedout, @"No UNSUBACK received [MQTT-3.10.3-5] within %f seconds", self.timeoutValue);
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    XCTAssertEqual(self.unsubMid, self.sentUnsubMid, @"msgID(%d) in UNSUBACK does not match msgID(%d) in UNSUBSCRIBE [MQTT-3.10.3-4]", self.unsubMid, self.sentUnsubMid);
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    self.sentUnsubMid = [self.session unsubscribeTopic:topic unsubscribeHandler:^(NSError *error) {
+        XCTAssertEqual(self.unsubMid, self.sentUnsubMid, @"msgID(%d) in UNSUBACK does not match msgID(%d) in UNSUBSCRIBE [MQTT-3.10.3-4]", self.unsubMid, self.sentUnsubMid);
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:self.timeoutValue handler:nil];
 }
 
-- (void)testUnsubscribeTopicCloseExpected:(NSString *)topic
-{
+- (void)testUnsubscribeTopicCloseExpected:(NSString *)topic {
     self.unsubMid = 0;
     self.event = -1;
     self.timedout = false;
