@@ -805,7 +805,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                 if (self.effectiveKeepAlive > 0) {
                                     self.keepAliveTimer = [GCDTimer scheduledTimerWithTimeInterval:self.effectiveKeepAlive
                                                                                            repeats:YES
-                                                                                             queue: self.queue
+                                                                                             queue:self.queue
                                                                                              block:^() {
                                                                                                  [weakSelf keepAlive];
                                                                                              }];

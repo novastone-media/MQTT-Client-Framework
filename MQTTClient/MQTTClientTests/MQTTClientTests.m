@@ -569,28 +569,16 @@
     NSDictionary *parameters = MQTTTestHelpers.broker;
     
     self.session = [MQTTTestHelpers session:parameters];
-    self.session.keepAliveInterval = [parameters[@"timeout"] intValue] / 2;
+    self.session.keepAliveInterval = 2;
     
     [self connect:parameters];
     XCTAssertFalse(self.timedout);
-    XCTAssertEqual(self.event, MQTTSessionEventConnected, @"No MQTTSessionEventConnected %@", self.error);
+    XCTAssertEqual(self.event, MQTTSessionEventConnected);
+    XCTKVOExpectation *expectation = [[XCTKVOExpectation alloc] initWithKeyPath:@"type" object:self expectedValue:@(MQTTPingresp)];
     
-    self.event = -1;
-    self.type = 0xff;
-    [self performSelector:@selector(timedout:)
-               withObject:nil
-               afterDelay:[parameters[@"timeout"] intValue]];
+    [self waitForExpectations:@[expectation] timeout:[parameters[@"timeout"] intValue]];
     
-    while (!self.timedout && self.event == -1 && self.type == 0xff) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    XCTAssertEqual(self.type, MQTTPingresp, @"No PingResp received %u", self.type);
-    XCTAssertNotEqual(self.event, MQTTSessionEventConnectionClosed, @"MQTTSessionEventConnectionClosed %@", self.error);
-    XCTAssertNotEqual(self.event, MQTTSessionEventProtocolError, @"MQTTSessionEventProtocolError %@", self.error);
-    XCTAssertNotEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"MQTTSessionEventConnectionClosedByBroker %@", self.error);
-    XCTAssert(!self.timedout, @"Timeout 200%% keepalive");
     [self shutdown:parameters];
-    
 }
 
 /*
