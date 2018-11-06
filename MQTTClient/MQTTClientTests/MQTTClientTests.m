@@ -500,7 +500,7 @@
     [self connect:parameters];
     
     XCTAssertFalse(self.timedout);
-    XCTAssert(self.connectionError.code == MQTTSessionErrorConnackUnacceptableProtocolVersion, @"error = %@", self.connectionError);
+    XCTAssertNotNil(self.error);
     
     [self shutdown:parameters];
 }
