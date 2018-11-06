@@ -137,6 +137,9 @@
 		C7515EC01F4C6A710071CFFE /* ForegroundReconnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EBC1F4C6A710071CFFE /* ForegroundReconnection.m */; };
 		C7515EC11F4C6A710071CFFE /* ForegroundReconnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EBC1F4C6A710071CFFE /* ForegroundReconnection.m */; };
 		C7515EC21F4C6A710071CFFE /* ForegroundReconnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7515EBC1F4C6A710071CFFE /* ForegroundReconnection.m */; };
+		C76019D52191E9B700B72C63 /* MQTTTestWebsockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B6A1881C133A9F00618573 /* MQTTTestWebsockets.m */; };
+		C76019D62191E9B800B72C63 /* MQTTTestWebsockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B6A1881C133A9F00618573 /* MQTTTestWebsockets.m */; };
+		C76019D72191E9B800B72C63 /* MQTTTestWebsockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B6A1881C133A9F00618573 /* MQTTTestWebsockets.m */; };
 		C7A48D7A1FFB836600248055 /* GCDTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* GCDTimer.h */; };
 		C7A48D7B1FFB836600248055 /* GCDTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* GCDTimer.h */; };
 		C7A48D7C1FFB836700248055 /* GCDTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = C701E3361FB0A70600B0CEB5 /* GCDTimer.h */; };
@@ -1408,6 +1411,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7AA17F11FB6F07900098AA9 /* MQTTSessionTests.m in Sources */,
+				C76019D52191E9B700B72C63 /* MQTTTestWebsockets.m in Sources */,
 				C7C064171FBB4976000B65C7 /* MQTTSessionManagerTests.m in Sources */,
 				C7C24D38208F13BF00DFF5F9 /* MQTTCoreDataPersistenceTests.m in Sources */,
 				C7095E7C1FBDD1E900D73DD9 /* MQTTSSLSecurityPolicyTests.m in Sources */,
@@ -1428,6 +1432,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8435A25F1BF3C69200D2BF33 /* MQTTTestBlocks.m in Sources */,
+				C76019D72191E9B800B72C63 /* MQTTTestWebsockets.m in Sources */,
 				840716511BBEF19E00FBB3CB /* MQTTSSLSecurityPolicyTests.m in Sources */,
 				842AF2AA1ECF297C000F77D8 /* MQTTClientTestsV5.m in Sources */,
 				840716551BBEF19E00FBB3CB /* MQTTACLTests.m in Sources */,
@@ -1448,6 +1453,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8435A25E1BF3C69200D2BF33 /* MQTTTestBlocks.m in Sources */,
+				C76019D62191E9B800B72C63 /* MQTTTestWebsockets.m in Sources */,
 				8425D70E1BBE8D68005AD733 /* MQTTClientSubscriptionTests.m in Sources */,
 				842AF2A91ECF297B000F77D8 /* MQTTClientTestsV5.m in Sources */,
 				8407160B1BBEE68900FBB3CB /* MQTTSessionManagerTests.m in Sources */,
