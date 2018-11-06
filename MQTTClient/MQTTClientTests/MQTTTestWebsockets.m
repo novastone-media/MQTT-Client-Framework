@@ -53,7 +53,7 @@
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             
             
-            XCTAssert(!self.timedout, @"timeout");
+            XCTAssertFalse(self.timedout);
             XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
             
             
@@ -71,7 +71,7 @@
             }
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             
-            XCTAssert(!self.timedout, @"timeout");
+            XCTAssertFalse(self.timedout);
             XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"Not ClosedByBroker %ld %@", (long)self.event, self.error);
         }
     }
@@ -119,7 +119,7 @@
                 self.session.userName = parameters[@"user"];
                 self.session.password = parameters[@"pass"];
                 [self connect:self.session parameters:parameters];
-                XCTAssert(!self.timedout, @"timeout");
+                XCTAssertFalse(self.timedout);
                 XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
                 
                 self.timedout = FALSE;
@@ -169,7 +169,7 @@
                 self.session.userName = parameters[@"user"];
                 self.session.password = parameters[@"pass"];
                 [self connect:self.session parameters:parameters];
-                XCTAssert(!self.timedout, @"timeout");
+                XCTAssertFalse(self.timedout);
                 XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
                 
                 self.timedout = FALSE;
@@ -237,7 +237,7 @@
             }
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             
-            XCTAssert(!self.timedout, @"timeout");
+            XCTAssertFalse(self.timedout);
             XCTAssertEqual(self.websocket.readyState, SR_OPEN, @"Websocket not open %ld", (long)self.websocket.readyState);
             
             MQTTMessage *connectMessage = [MQTTMessage connectMessageWithClientId:@"SRWebsocket"
@@ -277,7 +277,7 @@
             
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             
-            XCTAssert(!self.timedout, @"timeout");
+            XCTAssertFalse(self.timedout);
             XCTAssert(self.next, @"Websocket not response");
             
             
@@ -337,7 +337,7 @@ didReceiveMessage:(id)message {
     }
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     
-    XCTAssert(!self.timedout, @"timeout");
+    XCTAssertFalse(self.timedout);
     XCTAssertEqual(self.event, MQTTSessionEventConnected, @"Not Connected %ld %@", (long)self.event, self.error);
 }
 
@@ -356,7 +356,7 @@ didReceiveMessage:(id)message {
     }
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     
-    XCTAssert(!self.timedout, @"timeout");
+    XCTAssertFalse(self.timedout);
     XCTAssertEqual(self.event, MQTTSessionEventConnectionClosedByBroker, @"Not ClosedByBroker %ld %@", (long)self.event, self.error);
     
     self.session.delegate = nil;

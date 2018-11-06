@@ -544,7 +544,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         self.transport.delegate = nil;
     }
 
-    if(self.decoder){
+    if (self.decoder) {
         [self.decoder close];
         self.decoder.delegate = nil;
     }
@@ -1186,7 +1186,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                                           mid:(flow.messageId).intValue
                          ];
         }
-        if(self.messageHandler){
+        if (self.messageHandler){
             self.messageHandler(flow.data, flow.topic);
         }
         if (processed) {
@@ -1259,7 +1259,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     }
     [self closeInternal];
     
-    if(self.connectionHandler){
+    if (self.connectionHandler) {
         self.connectionHandler(eventCode);
     }
 

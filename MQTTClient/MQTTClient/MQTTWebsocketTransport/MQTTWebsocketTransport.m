@@ -55,8 +55,8 @@
     [self.websocket open];
 }
 
-- (NSURL*) endpointURL {
-    if(self.url != nil) {
+- (NSURL*)endpointURL {
+    if (self.url != nil) {
         return self.url;
     }
     NSString *protocol = (self.tls) ? @"wss" : @"ws";

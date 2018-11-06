@@ -197,7 +197,7 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     
-    XCTAssert(!self.timedout, @"timeout");
+    XCTAssertFalse(self.timedout);
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     
     self.session.delegate = nil;
