@@ -9,7 +9,7 @@ before_install:
   - gem install xcpretty
   - brew install mosquitto
 before_script: ./brokers/mosquitto/start.sh
-script: xcodebuild clean test -project MQTTClient/MQTTClient.xcodeproj -scheme $SCHEME -destination "$DESTINATION"
+script: xcodebuild clean test -workspace MQTTClient/MQTTClient.xcworkspace -scheme $SCHEME -destination "$DESTINATION"
 after_script: ./brokers/mosquitto/stop.sh
 after_success:
   - if [ "$SCHEME" == "MQTTClientmacOS" ]; then
