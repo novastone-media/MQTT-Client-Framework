@@ -11,12 +11,18 @@
 #import "MQTTSSLSecurityPolicyTransport.h"
 #import "MQTTTestHelpers.h"
 #import "MQTTLog.h"
+#import "MQTTStrict.h"
 
 @interface MQTTSessionTests : XCTestCase
 
 @end
 
 @implementation MQTTSessionTests
+
+- (void)setUp {
+    [super setUp];
+    MQTTStrict.strict = NO;
+}
 
 - (void)testConnectToTLSServer {
     XCTestExpectation *expectation = [self expectationWithDescription:@""];
