@@ -32,6 +32,8 @@ MQTT-Client-Framework is tested with a long list of brokers:
 
 ## Usage
 
+For example app, see [MQTTChat](https://github.com/ckrey/MQTTChat)
+
 Create a new client and connect to a broker:
 
 ```objective-c
