@@ -10,11 +10,17 @@
 
 #import "MQTTLog.h"
 #import "MQTTTestHelpers.h"
+#import "MQTTStrict.h"
 
 @interface MQTTTestBlocks : MQTTTestHelpers
 @end
 
 @implementation MQTTTestBlocks
+
+- (void)setUp {
+    [super setUp];
+    MQTTStrict.strict = NO;
+}
 
 - (void)testBlockPublishSuccess {
     NSDictionary *parameters = MQTTTestHelpers.broker;
@@ -150,7 +156,6 @@
 }
 
 - (void)testBlockQueued {
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     
     self.session = [MQTTTestHelpers session:parameters];
