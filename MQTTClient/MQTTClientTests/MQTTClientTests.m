@@ -602,7 +602,7 @@
 #define PROCESSING_NUMBER 20
 #define PROCESSING_TIMEOUT 30
 
-- (void)testThrottlingIncomingAtLeastOnce {
+- (void)DISABLEtestThrottlingIncomingAtLeastOnce {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
     [self connect:parameters];
