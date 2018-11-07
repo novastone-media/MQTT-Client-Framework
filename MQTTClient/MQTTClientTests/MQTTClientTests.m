@@ -118,9 +118,12 @@
     MQTTSession *subscribingSession = [MQTTTestHelpers session:parameters];
     subscribingSession.clientId = @"MQTTClient-sub";
     
-    if (![subscribingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for sub to broker");
-    }
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    [subscribingSession connectWithConnectHandler:^(NSError *error) {
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
+
     [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0 timeout:0];
     
     self.session =  [MQTTTestHelpers session:parameters];
@@ -152,9 +155,13 @@
     
     MQTTSession *subscribingSession = [MQTTTestHelpers session:parameters];
     subscribingSession.clientId = @"MQTTClient-sub";
-    if (![subscribingSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for sub to broker");
-    }
+
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    [subscribingSession connectWithConnectHandler:^(NSError *error) {
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
+
     [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0 timeout:0];
     
     self.session =  [MQTTTestHelpers session:parameters];
@@ -393,9 +400,11 @@
     MQTTSession *sameSession = [MQTTTestHelpers session:parameters];
     sameSession.clientId = @"MQTTClient";
     
-    if (![sameSession connectAndWaitTimeout:[parameters[@"timeout"] unsignedIntValue]]) {
-        XCTFail(@"no connection for same Session to broker");
-    }
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    [sameSession connectWithConnectHandler:^(NSError *error) {
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
     
     [self shutdown:parameters];
     [sameSession closeAndWait:0];

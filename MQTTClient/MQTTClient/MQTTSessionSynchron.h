@@ -17,23 +17,6 @@
 
 @interface MQTTSession(Synchron)
 
-/** connects to the specified MQTT server synchronously
- 
- @param timeout defines the maximum time to wait. Defaults to 0 for no timeout.
- 
- @return true if the connection was established
- 
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectAndWaitTimeout:30];
- @endcode
- 
- */
-- (BOOL)connectAndWaitTimeout:(NSTimeInterval)timeout;
-
 /** subscribes to a topic at a specific QoS level synchronously
  
  @param topic the Topic Filter to subscribe to.

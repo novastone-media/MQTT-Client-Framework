@@ -24,14 +24,12 @@
 }
 
 - (void)testUnsubscribe_with_wrong_flags_MQTT_3_10_1_1 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     DDLogVerbose(@"can't test [MQTT-3.10.1-1]");
 }
 
 - (void)testSubscribeWMultipleTopics_None_MQTT_3_8_3_3 {
-    MQTTStrict.strict = FALSE;
-    
-    
+    MQTTStrict.strict = NO;
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testMultiSubscribeCloseExpected:@{}];
@@ -53,7 +51,7 @@
 }
 
 - (void)testSubscribeWMultipleTopics_One {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -62,7 +60,7 @@
 }
 
 - (void)testSubscribeWMultipleTopics_more {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -71,7 +69,7 @@
 }
 
 - (void)testSubscribeWMultipleTopics_16_to_256 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -87,7 +85,7 @@
 }
 
 - (void)testSubscribeQoS0 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -96,7 +94,7 @@
 }
 
 - (void)testSubscribeQoS1 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -105,7 +103,7 @@
 }
 
 - (void)testSubscribeQoS2 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -114,7 +112,7 @@
 }
 
 - (void)testSubscribeTopicPlain {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -123,7 +121,7 @@
 }
 
 - (void)testSubscribeTopicHash {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -132,7 +130,7 @@
 }
 
 - (void)testSubscribeTopicHashnotalone_MQTT_4_7_1_2 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -144,7 +142,7 @@
 
 // All Topic Names and Topic Filters MUST be at least one character long [MQTT-4.7.3-1]
 - (void)testSubscribeEmptyTopicClosesConnection {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -153,7 +151,7 @@
 }
 
 - (void)testSubscribeTopicHashnotlast_MQTT_4_7_1_2 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -177,7 +175,7 @@
 }
 
 - (void)testSubscribeTopicPlus {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -186,7 +184,7 @@
 }
 
 - (void)testSubscribeTopicSlash {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -195,7 +193,7 @@
 }
 
 - (void)testSubscribeTopicPlusnotalone_MQTT_4_7_1_3 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -206,7 +204,7 @@
 }
 
 - (void)testSubscribeTopicNone_MQTT_3_8_3_3 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -215,7 +213,7 @@
 }
 
 - (void)SLOWtestSubscribeWildcardSYS_MQTT_4_7_2_1 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -240,7 +238,7 @@
 }
 
 - (void)testSubscribeLong_MQTT_4_7_3_3 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -299,7 +297,7 @@
 
 
 - (void)SLOWtestSubscribeSameTopicDifferentQoS_MQTT_3_8_4_3 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -316,7 +314,7 @@
  * The Server MUST deliver the message to the Client respecting the maximum QoS of all the matching subscriptions.
  */
 - (void)test_delivery_max_QoS_MQTT_3_3_5_1 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -338,7 +336,7 @@
  * is deleted, otherwise no additional processing occurs.
  */
 - (void)test_unsubscribe_byte_by_byte_MQTT_3_10_4_1 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -352,7 +350,7 @@
  * If a Server deletes a Subscription It MUST stop adding any new messages for delivery to the Client.
  */
 - (void)test_stop_delivering_after_unsubscribe_MQTT_3_10_4_2 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -377,7 +375,7 @@
  * QoS 2 messages which it has started to send to the Client.
  */
 - (void)test_complete_delivering_qos12_after_unsubscribe_MQTT_3_10_4_3 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -398,7 +396,7 @@
 
 
 - (void)testUnsubscribeTopicPlain {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -416,7 +414,7 @@
 }
 
 - (void)testUnsubscribeTopicHashnotalone_MQTT_4_7_1_2 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -439,7 +437,7 @@
 }
 
 - (void)testUnsubscribeTopicPlus {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -448,7 +446,7 @@
 }
 
 - (void)testUnsubscribeTopicEmpty_MQTT_4_7_3_1 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -457,7 +455,7 @@
 }
 
 - (void)DISABLEtestUnsubscribeTopicNone_MQTT_3_10_3_2 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     // Test specifically with emqtt because there is a bug
     // in mosquitto: https://github.com/eclipse/mosquitto/issues/665
     NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"emqtt"];
@@ -467,7 +465,7 @@
 }
 
 - (void)DISABLEtestUnsubscribeTopicZero_MQTT_4_7_3_1 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
@@ -476,7 +474,7 @@
 }
 
 - (void)DISABLEtestMultiUnsubscribe_None_MQTT_3_10_3_2 {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     // Test specifically with emqtt because there is a bug
     // in mosquitto: https://github.com/eclipse/mosquitto/issues/665
     NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"emqtt"];
@@ -486,7 +484,7 @@
 }
 
 - (void)testMultiUnsubscribe_One {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testMultiUnsubscribeTopic:@[@"abc"]];
@@ -494,7 +492,7 @@
 }
 
 - (void)testMultiUnsubscribe_more {
-    MQTTStrict.strict = FALSE;
+    MQTTStrict.strict = NO;
     
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];

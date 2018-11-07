@@ -218,7 +218,6 @@
 }
 
 - (void)testBlockConnect {
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     
     self.session = [MQTTTestHelpers session:parameters];
@@ -244,7 +243,6 @@
 }
 
 - (void)testBlockConnectUnknownHost {
-    
     NSMutableDictionary *parameters = [MQTTTestHelpers.broker mutableCopy];
     
     parameters[@"host"] = @"abc";

@@ -32,27 +32,6 @@
 
 @implementation MQTTSession(Synchron)
 
-/** Synchron connect
- *
- */
-- (BOOL)connectAndWaitTimeout:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-    self.synchronConnect = TRUE;
-    
-    [self connect];
-    
-    [[NSRunLoop currentRunLoop] addPort:[NSMachPort port] forMode:NSRunLoopCommonModes];
-    
-    while (self.synchronConnect && (timeout == 0 || started.timeIntervalSince1970 + timeout > [NSDate date].timeIntervalSince1970)) {
-        DDLogVerbose(@"[MQTTSessionSynchron] waiting for connect");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    
-    DDLogVerbose(@"[MQTTSessionSynchron] end connect");
-    
-    return (self.status == MQTTSessionStatusConnected);
-}
-
 - (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel timeout:(NSTimeInterval)timeout {
     NSDate *started = [NSDate date];
     self.synchronSub = TRUE;
