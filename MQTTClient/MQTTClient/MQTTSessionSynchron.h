@@ -17,32 +17,6 @@
 
 @interface MQTTSession(Synchron)
 
-/** subscribes to a topic at a specific QoS level synchronously
- 
- @param topic the Topic Filter to subscribe to.
- 
- @param qosLevel specifies the QoS Level of the subscription.
- qosLevel can be 0, 1, or 2.
- @param timeout defines the maximum time to wait
- 
- @return TRUE if successfully subscribed
- 
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectAndWaitTimeout:30];
- 
- [session subscribeAndWaitToTopic:@"example/#" atLevel:2 timeout:10];
- 
- @endcode
- 
- */
-- (BOOL)subscribeAndWaitToTopic:(NSString *)topic
-                        atLevel:(MQTTQosLevel)qosLevel
-                        timeout:(NSTimeInterval)timeout;
-
 /** subscribes a number of topics
  
  @param topics an NSDictionary<NSString *, NSNumber *> containing the Topic Filters to subscribe to as keys and

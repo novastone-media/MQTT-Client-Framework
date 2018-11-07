@@ -32,28 +32,6 @@
 
 @implementation MQTTSession(Synchron)
 
-- (BOOL)subscribeAndWaitToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel timeout:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-    self.synchronSub = TRUE;
-    UInt16 mid = [self subscribeToTopic:topic atLevel:qosLevel];
-    self.synchronSubMid = mid;
-    
-    [[NSRunLoop currentRunLoop] addPort:[NSMachPort port] forMode:NSRunLoopCommonModes];
-    
-    while (self.synchronSub && (timeout == 0 || started.timeIntervalSince1970 + timeout > [NSDate date].timeIntervalSince1970)) {
-        DDLogVerbose(@"[MQTTSessionSynchron] waiting for suback %d", mid);
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    
-    DDLogVerbose(@"[MQTTSessionSynchron] end subscribe");
-    
-    if (self.synchronSub || self.synchronSubMid != mid) {
-        return FALSE;
-    } else {
-        return TRUE;
-    }
-}
-
 - (BOOL)subscribeAndWaitToTopics:(NSDictionary<NSString *, NSNumber *> *)topics timeout:(NSTimeInterval)timeout {
     NSDate *started = [NSDate date];
     self.synchronSub = TRUE;

@@ -124,7 +124,11 @@
     }];
     [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
 
-    [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0 timeout:0];
+    XCTestExpectation *subscribeExpectation = [self expectationWithDescription:@""];
+    [subscribingSession subscribeToTopic:TOPIC atLevel:0 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
+        [subscribeExpectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
     
     self.session =  [MQTTTestHelpers session:parameters];
     self.session.willFlag = TRUE;
@@ -167,7 +171,11 @@
     }];
     [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
 
-    [subscribingSession subscribeAndWaitToTopic:TOPIC atLevel:0 timeout:0];
+    XCTestExpectation *subscribeExpectation = [self expectationWithDescription:@""];
+    [subscribingSession subscribeToTopic:TOPIC atLevel:0 subscribeHandler:^(NSError *error, NSArray<NSNumber *> *gQoss) {
+        [subscribeExpectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
     
     self.session =  [MQTTTestHelpers session:parameters];
     self.session.willFlag = TRUE;
