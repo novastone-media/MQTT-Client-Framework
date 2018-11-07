@@ -154,18 +154,4 @@
     }
 }
 
-- (void)closeAndWait:(NSTimeInterval)timeout {
-    NSDate *started = [NSDate date];
-    self.synchronDisconnect = TRUE;
-    [self closeWithDisconnectHandler:nil];
-    
-    [[NSRunLoop currentRunLoop] addPort:[NSMachPort port] forMode:NSRunLoopCommonModes];
-    
-    while (self.synchronDisconnect && (timeout == 0 || started.timeIntervalSince1970 + timeout > [NSDate date].timeIntervalSince1970)) {
-        DDLogVerbose(@"[MQTTSessionSynchron] waiting for close");
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-    }
-    DDLogVerbose(@"[MQTTSessionSynchron] end close");
-}
-
 @end

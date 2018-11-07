@@ -153,25 +153,4 @@
                        qos:(MQTTQosLevel)qos
                    timeout:(NSTimeInterval)timeout;
 
-/** closes an MQTTSession gracefully synchronously
- @param timeout defines the maximum time to wait
-
- If the connection was successfully established before, a DISCONNECT is sent.
- 
- @code
- #import "MQTTClient.h"
- 
- MQTTSession *session = [[MQTTSession alloc] init];
- 
- [session connectAndWaitTimeout:30];
- 
- ...
- 
- [session closeAndWait:10];
- 
- @endcode
- 
- */
-- (void)closeAndWait:(NSTimeInterval)timeout;
-
 @end

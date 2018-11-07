@@ -137,7 +137,12 @@
     
     self.ungraceful = TRUE;
     [self shutdown:parameters];
-    [subscribingSession closeAndWait:0];
+    
+    XCTestExpectation *closeExpectation = [self expectationWithDescription:@""];
+    [subscribingSession closeWithDisconnectHandler:^(NSError *error) {
+        [closeExpectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
 }
 
 /*
@@ -177,7 +182,12 @@
     
     self.ungraceful = YES;
     [self shutdown:parameters];
-    [subscribingSession closeAndWait:0];
+    
+    XCTestExpectation *closeExpectation = [self expectationWithDescription:@""];
+    [subscribingSession closeWithDisconnectHandler:^(NSError *error) {
+        [closeExpectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
 }
 
 /*
@@ -407,8 +417,12 @@
     [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
     
     [self shutdown:parameters];
-    [sameSession closeAndWait:0];
     
+    XCTestExpectation *closeExpectation = [self expectationWithDescription:@""];
+    [sameSession closeWithDisconnectHandler:^(NSError *error) {
+        [closeExpectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:[parameters[@"timeout"] unsignedIntValue] handler:nil];
 }
 
 /*
