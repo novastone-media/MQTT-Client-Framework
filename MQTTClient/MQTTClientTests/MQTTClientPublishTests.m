@@ -51,7 +51,8 @@
                           qos:MQTTQosLevelAtMostOnce];
 }
 
-- (void)SLOWtestPublish_r1_q0_zeroLengthPayload {
+- (void)testPublishZeroLengthPayloadAtMostOnceRetain {
+    self.timeoutValue = 1;
     [self testPublish:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
               onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
                retain:YES
