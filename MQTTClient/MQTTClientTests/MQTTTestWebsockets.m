@@ -12,7 +12,6 @@
 #import "MQTTTestHelpers.h"
 #import <SocketRocket/SRWebSocket.h>
 #import "MQTTWebsocketTransport.h"
-#import "MQTTSessionSynchron.h"
 
 @interface MQTTTestWebsockets : MQTTTestHelpers <SRWebSocketDelegate>
 

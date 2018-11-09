@@ -11,7 +11,6 @@
 #import "MQTTLog.h"
 #import "MQTTStrict.h"
 #import "MQTTTestHelpers.h"
-#import "MQTTSessionSynchron.h"
 #import "MQTTCFSocketTransport.h"
 
 @interface MQTTClientTests : MQTTTestHelpers

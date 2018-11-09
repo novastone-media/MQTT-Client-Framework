@@ -10,7 +10,6 @@
 
 #import "MQTTLog.h"
 #import "MQTTTestHelpers.h"
-#import "MQTTSessionSynchron.h"
 
 @interface OneTest : NSObject <MQTTSessionDelegate>
 @property (strong, nonatomic) MQTTSession *session;

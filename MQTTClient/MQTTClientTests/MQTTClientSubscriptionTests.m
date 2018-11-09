@@ -11,7 +11,6 @@
 #import "MQTTLog.h"
 #import "MQTTStrict.h"
 #import "MQTTTestHelpers.h"
-#import "MQTTSessionSynchron.h"
 
 @interface MQTTClientSubscriptionTests : MQTTTestHelpers
 @end
@@ -320,11 +319,17 @@
     [self connect:parameters];
     [self testSubscribeSubackExpected:[NSString stringWithFormat:@"%@/#", TOPIC] atLevel:MQTTQosLevelAtMostOnce];
     [self testSubscribeSubackExpected:[NSString stringWithFormat:@"%@/2", TOPIC] atLevel:MQTTQosLevelExactlyOnce];
-    [self.session publishAndWaitData:[@"Should be delivered with qos 1" dataUsingEncoding:NSUTF8StringEncoding]
-                             onTopic:[NSString stringWithFormat:@"%@/2", TOPIC]
-                              retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce
-                             timeout:0];
+    NSData *data = [@"Should be delivered with qos 1" dataUsingEncoding:NSUTF8StringEncoding];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    [self.session publishData:data
+                      onTopic:[NSString stringWithFormat:@"%@/2", TOPIC]
+                       retain:NO
+                          qos:MQTTQosLevelAtLeastOnce
+               publishHandler:^(NSError *error) {
+                   [expectation fulfill];
+               }];
+    [self waitForExpectationsWithTimeout:1 handler:nil];
     [self shutdown:parameters];
 }
 
@@ -355,17 +360,31 @@
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testSubscribeSubackExpected:TOPIC atLevel:MQTTQosLevelAtMostOnce];
-    [self.session publishAndWaitData:[@"Should be delivered" dataUsingEncoding:NSUTF8StringEncoding]
-                             onTopic:TOPIC
-                              retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce
-                             timeout:0];
+    
+    NSData *data = [@"Should be delivered" dataUsingEncoding:NSUTF8StringEncoding];
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    [self.session publishData:data
+                      onTopic:TOPIC
+                       retain:NO
+                          qos:MQTTQosLevelAtLeastOnce
+               publishHandler:^(NSError *error) {
+                   [expectation fulfill];
+               }];
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+    
     [self testUnsubscribeTopic:TOPIC];
-    [self.session publishAndWaitData:[@"Should not be delivered" dataUsingEncoding:NSUTF8StringEncoding]
-                             onTopic:TOPIC
-                              retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce
-                             timeout:0];
+    
+    NSData *data2 = [@"Should not be delivered" dataUsingEncoding:NSUTF8StringEncoding];
+    XCTestExpectation *expectation2 = [self expectationWithDescription:@""];
+    [self.session publishData:data2
+                      onTopic:TOPIC
+                       retain:NO
+                          qos:MQTTQosLevelAtLeastOnce
+               publishHandler:^(NSError *error) {
+                   [expectation2 fulfill];
+               }];
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+    
     [self shutdown:parameters];
 }
 
@@ -380,17 +399,31 @@
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testSubscribeSubackExpected:TOPIC atLevel:MQTTQosLevelExactlyOnce];
-    [self.session publishAndWaitData:[@"Should be delivered" dataUsingEncoding:NSUTF8StringEncoding]
-                             onTopic:TOPIC
-                              retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce
-                             timeout:0];
+    
+    NSData *data = [@"Should be delivered" dataUsingEncoding:NSUTF8StringEncoding];
+    XCTestExpectation *expectation = [self expectationWithDescription:@""];
+    [self.session publishData:data
+                      onTopic:TOPIC
+                       retain:NO
+                          qos:MQTTQosLevelAtLeastOnce
+               publishHandler:^(NSError *error) {
+                   [expectation fulfill];
+               }];
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+    
     [self testUnsubscribeTopic:TOPIC];
-    [self.session publishAndWaitData:[@"Should not be delivered" dataUsingEncoding:NSUTF8StringEncoding]
-                             onTopic:TOPIC
-                              retain:NO
-                                 qos:MQTTQosLevelAtLeastOnce
-                             timeout:0];
+    
+    NSData *data2 = [@"Should not be delivered" dataUsingEncoding:NSUTF8StringEncoding];
+    XCTestExpectation *expectation2 = [self expectationWithDescription:@""];
+    [self.session publishData:data2
+                      onTopic:TOPIC
+                       retain:NO
+                          qos:MQTTQosLevelAtLeastOnce
+               publishHandler:^(NSError *error) {
+                   [expectation2 fulfill];
+               }];
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+    
     [self shutdown:parameters];
 }
 
