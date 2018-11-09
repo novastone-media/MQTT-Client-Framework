@@ -30,6 +30,10 @@
 #import <MQTTClient/MQTTSessionManager.h>
 #endif
 
+#if __has_include(<MQTTClient/MQTTWebsocketTransport.h>)
+#import <MQTTClient/MQTTWebsocketTransport.h>
+#endif
+
 //! Project version number for MQTTClient.
 FOUNDATION_EXPORT double MQTTClientVersionNumber;
 
