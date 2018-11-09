@@ -246,49 +246,49 @@
     for (UInt32 i = 2; i <= 64; i *= 2) {
         topic = [topic stringByAppendingString:topic];
     }
-    DDLogVerbose(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+    DDLogVerbose(@"LongSubscribe (%lu)", topic.length);
     [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
     
     topic = @"bb";
     for (UInt32 i = 2; i <= 1024; i *= 2) {
         topic = [topic stringByAppendingString:topic];
     }
-    DDLogVerbose(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+    DDLogVerbose(@"LongSubscribe (%lu)", topic.length);
     [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
     
     topic = @"cc";
     for (UInt32 i = 2; i <= 10000; i *= 2) {
         topic = [topic stringByAppendingString:topic];
     }
-    DDLogVerbose(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+    DDLogVerbose(@"LongSubscribe (%lu)", topic.length);
     [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
     
     topic = @"dd";
     for (UInt32 i = 2; i < 32768; i *= 2) {
         topic = [topic stringByAppendingString:topic];
     }
-    DDLogVerbose(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+    DDLogVerbose(@"LongSubscribe (%lu)", topic.length);
     [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
     
     topic = @"ee";
     for (UInt32 i = 2; i <= 32768; i *= 2) {
         topic = [topic stringByAppendingString:topic];
     }
-    DDLogVerbose(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:15] UTF8String]));
+    DDLogVerbose(@"LongSubscribe (%lu)", topic.length);
     [self testSubscribeSubackExpected:[topic substringFromIndex:15] atLevel:0];
     
     topic = @"ff";
     for (UInt32 i = 2; i <= 32768; i *= 2) {
         topic = [topic stringByAppendingString:topic];
     }
-    DDLogVerbose(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:2] UTF8String]));
+    DDLogVerbose(@"LongSubscribe (%lu)", topic.length);
     [self testSubscribeSubackExpected:[topic substringFromIndex:2] atLevel:0];
     
     topic = @"gg";
     for (UInt32 i = 2; i <= 32768; i *= 2) {
         topic = [topic stringByAppendingString:topic];
     }
-    DDLogVerbose(@"LongSubscribe (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+    DDLogVerbose(@"LongSubscribe (%lu)", topic.length);
     [self testSubscribeSubackExpected:[topic substringFromIndex:1] atLevel:0];
     
     [self shutdown:parameters];

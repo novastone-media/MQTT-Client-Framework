@@ -337,7 +337,7 @@
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
               onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
                retain:YES
-              atLevel:2];
+              atLevel:MQTTQosLevelExactlyOnce];
     [self shutdown:parameters];
 }
 
@@ -346,12 +346,12 @@
     [self connect:parameters];
     
     NSString *topic = @"gg";
-    while (strlen([topic substringFromIndex:1].UTF8String) <= 32768) {
-        DDLogVerbose(@"LongPublishTopic (%lu)", strlen([[topic substringFromIndex:1] UTF8String]));
+    while (topic.length <= 32768) {
+        DDLogVerbose(@"LongPublishTopic (%lu)", topic.length);
         [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
                   onTopic:[NSString stringWithFormat:@"%@/%@", TOPIC, topic]
                    retain:YES
-                  atLevel:2];
+                  atLevel:MQTTQosLevelExactlyOnce];
         topic = [topic stringByAppendingString:topic];
     }
     
@@ -363,12 +363,12 @@
     [self connect:parameters];
     
     NSString *payload = @"gg";
-    while (strlen([payload substringFromIndex:1].UTF8String) <= 1000000) {
-        DDLogVerbose(@"LongPublishPayload (%lu)", strlen([[payload substringFromIndex:1] UTF8String]));
+    while (payload.length <= 1000000) {
+        DDLogVerbose(@"LongPublishPayload (%lu)", payload.length);
         [self testPublish:[payload dataUsingEncoding:NSUTF8StringEncoding]
-                  onTopic:[NSString stringWithFormat:@"%@", TOPIC]
+                  onTopic:TOPIC
                    retain:YES
-                  atLevel:2];
+                  atLevel:MQTTQosLevelExactlyOnce];
         payload = [payload stringByAppendingString:payload];
     }
     
@@ -556,8 +556,7 @@
               @"No MQTTSessionEventConnectionClosedByBroker or MQTTSessionEventConnectionError happened");
 }
 
-- (void)testPublish:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos
-{
+- (void)testPublish:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos {
     [self testPublishCore:data onTopic:topic retain:retain atLevel:qos];
     switch (qos % 4) {
         case 0:
@@ -583,8 +582,7 @@
     }
 }
 
-- (void)testPublishCore:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos
-{
+- (void)testPublishCore:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retain atLevel:(UInt8)qos {
     self.deliveredMessageMid = -1;
     self.sentMessageMid = [self.session publishData:data onTopic:topic retain:retain qos:qos];
     

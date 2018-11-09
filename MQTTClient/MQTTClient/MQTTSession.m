@@ -305,7 +305,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         !topic) {
         NSException* myException = [NSException
                                     exceptionWithName:@"topic must not be nil"
-                                    reason:[NSString stringWithFormat:@"%@", topic]
+                                    reason:topic
                                     userInfo:nil];
         @throw myException;
     }
@@ -315,7 +315,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         topic.length < 1) {
         NSException* myException = [NSException
                                     exceptionWithName:@"topic must not at least 1 character long"
-                                    reason:[NSString stringWithFormat:@"%@", topic]
+                                    reason:topic
                                     userInfo:nil];
         @throw myException;
     }
