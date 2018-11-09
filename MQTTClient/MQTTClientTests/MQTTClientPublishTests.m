@@ -361,16 +361,11 @@
 - (void)testPublish_r1_q2_long_payload {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
-    
-    NSString *payload = @"gg";
-    while (payload.length <= 1000000) {
-        DDLogVerbose(@"LongPublishPayload (%lu)", payload.length);
-        [self testPublish:[payload dataUsingEncoding:NSUTF8StringEncoding]
-                  onTopic:TOPIC
-                   retain:YES
-                  atLevel:MQTTQosLevelExactlyOnce];
-        payload = [payload stringByAppendingString:payload];
-    }
+    NSString *payload = [@"g" stringByPaddingToLength:3000000 withString:@"g" startingAtIndex:0];
+    [self testPublish:[payload dataUsingEncoding:NSUTF8StringEncoding]
+              onTopic:TOPIC
+               retain:YES
+              atLevel:MQTTQosLevelExactlyOnce];
     
     [self shutdown:parameters];
 }
