@@ -36,40 +36,42 @@
     [super tearDown];
 }
 
-- (void)SLOWtestPublish_r0_q0_noPayload {
+- (void)testPublishNoPayloadAtMostOnce {
+    self.timeoutValue = 1;
     [self testPublish:nil
               onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
                retain:NO
-              atLevel:0];
+              atLevel:MQTTQosLevelAtMostOnce];
 }
 
-- (void)testPublish_r0_q0_zeroLengthPayload {
+- (void)testPublishZeroLengthPayloadAtMostOnce {
     [self.session publishData:[[NSData alloc] init]
                       onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
                        retain:NO
-                          qos:0];
+                          qos:MQTTQosLevelAtMostOnce];
 }
 
 - (void)SLOWtestPublish_r1_q0_zeroLengthPayload {
     [self testPublish:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
               onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
-               retain:TRUE
-              atLevel:0];
+               retain:YES
+              atLevel:MQTTQosLevelAtMostOnce];
     [self testPublish:[[NSData alloc] init]
               onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
-               retain:TRUE
-              atLevel:0];
+               retain:YES
+              atLevel:MQTTQosLevelAtMostOnce];
     [self testPublish:[[NSData alloc] init]
               onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
-               retain:TRUE
-              atLevel:0];
+               retain:YES
+              atLevel:MQTTQosLevelAtMostOnce];
 }
 
-- (void)SLOWtestPublish_r0_q0 {
+- (void)testPublishAtMostOnce {
+    self.timeoutValue = 1;
     [self testPublish:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
               onTopic:[NSString stringWithFormat:@"%@/%s", TOPIC, __FUNCTION__]
                retain:NO
-              atLevel:0];
+              atLevel:MQTTQosLevelAtMostOnce];
 }
 
 /*
@@ -83,7 +85,7 @@
     [self testPublishCloseExpected:[@(__FUNCTION__) dataUsingEncoding:NSUTF8StringEncoding]
                            onTopic:[NSString stringWithFormat:@"%@<%C>/%s", TOPIC, feff, __FUNCTION__]
                             retain:NO
-                           atLevel:0];
+                           atLevel:MQTTQosLevelAtMostOnce];
 }
 
 /*
@@ -153,13 +155,13 @@
     
     @try {
         [self.session publishData:[[NSData alloc] init]
-                          onTopic:stringWith9c retain:0 qos:0];
+                          onTopic:stringWith9c retain:NO qos:MQTTQosLevelAtMostOnce];
         [self.session publishData:[[NSData alloc] init]
-                          onTopic:stringWithNull retain:0 qos:0];
+                          onTopic:stringWithNull retain:NO qos:MQTTQosLevelAtMostOnce];
         [self.session publishData:[[NSData alloc] init]
-                          onTopic:stringWithFEFF retain:0 qos:0];
+                          onTopic:stringWithFEFF retain:NO qos:MQTTQosLevelAtMostOnce];
         [self.session publishData:[[NSData alloc] init]
-                          onTopic:stringWithD800 retain:0 qos:0];
+                          onTopic:stringWithD800 retain:NO qos:MQTTQosLevelAtMostOnce];
         [self.session connect];
         XCTFail(@"Should not get here but throw exception before");
     } @catch (NSException *exception) {
