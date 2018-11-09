@@ -10,11 +10,17 @@
 
 #import "MQTTLog.h"
 #import "MQTTTestHelpers.h"
+#import "MQTTStrict.h"
 
 @interface MQTTClientOnlyTests : MQTTTestHelpers
 @end
 
 @implementation MQTTClientOnlyTests
+
+- (void)setUp {
+    [super setUp];
+    MQTTStrict.strict = NO;
+}
 
 - (void)tearDown {
     [self.session closeWithReturnCode:MQTTSuccess
