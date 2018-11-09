@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08A9AC01325AC3F903B85C7FAB52BCEE /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 530417F9E4E1F361865E3D3A4DC9D640 /* SRWebSocket.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		0B2CF3A7CE3CBAD5AECF37BDCCB3421E /* Pods-MQTTClientiOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAD483E310A552F90F9743F48E6243 /* Pods-MQTTClientiOS-dummy.m */; };
 		0FA9FDCB93691AE728832CDE62E5DACE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C42BE9CF12A8387B3D24181BA25F073 /* Foundation.framework */; };
 		1475D34C9E8DAB32980B4B7588BF6FF4 /* Pods-MQTTClienttvOSTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 66B7D8ADB64BA5FD376E16E5C6C0D581 /* Pods-MQTTClienttvOSTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		178894DCD14B10790E0B1808D201C997 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 530417F9E4E1F361865E3D3A4DC9D640 /* SRWebSocket.m */; };
 		187E025B9BDA48B9AF7C4812B0B16456 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9850176FA4F7E76146BB3D4B8DD0DCFC /* Cocoa.framework */; };
 		226C3EDB2C9F27433A78A5E5D6D57C07 /* Pods-MQTTClienttvOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FA491337689AFAB28B70025B823ED0A /* Pods-MQTTClienttvOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2654CB33E1D1326C776A667A1F15A07E /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 530417F9E4E1F361865E3D3A4DC9D640 /* SRWebSocket.m */; };
 		2829B913BF3FAFBDD187D5CE032444AD /* Pods-MQTTClientiOSTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D10F350F5A4B60F42C6DDB8D90DD5EC /* Pods-MQTTClientiOSTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		282C07410690B7396B350447A41E6EC6 /* Pods-MQTTClienttvOSTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3B3DFCF3212FCC2C0ADEEA9D7F20FC /* Pods-MQTTClienttvOSTests-dummy.m */; };
 		2C91814AB9A3250D218A0578EBB6958E /* SRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 786E8D72F4811CE176B3C4A92C2A65DA /* SRWebSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		363868662C9DBB741F16D6080418DB00 /* SocketRocket-iOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C28C669C93FBAFFDE5A8AC221D613AB3 /* SocketRocket-iOS-dummy.m */; };
 		395B8C7FB23B38B2FEF3D26A2838672D /* Pods-MQTTClientiOSTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C210744AC4B6CCD0323C5755E2A22A /* Pods-MQTTClientiOSTests-dummy.m */; };
 		44762078022F344D9BA05DDFCFE0544A /* Pods-MQTTClientiOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 12427E0F0B3D00884188A39F4D0CB398 /* Pods-MQTTClientiOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4D6E3AE7CB69C5C43357B75D671B2FC5 /* Pods-MQTTClientmacOSTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FA0109634375B227DE1AF35BBBEF22 /* Pods-MQTTClientmacOSTests-dummy.m */; };
@@ -26,15 +26,14 @@
 		66B1365DA143681924A74FC3DF6C334F /* SocketRocket-iOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E90BBE3451C9FC4DB1C5D6EB1F8DDEDA /* SocketRocket-iOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67E7EB1C7731C7E0F1A468FB9B2A5187 /* SocketRocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 2CAB76540A43A86752107DE3C7638648 /* SocketRocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		688F115694CB9A6E196DF7639D22BB19 /* SocketRocket-tvOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B4758ADB8AC06009A5D3AC8C3D683947 /* SocketRocket-tvOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6D17DAD6E669221998AA1220F75C24AD /* SocketRocket-tvOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 39AAB0BE1204FC6AB6C7854C6EDDC953 /* SocketRocket-tvOS-dummy.m */; };
 		6F49AE983DD66E5F07F3CC47E9979451 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E9FAB9A2BE381741BD0754F043D28C5 /* Foundation.framework */; };
 		717D9362C6B7EB09495B49F62D89F931 /* SRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 786E8D72F4811CE176B3C4A92C2A65DA /* SRWebSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758D886717E7126E6BD9C6817F21435A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D49B6607481298821EB44F98561D69EF /* CFNetwork.framework */; };
+		7A55F1FAC381154F5BB3B1C20C24ADB8 /* SocketRocket-tvOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 39AAB0BE1204FC6AB6C7854C6EDDC953 /* SocketRocket-tvOS-dummy.m */; };
 		7E4A5C5CE960B1717883FEC5DDF30581 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C42BE9CF12A8387B3D24181BA25F073 /* Foundation.framework */; };
 		8291B30F63BC36A60222B7CE18667D8F /* SRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 786E8D72F4811CE176B3C4A92C2A65DA /* SRWebSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		838F212EA1EA3B933B1A929F04FDA11F /* Pods-MQTTClientmacOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F505228FA0BF98066CB6A22AE771B3 /* Pods-MQTTClientmacOS-dummy.m */; };
 		9193034383386B23D791F651639DA0CC /* SocketRocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 2CAB76540A43A86752107DE3C7638648 /* SocketRocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9311199A072E9F254FCA5F2F83352C31 /* SocketRocket-macOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 573F11B53659CC7DA3B67A5A6C900439 /* SocketRocket-macOS-dummy.m */; };
 		944583716F56B55348651DDC614664F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E9FAB9A2BE381741BD0754F043D28C5 /* Foundation.framework */; };
 		9BF9C86748BBFD1920C8E6F9E1A5EAC2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9850176FA4F7E76146BB3D4B8DD0DCFC /* Cocoa.framework */; };
 		AF9BEB0E1641A5D2F049D7304B5F0C8A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C42BE9CF12A8387B3D24181BA25F073 /* Foundation.framework */; };
@@ -44,9 +43,10 @@
 		CCF45A172350ED79855D32009E869DA9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 877F07366314AC533D48E104D1871743 /* CFNetwork.framework */; };
 		CF290726EB7E00E6B2ADF19CB3719E3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E9FAB9A2BE381741BD0754F043D28C5 /* Foundation.framework */; };
 		D5A4B9CA2816948DC3892289A2022696 /* Pods-MQTTClientmacOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A481FF9A7F8DD5200FBAB1A807B27B4 /* Pods-MQTTClientmacOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8E3A1FF0AD2570FA490B9232D25D160 /* SocketRocket-iOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C28C669C93FBAFFDE5A8AC221D613AB3 /* SocketRocket-iOS-dummy.m */; };
-		DD0ECE3208EDC4A3EF73AF5402E057D2 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 530417F9E4E1F361865E3D3A4DC9D640 /* SRWebSocket.m */; };
+		D96215FB51C23014F3D6A7A5E5914248 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 530417F9E4E1F361865E3D3A4DC9D640 /* SRWebSocket.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		DA54F50C5B95C711C68AAA60C8A0A502 /* SocketRocket-macOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 573F11B53659CC7DA3B67A5A6C900439 /* SocketRocket-macOS-dummy.m */; };
 		E04BFFDBAF2C06E90EAFC1B2DB2B2D8C /* SocketRocket-macOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 22B2DB8912142CDFD3BED59CC0AF1EB4 /* SocketRocket-macOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E472E5BA18D539DB6EBB421B5B47224D /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 530417F9E4E1F361865E3D3A4DC9D640 /* SRWebSocket.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		F6E9DEE911E64467751C492878DCE3FD /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E420BFDA4192CE9DD4FC19271B85B711 /* CoreServices.framework */; };
 		FDB7666DF424D6C47E340354AFB46BAD /* Pods-MQTTClienttvOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1F692B226B3B8F2DA3D6CEDD250368 /* Pods-MQTTClienttvOS-dummy.m */; };
 /* End PBXBuildFile section */
@@ -690,7 +690,7 @@
 			buildConfigurationList = 06E358CC339DFEA8C45E3E08E821908D /* Build configuration list for PBXNativeTarget "SocketRocket-iOS" */;
 			buildPhases = (
 				5E47010767DAFD9ACA4721B8EA20BD80 /* Headers */,
-				BE5BDDF1DBE5BE2DF8E442BE8C9D2502 /* Sources */,
+				05F0F029A53F21BE74426775D4820EA7 /* Sources */,
 				B6FDF5458CADB11E8314C3AA0D6698D2 /* Frameworks */,
 				1ED7ADFD81519B42FF71DE8F7E8B8596 /* Resources */,
 			);
@@ -727,7 +727,7 @@
 			buildConfigurationList = 7E76535CD53F5D8E4AA8AAE6CB8E3D38 /* Build configuration list for PBXNativeTarget "SocketRocket-macOS" */;
 			buildPhases = (
 				8BE1B67CDA866889E00B4BF8D40B7C53 /* Headers */,
-				6DCA0360E762662791447B9B1F66F914 /* Sources */,
+				62035713D19DDE7925E8F63C106658BF /* Sources */,
 				E852EE5324340838AE15AE322BE1337C /* Frameworks */,
 				C400132521E820D71BCF2DEA84BCFE01 /* Resources */,
 			);
@@ -745,7 +745,7 @@
 			buildConfigurationList = A919AEA4D020C0796676DB9F806456DD /* Build configuration list for PBXNativeTarget "SocketRocket-tvOS" */;
 			buildPhases = (
 				CCCCE3F415942C9C59601BC136140C83 /* Headers */,
-				70F376172A5BA95365B700A7FBB4D0DC /* Sources */,
+				91E3545D2D1D8876F86CA0CDFED3808B /* Sources */,
 				39E61EF101EB67AECBD393F4339A53C0 /* Frameworks */,
 				C42BB7D362EF0F6AC1EFDE843D2EE8EA /* Resources */,
 			);
@@ -878,6 +878,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		05F0F029A53F21BE74426775D4820EA7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				363868662C9DBB741F16D6080418DB00 /* SocketRocket-iOS-dummy.m in Sources */,
+				E472E5BA18D539DB6EBB421B5B47224D /* SRWebSocket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1B10072646AA3243BF64991DDC8ECECE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -894,21 +903,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6DCA0360E762662791447B9B1F66F914 /* Sources */ = {
+		62035713D19DDE7925E8F63C106658BF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9311199A072E9F254FCA5F2F83352C31 /* SocketRocket-macOS-dummy.m in Sources */,
-				178894DCD14B10790E0B1808D201C997 /* SRWebSocket.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		70F376172A5BA95365B700A7FBB4D0DC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6D17DAD6E669221998AA1220F75C24AD /* SocketRocket-tvOS-dummy.m in Sources */,
-				DD0ECE3208EDC4A3EF73AF5402E057D2 /* SRWebSocket.m in Sources */,
+				DA54F50C5B95C711C68AAA60C8A0A502 /* SocketRocket-macOS-dummy.m in Sources */,
+				D96215FB51C23014F3D6A7A5E5914248 /* SRWebSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -920,12 +920,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BE5BDDF1DBE5BE2DF8E442BE8C9D2502 /* Sources */ = {
+		91E3545D2D1D8876F86CA0CDFED3808B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8E3A1FF0AD2570FA490B9232D25D160 /* SocketRocket-iOS-dummy.m in Sources */,
-				2654CB33E1D1326C776A667A1F15A07E /* SRWebSocket.m in Sources */,
+				7A55F1FAC381154F5BB3B1C20C24ADB8 /* SocketRocket-tvOS-dummy.m in Sources */,
+				08A9AC01325AC3F903B85C7FAB52BCEE /* SRWebSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
