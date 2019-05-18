@@ -39,10 +39,10 @@
     [self.stream setDelegate:nil];
 }
 
-- (void)setState:(MQTTCFSocketEncoderState)state {
-    DDLogVerbose(@"[MQTTCFSocketEncoder] setState %ld/%ld", (long)_state, (long)state);
-    _state = state;
-}
+//- (void)setState:(MQTTCFSocketEncoderState)state {
+//    DDLogVerbose(@"[MQTTCFSocketEncoder] setState %ld/%ld", (long)_state, (long)state);
+//    _state = state;
+//}
 
 - (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode {
     if (eventCode & NSStreamEventOpenCompleted) {

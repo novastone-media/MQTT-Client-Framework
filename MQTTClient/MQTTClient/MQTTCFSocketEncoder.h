@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, MQTTCFSocketEncoderState) {
 
 @interface MQTTCFSocketEncoder : NSObject <NSStreamDelegate>
 
-@property (nonatomic) MQTTCFSocketEncoderState state;
+@property (atomic) MQTTCFSocketEncoderState state;
 @property (strong, nonatomic) NSError *error;
 @property (strong, nonatomic) NSOutputStream *stream;
 @property (weak, nonatomic ) id<MQTTCFSocketEncoderDelegate> delegate;
