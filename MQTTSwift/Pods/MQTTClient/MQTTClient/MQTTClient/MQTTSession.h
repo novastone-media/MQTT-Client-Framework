@@ -6,8 +6,8 @@
 /**
  Using MQTT in your Objective-C application
  
- @author Christoph Krey krey.christoph@gmail.com
- @copyright Copyright © 2013-2016, Christoph Krey 
+ @author Christoph Krey c@ckrey.de
+ @copyright Copyright © 2013-2017, Christoph Krey. All rights reserved.
  
  based on Copyright (c) 2011, 2013, 2lemetry LLC
     All rights reserved. This program and the accompanying materials
@@ -50,6 +50,31 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
     MQTTSessionEventConnectionError,
     MQTTSessionEventProtocolError,
     MQTTSessionEventConnectionClosedByBroker
+};
+
+/**
+ The error domain used for all errors created by MQTTSession
+ */
+extern NSString * const MQTTSessionErrorDomain;
+
+/**
+ The error codes used for all errors created by MQTTSession
+ */
+typedef NS_ENUM(NSInteger, MQTTSessionError) {
+    MQTTSessionErrorConnectionRefused = -8, // Sent if the server closes the connection without sending an appropriate error CONNACK
+    MQTTSessionErrorIllegalMessageReceived = -7,
+    MQTTSessionErrorDroppingOutgoingMessage = -6, // For some reason the value is the same as for MQTTSessionErrorNoResponse
+    MQTTSessionErrorNoResponse = -6, // For some reason the value is the same as for MQTTSessionErrorDroppingOutgoingMessage
+    MQTTSessionErrorEncoderNotReady = -5,
+    MQTTSessionErrorInvalidConnackReceived = -2, // Sent if the message received from server was an invalid connack message
+    MQTTSessionErrorNoConnackReceived = -1, // Sent if first message received from server was no connack message
+
+    MQTTSessionErrorConnackUnacceptableProtocolVersion = 1, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackIdentifierRejected = 2, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackServeUnavailable = 3, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackBadUsernameOrPassword = 4, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackNotAuthorized = 5, // Value as defined by MQTT Protocol
+    MQTTSessionErrorConnackReserved = 6, // Should be value 6-255, as defined by MQTT Protocol
 };
 
 /** Session delegate gives your application control over the MQTTSession
@@ -154,6 +179,22 @@ typedef NS_ENUM(NSInteger, MQTTSessionEvent) {
  @note this method is called after a publish with qos 1 or 2 only
  */
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID;
+
+/** gets called when a published message was actually delivered
+ @param session the MQTTSession reporting the delivery
+ @param msgID the Message Identifier of the delivered message
+ @param topic the topic of the delivered message
+ @param data the data Identifier of the delivered message
+ @param qos the QoS level of the delivered message
+ @param retainFlag the retain Flag of the delivered message
+ @note this method is called after a publish with qos 1 or 2 only
+ */
+- (void)messageDelivered:(MQTTSession *)session
+                   msgID:(UInt16)msgID
+                   topic:(NSString *)topic
+                    data:(NSData *)data
+                     qos:(MQTTQosLevel)qos
+              retainFlag:(BOOL)retainFlag;
 
 /** gets called when a subscription is acknowledged by the MQTT broker
  @param session the MQTTSession reporting the acknowledge
@@ -309,9 +350,24 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 @property (nonatomic, readonly) BOOL sessionPresent;
 
-/** see initWithClientId for description
- * @param clientId The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
+/** streamSSLLevel an NSString containing the security level for read and write streams
+ * For list of possible values see:
+ * https://developer.apple.com/documentation/corefoundation/cfstream/cfstream_socket_security_level_constants
+ * Please also note that kCFStreamSocketSecurityLevelTLSv1_2 is not in a list
+ * and cannot be used as constant, but you can use it as a string value
+ * defaults to kCFStreamSocketSecurityLevelNegotiatedSSL
+ */
+@property (strong, nonatomic) NSString *streamSSLLevel;
 
+/** host an NSString containing the hostName or IP address of the Server
+ */
+@property (readonly) NSString *host;
+
+/** port an unsigned 32 bit integer containing the IP port number of the Server
+ */
+@property (readonly) UInt32 port;
+
+/** The Client Identifier identifies the Client to the Server. If nil, a random clientId is generated.
  */
 @property (strong, nonatomic) NSString *clientId;
 
@@ -326,6 +382,24 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  * the Keep Alive value. In the  absence of sending any other Control Packets, the Client sends a PINGREQ Packet.
  */
 @property (nonatomic) UInt16 keepAliveInterval;
+
+/** The serverKeepAlive is a time interval measured in seconds.
+ *  This value may be set by the broker and overrides keepAliveInterval if present
+ *  Zero means the broker does not perform any keep alive checks
+ */
+@property (readonly, strong, nonatomic) NSNumber *serverKeepAlive;
+
+/** effectiveKeepAlive is a time interval measured in seconds
+ *  It indicates the effective keep alive interval after a successfull connect
+ *  where keepAliveInterval might have been overridden by the broker.
+ */
+@property (readonly, nonatomic) UInt16 effectiveKeepAlive;
+
+
+/**
+ * dupTimeout If PUBACK or PUBREC not received, message will be resent after this interval
+ */
+@property (nonatomic) double dupTimeout;
 
 /** leanSessionFlag specifies if the server should discard previous session information. */
 @property (nonatomic) BOOL cleanSessionFlag;
@@ -359,17 +433,39 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 /** protocolLevel specifies the protocol to be used */
 @property (nonatomic) MQTTProtocolVersion protocolLevel;
 
-/** runLoop The runLoop where the streams are scheduled. If nil, defaults to [NSRunLoop currentRunLoop]. */
-@property (strong, nonatomic) NSRunLoop *runLoop;
+/** sessionExpiryInterval specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *sessionExpiryInterval;
 
-/** runLoopMode The runLoopMode where the streams are scheduled. If nil, defaults to NSRunLoopCommonModes. */
-@property (strong, nonatomic) NSString *runLoopMode;
+/** authMethod specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSString *authMethod;
 
+/** authData specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSData *authData;
 
-/** The security policy used to evaluate server trust for secure connections.
- * (see MQTTSSLSecurityPolicy.h for more detail).
- */
-@property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
+/** requestProblemInformation specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *requestProblemInformation;
+
+/** willDelayInterval specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *willDelayInterval;
+
+/** requestResponseInformation specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *requestResponseInformation;
+
+/** receiveMaximum specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *receiveMaximum;
+
+/** topicAliasMaximum specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *topicAliasMaximum;
+
+/** topicAliasMaximum specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSDictionary <NSString *, NSString*> *userProperty;
+
+/** maximumPacketSize specifies the number of seconds after which a session should expire MQTT v5.0*/
+@property (strong, nonatomic) NSNumber *maximumPacketSize;
+
+/** queue The queue where the streams are scheduled. */
+@property (strong, nonatomic) dispatch_queue_t queue;
+
 
 /** for mqttio-OBJC backward compatibility
  the connect message used is stored here
@@ -386,10 +482,13 @@ typedef void (^MQTTPublishHandler)(NSError *error);
 /** certificates an NSArray holding client certificates or nil */
 @property (strong, nonatomic) NSArray *certificates;
 
+/** Require for VoIP background service
+ * defaults to NO
+ */
+@property (nonatomic) BOOL voip;
+
 /** connect to the given host through the given transport with the given
  *  MQTT session parameters asynchronously
- *
- *  @exception NSInternalInconsistencyException if the parameters are invalid
  *
  */
 
@@ -401,8 +500,7 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  @param connectHandler identifies a block which is executed on successfull or unsuccessfull connect. Might be nil
  error is nil in the case of a successful connect
  sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
- 
- @return nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and
+ returns nothing and returns immediately. To check the connect results, register as an MQTTSessionDelegate and
  - watch for events
  - watch for connect or connectionRefused messages
  - watch for error messages
@@ -431,6 +529,18 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  *
  */
 - (void)disconnect;
+
+/** disconnect V5
+ *  @param returnCode the returncode send to the broker
+ *  @param sessionExpiryInterval the time in seconds before the session can be deleted
+ *  @param reasonString a string explaining the reason
+ *  @param userProperty additional dictionary of user key/value combinations
+ */
+- (void)disconnectWithReturnCode:(MQTTReturnCode)returnCode
+           sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
+                    reasonString:(NSString *)reasonString
+                    userProperty:(NSDictionary <NSString *, NSString *> *)userProperty;
+
 
 /** initialises the MQTT session with default values
  @return the initialised MQTTSession object
@@ -465,7 +575,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  
  */
 
-- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel;
+- (UInt16)subscribeToTopic:(NSString *)topic
+                   atLevel:(MQTTQosLevel)qosLevel;
 /** subscribes to a topic at a specific QoS level
  
  @param topic the Topic Filter to subscribe to.
@@ -500,7 +611,9 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  
  */
 
-- (UInt16)subscribeToTopic:(NSString *)topic atLevel:(MQTTQosLevel)qosLevel subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
+- (UInt16)subscribeToTopic:(NSString *)topic
+                   atLevel:(MQTTQosLevel)qosLevel
+          subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
 
 /** subscribes a number of topics
  
@@ -566,7 +679,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 
 
-- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
+- (UInt16)subscribeToTopics:(NSDictionary<NSString *, NSNumber *> *)topics
+           subscribeHandler:(MQTTSubscribeHandler)subscribeHandler;
 
 /** unsubscribes from a topic
  
@@ -604,7 +718,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 
 
-- (UInt16)unsubscribeTopic:(NSString *)topic unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;
+- (UInt16)unsubscribeTopic:(NSString *)topic
+        unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;
 
 /** unsubscribes from a number of topics
  
@@ -646,7 +761,8 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  @note returns immediately.
  
  */
-- (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;
+- (UInt16)unsubscribeTopics:(NSArray<NSString *> *)topics
+         unsubscribeHandler:(MQTTUnsubscribeHandler)unsubscribeHandler;
 
 /** publishes data on a given topic at a specified QoS level and retain flag
  
@@ -674,7 +790,10 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  
  */
 
-- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos;
+- (UInt16)publishData:(NSData *)data
+              onTopic:(NSString *)topic
+               retain:(BOOL)retainFlag
+                  qos:(MQTTQosLevel)qos;
 
 /** publishes data on a given topic at a specified QoS level and retain flag
  
@@ -685,7 +804,7 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  qos can be 0, 1, or 2.
  
  
- @param publishHandler identifies a block which is executed on successfull or unsuccessfull connect. Might be nil
+ @param publishHandler identifies a block which is executed on successfull or unsuccessfull publsh. Might be nil
  error is nil in the case of a successful connect
  sessionPresent indicates in MQTT 3.1.1 if persistent session data was present at the server
  
@@ -717,7 +836,11 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  
  */
 
-- (UInt16)publishData:(NSData *)data onTopic:(NSString *)topic retain:(BOOL)retainFlag qos:(MQTTQosLevel)qos publishHandler:(MQTTPublishHandler)publishHandler;
+- (UInt16)publishData:(NSData *)data
+              onTopic:(NSString *)topic
+               retain:(BOOL)retainFlag
+                  qos:(MQTTQosLevel)qos
+       publishHandler:(MQTTPublishHandler)publishHandler;
 
 /** closes an MQTTSession gracefully
  
@@ -747,8 +870,17 @@ typedef void (^MQTTPublishHandler)(NSError *error);
  */
 - (void)closeWithDisconnectHandler:(MQTTDisconnectHandler)disconnectHandler;
 
-/** closes an MQTTSession gracefully
-  */
-- (void)close;
+/** close V5
+ *  @param returnCode the returncode send to the broker
+ *  @param sessionExpiryInterval the time in seconds before the session can be deleted
+ *  @param reasonString a string explaining the reason
+ *  @param userProperty additional dictionary of user key/value combinations
+ *  @param disconnectHandler will be called when the disconnect finished
+ */
+- (void)closeWithReturnCode:(MQTTReturnCode)returnCode
+      sessionExpiryInterval:(NSNumber *)sessionExpiryInterval
+               reasonString:(NSString *)reasonString
+               userProperty:(NSDictionary <NSString *, NSString *> *)userProperty
+          disconnectHandler:(MQTTDisconnectHandler)disconnectHandler;
 
 @end

@@ -152,7 +152,7 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
         NSBundle *bundle = [NSBundle bundleForClass:[self class]];
         NSArray *paths = [bundle pathsForResourcesOfType:@"cer" inDirectory:@"."];
 
-        NSMutableArray *certificates = [NSMutableArray arrayWithCapacity:[paths count]];
+        NSMutableArray *certificates = [NSMutableArray arrayWithCapacity:paths.count];
         for (NSString *path in paths) {
             NSData *certificateData = [NSData dataWithContentsOfFile:path];
             [certificates addObject:certificateData];
@@ -175,12 +175,12 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
     MQTTSSLSecurityPolicy *securityPolicy = [[self alloc] init];
     securityPolicy.SSLPinningMode = pinningMode;
 
-    [securityPolicy setPinnedCertificates:[self defaultPinnedCertificates]];
+    securityPolicy.pinnedCertificates = [self defaultPinnedCertificates];
 
     return securityPolicy;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (!self) {
         return nil;
@@ -193,10 +193,10 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
 }
 
 - (void)setPinnedCertificates:(NSArray *)pinnedCertificates {
-    _pinnedCertificates = [[NSOrderedSet orderedSetWithArray:pinnedCertificates] array];
+    _pinnedCertificates = [NSOrderedSet orderedSetWithArray:pinnedCertificates].array;
     
     if (self.pinnedCertificates) {
-        NSMutableArray *mutablePinnedPublicKeys = [NSMutableArray arrayWithCapacity:[self.pinnedCertificates count]];
+        NSMutableArray *mutablePinnedPublicKeys = [NSMutableArray arrayWithCapacity:(self.pinnedCertificates).count];
         for (NSData *certificate in self.pinnedCertificates) {
             id publicKey = SSLPublicKeyForCertificate(certificate);
             if (!publicKey) {
@@ -226,6 +226,7 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
         return self.allowInvalidCertificates || SSLServerTrustIsValid(serverTrust);
     }
     // if client didn't allow invalid certs, it must pass CA infrastructure
+    // TODO: Can we change order here?
     else if (!SSLServerTrustIsValid(serverTrust) && !self.allowInvalidCertificates) {
         return NO;
     }
@@ -238,7 +239,14 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
         case MQTTSSLPinningModeCertificate: {
             NSMutableArray *pinnedCertificates = [NSMutableArray array];
             for (NSData *certificateData in self.pinnedCertificates) {
-                [pinnedCertificates addObject:(__bridge_transfer id)SecCertificateCreateWithData(NULL, (__bridge CFDataRef)certificateData)];
+                @try {
+                    [pinnedCertificates addObject:(__bridge_transfer id)SecCertificateCreateWithData(NULL, (__bridge CFDataRef)certificateData)];
+                } @catch (NSException *exception) {
+                    //fix issue #151, if the pinnedCertification is not a valid DER-encoded X.509 certificate, for example it is the PEM format, SecCertificateCreateWithData will return nil, and application will crash
+                    if ([exception.name isEqual:NSInvalidArgumentException]) {
+                        return NO;
+                    }
+                }
             }
             SecTrustSetAnchorCertificates(serverTrust, (__bridge CFArrayRef)pinnedCertificates);
 
@@ -257,13 +265,13 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
                 }
             }
 
-            return trustedCertificateCount == [serverCertificates count];
+            return trustedCertificateCount == serverCertificates.count;
         }
         case MQTTSSLPinningModePublicKey: {
             NSUInteger trustedPublicKeyCount = 0;
             NSArray *publicKeys = SSLPublicKeyTrustChainForServerTrust(serverTrust);
-            if (!self.validatesCertificateChain && [publicKeys count] > 0) {
-                publicKeys = @[[publicKeys firstObject]];
+            if (!self.validatesCertificateChain && publicKeys.count > 0) {
+                publicKeys = @[publicKeys.firstObject];
             }
 
             for (id trustChainPublicKey in publicKeys) {
@@ -274,7 +282,7 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
                 }
             }
 
-            return trustedPublicKeyCount > 0 && ((self.validatesCertificateChain && trustedPublicKeyCount == [serverCertificates count]) || (!self.validatesCertificateChain && trustedPublicKeyCount >= 1));
+            return trustedPublicKeyCount > 0 && ((self.validatesCertificateChain && trustedPublicKeyCount == serverCertificates.count) || (!self.validatesCertificateChain && trustedPublicKeyCount >= 1));
         }
     }
 

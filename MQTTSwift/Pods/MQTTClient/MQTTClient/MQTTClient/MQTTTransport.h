@@ -3,7 +3,7 @@
 //  MQTTClient
 //
 //  Created by Christoph Krey on 06.12.15.
-//  Copyright © 2015-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2015-2017 Christoph Krey. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -36,16 +36,28 @@
      MQTTTransportClosed
  };
 
-/** runLoop The runLoop where the streams are scheduled. If nil, defaults to [NSRunLoop currentRunLoop]. */
-@property (strong, nonatomic) NSRunLoop * _Nonnull runLoop;
+/** queue The queue where the streams are scheduled. */
+@property (strong, nonatomic, nonnull) dispatch_queue_t queue;
 
-/** runLoopMode The runLoopMode where the streams are scheduled. If nil, defaults to NSRunLoopCommonModes. */
-@property (strong, nonatomic) NSString * _Nonnull runLoopMode;
+/** streamSSLLevel an NSString containing the security level for read and write streams
+ * For list of possible values see:
+ * https://developer.apple.com/documentation/corefoundation/cfstream/cfstream_socket_security_level_constants
+ * Please also note that kCFStreamSocketSecurityLevelTLSv1_2 is not in a list
+ * and cannot be used as constant, but you can use it as a string value
+ * defaults to kCFStreamSocketSecurityLevelNegotiatedSSL
+ */
+@property (strong, nonatomic, nonnull) NSString *streamSSLLevel;
+
+/** host an NSString containing the hostName or IP address of the host to connect to */
+@property (strong, nonatomic, nonnull) NSString *host;
+
+/** port an unsigned 32 bit integer containing the IP port number to connect to */
+@property (nonatomic) UInt32 port;
 
 /** MQTTTransportDelegate needs to be set to a class implementing th MQTTTransportDelegate protocol
  * to receive delegate messages.
  */
-@property (strong, nonatomic) _Nullable id<MQTTTransportDelegate> delegate;
+@property (weak, nonatomic) _Nullable id<MQTTTransportDelegate> delegate;
 
 /** state contains the current MQTTTransportState of the transport */
 @property (nonatomic) MQTTTransportState state;

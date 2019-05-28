@@ -19,7 +19,9 @@ class ViewController: UIViewController, MQTTSessionDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        session.transport = MQTTCFSocketTransport()
+        session.transport.host = "test.mosquitto.org"
+        session.transport.port = 1883
         session.delegate = self
     }
     
@@ -76,7 +78,7 @@ class ViewController: UIViewController, MQTTSessionDelegate {
         case .connected:
             self.session.disconnect()
         case .closed, .created, .error:
-            self.session.connect(toHost: "test.mosquitto.org", port: 1883, usingSSL: false)
+            self.session.connect()
         default:
             return
         }

@@ -3,7 +3,7 @@
 //  MQTTClient
 //
 //  Created by Christoph Krey on 06.12.15.
-//  Copyright © 2015-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2015-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTTransport.h"
@@ -15,20 +15,34 @@
  */
 @interface MQTTCFSocketTransport : MQTTTransport <MQTTTransport, MQTTCFSocketDecoderDelegate, MQTTCFSocketEncoderDelegate>
 
+/** streamSSLLevel an NSString containing the security level for read and write streams
+ * For list of possible values see:
+ * https://developer.apple.com/documentation/corefoundation/cfstream/cfstream_socket_security_level_constants
+ * Please also note that kCFStreamSocketSecurityLevelTLSv1_2 is not in a list
+ * and cannot be used as constant, but you can use it as a string value
+ * defaults to kCFStreamSocketSecurityLevelNegotiatedSSL
+ */
+@property (strong, nonatomic) NSString *streamSSLLevel;
+
 /** host an NSString containing the hostName or IP address of the host to connect to
  * defaults to @"localhost"
  */
 @property (strong, nonatomic) NSString *host;
 
-/** port an unsigned 16 bit integer containing the IP port number to connect to 
+/** port an unsigned 32 bit integer containing the IP port number to connect to
  * defaults to 1883
  */
-@property (nonatomic) UInt16 port;
+@property (nonatomic) UInt32 port;
 
 /** tls a boolean indicating whether the transport should be using security 
  * defaults to NO
  */
 @property (nonatomic) BOOL tls;
+
+/** Require for VoIP background service
+ * defaults to NO
+ */
+@property (nonatomic) BOOL voip;
 
 /** certificates An identity certificate used to reply to a server requiring client certificates according
  * to the description given for SSLSetCertificate(). You may build the certificates array yourself or use the
