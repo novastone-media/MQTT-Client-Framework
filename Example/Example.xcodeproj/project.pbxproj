@@ -17,7 +17,7 @@
 
 /* Begin PBXFileReference section */
 		0887A182A21ED76531A9BFCE /* Pods-MQTTSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTSwift/Pods-MQTTSwift.release.xcconfig"; sourceTree = "<group>"; };
-		84B65C671CF39DA50089B477 /* MQTTSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MQTTSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		84B65C671CF39DA50089B477 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84B65C6A1CF39DA50089B477 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84B65C6C1CF39DA50089B477 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		84B65C6F1CF39DA50089B477 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -51,7 +51,7 @@
 		84B65C5E1CF39DA50089B477 = {
 			isa = PBXGroup;
 			children = (
-				84B65C691CF39DA50089B477 /* MQTTSwift */,
+				84B65C691CF39DA50089B477 /* Example */,
 				84B65C681CF39DA50089B477 /* Products */,
 				E51FC76FD75427887B43C7BE /* Pods */,
 				4A3C326FCB8B312427A2376C /* Frameworks */,
@@ -61,12 +61,12 @@
 		84B65C681CF39DA50089B477 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				84B65C671CF39DA50089B477 /* MQTTSwift.app */,
+				84B65C671CF39DA50089B477 /* Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		84B65C691CF39DA50089B477 /* MQTTSwift */ = {
+		84B65C691CF39DA50089B477 /* Example */ = {
 			isa = PBXGroup;
 			children = (
 				84B65C6A1CF39DA50089B477 /* AppDelegate.swift */,
@@ -76,7 +76,7 @@
 				84B65C731CF39DA50089B477 /* LaunchScreen.storyboard */,
 				84B65C761CF39DA50089B477 /* Info.plist */,
 			);
-			path = MQTTSwift;
+			path = Example;
 			sourceTree = "<group>";
 		};
 		E51FC76FD75427887B43C7BE /* Pods */ = {
@@ -91,9 +91,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		84B65C661CF39DA50089B477 /* MQTTSwift */ = {
+		84B65C661CF39DA50089B477 /* Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 84B65C791CF39DA50089B477 /* Build configuration list for PBXNativeTarget "MQTTSwift" */;
+			buildConfigurationList = 84B65C791CF39DA50089B477 /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
 				A1EFE0BBEADAC354651BBCBF /* [CP] Check Pods Manifest.lock */,
 				20400CA1FA398E0F3FA8BBCC /* 📦 Check Pods Manifest.lock */,
@@ -107,9 +107,9 @@
 			);
 			dependencies = (
 			);
-			name = MQTTSwift;
+			name = Example;
 			productName = MQTTSwift;
-			productReference = 84B65C671CF39DA50089B477 /* MQTTSwift.app */;
+			productReference = 84B65C671CF39DA50089B477 /* Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -128,7 +128,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 84B65C621CF39DA50089B477 /* Build configuration list for PBXProject "MQTTSwift" */;
+			buildConfigurationList = 84B65C621CF39DA50089B477 /* Build configuration list for PBXProject "Example" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -142,7 +142,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				84B65C661CF39DA50089B477 /* MQTTSwift */,
+				84B65C661CF39DA50089B477 /* Example */,
 			);
 		};
 /* End PBXProject section */
@@ -384,7 +384,7 @@
 			baseConfigurationReference = CB7967891DB93DF9E94CD2F8 /* Pods-MQTTSwift.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = MQTTSwift/Info.plist;
+				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -396,7 +396,7 @@
 			baseConfigurationReference = 0887A182A21ED76531A9BFCE /* Pods-MQTTSwift.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = MQTTSwift/Info.plist;
+				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.owntracks.MQTTSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -406,7 +406,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		84B65C621CF39DA50089B477 /* Build configuration list for PBXProject "MQTTSwift" */ = {
+		84B65C621CF39DA50089B477 /* Build configuration list for PBXProject "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				84B65C771CF39DA50089B477 /* Debug */,
@@ -415,7 +415,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		84B65C791CF39DA50089B477 /* Build configuration list for PBXNativeTarget "MQTTSwift" */ = {
+		84B65C791CF39DA50089B477 /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				84B65C7A1CF39DA50089B477 /* Debug */,
