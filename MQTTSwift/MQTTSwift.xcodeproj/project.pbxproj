@@ -12,7 +12,6 @@
 		84B65C701CF39DA50089B477 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84B65C6E1CF39DA50089B477 /* Main.storyboard */; };
 		84B65C721CF39DA50089B477 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84B65C711CF39DA50089B477 /* Assets.xcassets */; };
 		84B65C751CF39DA50089B477 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84B65C731CF39DA50089B477 /* LaunchScreen.storyboard */; };
-		84B65C7D1CF39E240089B477 /* MQTTSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B65C7C1CF39E240089B477 /* MQTTSwift.swift */; };
 		95ECD3F6857E94FFDFAD4B66 /* Pods_MQTTSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14CF6C457355F7BDBFBA98B /* Pods_MQTTSwift.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,7 +24,6 @@
 		84B65C711CF39DA50089B477 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84B65C741CF39DA50089B477 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84B65C761CF39DA50089B477 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84B65C7C1CF39E240089B477 /* MQTTSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MQTTSwift.swift; sourceTree = "<group>"; };
 		CB7967891DB93DF9E94CD2F8 /* Pods-MQTTSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQTTSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MQTTSwift/Pods-MQTTSwift.debug.xcconfig"; sourceTree = "<group>"; };
 		D14CF6C457355F7BDBFBA98B /* Pods_MQTTSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MQTTSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -73,7 +71,6 @@
 			children = (
 				84B65C6A1CF39DA50089B477 /* AppDelegate.swift */,
 				84B65C6C1CF39DA50089B477 /* ViewController.swift */,
-				84B65C7C1CF39E240089B477 /* MQTTSwift.swift */,
 				84B65C6E1CF39DA50089B477 /* Main.storyboard */,
 				84B65C711CF39DA50089B477 /* Assets.xcassets */,
 				84B65C731CF39DA50089B477 /* LaunchScreen.storyboard */,
@@ -247,7 +244,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84B65C7D1CF39E240089B477 /* MQTTSwift.swift in Sources */,
 				84B65C6D1CF39DA50089B477 /* ViewController.swift in Sources */,
 				84B65C6B1CF39DA50089B477 /* AppDelegate.swift in Sources */,
 			);
