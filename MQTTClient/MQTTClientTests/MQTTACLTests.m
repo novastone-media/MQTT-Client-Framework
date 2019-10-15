@@ -21,6 +21,7 @@
     [super setUp];
     MQTTStrict.strict = NO;
 }
+
 /*
  * [MQTT-3.1.2-19]
  * If the User Name Flag is set to 1, a user name MUST be present in the payload.
@@ -101,13 +102,8 @@
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
     self.session.userName = nil;
-    @try {
-        self.session.password = @"password w/o user";
-        [self.session connect];
-        XCTFail(@"Should not get here but throw exception before");
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    self.session.password = @"password w/o user";
+    XCTAssertThrows([self.session connect]);
 }
 
 /*
@@ -127,13 +123,7 @@
                      (unsigned long) [self.session.userName dataUsingEncoding:NSUTF8StringEncoding].length);
         self.session.userName = [self.session.userName stringByAppendingString:self.session.userName];
     }
-    
-    @try {
-        [self.session connect];
-        XCTFail(@"Should not get here but throw exception before");
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    XCTAssertThrows([self.session connect]);
 }
 
 - (void)test_connect_user_nonUTF8_strict {
@@ -144,20 +134,15 @@
     self.session = [MQTTTestHelpers session:parameters];
     self.session.userName = @"user";
     
-    @try {
-        //NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
-        //self.session.userName = stringWith9c;
-        NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
-        self.session.userName = stringWithD800;
-        //NSString *stringWithFEFF = [NSString stringWithFormat:@"%@<%C>/%s", TOPIC, 0xfeff, __FUNCTION__];
-        //self.session.userName = stringWithFEFF;
-        //NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
-        //self.session.userName = stringWithNull;
-        [self.session connect];
-        XCTFail(@"Should not get here but throw exception before");
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    //NSString *stringWith9c = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+    //self.session.userName = stringWith9c;
+    NSString *stringWithD800 = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0xD800, __FUNCTION__];
+    self.session.userName = stringWithD800;
+    //NSString *stringWithFEFF = [NSString stringWithFormat:@"%@<%C>/%s", TOPIC, 0xfeff, __FUNCTION__];
+    //self.session.userName = stringWithFEFF;
+    //NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
+    //self.session.userName = stringWithNull;
+    XCTAssertThrows([self.session connect]);
 }
 
 - (void)connect:(MQTTSession *)session parameters:(NSDictionary *)parameters {

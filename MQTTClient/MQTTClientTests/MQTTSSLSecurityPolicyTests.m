@@ -391,7 +391,7 @@ static SecTrustRef UTTrustWithCertificate(SecCertificateRef certificate) {
     SecTrustRef trust = UTTrustWithCertificate(certificate);
     
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeCertificate];
-    policy.pinnedCertificates = @[ (__bridge_transfer id)SecCertificateCopyData(certificate) ];
+    policy.pinnedCertificates = @[(__bridge_transfer id)SecCertificateCopyData(certificate)];
     policy.allowInvalidCertificates = YES;
     [self setRootCertificateAsLoneAnchorCertificateForTrust:trust];
     XCTAssert([policy evaluateServerTrust:trust forDomain:@"foobar.com"], @"Certificate should be trusted");

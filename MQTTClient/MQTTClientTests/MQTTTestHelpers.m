@@ -51,6 +51,7 @@ static NSDictionary *allBrokers = nil;
 
 - (void)tearDown {
     [self.timer invalidate];
+    self.session = nil;
     [super tearDown];
 }
 

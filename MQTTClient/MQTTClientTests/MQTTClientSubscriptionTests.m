@@ -35,18 +35,12 @@
     [self shutdown:parameters];
 }
 
-- (void)testSubscribeWMultipleTopics_None_strict {
-    
+- (void)testSubscribeWMultipleTopicsNoneStrict {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     MQTTStrict.strict = NO;
     [self connect:parameters];
     MQTTStrict.strict = YES;
-    @try {
-        [self testMultiSubscribeCloseExpected:@{}];
-        XCTFail(@"Should never get here, exception expected");
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    XCTAssertThrows([self testMultiSubscribeCloseExpected:@{}]);
 }
 
 - (void)testSubscribeWMultipleTopics_One {
@@ -158,19 +152,13 @@
     [self shutdown:parameters];
 }
 
-- (void)testSubscribeTopicHashnotlast_strict {
-    
+- (void)testSubscribeTopicHashNotLastStrict {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     // Set it to no to allow to connect in non strict mode
     MQTTStrict.strict = NO;
     [self connect:parameters];
     MQTTStrict.strict = YES;
-    @try {
-        [self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0];
-        XCTFail(@"Should never get here, exception expected");
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    XCTAssertThrows([self testSubscribeCloseExpected:@"MQTTClient/#/def" atLevel:0]);
 }
 
 - (void)testSubscribeTopicPlus {
@@ -448,30 +436,22 @@
 
 - (void)testUnsubscribeTopicHashnotalone_MQTT_4_7_1_2 {
     MQTTStrict.strict = NO;
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testUnsubscribeTopicCloseExpected:@"#abc"];
     [self shutdown:parameters];
 }
 
-- (void)testUnsubscribeTopicHashnotalone_strict {
-    
+- (void)testUnsubscribeTopicHashNotAloneStrict {
     NSDictionary *parameters = MQTTTestHelpers.broker;
     MQTTStrict.strict = NO;
     [self connect:parameters];
     MQTTStrict.strict = YES;
-    @try {
-        [self testUnsubscribeTopicCloseExpected:@"#abc"];
-        XCTFail(@"Should never get here, exception expected");
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    XCTAssertThrows([self testUnsubscribeTopicCloseExpected:@"#abc"]);
 }
 
 - (void)testUnsubscribeTopicPlus {
     MQTTStrict.strict = NO;
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testUnsubscribeTopic:@"+"];
@@ -480,7 +460,6 @@
 
 - (void)testUnsubscribeTopicEmpty_MQTT_4_7_3_1 {
     MQTTStrict.strict = NO;
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     [self connect:parameters];
     [self testUnsubscribeTopicCloseExpected:@""];

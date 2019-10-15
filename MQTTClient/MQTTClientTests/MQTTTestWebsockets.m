@@ -23,6 +23,11 @@
 
 @implementation MQTTTestWebsockets
 
+- (void)tearDown {
+    self.session = nil;
+    self.websocket = nil;
+    [super tearDown];
+}
 - (void)testWSTRANSPORT {
     NSDictionary *parameters = MQTTTestHelpers.allBrokers[@"mosquittoWS"];
     MQTTWebsocketTransport *wsTransport = [[MQTTWebsocketTransport alloc] init];

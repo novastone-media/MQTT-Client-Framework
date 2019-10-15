@@ -153,21 +153,11 @@
     NSString *stringWithFEFF = [NSString stringWithFormat:@"%@<%C>/%s", TOPIC, 0xfeff, __FUNCTION__];
     
     NSString *stringWithNull = [NSString stringWithFormat:@"%@/%C/%s", TOPIC, 0, __FUNCTION__];
-    
-    @try {
-        [self.session publishData:[[NSData alloc] init]
-                          onTopic:stringWith9c retain:NO qos:MQTTQosLevelAtMostOnce];
-        [self.session publishData:[[NSData alloc] init]
-                          onTopic:stringWithNull retain:NO qos:MQTTQosLevelAtMostOnce];
-        [self.session publishData:[[NSData alloc] init]
-                          onTopic:stringWithFEFF retain:NO qos:MQTTQosLevelAtMostOnce];
-        [self.session publishData:[[NSData alloc] init]
-                          onTopic:stringWithD800 retain:NO qos:MQTTQosLevelAtMostOnce];
-        [self.session connect];
-        XCTFail(@"Should not get here but throw exception before");
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    XCTAssertThrows([self.session publishData:[[NSData alloc] init] onTopic:stringWith9c retain:NO qos:MQTTQosLevelAtMostOnce]);
+    XCTAssertThrows([self.session publishData:[[NSData alloc] init] onTopic:stringWithNull retain:NO qos:MQTTQosLevelAtMostOnce]);
+    XCTAssertThrows([self.session publishData:[[NSData alloc] init] onTopic:stringWithFEFF retain:NO qos:MQTTQosLevelAtMostOnce]);
+    XCTAssertThrows([self.session publishData:[[NSData alloc] init] onTopic:stringWithD800 retain:NO qos:MQTTQosLevelAtMostOnce]);
+    XCTAssertThrows([self.session connect]);
     
 }
 

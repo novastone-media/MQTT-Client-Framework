@@ -58,17 +58,11 @@
  */
 - (void)test_init_zero_clientId_noclean_strict {
     MQTTStrict.strict = YES;
-    
     NSDictionary *parameters = MQTTTestHelpers.broker;
     self.session = [MQTTTestHelpers session:parameters];
-    @try {
-        self.session.cleanSessionFlag = FALSE;
-        self.session.clientId = @"";
-        [self.session connect];
-        XCTFail(@"Should not get here but throw exception before");
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    self.session.cleanSessionFlag = FALSE;
+    self.session.clientId = @"";
+    XCTAssertThrows([self.session connect]);
 }
 
 - (void)test_init_long_clientId {
@@ -545,16 +539,9 @@
 - (void)test_connect_illegal_protocollevel88_strict {
     MQTTStrict.strict = YES;
     NSDictionary *parameters = MQTTTestHelpers.broker;
-    
     self.session = [MQTTTestHelpers session:parameters];
-    @try {
-        self.session.protocolLevel = 88;
-        [self.session connect];
-        XCTFail(@"Should not get here but throw exception before");
-    } @catch (NSException *exception) {
-    } @finally {
-    }
-    
+    self.session.protocolLevel = 88;
+    XCTAssertThrows([self.session connect]);
 }
 
 /*
