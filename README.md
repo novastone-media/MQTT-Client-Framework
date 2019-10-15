@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/novastone-media/MQTT-Client-Framework/branch/master/graph/badge.svg)](https://codecov.io/gh/novastone-media/MQTT-Client-Framework)
 [![CocoaPods Version](https://img.shields.io/cocoapods/v/MQTTClient.svg)](https://img.shields.io/cocoapods/v/MQTTClient.svg)
 [![Platform](https://img.shields.io/cocoapods/p/MQTTClient.svg?style=flat)](https://img.shields.io/cocoapods/p/MQTTClient.svg?style=flat)
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=dWNIWHl6TzJWazZYNFBHQXhhN2NHQT09LS02UEdDczEwWXJWaGhVUWw5Y0hqRWRnPT0=--ef92b30c4084110fac87881baacef88c83193564)](https://www.browserstack.com/automate/public-build/dWNIWHl6TzJWazZYNFBHQXhhN2NHQT09LS02UEdDczEwWXJWaGhVUWw5Y0hqRWRnPT0=--ef92b30c4084110fac87881baacef88c83193564)
+[![BrowserStack Status](https://app-automate.browserstack.com/badge.svg?badge_key=bUpOUXEwVWJWT3NJaHluc1ZoekhVbGtTNUxPSHMyOFJnNW5pQlFqTS9nST0tLW0raVNLNHZmQmp2YmN2TmZ5dzkvQXc9PQ==--94103d1f1bfae825c70988b3f6008b6130bfb34b)](https://app-automate.browserstack.com/badge.svg?badge_key=bUpOUXEwVWJWT3NJaHluc1ZoekhVbGtTNUxPSHMyOFJnNW5pQlFqTS9nST0tLW0raVNLNHZmQmp2YmN2TmZ5dzkvQXc9PQ==--94103d1f1bfae825c70988b3f6008b6130bfb34b)
 
 MQTT-Client-Framework is a native Objective-C iOS library. It uses `CFNetwork` for networking and `CoreData` for persistence. It is a complete implementation of MQTT 3.1.1 and supports TLS.
 
