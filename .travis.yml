@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode10
+osx_image: xcode11
 env:
   matrix:
     - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 8,OS=11.4'
@@ -9,7 +9,7 @@ before_install:
   - gem install xcpretty
   - brew install mosquitto
 install:
-    xcodebuild -destination generic/platform=iOS -workspace Example/Example.xcworkspace -scheme "Example"
+    xcodebuild -destination generic/platform=iOS -workspace Example/Example.xcworkspace -scheme "Example" -derivedDataPath "build"
 before_script: ./brokers/mosquitto/start.sh
 script: xcodebuild clean test -workspace MQTTClient/MQTTClient.xcworkspace -scheme $SCHEME -destination "$DESTINATION"
 after_script: ./brokers/mosquitto/stop.sh
@@ -23,3 +23,4 @@ addons:
     username: "markrobinson21"
     access_key:
       secure: "nFBGconUssll+PN4C7ENawVmCV7wLMkLNL2r6EZnwdQkLLEd1IeftuomS2meXbTANPJdki0FRfo85Q1icxUb/L4Juz8LFf6v4mJ55m//E84WyDhlzKdOYftTDNuDrMT88qNwBREa1clPnX38Xztq1KiEiTwoqZkaIwJRn0hrmHCnlLguixaaymfL0mhpOr4CWsIcTWwuBK0X6kb1KDaZqzd3kvcDxza+XAPQbbr//r3qRb4NqSpcyh5LXQzIbyAGKKajNIDAwjLxJV5N0Z0IlswNFGt5sLjAfHgouH8dcLhEldbnGbocvlDVK8L6k9GUGNHxNPnw17Wa9CI4pbXkcUcex9/P2maSMf8nMwj8WxIrR07nLh218sRI7ts878I5T/qi432zvgqfliI5hlowomWgMTRV6QcJKhU+KP30EykwCoyqVTie4dQuvnxogQRG6AKNt0DhZ5m7UYLvzYTgirYy0GZDC4OZZpg1drc6RsIM1PmmGCvTHVU7WN+CXHxxhJ7qNVqG4r9nrUzeqNeHuVQNZWnjZnG2vkBmyCpsh6H4LrGyVv7Fpi88ABn+735GqgnQAt0kW+ECBqofXCCZb9oVBQf/PMoi4T01fo6fnqzya3+hhqiPFtgnq2ewENz9QlRne/8FtH/cWSOB1O1nFnPHCIVDocdrxpC1Bla3IKA="
+    app_path: "build/Build/Products/Debug-iphoneos/Example.app"
