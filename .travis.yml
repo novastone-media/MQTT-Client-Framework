@@ -9,7 +9,7 @@ before_install:
   - gem install xcpretty
   - brew install mosquitto
 install:
-    xcodebuild -destination generic/platform=iOS -workspace Example/Example.xcworkspace -scheme "Example" -derivedDataPath "build" -allowProvisioningUpdates
+    xcodebuild -destination generic/platform=iOS -workspace Example/Example.xcworkspace -scheme "Example" -derivedDataPath "build" CODE_SIGNING_ALLOWED=NO
 before_script: ./brokers/mosquitto/start.sh
 script: xcodebuild clean test -workspace MQTTClient/MQTTClient.xcworkspace -scheme $SCHEME -destination "$DESTINATION"
 after_script: ./brokers/mosquitto/stop.sh
