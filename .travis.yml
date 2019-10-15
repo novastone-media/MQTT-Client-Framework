@@ -5,17 +5,24 @@ env:
     - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 8,OS=11.4'
     - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 7,OS=12.0'
     - SCHEME=MQTTClientmacOS DESTINATION='platform=macOS'
+    - SCHEME=Example DESTINATION='generic/platform=iOS'
 before_install:
   - gem install xcpretty
   - brew install mosquitto
-before_script: ./brokers/mosquitto/start.sh
-script: xcodebuild clean test -workspace MQTTClient/MQTTClient.xcworkspace -scheme $SCHEME -destination "$DESTINATION"
-script: ./run_browserstack.sh 
-after_script: ./brokers/mosquitto/stop.sh
-after_success:
-  - if [ "$SCHEME" == "MQTTClientmacOS" ]; then
-      bash <(curl -s https://codecov.io/bash);
+before_script: 
+  - ./brokers/mosquitto/start.sh
+script: 
+  - if [ "$SCHEME" == "Example" ]; then
+      ./run_browserstack;
+    else
+      xcodebuild clean test -workspace MQTTClient/MQTTClient.xcworkspace -scheme $SCHEME -destination "$DESTINATION";
     fi
+after_script: 
+  - ./brokers/mosquitto/stop.sh
+after_success:
+    - if [ "$SCHEME" == "MQTTClientmacOS" ]; then
+        bash <(curl -s https://codecov.io/bash);
+      fi
     
 addons:
   browserstack:
