@@ -14,7 +14,7 @@ before_script:
   - ./brokers/mosquitto/start.sh
 script: 
     - if [ "$SCHEME" == "Example" ]; then
-        data='{"devices":["iPhone XS-13"], "app":"bs://3d81b39af4a0bb7fb6d57800538043ca650d51a0", "deviceLogs" :"true", "testSuite":"bs://8b98463cc546241e0a39545d09081f609c852716", "project":"MQTTClient"}'
+        data='{"devices":["iPhone XS-13"], "app":"bs://3d81b39af4a0bb7fb6d57800538043ca650d51a0", "deviceLogs" :"true", "testSuite":"bs://8b98463cc546241e0a39545d09081f609c852716", "project":"MQTTClient"}';
         curl -u "markrobinson21:$BROWSERSTACK_KEY" -X POST https://api-cloud.browserstack.com/app-automate/xcuitest/build -d "$data" -H 'Content-Type:application/json';
       else
         xcodebuild clean test -workspace MQTTClient/MQTTClient.xcworkspace -scheme $SCHEME -destination "$DESTINATION";
