@@ -8,12 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "MQTTTransport.h"
-#import <SocketRocket/SRWebSocket.h>
 
 /** MQTTCFSocketTransport
  * implements an MQTTTransport on top of Websockets (SocketRocket)
  */
-@interface MQTTWebsocketTransport : MQTTTransport <MQTTTransport, SRWebSocketDelegate>
+@interface MQTTWebsocketTransport : MQTTTransport <MQTTTransport>
 
 /** host an NSString containing the hostName or IP address of the host to connect to
  * defaults to @"localhost"
