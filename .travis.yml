@@ -3,7 +3,7 @@ osx_image: xcode11.2
 env:
   matrix:
     - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 8,OS=12.1'
-    - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 8,OS=13.0'
+    - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 8,OS=13.2'
     - SCHEME=MQTTClientmacOS DESTINATION='platform=macOS'
 before_install:
   - gem install xcpretty
