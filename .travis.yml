@@ -1,9 +1,7 @@
 language: objective-c
 osx_image: xcode11
 env:
-  secure: su1PWmVQ0caWlxZVti2cSJ7U/KmknxTrKOftHZy+fjcnqp+NENTwAwKoRL7MND/5EZzJWnuSY8a8PCr4r3cGeQif20zX7Qs2NcZ9Fyhh1rXLYyH14jH0kMenPvAdY9d7nWRhl5oRcS9VKlAVvsM/RXyhkcf9VMaiYg1rmtfLUo3+thEtXAqtWj8upUqpi6R5IWVksb21bQ7rmemDPJLWaZNM3vGJctUmdhoef739FI8/Jbe++7KWw+ZO8bKGTOFiUoqZZMfni2o3ISsz39UzJmK4E/ZRKo9kiFieBicws2rIdvlLvsuervTrOHPd5dATHOumpVC7OImsO+O8BdsagRDBevllwAb8hBwBJEMxww0VBKJ6A1xVoUJkAHJH+pT85t3mD5PG4KPB+WtNQWHBUsI2oSy2KhHSKNEiSRNxtziH9jm/qqAArm/TWw4AW/B13HDJtA0dAuscUHOWVev0gyyigTorDKPTcAV9ApTsrJHvKTYNJyIETpNZ7yxmfXMDxerCvm5lFxq7FeOmT70wvkIxYhyEvjt2MESmYteGJ9+kqEk8XZPZ04tXH2X3YuyJXVne6jh88iJBflMI0LBvB1uOFzM0Z5F+nLM9uUD5wNjBrhcP6BL0LEUFKpNs5CUAPzb9jltnlCm8tGYTSFh0kD7ZyxtUSbIjwzBa2o16Sns=
   matrix:
-    - SCHEME=Example DESTINATION='generic/platform=iOS'
     - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 8,OS=11.4'
     - SCHEME=MQTTClientiOS DESTINATION='platform=iOS Simulator,name=iPhone 7,OS=12.0'
     - SCHEME=MQTTClientmacOS DESTINATION='platform=macOS'
@@ -13,12 +11,7 @@ before_install:
 before_script: 
   - ./brokers/mosquitto/start.sh
 script: 
-    - if [ "$SCHEME" == "Example" ]; then
-        data='{"devices":["iPhone XS-13"], "app":"bs://3d81b39af4a0bb7fb6d57800538043ca650d51a0", "deviceLogs" :"true", "testSuite":"bs://8b98463cc546241e0a39545d09081f609c852716", "project":"MQTTClient"}';
-        curl -u "markrobinson21:$BROWSERSTACK_KEY" -X POST https://api-cloud.browserstack.com/app-automate/xcuitest/build -d "$data" -H 'Content-Type:application/json';
-      else
-        xcodebuild clean test -workspace MQTTClient/MQTTClient.xcworkspace -scheme $SCHEME -destination "$DESTINATION";
-      fi
+  - xcodebuild clean test -workspace MQTTClient/MQTTClient.xcworkspace -scheme $SCHEME -destination "$DESTINATION";
 after_script: 
   - ./brokers/mosquitto/stop.sh
 after_success:
