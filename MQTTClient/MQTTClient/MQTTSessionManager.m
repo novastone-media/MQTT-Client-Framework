@@ -42,9 +42,7 @@
 @property (strong, nonatomic) NSArray *certificates;
 @property (nonatomic) MQTTProtocolVersion protocolLevel;
 
-#if TARGET_OS_IPHONE == 1
-@property (strong, nonatomic) ForegroundReconnection *foregroundReconnection;
-#endif
+@property (strong, nonatomic) ForegroundReconnection *foregroundReconnection NS_EXTENSION_UNAVAILABLE_IOS("Use view controller based solutions where appropriate instead.");
 
 @property (nonatomic) BOOL persistent;
 @property (nonatomic) NSUInteger maxWindowSize;
@@ -101,14 +99,16 @@
                                                          reconnectBlock:^{
                                                              [weakSelf reconnect:nil];
                                                          }];
-#if TARGET_OS_IPHONE == 1
-    if (connectInForeground) {
-        self.foregroundReconnection = [[ForegroundReconnection alloc] initWithMQTTSessionManager:self];
+    if (connectInForeground && [self respondsToSelector:@selector(addForegroundReconnection)]) {
+        [self addForegroundReconnection];
     }
-#endif
     self.subscriptionLock = [[NSLock alloc] init];
     
     return self;
+}
+
+- (void)addForegroundReconnection NS_EXTENSION_UNAVAILABLE_IOS("Use view controller based solutions where appropriate instead.") {
+    self.foregroundReconnection = [[ForegroundReconnection alloc] initWithMQTTSessionManager:self];
 }
 
 - (void)connectTo:(NSString *)host
