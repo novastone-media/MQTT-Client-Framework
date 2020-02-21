@@ -54,7 +54,7 @@
     [self.sessionManager disconnectWithDisconnectHandler:nil];
 }
 
-- (void)appDidEnterBackground {
+- (void)appDidEnterBackground NS_EXTENSION_UNAVAILABLE_IOS("Use view controller based solutions where appropriate instead.") {
     if (!self.sessionManager.requiresTearDown) {
         // we don't want to tear down session as it's already closed
         return;
@@ -71,7 +71,7 @@
     [self.sessionManager connectToLast:nil];
 }
 
-- (void)endBackgroundTask {
+- (void)endBackgroundTask NS_EXTENSION_UNAVAILABLE_IOS("Use view controller based solutions where appropriate instead.") {
     if (self.backgroundTask) {
         [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
         self.backgroundTask = UIBackgroundTaskInvalid;
