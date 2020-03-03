@@ -275,9 +275,17 @@
         case MQTTSessionEventProtocolError:
         case MQTTSessionEventConnectionRefused:
         case MQTTSessionEventConnectionError:
-            [self triggerDelayedReconnect];
+            
             self.lastErrorCode = error;
             [self updateState:MQTTSessionManagerStateError];
+            
+            if([self.delegate respondsToSelector:@selector(sessionManager:shouldTriggerDelayedReconnectForError:)] && ![self.delegate sessionManager:self shouldTriggerDelayedReconnectForError:error]){
+                //do nothing
+            }else {
+                [self triggerDelayedReconnect];
+            }
+            
+            
             break;
             
         default:
