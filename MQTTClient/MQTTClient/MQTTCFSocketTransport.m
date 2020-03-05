@@ -236,7 +236,7 @@
         return nil;
     }
     
-    NSArray *clientCerts = @[(__bridge id)identityRef, (__bridge id)cert];
+    NSArray *clientCerts = @[(__bridge id)identityRef];
     return clientCerts;
 }
 
