@@ -6,7 +6,7 @@ Pod::Spec.new do |mqttc|
 	mqttc.license      = { :type => "EPLv1", :file => "LICENSE" }
 	mqttc.author       = { "Christoph Krey" => "krey.christoph@gmail.com" }
 	mqttc.source       = {
-		:git => "https://github.com/ckrey/MQTT-Client-Framework.git",
+		:git => "https://github.com/life360/MQTT-Client-Framework.git",
 		:tag => "0.8.7",
 		:submodules => true
 	}
@@ -45,7 +45,7 @@ Pod::Spec.new do |mqttc|
 	end
 
 	mqttc.subspec 'MinL' do |minl|
-		minl.dependency 'CocoaLumberjack', '~> 2.3.0'
+		minl.dependency 'CocoaLumberjack', '3.6.1'
 
 		minl.source_files =	"MQTTClient/MQTTClient/MQTTCFSocketDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTCFSocketEncoder.{h,m}",
