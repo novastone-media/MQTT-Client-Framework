@@ -22,7 +22,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 @interface MQTTSession() <MQTTDecoderDelegate, MQTTTransportDelegate>
 
-@property (nonatomic, readwrite) MQTTSessionStatus status;
+@property (atomic, readwrite) MQTTSessionStatus status;
 @property (nonatomic, readwrite) BOOL sessionPresent;
 
 @property (strong, nonatomic) GCDTimer *keepAliveTimer;
@@ -39,12 +39,12 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 @property (nonatomic) UInt16 txMsgId;
 
-@property (nonatomic) BOOL synchronPub;
-@property (nonatomic) UInt16 synchronPubMid;
-@property (nonatomic) BOOL synchronUnsub;
-@property (nonatomic) UInt16 synchronUnsubMid;
-@property (nonatomic) BOOL synchronSub;
-@property (nonatomic) UInt16 synchronSubMid;
+@property (atomic) BOOL synchronPub;
+@property (atomic) UInt16 synchronPubMid;
+@property (atomic) BOOL synchronUnsub;
+@property (atomic) UInt16 synchronUnsubMid;
+@property (atomic) BOOL synchronSub;
+@property (atomic) UInt16 synchronSubMid;
 @property (nonatomic) BOOL synchronConnect;
 @property (nonatomic) BOOL synchronDisconnect;
 
