@@ -5,7 +5,6 @@
 // Copyright © 2013-2017, Christoph Krey. All rights reserved.
 //
 
-
 #import "MQTTSession.h"
 #import "MQTTDecoder.h"
 #import "MQTTStrict.h"
@@ -13,6 +12,7 @@
 #import "MQTTMessage.h"
 #import "MQTTCoreDataPersistence.h"
 #import "GCDTimer.h"
+#import "GCDMutableDictionary.h"
 
 @class MQTTSSLSecurityPolicy;
 
@@ -33,9 +33,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 @property (strong, nonatomic) MQTTDecoder *decoder;
 
 @property (copy, nonatomic) MQTTDisconnectHandler disconnectHandler;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTSubscribeHandler> *subscribeHandlers;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTUnsubscribeHandler> *unsubscribeHandlers;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTPublishHandler> *publishHandlers;
+@property (nonatomic, strong) GCDMutableDictionary<NSNumber *, MQTTSubscribeHandler> *subscribeHandlers;
+@property (nonatomic, strong) GCDMutableDictionary<NSNumber *, MQTTUnsubscribeHandler> *unsubscribeHandlers;
+@property (nonatomic, strong) GCDMutableDictionary<NSNumber *, MQTTPublishHandler> *publishHandlers;
 
 @property (nonatomic) UInt16 txMsgId;
 
@@ -71,9 +71,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self = [super init];
     self.txMsgId = 1;
     self.persistence = [[MQTTCoreDataPersistence alloc] init];
-    self.subscribeHandlers = [[NSMutableDictionary alloc] init];
-    self.unsubscribeHandlers = [[NSMutableDictionary alloc] init];
-    self.publishHandlers = [[NSMutableDictionary alloc] init];
+    self.subscribeHandlers = [[GCDMutableDictionary alloc] init];
+    self.unsubscribeHandlers = [[GCDMutableDictionary alloc] init];
+    self.publishHandlers = [[GCDMutableDictionary alloc] init];
 
     self.clientId = nil;
     self.userName = nil;
