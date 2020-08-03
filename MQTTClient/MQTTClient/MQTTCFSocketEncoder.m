@@ -59,8 +59,10 @@
         }
         
         if (self.state == MQTTCFSocketEncoderStateReady) {
-            if (self.buffer.length) {
-                [self send:nil];
+            @synchronized(self) {
+                if (self.buffer.length) {
+                    [self send:nil];
+                }
             }
         }
     }
