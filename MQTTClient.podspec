@@ -44,6 +44,7 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
 					"MQTTClient/MQTTClient/MQTTTransport.{h,m}",
+					"MQTTClient/MQTTClient/GCDMutableDictionary.{h,m}",
 					"MQTTClient/MQTTClient/GCDTimer.{h,m}"
 	end
 
@@ -70,6 +71,7 @@ Pod::Spec.new do |mqttc|
 					"MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
 					"MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
 					"MQTTClient/MQTTClient/MQTTTransport.{h,m}",
+					"MQTTClient/MQTTClient/GCDMutableDictionary.{h,m}",
 					"MQTTClient/MQTTClient/GCDTimer.{h,m}"
 		minl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'LUMBERJACK=1' }
 	end
