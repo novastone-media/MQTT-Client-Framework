@@ -5,7 +5,6 @@
 // Copyright © 2013-2017, Christoph Krey. All rights reserved.
 //
 
-
 #import "MQTTSession.h"
 #import "MQTTDecoder.h"
 #import "MQTTStrict.h"
@@ -13,6 +12,7 @@
 #import "MQTTMessage.h"
 #import "MQTTCoreDataPersistence.h"
 #import "GCDTimer.h"
+#import "GCDMutableDictionary.h"
 
 @class MQTTSSLSecurityPolicy;
 
@@ -22,7 +22,7 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 
 @interface MQTTSession() <MQTTDecoderDelegate, MQTTTransportDelegate>
 
-@property (nonatomic, readwrite) MQTTSessionStatus status;
+@property (atomic, readwrite) MQTTSessionStatus status;
 @property (nonatomic, readwrite) BOOL sessionPresent;
 
 @property (strong, nonatomic) GCDTimer *keepAliveTimer;
@@ -33,18 +33,18 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 @property (strong, nonatomic) MQTTDecoder *decoder;
 
 @property (copy, nonatomic) MQTTDisconnectHandler disconnectHandler;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTSubscribeHandler> *subscribeHandlers;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTUnsubscribeHandler> *unsubscribeHandlers;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, MQTTPublishHandler> *publishHandlers;
+@property (nonatomic, strong) GCDMutableDictionary<NSNumber *, MQTTSubscribeHandler> *subscribeHandlers;
+@property (nonatomic, strong) GCDMutableDictionary<NSNumber *, MQTTUnsubscribeHandler> *unsubscribeHandlers;
+@property (nonatomic, strong) GCDMutableDictionary<NSNumber *, MQTTPublishHandler> *publishHandlers;
 
 @property (nonatomic) UInt16 txMsgId;
 
-@property (nonatomic) BOOL synchronPub;
-@property (nonatomic) UInt16 synchronPubMid;
-@property (nonatomic) BOOL synchronUnsub;
-@property (nonatomic) UInt16 synchronUnsubMid;
-@property (nonatomic) BOOL synchronSub;
-@property (nonatomic) UInt16 synchronSubMid;
+@property (atomic) BOOL synchronPub;
+@property (atomic) UInt16 synchronPubMid;
+@property (atomic) BOOL synchronUnsub;
+@property (atomic) UInt16 synchronUnsubMid;
+@property (atomic) BOOL synchronSub;
+@property (atomic) UInt16 synchronSubMid;
 @property (nonatomic) BOOL synchronConnect;
 @property (nonatomic) BOOL synchronDisconnect;
 
@@ -71,9 +71,9 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self = [super init];
     self.txMsgId = 1;
     self.persistence = [[MQTTCoreDataPersistence alloc] init];
-    self.subscribeHandlers = [[NSMutableDictionary alloc] init];
-    self.unsubscribeHandlers = [[NSMutableDictionary alloc] init];
-    self.publishHandlers = [[NSMutableDictionary alloc] init];
+    self.subscribeHandlers = [[GCDMutableDictionary alloc] init];
+    self.unsubscribeHandlers = [[GCDMutableDictionary alloc] init];
+    self.publishHandlers = [[GCDMutableDictionary alloc] init];
 
     self.clientId = nil;
     self.userName = nil;

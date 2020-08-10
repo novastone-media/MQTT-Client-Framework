@@ -17,6 +17,8 @@
 
 @implementation MQTTCFSocketEncoder
 
+@synthesize state = _state;
+
 - (instancetype)init {
     self = [super init];
     self.state = MQTTCFSocketEncoderStateInitializing;
@@ -39,9 +41,17 @@
     [self.stream setDelegate:nil];
 }
 
+- (MQTTCFSocketEncoderState)state {
+    @synchronized (self) {
+        return _state;
+    }
+}
+
 - (void)setState:(MQTTCFSocketEncoderState)state {
-    DDLogVerbose(@"[MQTTCFSocketEncoder] setState %ld/%ld", (long)_state, (long)state);
-    _state = state;
+    @synchronized (self) {
+        DDLogVerbose(@"[MQTTCFSocketEncoder] setState %ld/%ld", (long)_state, (long)state);
+        _state = state;
+    }
 }
 
 - (void)stream:(NSStream *)sender handleEvent:(NSStreamEvent)eventCode {
@@ -59,8 +69,10 @@
         }
         
         if (self.state == MQTTCFSocketEncoderStateReady) {
-            if (self.buffer.length) {
-                [self send:nil];
+            @synchronized(self) {
+                if (self.buffer.length) {
+                    [self send:nil];
+                }
             }
         }
     }
