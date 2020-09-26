@@ -12,16 +12,16 @@
 
 #ifdef DEBUG
 
-DDLogLevel ddLogLevel = DDLogLevelVerbose;
+DDLogLevel MQTTLogLevel = DDLogLevelVerbose;
 
 #else
 
-DDLogLevel ddLogLevel = DDLogLevelWarning;
+DDLogLevel MQTTLogLevel = DDLogLevelWarning;
 
 #endif
 
 + (void)setLogLevel:(DDLogLevel)logLevel {
-    ddLogLevel = logLevel;
+    MQTTLogLevel = logLevel;
 }
 
 @end
