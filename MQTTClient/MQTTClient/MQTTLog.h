@@ -14,7 +14,7 @@
 
 #ifdef LUMBERJACK
 
-#define LOG_LEVEL_DEF ddLogLevel
+#define LOG_LEVEL_DEF MQTTLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 #else /* LUMBERJACK */
@@ -83,11 +83,11 @@ DDLogLevelAll       = NSUIntegerMax
 
 #ifdef DEBUG
 
-#define DDLogVerbose if (ddLogLevel & DDLogFlagVerbose) NSLog
-#define DDLogDebug if (ddLogLevel & DDLogFlagDebug) NSLog
-#define DDLogWarn if (ddLogLevel & DDLogFlagWarning) NSLog
-#define DDLogInfo if (ddLogLevel & DDLogFlagInfo) NSLog
-#define DDLogError if (ddLogLevel & DDLogFlagError) NSLog
+#define DDLogVerbose if (MQTTLogLevel & DDLogFlagVerbose) NSLog
+#define DDLogDebug if (MQTTLogLevel & DDLogFlagDebug) NSLog
+#define DDLogWarn if (MQTTLogLevel & DDLogFlagWarning) NSLog
+#define DDLogInfo if (MQTTLogLevel & DDLogFlagInfo) NSLog
+#define DDLogError if (MQTTLogLevel & DDLogFlagError) NSLog
 
 #else
 
@@ -100,7 +100,7 @@ DDLogLevelAll       = NSUIntegerMax
 #endif /* DEBUG */
 #endif /* LUMBERJACK */
 
-extern DDLogLevel ddLogLevel;
+extern DDLogLevel MQTTLogLevel;
 
 /** MQTTLog lets you define the log level for MQTTClient
  *  independently of using CocoaLumberjack
