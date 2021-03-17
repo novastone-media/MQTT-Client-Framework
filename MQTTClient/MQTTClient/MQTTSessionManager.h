@@ -37,7 +37,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @param topic the topic the data was published to
  @param retained indicates if the data retransmitted from server storage
  */
-- (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained;
+- (void)handleMessage:(NSData * _Nullable)data onTopic:(NSString * _Nullable)topic retained:(BOOL)retained;
 
 @optional
 
@@ -51,7 +51,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @param sessionManager the instance of MQTTSessionManager whose state changed
  @param newState the new connection state of the sessionManager. This will be identical to `sessionManager.state`.
  */
-- (void)sessionManager:(MQTTSessionManager *)sessonManager didChangeState:(MQTTSessionManagerState)newState;
+- (void)sessionManager:(MQTTSessionManager * _Nullable)sessonManager didChangeState:(MQTTSessionManagerState)newState;
 
 @end
 
@@ -61,7 +61,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 
 /** the delegate receiving incoming messages
  */
-@property (weak, nonatomic) id<MQTTSessionManagerDelegate> delegate;
+@property (weak, nonatomic) id<MQTTSessionManagerDelegate> _Nullable delegate;
 
 /** subscriptions is a dictionary of NSNumber instances indicating the MQTTQoSLevel.
  *  The keys are topic filters.
@@ -70,7 +70,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  *  Setting a new subscriptions dictionary initiates SUBSCRIBE or UNSUBSCRIBE messages by SessionManager
  *  by comparing the old and new subscriptions.
  */
-@property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *subscriptions;
+@property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> * _Nonnull subscriptions;
 
 /** effectiveSubscriptions s a dictionary of NSNumber instances indicating the granted MQTTQoSLevel, or 0x80 for subscription failure.
  *  The keys are topic filters.
@@ -111,6 +111,12 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 @property (nonatomic, readonly) NSError *lastErrorCode;
 
+/** The duration at which the connection-retry timer should be capped. When MQTTSessionManager receives a ClosedByBroker or an Error
+    event, it will attempt to reconnect to the broker. The time in between connection attempts is doubled each time, until it remains at maxRetryInterval.
+    Defaults to 64 seconds.
+ */
+@property (nonatomic) NSTimeInterval maxConnectionRetryInterval;
+
 /** initWithPersistence sets the MQTTPersistence properties other than default
  * @param persistent YES or NO (default) to establish file or in memory persistence.
  * @param maxWindowSize (a positive number, default is 16) to control the number of messages sent before waiting for acknowledgement in Qos 1 or 2. Additional messages are stored and transmitted later.
@@ -119,7 +125,6 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param maxRetryInterval The duration at which the connection-retry timer should be capped. When MQTTSessionManager receives a ClosedByBroker or an Error
     event, it will attempt to reconnect to the broker. The time in between connection attempts is doubled each time, until it remains at maxRetryInterval.
     Defaults to 64 seconds.
- * @param connectInForeground Whether or not to connect the MQTTSession when the app enters the foreground, and disconnect when it becomes inactive. When NO, the caller is responsible for calling -connectTo: and -disconnect. Defaults to YES.
  * @return the initialized MQTTSessionManager object
  */
 
@@ -127,8 +132,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
                               maxWindowSize:(NSUInteger)maxWindowSize
                                 maxMessages:(NSUInteger)maxMessages
                                     maxSize:(NSUInteger)maxSize
-                 maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
-                        connectInForeground:(BOOL)connectInForeground;
+                 maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval;
 
 /** initWithPersistence sets the MQTTPersistence properties other than default
  * @param persistent YES or NO (default) to establish file or in memory persistence.

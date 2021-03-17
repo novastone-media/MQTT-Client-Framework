@@ -41,16 +41,11 @@
 
 @property (strong, nonatomic) NSTimer *disconnectTimer;
 @property (strong, nonatomic) NSTimer *activityTimer;
-#if TARGET_OS_IPHONE == 1
-@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
-#endif
 
 @property (nonatomic) BOOL persistent;
 @property (nonatomic) NSUInteger maxWindowSize;
 @property (nonatomic) NSUInteger maxSize;
 @property (nonatomic) NSUInteger maxMessages;
-@property (nonatomic) BOOL shouldConnectInForeground;
-@property (nonatomic) NSTimeInterval maxConnectionRetryInterval;
 
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *internalSubscriptions;
 @property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
@@ -64,17 +59,6 @@
 
 @implementation MQTTSessionManager
 
-- (void)dealloc {
-#if TARGET_OS_IPHONE == 1
-
-  NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-  [defaultCenter removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
-  [defaultCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-  [defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-
-#endif
-}
-
 - (id)init {
     self = [super init];
 
@@ -87,29 +71,7 @@
     self.maxSize = MQTT_MAX_SIZE;
     self.maxMessages = MQTT_MAX_MESSAGES;
     self.maxWindowSize = MQTT_MAX_WINDOW_SIZE;
-    self.shouldConnectInForeground = YES;
     self.maxConnectionRetryInterval = RECONNECT_TIMER_MAX_DEFAULT;
-
-#if TARGET_OS_IPHONE == 1
-    self.backgroundTask = UIBackgroundTaskInvalid;
-
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-
-    [defaultCenter addObserver:self
-                      selector:@selector(appWillResignActive)
-                          name:UIApplicationWillResignActiveNotification
-                        object:nil];
-
-    [defaultCenter addObserver:self
-                      selector:@selector(appDidEnterBackground)
-                          name:UIApplicationDidEnterBackgroundNotification
-                        object:nil];
-
-    [defaultCenter addObserver:self
-                      selector:@selector(appDidBecomeActive)
-                          name:UIApplicationDidBecomeActiveNotification
-                        object:nil];
-#endif
     self.subscriptionLock = [[NSLock alloc] init];
     return self;
 }
@@ -118,15 +80,13 @@
                               maxWindowSize:(NSUInteger)maxWindowSize
                                 maxMessages:(NSUInteger)maxMessages
                                     maxSize:(NSUInteger)maxSize
-                 maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval
-                        connectInForeground:(BOOL)connectInForeground {
+                 maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval {
     self = [self init];
     self.persistent = persistent;
     self.maxWindowSize = maxWindowSize;
     self.maxSize = maxSize;
     self.maxMessages = maxMessages;
     self.maxConnectionRetryInterval = maxRetryInterval;
-    self.shouldConnectInForeground = connectInForeground;
     return self;
 }
 
@@ -138,37 +98,9 @@
                        maxWindowSize:maxWindowSize
                          maxMessages:maxMessages
                              maxSize:maxSize
-          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT
-                 connectInForeground:YES];
+          maxConnectionRetryInterval:RECONNECT_TIMER_MAX_DEFAULT];
     return self;
 }
-
-#if TARGET_OS_IPHONE == 1
-- (void)appWillResignActive {
-    if (self.shouldConnectInForeground) {
-        [self disconnect];
-    }
-}
-
-- (void)appDidEnterBackground {
-    if (self.shouldConnectInForeground) {
-        __weak MQTTSessionManager *weakSelf = self;
-        self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            __strong MQTTSessionManager *strongSelf = weakSelf;
-            if (strongSelf.backgroundTask) {
-                [[UIApplication sharedApplication] endBackgroundTask:strongSelf.backgroundTask];
-                strongSelf.backgroundTask = UIBackgroundTaskInvalid;
-            }
-        }];
-    }
-}
-
-- (void)appDidBecomeActive {
-    if (self.shouldConnectInForeground) {
-        [self connectToLast];
-    }
-}
-#endif
 
 - (void)connectTo:(NSString *)host
              port:(NSInteger)port
@@ -390,16 +322,6 @@
     }
 }
 
-- (void)endBackgroundTask
-{
-#if TARGET_OS_IPHONE == 1
-    if (self.backgroundTask) {
-        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-        self.backgroundTask = UIBackgroundTaskInvalid;
-    }
-#endif
-}
-
 #pragma mark - MQTT Callback methods
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
@@ -425,13 +347,11 @@
         }
         case MQTTSessionEventConnectionClosed:
             [self updateState:MQTTSessionManagerStateClosed];
-            [self endBackgroundTask];
             [self updateState:MQTTSessionManagerStateStarting];
             break;
 
         case MQTTSessionEventConnectionClosedByBroker:
             [self updateState:MQTTSessionManagerStateClosed];
-            [self endBackgroundTask];
             [self updateState:MQTTSessionManagerStateStarting];
             break;
 
