@@ -37,7 +37,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @param topic the topic the data was published to
  @param retained indicates if the data retransmitted from server storage
  */
-- (void)handleMessage:(NSData * _Nullable)data onTopic:(NSString * _Nullable)topic retained:(BOOL)retained;
+- (void)handleMessage:(nullable NSData *)data onTopic:(nullable NSString *)topic retained:(BOOL)retained;
 
 @optional
 
@@ -51,7 +51,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @param sessionManager the instance of MQTTSessionManager whose state changed
  @param newState the new connection state of the sessionManager. This will be identical to `sessionManager.state`.
  */
-- (void)sessionManager:(MQTTSessionManager * _Nullable)sessonManager didChangeState:(MQTTSessionManagerState)newState;
+- (void)sessionManager:(nullable MQTTSessionManager *)sessonManager didChangeState:(MQTTSessionManagerState)newState;
 
 @end
 
@@ -61,7 +61,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 
 /** the delegate receiving incoming messages
  */
-@property (weak, nonatomic) id<MQTTSessionManagerDelegate> _Nullable delegate;
+@property (weak, nonatomic, nullable) id<MQTTSessionManagerDelegate> delegate;
 
 /** subscriptions is a dictionary of NSNumber instances indicating the MQTTQoSLevel.
  *  The keys are topic filters.
@@ -70,7 +70,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  *  Setting a new subscriptions dictionary initiates SUBSCRIBE or UNSUBSCRIBE messages by SessionManager
  *  by comparing the old and new subscriptions.
  */
-@property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> * _Nonnull subscriptions;
+@property (strong, nonatomic, nonnull) NSDictionary<NSString *, NSNumber *> *subscriptions;
 
 /** effectiveSubscriptions s a dictionary of NSNumber instances indicating the granted MQTTQoSLevel, or 0x80 for subscription failure.
  *  The keys are topic filters.
@@ -101,7 +101,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
     }
  *  @endcode
  */
-@property (readonly, strong, nonatomic) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
+@property (readonly, strong, nonatomic, null_unspecified) NSDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
 
 /** SessionManager status
  */
@@ -109,7 +109,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
 
 /** SessionManager last error code when state equals MQTTSessionManagerStateError
  */
-@property (nonatomic, readonly) NSError *lastErrorCode;
+@property (nonatomic, readonly, null_unspecified) NSError *lastErrorCode;
 
 /** The duration at which the connection-retry timer should be capped. When MQTTSessionManager receives a ClosedByBroker or an Error
     event, it will attempt to reconnect to the broker. The time in between connection attempts is doubled each time, until it remains at maxRetryInterval.
@@ -128,11 +128,11 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @return the initialized MQTTSessionManager object
  */
 
-- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
-                              maxWindowSize:(NSUInteger)maxWindowSize
-                                maxMessages:(NSUInteger)maxMessages
-                                    maxSize:(NSUInteger)maxSize
-                 maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval;
+- (null_unspecified MQTTSessionManager *)initWithPersistence:(BOOL)persistent
+                                               maxWindowSize:(NSUInteger)maxWindowSize
+                                                 maxMessages:(NSUInteger)maxMessages
+                                                     maxSize:(NSUInteger)maxSize
+                                  maxConnectionRetryInterval:(NSTimeInterval)maxRetryInterval;
 
 /** initWithPersistence sets the MQTTPersistence properties other than default
  * @param persistent YES or NO (default) to establish file or in memory persistence.
@@ -142,10 +142,10 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @return the initialized MQTTSessionManager object
  */
 
-- (MQTTSessionManager *)initWithPersistence:(BOOL)persistent
-                              maxWindowSize:(NSUInteger)maxWindowSize
-                                maxMessages:(NSUInteger)maxMessages
-                                    maxSize:(NSUInteger)maxSize;
+- (null_unspecified MQTTSessionManager *)initWithPersistence:(BOOL)persistent
+                                               maxWindowSize:(NSUInteger)maxWindowSize
+                                                 maxMessages:(NSUInteger)maxMessages
+                                                     maxSize:(NSUInteger)maxSize;
 
 /** Connects to the MQTT broker and stores the parameters for subsequent reconnects
  * @param host specifies the hostname or ip address to connect to. Defaults to @"localhost".
@@ -167,22 +167,22 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param protocolLevel Protocol version of the connection.
  */
 
-- (void)connectTo:(NSString *)host
+- (void)connectTo:(null_unspecified NSString *)host
              port:(NSInteger)port
               tls:(BOOL)tls
         keepalive:(NSInteger)keepalive
             clean:(BOOL)clean
              auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
+             user:(null_unspecified NSString *)user
+             pass:(null_unspecified NSString *)pass
              will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
+        willTopic:(null_unspecified NSString *)willTopic
+          willMsg:(null_unspecified NSData *)willMsg
           willQos:(MQTTQosLevel)willQos
    willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId
-   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-     certificates:(NSArray *)certificates
+     withClientId:(null_unspecified NSString *)clientId
+   securityPolicy:(null_unspecified MQTTSSLSecurityPolicy *)securityPolicy
+     certificates:(null_unspecified NSArray *)certificates
     protocolLevel:(MQTTProtocolVersion)protocolLevel;
 
 
@@ -205,22 +205,22 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param certificates An NSArray of the pinned certificates to use or nil.
  */
 
-- (void)connectTo:(NSString *)host
+- (void)connectTo:(null_unspecified NSString *)host
              port:(NSInteger)port
               tls:(BOOL)tls
         keepalive:(NSInteger)keepalive
             clean:(BOOL)clean
              auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
+             user:(null_unspecified NSString *)user
+             pass:(null_unspecified NSString *)pass
              will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
+        willTopic:(null_unspecified NSString *)willTopic
+          willMsg:(null_unspecified NSData *)willMsg
           willQos:(MQTTQosLevel)willQos
    willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId
-   securityPolicy:(MQTTSSLSecurityPolicy *)securityPolicy
-     certificates:(NSArray *)certificates;
+     withClientId:(null_unspecified NSString *)clientId
+   securityPolicy:(null_unspecified MQTTSSLSecurityPolicy *)securityPolicy
+     certificates:(null_unspecified NSArray *)certificates;
 
 /** Convenience alternative to full paramter connectTo
  * @param host see connectTo description
@@ -239,20 +239,20 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param clientId see connectTo description
  */
 
-- (void)connectTo:(NSString *)host
+- (void)connectTo:(null_unspecified NSString *)host
              port:(NSInteger)port
               tls:(BOOL)tls
         keepalive:(NSInteger)keepalive
             clean:(BOOL)clean
              auth:(BOOL)auth
-             user:(NSString *)user
-             pass:(NSString *)pass
+             user:(null_unspecified NSString *)user
+             pass:(null_unspecified NSString *)pass
              will:(BOOL)will
-        willTopic:(NSString *)willTopic
-          willMsg:(NSData *)willMsg
+        willTopic:(null_unspecified NSString *)willTopic
+          willMsg:(null_unspecified NSData *)willMsg
           willQos:(MQTTQosLevel)willQos
    willRetainFlag:(BOOL)willRetainFlag
-     withClientId:(NSString *)clientId;
+     withClientId:(null_unspecified NSString *)clientId;
 
 /** Convenience alternative to full paramter connectTo
  * @param host see connectTo description
@@ -270,19 +270,19 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  * @param clientId see connectTo description
  */
 
-- (void)connectTo:(NSString *)host
-                  port:(NSInteger)port
-                   tls:(BOOL)tls
-             keepalive:(NSInteger)keepalive
-                 clean:(BOOL)clean
-                  auth:(BOOL)auth
-                  user:(NSString *)user
-                  pass:(NSString *)pass
-             willTopic:(NSString *)willTopic
-                  will:(NSData *)will
-               willQos:(MQTTQosLevel)willQos
-        willRetainFlag:(BOOL)willRetainFlag
-          withClientId:(NSString *)clientId;
+- (void)connectTo:(null_unspecified NSString *)host
+             port:(NSInteger)port
+              tls:(BOOL)tls
+        keepalive:(NSInteger)keepalive
+            clean:(BOOL)clean
+             auth:(BOOL)auth
+             user:(null_unspecified NSString *)user
+             pass:(null_unspecified NSString *)pass
+        willTopic:(null_unspecified NSString *)willTopic
+             will:(null_unspecified NSData *)will
+          willQos:(MQTTQosLevel)willQos
+   willRetainFlag:(BOOL)willRetainFlag
+     withClientId:(null_unspecified NSString *)clientId;
 
 /** Re-Connects to the MQTT broker using the parameters for given in the connectTo method
  */
@@ -298,7 +298,7 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @return the Message Identifier of the PUBLISH message. Zero if qos 0. If qos 1 or 2, zero if message was dropped
  @note returns immediately.
  */
-- (UInt16)sendData:(NSData *)data topic:(NSString *)topic qos:(MQTTQosLevel)qos retain:(BOOL)retainFlag;
+- (UInt16)sendData:(null_unspecified NSData *)data topic:(null_unspecified NSString *)topic qos:(MQTTQosLevel)qos retain:(BOOL)retainFlag;
 
 /** Disconnects gracefully from the MQTT broker
  */
