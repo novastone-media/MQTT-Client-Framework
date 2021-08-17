@@ -90,6 +90,10 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 @property (readonly) UInt32 port;
 
+/** alpn to negotiate in TLS sessions
+ */
+@property (strong, nonatomic) NSArray *alpn;
+
 /** the delegate receiving incoming messages
  */
 @property (weak, nonatomic) id<MQTTSessionManagerDelegate> delegate;
