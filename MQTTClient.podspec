@@ -1,13 +1,13 @@
 Pod::Spec.new do |mqttc|
 	mqttc.name         = "MQTTClient"
-	mqttc.version      = "0.15.3"
+	mqttc.version      = "0.15.4"
 	mqttc.summary      = "iOS, macOS and tvOS native ObjectiveC MQTT Client Framework"
 	mqttc.homepage     = "https://github.com/novastone-media/MQTT-Client-Framework"
 	mqttc.license      = { :type => "EPLv1", :file => "LICENSE" }
 	mqttc.author       = { "novastonemedia" => "ios@novastonemedia.com" }
 	mqttc.source       = {
 		:git => "https://github.com/novastone-media/MQTT-Client-Framework.git",
-		:tag => "0.15.2",
+		:tag => "0.15.4",
 		:submodules => true
 	}
 
@@ -91,7 +91,7 @@ Pod::Spec.new do |mqttc|
 
 	mqttc.subspec 'Websocket' do |ws|
 		ws.source_files = "MQTTClient/MQTTClient/MQTTWebsocketTransport/*.{h,m}"
-		ws.dependency 'SocketRocket'
+		ws.dependency 'SocketRocket', '0.5.1'
 		ws.dependency 'MQTTClient/Min'
 		ws.requires_arc = true
 		ws.libraries = "icucore"
@@ -99,7 +99,7 @@ Pod::Spec.new do |mqttc|
 
 	mqttc.subspec 'WebsocketL' do |wsl|
 		wsl.source_files = "MQTTClient/MQTTClient/MQTTWebsocketTransport/*.{h,m}"
-		wsl.dependency 'SocketRocket'
+		wsl.dependency 'SocketRocket', '0.5.1'
 		wsl.dependency 'MQTTClient/MinL'
 		wsl.requires_arc = true
 		wsl.libraries = "icucore"
