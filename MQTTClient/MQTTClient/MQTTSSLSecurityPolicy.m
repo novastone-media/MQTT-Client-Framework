@@ -42,7 +42,7 @@ static id SSLPublicKeyForCertificate(NSData *certificate) {
     CFArrayRef tempCertificates = nil;
     SecPolicyRef policy = nil;
     SecTrustRef allowedTrust = nil;
-    SecTrustResultType result;
+    CFErrorRef error;
 
     allowedCertificate = SecCertificateCreateWithData(NULL, (__bridge CFDataRef)certificate);
     __Require_Quiet(allowedCertificate != NULL, _out);
@@ -52,9 +52,9 @@ static id SSLPublicKeyForCertificate(NSData *certificate) {
 
     policy = SecPolicyCreateBasicX509();
     __Require_noErr_Quiet(SecTrustCreateWithCertificates(tempCertificates, policy, &allowedTrust), _out);
-    __Require_noErr_Quiet(SecTrustEvaluate(allowedTrust, &result), _out);
+    __Require_noErr_Quiet(SecTrustEvaluateWithError(allowedTrust, &error), _out);
 
-    allowedPublicKey = (__bridge_transfer id)SecTrustCopyPublicKey(allowedTrust);
+    allowedPublicKey = (__bridge_transfer id)SecTrustCopyKey(allowedTrust);
 
     _out:
     if (allowedTrust) {
@@ -78,11 +78,10 @@ static id SSLPublicKeyForCertificate(NSData *certificate) {
 
 static BOOL SSLServerTrustIsValid(SecTrustRef serverTrust) {
     BOOL isValid = NO;
-    SecTrustResultType result;
-    __Require_noErr_Quiet(SecTrustEvaluate(serverTrust, &result), _out);
+    CFErrorRef error;
+    __Require_noErr_Quiet(SecTrustEvaluateWithError(serverTrust, &error), _out);
 
-    isValid = (result == kSecTrustResultUnspecified      // The OS trusts this certificate implicitly.
-                || result == kSecTrustResultProceed);    // The user explicitly told the OS to trust it.
+    isValid = (error == nil);    // The user explicitly told the OS to trust it.
 
     // else?  It's somebody else's key. Fall immediately.
 
@@ -115,10 +114,10 @@ static NSArray * SSLPublicKeyTrustChainForServerTrust(SecTrustRef serverTrust) {
         SecTrustRef trust;
         __Require_noErr_Quiet(SecTrustCreateWithCertificates(certificates, policy, &trust), _out);
 
-        SecTrustResultType result;
-        __Require_noErr_Quiet(SecTrustEvaluate(trust, &result), _out);
+        CFErrorRef error;
+        __Require_noErr_Quiet(SecTrustEvaluateWithError(trust, &error), _out);
 
-        [trustChain addObject:(__bridge_transfer id)SecTrustCopyPublicKey(trust)];
+        [trustChain addObject:(__bridge_transfer id)SecTrustCopyKey(trust)];
 
         _out:
         if (trust) {

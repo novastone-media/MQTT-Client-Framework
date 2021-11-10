@@ -12,8 +12,8 @@ Pod::Spec.new do |mqttc|
 	}
 
 	mqttc.requires_arc = true
-	mqttc.platform = :ios, "6.1", :osx, "10.10", :tvos, "9.0"
-	mqttc.ios.deployment_target = "6.1"
+	mqttc.platform = :ios, "14.0", :osx, "10.10", :tvos, "9.0"
+	mqttc.ios.deployment_target = "14.0"
 	mqttc.osx.deployment_target = "10.10"
 	mqttc.tvos.deployment_target = "9.0"
 	mqttc.default_subspec = 'Core'
@@ -45,7 +45,7 @@ Pod::Spec.new do |mqttc|
 	end
 
 	mqttc.subspec 'MinL' do |minl|
-		minl.dependency 'CocoaLumberjack', '3.6.1'
+		minl.dependency 'CocoaLumberjack', '3.7.2'
 
 		minl.source_files =	"MQTTClient/MQTTClient/MQTTCFSocketDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTCFSocketEncoder.{h,m}",
