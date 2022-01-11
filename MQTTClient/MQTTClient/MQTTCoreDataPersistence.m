@@ -22,14 +22,6 @@
 
 @end
 
-@interface MQTTCoreDataFlow ()
-
-- (MQTTCoreDataFlow *)initWithContext:(NSManagedObjectContext *)context andObject:(id<MQTTFlow>)object;
-@property NSManagedObjectContext *context;
-@property id<MQTTFlow> object;
-
-@end
-
 @implementation MQTTCoreDataFlow
 
 @synthesize context;
@@ -197,9 +189,12 @@
 
 - (NSManagedObjectContext *)managedObjectContext {
     if (!_managedObjectContext) {
-        NSPersistentStoreCoordinator *coordinator = [self createPersistentStoreCoordinator];
+        NSPersistentStoreCoordinator *coordinator = [NSPersistentStoreCoordinator new];
+        
         _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-       _managedObjectContext.persistentStoreCoordinator = coordinator;
+        if (coordinator) {
+            _managedObjectContext.persistentStoreCoordinator = coordinator;
+        }
     }
     return _managedObjectContext;
 }
@@ -244,7 +239,9 @@
 
 - (void)deleteFlow:(MQTTCoreDataFlow *)flow {
     [self.managedObjectContext performBlockAndWait:^{
-        [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
+        if (flow && flow.object) {
+            [self.managedObjectContext deleteObject:(NSManagedObject *)flow.object];
+        }
     }];
     [self sync];
 }
@@ -297,6 +294,14 @@
     NSMutableArray *flows = [NSMutableArray array];
     __block NSArray *rows;
     [self.managedObjectContext performBlockAndWait:^{
+        NSString *entityToSearch = @"MQTTFlow";
+
+        NSManagedObjectModel *managedObjectModel = [[self.managedObjectContext persistentStoreCoordinator] managedObjectModel];
+        NSDictionary *entities = [managedObjectModel entitiesByName];
+        NSArray<NSString*> *entityNames = [entities allKeys];
+        if (![entityNames containsObject:entityToSearch]) {
+            return;
+        }
         
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:
@@ -338,6 +343,14 @@
     MQTTCoreDataFlow *flow = nil;
 
     DDLogVerbose(@"flowforClientId performing");
+    NSString *entityToSearch = @"MQTTFlow";
+
+    NSManagedObjectModel *managedObjectModel = [[self.managedObjectContext persistentStoreCoordinator] managedObjectModel];
+    NSDictionary *entities = [managedObjectModel entitiesByName];
+    NSArray<NSString*> *entityNames = [entities allKeys];
+    if (![entityNames containsObject:entityToSearch]) {
+        return flow;
+    }
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"MQTTFlow"];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:
@@ -368,14 +381,25 @@
     if (!flow) {
         __block id<MQTTFlow> row;
         [self.managedObjectContext performBlockAndWait:^{
-            row = [NSEntityDescription insertNewObjectForEntityForName:@"MQTTFlow"
+            NSString *entityToSearch = @"MQTTFlow";
+
+            NSManagedObjectModel *managedObjectModel = [[self.managedObjectContext persistentStoreCoordinator] managedObjectModel];
+            NSDictionary *entities = [managedObjectModel entitiesByName];
+            NSArray<NSString*> *entityNames = [entities allKeys];
+            if (![entityNames containsObject:entityToSearch]) {
+                return;
+            }
+
+            row = [NSEntityDescription insertNewObjectForEntityForName:entityToSearch
                                                 inManagedObjectContext:self.managedObjectContext];
             
             row.clientId = clientId;
             row.incomingFlag = @(incomingFlag);
             row.messageId = @(messageId);
         }];
-        flow = [[MQTTCoreDataFlow alloc] initWithContext:self.managedObjectContext andObject:row];
+        if (row) {
+            flow = [[MQTTCoreDataFlow alloc] initWithContext:self.managedObjectContext andObject:row];
+        }
     }
 
     return flow;

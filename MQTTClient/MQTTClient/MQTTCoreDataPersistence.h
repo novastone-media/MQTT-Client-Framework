@@ -10,12 +10,30 @@
 #import <CoreData/CoreData.h>
 #import "MQTTPersistence.h"
 
-@interface MQTTCoreDataPersistence : NSObject <MQTTPersistence>
+@interface MQTTCoreDataFlow : NSObject <MQTTFlow>
+- (MQTTCoreDataFlow *)initWithContext:(NSManagedObjectContext *)context andObject:(id<MQTTFlow>)object;
+@property NSManagedObjectContext *context;
+@property id<MQTTFlow> object;
+@end
 
+@interface MQTTCoreDataPersistence : NSObject <MQTTPersistence>
+- (NSPersistentStoreCoordinator *)createPersistentStoreCoordinator;
+- (NSManagedObjectContext *)managedObjectContext;
+- (NSArray *)allFlowsforClientId:(NSString *)clientId;
+- (void)sync;
+- (void)deleteAllFlowsForClientId:(NSString *)clientId;
+- (void)deleteFlow:(MQTTCoreDataFlow *)flow;
+- (MQTTCoreDataFlow *)createFlowforClientId:(NSString *)clientId
+                               incomingFlag:(BOOL)incomingFlag
+                                  messageId:(UInt16)messageId;
+- (MQTTCoreDataFlow *)internalFlowForClientId:(NSString *)clientId
+                                 incomingFlag:(BOOL)incomingFlag
+                                    messageId:(UInt16)messageId;
+
+- (MQTTCoreDataFlow *)flowforClientId:(NSString *)clientId  incomingFlag:(BOOL)incomingFlag messageId:(UInt16)messageId;
+- (void)internalSync;
 @end
 
 @interface MQTTFlow : NSManagedObject <MQTTFlow>
 @end
 
-@interface MQTTCoreDataFlow : NSObject <MQTTFlow>
-@end

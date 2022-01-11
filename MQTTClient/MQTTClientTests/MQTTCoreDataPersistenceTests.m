@@ -43,4 +43,17 @@
     XCTAssertEqual(store.type, NSInMemoryStoreType);
 }
 
+- (void)testNilCoordinator {
+    MQTTCoreDataPersistence *persistence = [[MQTTCoreDataPersistence alloc] init];
+    [persistence managedObjectContext];
+    [persistence createPersistentStoreCoordinator];
+    [persistence allFlowsforClientId:@"" incomingFlag:NO];
+    [persistence sync];
+    [persistence deleteAllFlowsForClientId:@""];
+    [persistence deleteFlow: [MQTTCoreDataFlow new] ];
+    [persistence createFlowforClientId:@"" incomingFlag:NO messageId:1];
+    [persistence internalFlowForClientId:@"" incomingFlag:NO messageId:1];
+    [persistence flowforClientId:@"" incomingFlag:NO messageId:1];
+}
+
 @end
