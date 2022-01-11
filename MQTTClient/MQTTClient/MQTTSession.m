@@ -13,6 +13,7 @@
 #import "MQTTMessage.h"
 #import "MQTTCoreDataPersistence.h"
 #import "GCDTimer.h"
+#import <os/log.h>
 
 @class MQTTSSLSecurityPolicy;
 
@@ -49,7 +50,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
 @property (nonatomic) BOOL synchronDisconnect;
 
 @property (strong, nonatomic) MQTTSSLSecurityPolicy *securityPolicy;
-
 @end
 
 #define DUPLOOP 1.0
@@ -74,7 +74,6 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
     self.subscribeHandlers = [[NSMutableDictionary alloc] init];
     self.unsubscribeHandlers = [[NSMutableDictionary alloc] init];
     self.publishHandlers = [[NSMutableDictionary alloc] init];
-
     self.clientId = nil;
     self.userName = nil;
     self.password = nil;
@@ -802,7 +801,13 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                     self.effectiveKeepAlive = self.keepAliveInterval;
                                 }
 
+                                if (self.effectiveKeepAlive <= 0) {
+                                    os_log_with_type(OS_LOG_DEFAULT, OS_LOG_TYPE_INFO, "Ping Time Req modified %d", self.keepAliveInterval);
+                                    self.effectiveKeepAlive = self.keepAliveInterval;
+                                }
+
                                 if (self.effectiveKeepAlive > 0) {
+                                    os_log_with_type(OS_LOG_DEFAULT, OS_LOG_TYPE_INFO, "Ping Time Req %d", self.keepAliveInterval);
                                     self.keepAliveTimer = [GCDTimer scheduledTimerWithTimeInterval:self.effectiveKeepAlive
                                                                                            repeats:YES
                                                                                              queue:self.queue
