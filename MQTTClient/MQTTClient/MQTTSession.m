@@ -548,15 +548,17 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
         self.decoder.delegate = nil;
     }
 
-    NSArray *flows = [self.persistence allFlowsforClientId:self.clientId
-                                              incomingFlag:NO];
-    for (id<MQTTFlow> flow in flows) {
-        switch ((flow.commandType).intValue) {
-            case MQTTPublish:
-            case MQTTPubrel:
-                flow.deadline = [flow.deadline dateByAddingTimeInterval:-self.dupTimeout];
-                [self.persistence sync];
-                break;
+    if (self.clientId) {
+        NSArray *flows = [self.persistence allFlowsforClientId:self.clientId
+                                                  incomingFlag:NO];
+        for (id<MQTTFlow> flow in flows) {
+            switch ((flow.commandType).intValue) {
+                case MQTTPublish:
+                case MQTTPubrel:
+                    flow.deadline = [flow.deadline dateByAddingTimeInterval:-self.dupTimeout];
+                    [self.persistence sync];
+                    break;
+            }
         }
     }
 
@@ -572,24 +574,28 @@ NSString * const MQTTSessionErrorDomain = @"MQTT";
                                          code:MQTTSessionErrorNoResponse
                                      userInfo:@{NSLocalizedDescriptionKey : @"No response"}];
 
-    NSArray *allSubscribeHandlers = self.subscribeHandlers.allValues;
-    [self.subscribeHandlers removeAllObjects];
-    for (MQTTSubscribeHandler subscribeHandler in allSubscribeHandlers) {
-        subscribeHandler(error, nil);
+    if(self.subscribeHandlers) {
+        NSArray *allSubscribeHandlers = self.subscribeHandlers.allValues;
+        [self.subscribeHandlers removeAllObjects];
+        for (MQTTSubscribeHandler subscribeHandler in allSubscribeHandlers) {
+            subscribeHandler(error, nil);
+        }
     }
 
-    NSArray *allUnsubscribeHandlers = self.unsubscribeHandlers.allValues;
-    [self.unsubscribeHandlers removeAllObjects];
-    for (MQTTUnsubscribeHandler unsubscribeHandler in allUnsubscribeHandlers) {
-        unsubscribeHandler(error);
+    if(self.unsubscribeHandlers) {
+        NSArray *allUnsubscribeHandlers = self.unsubscribeHandlers.allValues;
+        [self.unsubscribeHandlers removeAllObjects];
+        for (MQTTUnsubscribeHandler unsubscribeHandler in allUnsubscribeHandlers) {
+            unsubscribeHandler(error);
+        }
     }
 
     MQTTDisconnectHandler disconnectHandler = self.disconnectHandler;
     if (disconnectHandler) {
-        self.disconnectHandler = nil;
         disconnectHandler(nil);
     }
-
+    self.disconnectHandler = nil;
+    
     [self tell];
     self.synchronPub = FALSE;
     self.synchronPubMid = 0;
