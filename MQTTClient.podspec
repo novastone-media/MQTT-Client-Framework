@@ -45,7 +45,7 @@ Pod::Spec.new do |mqttc|
 	end
 
 	mqttc.subspec 'MinL' do |minl|
-		minl.dependency 'CocoaLumberjack', '3.7.2'
+		minl.dependency 'CocoaLumberjack', '3.7.4'
 
 		minl.source_files =	"MQTTClient/MQTTClient/MQTTCFSocketDecoder.{h,m}",
 					"MQTTClient/MQTTClient/MQTTCFSocketEncoder.{h,m}",
