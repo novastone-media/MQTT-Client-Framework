@@ -6,6 +6,7 @@ target 'MQTTClientTests' do
 	pod 'MQTTClient/MinL', :path => '..'
 	pod 'MQTTClient/ManagerL', :path => '..'
 	pod 'MQTTClient/WebsocketL', :path => '..'
+  pod 'SocketRocket', '0.5.1'
 end
 
 target 'MQTTClientTVTests' do
@@ -14,6 +15,7 @@ target 'MQTTClientTVTests' do
 	pod 'MQTTClient/MinL', :path => '..'
 	pod 'MQTTClient/ManagerL', :path => '..'
 	pod 'MQTTClient/WebsocketL', :path => '..'
+  	pod 'SocketRocket', '0.5.1'
 end
 
 target 'MQTTClientOSXTests' do
@@ -22,4 +24,5 @@ target 'MQTTClientOSXTests' do
 	pod 'MQTTClient/MinL', :path => '..'
 	pod 'MQTTClient/ManagerL', :path => '..'
 	pod 'MQTTClient/WebsocketL', :path => '..'
+  	pod 'SocketRocket', '0.5.1'
 end
