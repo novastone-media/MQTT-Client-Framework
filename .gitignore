@@ -16,3 +16,5 @@ DerivedData
 .idea/
 *.hmap
 *.xccheckout
+.swiftpm
+.swift-version
