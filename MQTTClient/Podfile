@@ -4,7 +4,8 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'MQTTClientmacOS' do
-	pod 'SocketRocket', '0.5.1'
+  platform :osx, '11.0'
+	pod 'SocketRocket', '0.6'
     
     target 'MQTTClientmacOSTests' do
         inherit! :search_paths
@@ -12,7 +13,8 @@ target 'MQTTClientmacOS' do
 end
 
 target 'MQTTClientiOS' do
-    pod 'SocketRocket', '0.5.1'
+    platform :ios, '11.0'
+    pod 'SocketRocket', '0.6'
     
     target 'MQTTClientiOSTests' do
         inherit! :search_paths
@@ -20,7 +22,8 @@ target 'MQTTClientiOS' do
 end
 
 target 'MQTTClienttvOS' do
-    pod 'SocketRocket', '0.5.1'
+    platform :tvos, '11.0'
+    pod 'SocketRocket', '0.6'
     
     target 'MQTTClienttvOSTests' do
         inherit! :search_paths

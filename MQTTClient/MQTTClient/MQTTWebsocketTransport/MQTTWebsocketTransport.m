@@ -29,7 +29,6 @@
     self.path = @"/mqtt";
     self.tls = false;
     self.allowUntrustedCertificates = false;
-    self.pinnedCertificates = nil;
     self.additionalHeaders = @{};
     return self;
 }
@@ -39,7 +38,6 @@
     self.state = MQTTTransportOpening;
     
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[self endpointURL]];
-    urlRequest.SR_SSLPinnedCertificates = self.pinnedCertificates;
   
     [self.additionalHeaders enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
       [urlRequest addValue:obj forHTTPHeaderField:key];
