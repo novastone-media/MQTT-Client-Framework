@@ -27,6 +27,7 @@
 @synthesize streamSSLLevel;
 @synthesize host;
 @synthesize port;
+@synthesize alpn;
 
 - (instancetype)init {
     self = [super init];
@@ -34,6 +35,7 @@
     self.port = 1883;
     self.tls = false;
     self.allowsCellularAccess = YES;
+    self.alpn = nil;
     self.voip = false;
     self.certificates = nil;
     self.queue = dispatch_get_main_queue();
@@ -95,8 +97,25 @@
                                                code:errSSLInternal
                                            userInfo:@{NSLocalizedDescriptionKey : @"Fail to init ssl output stream!"}];
         }
+        
+        if (@available(iOS 11, *)) {
+            if (self.alpn != nil && [self.alpn count] > 0) {
+                OSStatus err;
+                SSLContextRef sslContext = CFReadStreamCopyProperty(readStream, kCFStreamPropertySSLContext);
+                if ((err = SSLSetALPNProtocols(sslContext, (__bridge CFArrayRef) self.alpn))) {
+                    connectError = [NSError errorWithDomain:@"MQTT" code:err userInfo:@{
+                        NSLocalizedDescriptionKey : @"ALPN error"}];
+                }
+                
+                sslContext = CFWriteStreamCopyProperty(writeStream, kCFStreamPropertySSLContext);
+                if ((err = SSLSetALPNProtocols(sslContext, (__bridge CFArrayRef) self.alpn))) {
+                    connectError = [NSError errorWithDomain:@"MQTT" code:err userInfo:@{
+                        NSLocalizedDescriptionKey : @"ALPN error"}];
+                }
+            }
+        }
     }
-    
+
     if (!self.allowsCellularAccess) {
         CFReadStreamSetProperty(readStream, kCFStreamPropertyNoCellular, kCFBooleanTrue);
         CFWriteStreamSetProperty(writeStream, kCFStreamPropertyNoCellular, kCFBooleanTrue);

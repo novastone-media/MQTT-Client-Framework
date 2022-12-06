@@ -44,11 +44,12 @@
  */
 @property (nonatomic) BOOL allowUntrustedCertificates;
 
-/** pinnedCertificates an NSArray containing certificates to validate server certificates against
+/** pinnedCertificates has been deprecated via SocketRocket, and therefore
+ * deprecated via MQTT.
  * defaults to nil
  */
-@property (strong, nonatomic) NSArray *pinnedCertificates;
-  
+//@property (strong, nonatomic) NSArray *pinnedCertificates;
+
 /** additionalHeaders an NSDictionary containing extra headers sent when establishing the websocket connection. Useful for custom authorization protocols. e.g. AWS IoT Custom Auth.
  * defaults to an empty dictionary
  */

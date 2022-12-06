@@ -42,6 +42,10 @@
 /// A Boolean value indicating whether the transport should send data over the cell network. Defaults to `YES`.
 @property (nonatomic) BOOL allowsCellularAccess;
 
+/** ALPN to use, default to not use ALPN
+ */
+@property (strong, nonatomic) NSArray *alpn;
+
 /** Require for VoIP background service
  * defaults to NO
  */

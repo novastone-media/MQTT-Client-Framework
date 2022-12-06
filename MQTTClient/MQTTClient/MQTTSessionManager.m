@@ -354,6 +354,7 @@
         transport.voip = self.session.voip;
         transport.queue = self.queue;
         transport.streamSSLLevel = self.streamSSLLevel;
+        transport.alpn = self.alpn;
         self.session.transport = transport;
         [self.session connectWithConnectHandler:connectHandler];
     }
