@@ -15,18 +15,18 @@
 
 #import <Foundation/Foundation.h>
 
-#import "../MQTTSession.h"
-#import "../MQTTDecoder.h"
-#import "../MQTTSessionLegacy.h"
-#import "../MQTTProperties.h"
-#import "../MQTTMessage.h"
-#import "../MQTTTransport.h"
-#import "../MQTTCFSocketTransport.h"
-#import "../MQTTCoreDataPersistence.h"
-#import "../MQTTSSLSecurityPolicyTransport.h"
-#import "../MQTTLog.h"
-#import "../MQTTSessionManager.h"
-#import "../MQTTWebsocketTransport/MQTTWebsocketTransport.h"
+#import "MQTTSession.h"
+#import "MQTTDecoder.h"
+#import "MQTTSessionLegacy.h"
+#import "MQTTProperties.h"
+#import "MQTTMessage.h"
+#import "MQTTTransport.h"
+#import "MQTTCFSocketTransport.h"
+#import "MQTTCoreDataPersistence.h"
+#import "MQTTSSLSecurityPolicyTransport.h"
+#import "MQTTLog.h"
+#import "MQTTSessionManager.h"
+#import "MQTTWebsocketTransport.h"
 
 //! Project version number for MQTTClient.
 FOUNDATION_EXPORT double MQTTClientVersionNumber;
